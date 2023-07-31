@@ -1,0 +1,73 @@
+@tailwind base;
+
+@layer base {
+  .fr {
+    @apply flex-row;
+  }
+  .fc {
+    @apply flex-col;
+  }
+  .fss {
+    @apply flex items-start justify-start;
+  }
+  .fcc {
+    @apply flex items-center justify-center;
+  }
+  .fce {
+    @apply flex items-center justify-evenly;
+  }
+  .fcb {
+    @apply flex items-center justify-between;
+  }
+  .featureCard {
+    @apply w-[20.5em] h-[10.5em] px-5 py-6 rounded-lg text-center text-white;
+  }
+  .glass {
+    backdrop-filter: blur(3em);
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        transparent,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+      ),
+      url("/noice.svg");
+    @apply shadow 
+      border border-white/10 border-opacity-90 inset-0  
+      p-5 rounded-xl 
+      /* bg-gradient-to-tr from-white/10 via-transparent to-white/10  */;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 8.5rem;
+}
+
+body::-webkit-scrollbar {
+  width: 0.7rem;
+  background-color: transparent;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  @apply glass;
+  background-color: rgba(169, 169, 169, 0.2);
+  border-radius: 0.5rem;  
+}
