@@ -15,7 +15,7 @@ export default function Home() {
         >
           <AnimateText text="Comming Soon" className="text-[5vw]" />
           <AnimateText
-            text="please wait for it"
+            text="Please wait for it"
             className="text-[2.3em] text-zinc-400"
           />
         </motion.div>
