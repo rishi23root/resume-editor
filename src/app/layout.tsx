@@ -4,6 +4,10 @@ import { Inter } from "next/font/google";
 import { clsx } from "clsx";
 import { BubbleUnderlay } from "@/components/custom/BubbelUnderLay";
 import NoSSR from "@/hooks/NoSSR";
+
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -42,19 +46,19 @@ export const metadata: Metadata = {
     { name: "rishi23root" },
     { name: "Rishabh Jain", url: "https://github.com/rishi23root" },
   ],
-  openGraph: {
-    type: "website",
-    url: "https://editor.buildyourresume.online",
-    title: "Build.Your.Resume",
-    description:
-      "Generated Your Resume online free, fast and easy with simple clicks.",
-    images: [
-      {
-        url: "https://buildyourresume.online/logo.png",
-        alt: "Build.Your.Resume",
-      },
-    ],
-  },
+  // openGraph: {
+  //   type: "website",
+  //   url: "https://editor.buildyourresume.online",
+  //   title: "Build.Your.Resume",
+  //   description:
+  //     "Generated Your Resume online free, fast and easy with simple clicks.",
+  //   images: [
+  //     {
+  //       url: "https://buildyourresume.online/logo.png",
+  //       alt: "Build.Your.Resume",
+  //     },
+  //   ],
+  // },
 };
 
 export default function RootLayout({
@@ -63,40 +67,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      {/* // if you want to add CSP  not working for now cheeck in production   */}
-      {/* <meta
-        httpEquiv="Content-Security-Policy"
-        content="default-src 'self' data: 'unsafe-inline' *.buildyourresume.online buildyourresume.online"
-      /> */}
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
 
-      <body
-        suppressHydrationWarning={true}
-        className={clsx(
-          inter.className,
-          // "bg-white",
-          // "text-black",
-          "bg-[#12141D]",
-          "text-[#E0E0E0]",
-          "min-h-screen",
-          "min-w-full",
-          "relative"
-        )}
-      >
-        <NoSSR>
-          <BubbleUnderlay
-            className={clsx(
-              "fixed",
-              "top-0 left-0",
-              "w-full h-full",
-              "-z-10",
-              "pointer-events-none",
-              "select-none"
-            )}
-          />
-        </NoSSR>
-        {children}
-      </body>
-    </html>
+    >
+      <html lang="en">
+        <body
+          suppressHydrationWarning={true}
+
+          className={clsx(
+            inter.className,
+            // "bg-white",
+            // "text-black",
+            "bg-[#12141D]",
+            "text-[#E0E0E0]",
+            "min-h-screen",
+            "min-w-full",
+            "relative",
+            "flex items-center",
+            "flex-col"
+          )}
+        >
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
