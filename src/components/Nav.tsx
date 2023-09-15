@@ -1,12 +1,27 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
+import React from "react";
+// import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Notification, NotificationArr } from "@/types/utils";
+import { cn } from "@/lib/utils";
 
 function Nav() {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isSignedIn } = useAuth();
+  const pathname = usePathname();
   return (
-    <div className="flex items-center justify-between ">
+    <div className="fcb">
       <Image
         className="w-40 h-12 lg:w-72 lg:h-16 "
         alt="main logo"
@@ -27,20 +42,20 @@ function Nav() {
         </Link>
       </div>
       <div className="flex items-center justify-center gap-2 lg:gap-8 ">
-        <NavBtns isLoaded={isLoaded} isSignedIn={isSignedIn} />
+        <NavBtns isSignedIn={isSignedIn} pathname={pathname} />
       </div>
     </div>
   );
 }
 
 function NavBtns({
-  isLoaded,
   isSignedIn,
+  pathname,
 }: {
-  isLoaded: Boolean;
   isSignedIn: Boolean | undefined;
+  pathname: string;
 }) {
-  if (!isLoaded || !isSignedIn) {
+  if (!isSignedIn) {
     return (
       <>
         <Link
@@ -61,24 +76,133 @@ function NavBtns({
         </Link>
       </>
     );
+  } else {
+    // user is signed in
+    // conditional redering for pages
+    // if pages parent is dashboard that mean no need to show go
+    // basically protective route and show user specific content
+
+    // extract current page
+    if (pathname == "/") {
+      return (
+        <Link
+          href={"/dashboard"}
+          className="p-2 md:px-5 rounded-xl border-stone-500 bg-gradient-to-r from-blue-600 to-fuchsia-500 fcc"
+        >
+          <div className="gap-2 font-medium text-center lg:text-2xl text-neutral-200 fcc">
+            Dashboard{" "}
+            <Image
+              className="w-[22px] h-[17px] opacity-90 invert"
+              alt="arrow svg"
+              src="/arrow.svg"
+              width={22}
+              height={17}
+            />
+          </div>
+        </Link>
+      );
+    } else {
+      // import user btns and other element to render in place of btn
+      return (
+        <div className="gap-8 fcc">
+          <div className="icon">
+            <NotificationElement />
+          </div>
+          <div className="w-9 icon">
+            <UserButton afterSwitchSessionUrl="/" afterSignOutUrl="/" />
+          </div>
+        </div>
+      );
+    }
   }
-  // check if user is signed in or not
+}
+
+function NotificationElement() {
+  let initialNotification: Notification[] = [];
+  // fetch notifications
+  const [notification, setNotifications] = useState(initialNotification);
+  useEffect(() => {
+    // check every 2 minute if any request in que
+    // if it does then every 30sec check for notifiction
+    // else no need
+    const id = setTimeout(() => {
+      setNotifications((prec) => [
+        ...prec,
+        {
+          type: "warn",
+          message: "resume builded",
+        },
+        {
+          type: "info",
+          message: "unable to build retry",
+        },
+        {
+          type: "alert",
+          message: "resume builded",
+        },
+        {
+          type: "error",
+          message: "unable to build retry",
+        },
+      ]);
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, []);
+
+  const classForNotification = {
+    info: "bg-gray-700",
+    alert: "bg-red-700 ",
+    warn: "bg-yellow-200  text-black",
+    error: "bg-orange-300 text-black ",
+  };
+
   return (
-    <Link
-      href={"/dashboard"}
-      className="p-2 md:px-5 rounded-xl border-stone-500 bg-gradient-to-r from-blue-600 to-fuchsia-500 fcc"
-    >
-      <div className="gap-2 font-medium text-center lg:text-2xl text-neutral-200 fcc">
-        Dashboard{" "}
-        <Image
-          className="w-[22px] h-[17px] opacity-90 invert"
-          alt="arrow svg"
-          src="/arrow.svg"
-          width={22}
-          height={17}
-        />
-      </div>
-    </Link>
+    <div className="relative w-[40px] h-[40px] pointer hover:border border-gray-600 rounded ">
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div>
+            <Image
+              src={"/notification.svg"}
+              width={40}
+              height={40}
+              className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+              alt="notification to update"
+            />
+            {notification.length > 0 && (
+              <Image
+                src={"/newNotification.svg"}
+                width={40}
+                height={40}
+                className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                alt="notification to update"
+              />
+            )}
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-[16em] text-center translate-y-5 border-gray-300 rounded">
+          <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {notification.map((noti, index) => {
+            return (
+              <DropdownMenuItem
+                className={cn(
+                  `m-1 p-2 max-h-12`,
+                  classForNotification[noti.type],
+                  "relative"
+                )}
+              >
+                {(noti.type as string).toUpperCase()}: {noti.message}
+                <div className="absolute right-0 -translate-x-1/2">X</div>
+              </DropdownMenuItem>
+            );
+          })}
+
+          {/* <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuItem>Subscription</DropdownMenuItem>  */}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
 

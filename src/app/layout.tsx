@@ -2,8 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { clsx } from "clsx";
-import { BubbleUnderlay } from "@/components/custom/BubbelUnderLay";
-import NoSSR from "@/hooks/NoSSR";
+import { BubbleUnderlay } from "../components/custom/BubbelUnderLay";
+import NoSSR from "../hooks/NoSSR";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -71,23 +71,21 @@ export default function RootLayout({
       appearance={{
         baseTheme: dark,
       }}
-
     >
       <html lang="en">
         <body
           suppressHydrationWarning={true}
-
           className={clsx(
             inter.className,
+            // "bg-white",
+            // "text-black",
             // "bg-white",
             // "text-black",
             "bg-[#12141D]",
             "text-[#E0E0E0]",
             "min-h-screen",
             "min-w-full",
-            "relative",
-            "flex items-center",
-            "flex-col"
+            "relative"
           )}
         >
           {children}
