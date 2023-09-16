@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
-import { BubbleUnderlay } from "../../../../components/custom/BubbelUnderLay";
-import NoSSR from "../../../../hooks/NoSSR";
+import { BubbleUnderlay } from "../../components/custom/BubbelUnderLay";
+import NoSSR from "../../hooks/NoSSR";
 
 export default function RootLayout({
   children,

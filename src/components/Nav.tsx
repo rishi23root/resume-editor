@@ -2,8 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { UserButton, useAuth } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import React from "react";
 // import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import {
@@ -16,10 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Notification, NotificationArr } from "@/types/utils";
 import { cn } from "@/lib/utils";
+import RenderCompleted from "@/hooks/RenderCompleted";
 
 function Nav() {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
+  const rendered = RenderCompleted();
+
   return (
     <div className="fcb">
       <Image
@@ -31,6 +34,25 @@ function Nav() {
         priority
       />
       <div className="hidden gap-3 fcc lg:gap-12 lg:text-2xl font-base md:flex">
+        {rendered && <NavLinks isSignedIn={isSignedIn} pathname={pathname} />}
+      </div>
+      <div className="flex items-center justify-center gap-2 lg:gap-8 ">
+        {rendered && <NavBtns isSignedIn={isSignedIn} pathname={pathname} />}
+      </div>
+    </div>
+  );
+}
+
+function NavLinks({
+  isSignedIn,
+  pathname,
+}: {
+  isSignedIn: Boolean | undefined;
+  pathname: string;
+}) {
+  if (!isSignedIn)
+    return (
+      <>
         <Link href={"/#about"} className="text-violet-50">
           About
         </Link>
@@ -40,12 +62,22 @@ function Nav() {
         <Link href={"/#pricing"} className="text-violet-50">
           Pricing
         </Link>
-      </div>
-      <div className="flex items-center justify-center gap-2 lg:gap-8 ">
-        <NavBtns isSignedIn={isSignedIn} pathname={pathname} />
-      </div>
-    </div>
+      </>
+    );
+  return (
+    <>
+      <Link href={"/New"} className="text-violet-50">
+        New +
+      </Link>
+      <Link href={"/Templates"} className="text-violet-50">
+        Templates
+      </Link>
+      <Link href={"/JobDescriptions"} className="text-violet-50">
+        Job Descriptions
+      </Link>
+    </>
   );
+    
 }
 
 function NavBtns({
@@ -118,9 +150,11 @@ function NavBtns({
 }
 
 function NotificationElement() {
-  let initialNotification: Notification[] = [];
+  const router = useRouter();
+  const ref = useRef(null);
+
   // fetch notifications
-  const [notification, setNotifications] = useState(initialNotification);
+  const [notification, setNotifications] = useState<Notification[]>([]);
   useEffect(() => {
     // check every 2 minute if any request in que
     // if it does then every 30sec check for notifiction
@@ -180,26 +214,44 @@ function NotificationElement() {
             )}
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[16em] text-center translate-y-5 border-gray-300 rounded">
-          <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+        <DropdownMenuContent
+          ref={ref}
+          className="w-[20em] translate-y-5 -translate-x-12 bg-[#252526] border-none rounded shadow-2xl  "
+        >
+          <DropdownMenuLabel className="text-center">
+            Notifications
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {notification.map((noti, index) => {
             return (
               <DropdownMenuItem
+                onClick={() => {
+                  // if link is provied then navigate there ele pass
+                  noti.link && router.push(noti.link);
+                }}
+                key={noti.message + index}
                 className={cn(
-                  `m-1 p-2 max-h-12`,
+                  `m-1 p-2 max-h-12 opacity-[.8]`,
                   classForNotification[noti.type],
-                  "relative"
+                  "relative",
+                  "cursor-pointer"
                 )}
               >
                 {(noti.type as string).toUpperCase()}: {noti.message}
-                <div className="absolute right-0 -translate-x-1/2">X</div>
+                {noti.link && (
+                  <div className="absolute bottom-0 h-full font-bold tracking-widest right-3 fcc cursor-grab">
+                    <Image
+                      src={"/arrow.svg"}
+                      width={20}
+                      height={20}
+                      alt="thisis "
+                      className="-rotate-12"
+                    />
+                  </div>
+                )}
               </DropdownMenuItem>
             );
           })}
-
-          {/* <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>  */}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

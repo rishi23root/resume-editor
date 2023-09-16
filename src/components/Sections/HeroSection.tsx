@@ -91,19 +91,19 @@ function HeroSection({ editorLink }: { editorLink: string }) {
       <div className="relative w-[26em] h-[30em] xl:scale-[1.1] lg:scale-[.9] md:scale-[.9] scale-[.65] translate-x-4 md:-translate-x-4   lg:-translate-x-2 xl:-translate-x-14 ">
         <Image
           alt="example resume"
-          className=" aspect-auto absolute rounded right-[11%] top-[50%] -translate-y-1/2 scale-150 brightness-[.8]"
-          src="/exmaple-resume2.png"
-          priority
-          width={306}
-          height={396}
+          className="absolute rounded right-[0] top-[50%] -translate-y-1/2 scale-[1] brightness-[.95]"
+          src="/exampleR/twoColumn.jpg"
+          priority={true}
+          width={900}
+          height={1500}
         />
         <Image
           alt="example resume"
-          className=" aspect-auto  absolute rounded right-[28%] top-[55%] -translate-y-1/2 scale-120 h-[28rem] w-[22rem] brightness-[.8]"
-          src="/exmaple-resume1.png"
-          priority
-          width={306}
-          height={430}
+          className="absolute rounded right-[28%] top-[55%] -translate-y-1/2 scale-120 h-[28rem] w-[22rem] brightness-[.97] shadow-lg"
+          src="/exampleR/singleColumn.jpg"
+          priority={true}
+          width={900}
+          height={1500}
         />
       </div>
     </section>
