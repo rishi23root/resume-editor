@@ -78,15 +78,12 @@ export default function RootLayout({
           suppressHydrationWarning={true}
           className={clsx(
             inter.className,
-            // "bg-white",
-            // "text-black",
-            // "bg-white",
-            // "text-black",
             "bg-[#12141D]",
             "text-[#E0E0E0]",
             "min-h-screen",
-            "min-w-full",
-            "relative"
+            "min-w-full pb-8",
+            "relative ",
+            "flex flex-col"
           )}
         >
           {children}

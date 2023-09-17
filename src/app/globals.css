@@ -2,10 +2,10 @@
 
 @layer base {
   .fr {
-    @apply flex-row;
+    @apply flex flex-row;
   }
   .fc {
-    @apply flex-col;
+    @apply flex flex-col;
   }
   .fss {
     @apply flex items-start justify-start;
