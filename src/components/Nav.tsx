@@ -1,11 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import { UserButton, useAuth } from "@clerk/nextjs";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import React from "react";
-// import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,9 +7,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Notification, NotificationArr } from "@/types/utils";
-import { cn } from "@/lib/utils";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import useNotification from "@/hooks/NotificationHandeller";
 import RenderCompleted from "@/hooks/RenderCompleted";
+import { cn } from "@/lib/utils";
+import { Notification } from "@/types/utils";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { NotificationArr } from "../types/utils";
+
+type NavProps = {
+  isSignedIn: Boolean | undefined;
+  pathname: string;
+};
 
 function Nav() {
   const { isSignedIn } = useAuth();
@@ -25,14 +38,16 @@ function Nav() {
 
   return (
     <div className="fcb">
-      <Image
-        className="w-40 h-12 lg:w-72 lg:h-16 "
-        alt="main logo"
-        src="/logo.png"
-        width={275}
-        height={65}
-        priority
-      />
+      <Link href={"/"}>
+        <Image
+          className="w-40 h-12 lg:w-72 lg:h-16 "
+          alt="main logo"
+          src="/logo.png"
+          width={275}
+          height={65}
+          priority
+        />
+      </Link>
       <div className="hidden gap-3 fcc lg:gap-12 lg:text-2xl font-base md:flex">
         {rendered && <NavLinks isSignedIn={isSignedIn} pathname={pathname} />}
       </div>
@@ -43,14 +58,8 @@ function Nav() {
   );
 }
 
-function NavLinks({
-  isSignedIn,
-  pathname,
-}: {
-  isSignedIn: Boolean | undefined;
-  pathname: string;
-}) {
-  if (!isSignedIn)
+function NavLinks({ isSignedIn, pathname }: NavProps) {
+  if (!isSignedIn || pathname == "/")
     return (
       <>
         <Link href={"/#about"} className="text-violet-50">
@@ -77,16 +86,10 @@ function NavLinks({
       </Link>
     </>
   );
-    
 }
 
-function NavBtns({
-  isSignedIn,
-  pathname,
-}: {
-  isSignedIn: Boolean | undefined;
-  pathname: string;
-}) {
+function NavBtns(props: NavProps) {
+  const { isSignedIn, pathname } = props;
   if (!isSignedIn) {
     return (
       <>
@@ -136,12 +139,15 @@ function NavBtns({
     } else {
       // import user btns and other element to render in place of btn
       return (
-        <div className="gap-8 fcc">
+        <div className="gap-4 md:gap-8 fcc">
           <div className="icon">
             <NotificationElement />
           </div>
           <div className="w-9 icon">
             <UserButton afterSwitchSessionUrl="/" afterSignOutUrl="/" />
+          </div>
+          <div className="w-9 icon md:hidden">
+            <HamburgerOnMobile {...props} />
           </div>
         </div>
       );
@@ -149,50 +155,11 @@ function NavBtns({
   }
 }
 
+// notification components
 function NotificationElement() {
-  const router = useRouter();
-  const ref = useRef(null);
-
-  // fetch notifications
-  const [notification, setNotifications] = useState<Notification[]>([]);
-  useEffect(() => {
-    // check every 2 minute if any request in que
-    // if it does then every 30sec check for notifiction
-    // else no need
-    const id = setTimeout(() => {
-      setNotifications((prec) => [
-        ...prec,
-        {
-          type: "warn",
-          message: "resume builded",
-        },
-        {
-          type: "info",
-          message: "unable to build retry",
-        },
-        {
-          type: "alert",
-          message: "resume builded",
-        },
-        {
-          type: "error",
-          message: "unable to build retry",
-        },
-      ]);
-    }, 1000);
-
-    return () => clearInterval(id);
-  }, []);
-
-  const classForNotification = {
-    info: "bg-gray-700",
-    alert: "bg-red-700 ",
-    warn: "bg-yellow-200  text-black",
-    error: "bg-orange-300 text-black ",
-  };
-
+  const notification = useNotification();
   return (
-    <div className="relative w-[40px] h-[40px] pointer hover:border border-gray-600 rounded ">
+    <div className="relative w-[40px] h-[40px] pointer hover:border border-gray-600 rounded md:block hidden">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div>
@@ -214,47 +181,99 @@ function NotificationElement() {
             )}
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          ref={ref}
-          className="w-[20em] translate-y-5 -translate-x-12 bg-[#252526] border-none rounded shadow-2xl  "
-        >
+        <DropdownMenuContent className="w-[20em] translate-y-7 -translate-x-12 bg-[#12141D50] rounded-2xl shadow-xl shadow-[#f0f0f005] gap-2 flex flex-col p-2 border border-white border-opacity-10">
           <DropdownMenuLabel className="text-center">
             Notifications
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {notification.map((noti, index) => {
-            return (
-              <DropdownMenuItem
-                onClick={() => {
-                  // if link is provied then navigate there ele pass
-                  noti.link && router.push(noti.link);
-                }}
-                key={noti.message + index}
-                className={cn(
-                  `m-1 p-2 max-h-12 opacity-[.8]`,
-                  classForNotification[noti.type],
-                  "relative",
-                  "cursor-pointer"
-                )}
-              >
-                {(noti.type as string).toUpperCase()}: {noti.message}
-                {noti.link && (
-                  <div className="absolute bottom-0 h-full font-bold tracking-widest right-3 fcc cursor-grab">
-                    <Image
-                      src={"/arrow.svg"}
-                      width={20}
-                      height={20}
-                      alt="thisis "
-                      className="-rotate-12"
-                    />
-                  </div>
-                )}
-              </DropdownMenuItem>
-            );
-          })}
+          <NotificationRenderer notification={notification} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+  );
+}
+
+function NotificationRenderer({
+  notification,
+}: {
+  notification: Notification[];
+}) {
+  const router = useRouter();
+  const classForNotification = {
+    info: "bg-blue-500",
+    alert: "bg-red-500 ",
+    warn: " bg-yellow-500 ",
+    error: " bg-red-700",
+  };
+  return (
+    <>
+      {notification.map((noti, index) => {
+        return (
+          <div
+            onClick={() => {
+              // if link is provied then navigate there ele pass
+              noti.link && router.push(noti.link);
+            }}
+            key={noti.message + index}
+            className={cn(
+              `m-1 p-2 max-h-12 bg-opacity-5 border rounded-lg border-opacity-10 shadow-sm border-white`,
+              classForNotification[noti.type],
+              "relative",
+              "cursor-pointer"
+            )}
+          >
+            {(noti.type as string).toUpperCase()}: {noti.message}
+            {noti.link && (
+              <div className="absolute bottom-0 h-full font-bold tracking-widest right-3 fcc cursor-grab">
+                <Image
+                  src={"/arrow.svg"}
+                  width={20}
+                  height={20}
+                  alt="small arrow img "
+                  className="-rotate-12"
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function HamburgerOnMobile(props: NavProps) {
+  const [open, setOpen] = useState(false);
+  const notification = useNotification();
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger>
+        <svg viewBox="0 0 50 50" width="40px" height="40px" fill="white">
+          <path d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z" />
+        </svg>
+      </SheetTrigger>
+      <SheetContent className="bg-[#12141D]">
+        <SheetHeader className="text-start">
+          <SheetTitle className="pb-4">Links</SheetTitle>
+          <SheetDescription
+            className="flex flex-col gap-4 text-2xl underline text-start underline-offset-4 decoration-[#6255C2]"
+            onClick={(_) => setOpen(false)}
+          >
+            <NavLinks {...props} />
+          </SheetDescription>
+
+          {/* notifications */}
+          {notification.length && (
+            <SheetTitle className="pt-12 pb-4">Notification</SheetTitle>
+          )}
+          <div
+            className="flex flex-col gap-2 text-lg "
+            onClick={(_) => setOpen(false)}
+          >
+            <NotificationRenderer notification={notification} />
+          </div>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
   );
 }
 
