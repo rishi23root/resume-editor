@@ -2,7 +2,6 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -23,8 +22,7 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { NotificationArr } from "../types/utils";
+import { useState } from "react";
 
 type NavProps = {
   isSignedIn: Boolean | undefined;
@@ -38,7 +36,7 @@ function Nav() {
 
   return (
     <div className="fcb">
-      <Link href={"/"}>
+      <Link href={pathname != "/dashboard" ? "/dashboard" : "/"}>
         <Image
           className="w-40 h-12 lg:w-72 lg:h-16 "
           alt="main logo"
@@ -158,9 +156,10 @@ function NavBtns(props: NavProps) {
 // notification components
 function NotificationElement() {
   const notification = useNotification();
+  const [open, setopen] = useState(false);
   return (
     <div className="relative w-[40px] h-[40px] pointer hover:border border-gray-600 rounded md:block hidden">
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setopen}>
         <DropdownMenuTrigger>
           <div>
             <Image
@@ -181,12 +180,12 @@ function NotificationElement() {
             )}
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[20em] translate-y-7 -translate-x-12 bg-[#12141D50] rounded-2xl shadow-xl shadow-[#f0f0f005] gap-2 flex flex-col p-2 border border-white border-opacity-10">
+        <DropdownMenuContent className="w-[20em] translate-y-7 -translate-x-12 bg-[#12141D] rounded-2xl shadow-xl shadow-[#f0f0f005] gap-2 flex flex-col p-2 border border-white border-opacity-10">
           <DropdownMenuLabel className="text-center">
             Notifications
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <NotificationRenderer notification={notification} />
+          <NotificationRenderer notification={notification} setopen={setopen}/>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -195,8 +194,10 @@ function NotificationElement() {
 
 function NotificationRenderer({
   notification,
+  setopen,
 }: {
   notification: Notification[];
+  setopen?: (a: boolean) => void;
 }) {
   const router = useRouter();
   const classForNotification = {
@@ -213,10 +214,11 @@ function NotificationRenderer({
             onClick={() => {
               // if link is provied then navigate there ele pass
               noti.link && router.push(noti.link);
+              if (setopen) setopen(false);
             }}
             key={noti.message + index}
             className={cn(
-              `m-1 p-2 max-h-12 bg-opacity-5 border rounded-lg border-opacity-10 shadow-sm border-white`,
+              `m-1 p-2 max-h-12 bg-opacity-10 border rounded-lg border-opacity-10 shadow-sm border-white`,
               classForNotification[noti.type],
               "relative",
               "cursor-pointer"
@@ -251,7 +253,7 @@ function HamburgerOnMobile(props: NavProps) {
           <path d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z" />
         </svg>
       </SheetTrigger>
-      <SheetContent className="bg-[#12141D]">
+      <SheetContent className="bg-[#12141D] fc">
         <SheetHeader className="text-start">
           <SheetTitle className="pb-4">Links</SheetTitle>
           <SheetDescription
@@ -260,7 +262,9 @@ function HamburgerOnMobile(props: NavProps) {
           >
             <NavLinks {...props} />
           </SheetDescription>
+        </SheetHeader>
 
+        <SheetHeader className="text-start">
           {/* notifications */}
           {notification.length && (
             <SheetTitle className="pt-12 pb-4">Notification</SheetTitle>
@@ -272,6 +276,26 @@ function HamburgerOnMobile(props: NavProps) {
             <NotificationRenderer notification={notification} />
           </div>
         </SheetHeader>
+
+        <div className="flex-1 "></div>
+
+        {/* if not on dashboard page */}
+        {props.pathname != "/dashboard" && (
+          <Link
+            href={"/dashboard"}
+            className="items-center gap-4 fr"
+            onClick={(_) => setOpen(false)}
+          >
+            <Image
+              src={"/arrow.svg"}
+              className="rotate-180"
+              width={30}
+              height={30}
+              alt=";t"
+            ></Image>
+            Back to Dashboard
+          </Link>
+        )}
       </SheetContent>
     </Sheet>
   );

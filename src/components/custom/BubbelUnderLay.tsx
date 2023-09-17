@@ -135,7 +135,8 @@ function Bubble({
           "bg-opacity-10 rounded-full blur-2xl",
           color,
           "-translate-x-1/2 -translate-y-1/2",
-          "duration-[21s] ease-linear infinite"
+          "ease-linear infinite",
+          `duration-&lsqb;21s&rsqb;`
         )}
         style={{
           width: `${size / 4}rem`,

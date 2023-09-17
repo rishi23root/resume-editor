@@ -1,13 +1,10 @@
-import "./globals.css";
+import "@/styles/globals.css";
+import { clsx } from "clsx";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { clsx } from "clsx";
-import { BubbleUnderlay } from "../components/custom/BubbelUnderLay";
-import NoSSR from "../hooks/NoSSR";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import Nav from "@/components/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,6 +39,9 @@ export const metadata: Metadata = {
     "make professional resume",
     "help building a resume",
     "build a resume easy",
+    "how to make resume",
+    "where to make resume",
+    "which resume to make",
   ],
   authors: [
     { name: "rishi23root" },

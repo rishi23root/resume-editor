@@ -3,8 +3,10 @@
 import TwScreenInfo from "../../../components/custom/TwScreenInfo";
 import AnimateText from "../../../components/custom/AmimateText";
 import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 // import { UserButton, useAuth, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function Dashboard() {
   // get userid from clerk
@@ -16,7 +18,16 @@ export default function Dashboard() {
   return (
     // make whole page with 10/12 width and center it on above medium screens
     <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] lg:gap-10 gap-4 fr flex-1 ">
-      <div className="w-3/6 glass">
+      <div className="w-3/6 glass fc">
+        <Button className="gap-4 p-6 m-4 text-2xl bg-blue-600 rounded-xl fr">
+          <Image
+            src={"/svgs/addNew.svg"}
+            height={30}
+            width={30}
+            alt="this is add"
+          />
+          New Resume
+        </Button>
         <h1>this is Dashboard1</h1>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat, sequi
         est? Doloribus omnis, corporis, quibusdam quidem id minus aliquid

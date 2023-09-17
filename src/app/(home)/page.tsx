@@ -1,14 +1,22 @@
 import Nav from "../../components/Nav";
-import Line from "../../components/Line";
-import HeroSection from "../../components/Sections/HeroSection";
-import Section2 from "../../components/Sections/Section2";
-import SectionFeatures from "../../components/Sections/SectionFeatures";
+
+import dynamic from "next/dynamic";
+
+const Line = dynamic(() => import("@/components/Line"));
+const HeroSection = dynamic(() => import("@/components/Sections/HeroSection"));
+const Section2 = dynamic(() => import("@/components/Sections/Section2"));
+const SectionFeatures = dynamic(
+  () => import("@/components/Sections/SectionFeatures")
+);
+const Footer = dynamic(() => import("@/components/Footer"));
+
 import { SectionAbout } from "../../components/Sections/SectionAbout";
 import { SectionPrice } from "../../components/Sections/SectionPrice";
-import Footer from "../../components/Footer";
+
 import { BubbleUnderlay } from "@/components/custom/BubbelUnderLay";
 import NoSSR from "@/hooks/NoSSR";
 import clsx from "clsx";
+
 // import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 export default function Home() {
