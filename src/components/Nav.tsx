@@ -127,7 +127,7 @@ function NavBtns(props: NavProps) {
             <Image
               className="w-[22px] h-[17px] opacity-90 invert"
               alt="arrow svg"
-              src="/arrow.svg"
+              src="/svgs/arrow.svg"
               width={22}
               height={17}
             />
@@ -163,7 +163,7 @@ function NotificationElement() {
         <DropdownMenuTrigger>
           <div>
             <Image
-              src={"/notification.svg"}
+              src={"/svgs/notification.svg"}
               width={40}
               height={40}
               className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -171,7 +171,7 @@ function NotificationElement() {
             />
             {notification.length > 0 && (
               <Image
-                src={"/newNotification.svg"}
+                src={"/svgs/newNotification.svg"}
                 width={40}
                 height={40}
                 className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -185,7 +185,7 @@ function NotificationElement() {
             Notifications
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <NotificationRenderer notification={notification} setopen={setopen}/>
+          <NotificationRenderer notification={notification} setopen={setopen} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -228,7 +228,7 @@ function NotificationRenderer({
             {noti.link && (
               <div className="absolute bottom-0 h-full font-bold tracking-widest right-3 fcc cursor-grab">
                 <Image
-                  src={"/arrow.svg"}
+                  src={"/svgs/arrow.svg"}
                   width={20}
                   height={20}
                   alt="small arrow img "
@@ -287,7 +287,7 @@ function HamburgerOnMobile(props: NavProps) {
             onClick={(_) => setOpen(false)}
           >
             <Image
-              src={"/arrow.svg"}
+              src={"/svgs/arrow.svg"}
               className="rotate-180"
               width={30}
               height={30}

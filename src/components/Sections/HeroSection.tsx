@@ -19,7 +19,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
-                src="/arrow.svg"
+                src="/svgs/arrow.svg"
                 width={22}
                 height={17}
               />
@@ -31,7 +31,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
-                src="/arrow.svg"
+                src="/svgs/arrow.svg"
                 width={22}
                 height={17}
               />
@@ -43,7 +43,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
-                src="/arrow.svg"
+                src="/svgs/arrow.svg"
                 width={22}
                 height={17}
               />
@@ -55,7 +55,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
-                src="/arrow.svg"
+                src="/svgs/arrow.svg"
                 width={22}
                 height={17}
               />
@@ -67,7 +67,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
-                src="/arrow.svg"
+                src="/svgs/arrow.svg"
                 width={22}
                 height={17}
               />
