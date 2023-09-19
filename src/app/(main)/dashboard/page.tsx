@@ -17,7 +17,7 @@ export default function Dashboard() {
   // check if user is signed in if not then redirect to login pages else redirect to dashboard
   return (
     // make whole page with 10/12 width and center it on above medium screens
-    <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] lg:gap-10 gap-4 fr flex-1 ">
+    <>
       <div className="w-3/6 glass fc">
         <Button className="gap-4 p-6 m-4 text-2xl bg-blue-600 rounded-xl fr">
           <Image
@@ -43,9 +43,7 @@ export default function Dashboard() {
         magnam neque eum enim delectus, assumenda reiciendis debitis commodi,
         quam deleniti, placeat tempore!
       </div>
-
-      {/* <TwScreenInfo /> */}
-    </main>
+    </>
   );
 }
 
