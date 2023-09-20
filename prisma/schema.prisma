@@ -20,16 +20,23 @@ datasource db {
 // profile model
 
 model User {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String @unique
+  email     String   @unique
+  profile   String   @unique
+  createdAt DateTime @default(now())
 }
 
-
 model Profile {
-  id           Int            @id @default(autoincrement())
-  label        String
-  notification Notification[]
+  id           Int    @id @default(autoincrement())
+  
+  defaultLabel String
+
+  notifications Notification[]
+  resumes       Resume[]
+  
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 // user and profile will have the same id for user profile
@@ -40,9 +47,20 @@ model Notification {
   message String
   link    String?
 
-  Profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId Int?
+  Profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId Int
+  createdAt DateTime @default(now())
 }
 
-// createdAt DateTime @default(now())
-// updatedAt DateTime @updatedAt
+model Resume {
+  id    Int    @id @default(autoincrement())
+  label String
+
+  // add resume data here liek profiles and resume fields
+
+  // profile id
+  Profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
