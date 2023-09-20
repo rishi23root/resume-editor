@@ -15,31 +15,20 @@ datasource db {
   // shadowDatabaseUrl = env(“SHADOW_DATABASE_URL”)
 }
 
-// user model
-// resume model 
-// profile model
-
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  profile   String   @unique
-  createdAt DateTime @default(now())
-}
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String @unique
+  profile String @unique
 
-model Profile {
-  id           Int    @id @default(autoincrement())
-  
-  defaultLabel String
+  defaultLabel String 
 
   notifications Notification[]
   resumes       Resume[]
-  
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-}
 
-// user and profile will have the same id for user profile
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model Notification {
   id      Int     @id @default(autoincrement())
@@ -47,8 +36,9 @@ model Notification {
   message String
   link    String?
 
-  Profile   Profile  @relation(fields: [profileId], references: [id])
-  profileId Int
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
+
   createdAt DateTime @default(now())
 }
 
@@ -58,9 +48,10 @@ model Resume {
 
   // add resume data here liek profiles and resume fields
 
-  // profile id
-  Profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
+  // resume owner
+  owner     User     @relation(fields: [userId], references: [id])
+  userId    Int
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
