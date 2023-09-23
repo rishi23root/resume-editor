@@ -3,3 +3,14 @@ export type Notification = {
     message: string,
     link ?: string
 }
+
+
+export type templateWithImages = {
+    id: number,
+    name: string,
+    pages: string[]
+}
+// export type templateWithImages = [{
+//     name: string,
+//     pages: string[]
+// }]
