@@ -4,17 +4,13 @@ import { getTemplateDataWithImages } from "@/utils/actions";
 import { redirect } from "next/navigation";
 
 // app/posts/page.ts
-type Props = {
-  params: {};
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+// type Props = {
+//   params: {};
+//   searchParams: { [key: string]: string | string[] | undefined };
+// };
+// export default async function Template(props: Props) {
 
-export default async function Template(props: Props) {
-  const searchParams = props.searchParams;
-  // if (!searchParams.hasOwnProperty("TemplateName")) {
-  //   // console.log(searchParams);
-  //   redirect(`/Templates?TemplateName=singleColumn`);
-  // }
+export default async function Template() {
   const templateData = await getTemplateDataWithImages();
 
   return (
