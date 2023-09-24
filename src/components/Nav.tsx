@@ -47,7 +47,7 @@ function Nav() {
         />
       </Link>
       <div className="hidden gap-3 fcc lg:gap-12 lg:text-2xl font-base md:flex">
-        {rendered && <NavLinks isSignedIn={isSignedIn} pathname={pathname} />}
+        <NavLinks isSignedIn={isSignedIn} pathname={pathname} />
       </div>
       <div className="flex items-center justify-center gap-2 lg:gap-8 ">
         {rendered && <NavBtns isSignedIn={isSignedIn} pathname={pathname} />}
