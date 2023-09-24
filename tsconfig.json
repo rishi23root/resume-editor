@@ -21,9 +21,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "baseUrl": "src"
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/localtest.js"],
   "exclude": ["node_modules"]
 }

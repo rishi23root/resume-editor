@@ -7,8 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "pgen": "prisma generate",
+    "pstudio": "prisma studio",
+    "pmig": "prisma migrate dev",
     "ppull": "prisma db pull",
-    "pgen": "prisma generate"
+    "ppush": "prisma db push",
+    "pv": "prisma validate",
+    "pf": "prisma format"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
