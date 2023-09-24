@@ -12,6 +12,7 @@ WEBSITE_URL=0.0.0.0
 
 # db connections 
 DATABASE_URL=
-DIRECT_URL=
 
-BACKEND=
+BACKEND=https://api.buildyourresume.online
+
+
