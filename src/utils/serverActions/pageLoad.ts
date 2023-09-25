@@ -30,7 +30,7 @@ export async function userLogined() {
             "privateMetadata": {
                 'userDBid': newUser.id,
                 'name': user.firstName + " " + user.lastName
-            } as any}
+            }}
         )        
         // 3 redict user to the first time login sequence
         redirect('/New?new=true')

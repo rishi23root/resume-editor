@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "pgen": "prisma generate",
@@ -14,7 +14,7 @@
     "ppush": "prisma db push",
     "pv": "prisma validate",
     "pf": "prisma format",
-    "pSetup" : "npm run pf && npm run pgen && npm run ppush && npm run pstudio"
+    "pSetup": "npm run pf && npm run pgen && npm run ppush && npm run pstudio"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
