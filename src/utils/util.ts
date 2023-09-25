@@ -44,3 +44,6 @@ export async function getTemplateDataWithImages() {
 
   return templatesWithImages;
 }
+
+// export async function 
+// get notifications

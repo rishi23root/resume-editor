@@ -1,18 +1,18 @@
-"use client";
-
-import TwScreenInfo from "../../../components/custom/TwScreenInfo";
-import AnimateText from "../../../components/custom/AmimateText";
-import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+// import { dashboardAction } from "@/utils/serverActions/pageLoad";
+import { currentUser } from "@clerk/nextjs";
 
-// import { UserButton, useAuth, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
-export default function Dashboard() {
+export default async function Dashboard() {
   // get userid from clerk
   // const { isLoaded, userId, sessionId, getToken } = useAuth();
-  // const { user } = useUser();
-  // console.log(userId, user);
+  // const  user = await currentUser();
+  // console.log(user?.id);
+  
+  // const data = await dashboardAction()
+  // console.log(data);
+  
 
   // check if user is signed in if not then redirect to login pages else redirect to dashboard
   return (
@@ -46,5 +46,3 @@ export default function Dashboard() {
     </>
   );
 }
-
-// Dashboard.
