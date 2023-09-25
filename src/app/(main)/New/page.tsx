@@ -1,24 +1,36 @@
-"use client";
+import { type PageProps } from "@/types/utils";
+import { redirect } from "next/navigation";
+// page route /New
 
-import TwScreenInfo from "../../../components/custom/TwScreenInfo";
-import AnimateText from "../../../components/custom/AmimateText";
-import { AnimatePresence, motion } from "framer-motion";
+// user to create new resume
+// possibel search params are = mode, templateName, resumeId
+// parameters=> mode ['newResume', 'newLogin']
+// if newResume{
+// go to any one page and
+//     templateName [all list of templates]
+// }
 
-// import { UserButton, useAuth, useUser } from "@clerk/nextjs";
+export default function New(props: PageProps) {
+  if (!props.searchParams?.mode){
+    redirect('/New?mode=newResume');
+  } else if (props.searchParams?.mode == "newResume") {
+    // console.log(props);
+  } else if (props.searchParams?.mode == "newLogin") {
+    // ask user to upload the user from pc or load from linkedin or start generating the resume data
+    // ask user to use upload resume 
+  }
+  // show templates and ask user for his choices to template to use 
+  // and show old build resume if use that to create new or upload a resume to parse it 
 
-export default function New() {
-  // get userid from clerk
-  // const { isLoaded, userId, sessionId, getToken } = useAuth();
-  // const { user } = useUser();
-  // console.log(userId, user);
-
-  // check if user is signed in if not then redirect to login pages else redirect to dashboard
   return (
-    // make whole page with 10/12 width and center it on above medium screens
-    <div className="border">
-      this is new resume builder
-      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat, sequi est? Doloribus omnis, corporis, quibusdam quidem id minus aliquid repellat animi, dolor exercitationem sunt consequuntur veniam? Eius magnam neque eum enim delectus, assumenda reiciendis debitis commodi, quam deleniti, placeat tempore! */}
-      {/* <UserButton/> */}
+    <div className="w-full border">
+      {props.searchParams && Object.keys(props.searchParams).map((key) => {
+        return (
+          <div className="text-xl " key={key}>
+            {key} = {props.searchParams[key]}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -14,3 +14,8 @@ export type templateWithImages = {
 //     name: string,
 //     pages: string[]
 // }]
+
+export type PageProps = {
+  params: {};
+  searchParams: { [key: string]: string | string[] | undefined };
+};

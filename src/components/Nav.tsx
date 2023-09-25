@@ -76,7 +76,10 @@ function NavLinks({ isSignedIn, pathname }: NavProps) {
       <Link href={"/New"} className="text-violet-50">
         New +
       </Link>
-      <Link href={"/Templates"} className="text-violet-50">
+      <Link
+        href={"/Templates?templateName=singleColumn"}
+        className="text-violet-50"
+      >
         Templates
       </Link>
       <Link href={"/JobDescriptions"} className="text-violet-50">

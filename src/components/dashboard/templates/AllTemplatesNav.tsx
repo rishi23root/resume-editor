@@ -17,7 +17,7 @@ async function GetTemplates({
               href={{
                 pathname: `/Templates/`,
                 query: {
-                  TemplateName: ele.name,
+                  templateName: ele.name,
                 },
               }}
               key={ele.id}
