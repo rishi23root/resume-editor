@@ -35,7 +35,7 @@ function Nav() {
   const rendered = RenderCompleted();
 
   return (
-    <div className="fcb">
+    <div className="pr-2 fcb">
       <Link href={pathname != "/dashboard" ? "/dashboard" : "/"}>
         <Image
           className="w-40 h-12 lg:w-72 lg:h-16 "
@@ -125,11 +125,11 @@ function NavBtns(props: NavProps) {
           <div className="gap-2 font-medium text-center lg:text-2xl text-neutral-200 fcc">
             Dashboard{" "}
             <Image
-              className="w-[22px] h-[17px] opacity-90 invert"
+              className="w-[30px] h-[20px] fill-white"
               alt="arrow svg"
               src="/svgs/arrow.svg"
-              width={22}
-              height={17}
+              width={30}
+              height={20}
             />
           </div>
         </Link>
@@ -144,7 +144,7 @@ function NavBtns(props: NavProps) {
           <div className="w-9 icon">
             <UserButton afterSwitchSessionUrl="/" afterSignOutUrl="/" />
           </div>
-          <div className="w-9 icon md:hidden">
+          <div className=" w-fit md:hidden fc" >
             <HamburgerOnMobile {...props} />
           </div>
         </div>
@@ -249,7 +249,7 @@ function HamburgerOnMobile(props: NavProps) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
-        <svg viewBox="0 0 50 50" width="40px" height="40px" fill="white">
+        <svg viewBox="0 0 50 50" width="32px" height="32px" fill="white">
           <path d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z" />
         </svg>
       </SheetTrigger>
