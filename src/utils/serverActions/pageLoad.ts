@@ -7,13 +7,14 @@ import { redirect } from "next/navigation";
 
 
 
-export async function userLogined() {
+export async function userLogined(): Promise<PrivateMetadata | {}> {
     const user = await currentUser();
     // if user does not have private metadata that means user is new to platform 
     if (!Object.keys(user?.privateMetadata as object).length && user?.id) {
         // 1. create user in database 
 
-        
+        try{
+
         const newUser = await prisma.user.create({
             data: {
                 name: (user.firstName + ' ' + user.lastName),
@@ -34,6 +35,10 @@ export async function userLogined() {
         )        
         // 3 redict user to the first time login sequence
         redirect('/New?new=true')
+        } catch (e){
+            return {}
+        }
+
     } else{
         console.log("seems user is already exiting",user?.privateMetadata);
     }
