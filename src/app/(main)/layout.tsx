@@ -1,7 +1,4 @@
 import Nav from "@/components/Nav";
-// import { getUserId } from "@/utils/dbUtils";
-import { currentUser } from "@clerk/nextjs";
-import { prisma } from "@/lib/prisma";
 import { userLogined } from "@/utils/serverActions/pageLoad";
 
 export default async function RootLayout({
