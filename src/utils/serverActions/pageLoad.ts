@@ -17,7 +17,7 @@ export async function userLogined() {
         const newUser = await prisma.user.create({
             data: {
                 name: (user.firstName + ' ' + user.lastName),
-                cleckId: user.id,
+                clerkId: user.id
             },
             select: {
                 id: true,
