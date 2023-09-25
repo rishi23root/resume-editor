@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  cleckId String @unique
 
-  name  String
-  email String
+  name String
+  // email String
 
-  defaultLabel String
+  defaultLabel String?
 
   notifications Notification[]
   resumes       ResumeData[]

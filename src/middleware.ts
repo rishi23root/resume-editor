@@ -1,4 +1,8 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+// import { getUserByClearkId } from "./utils/dbUtils";
+
+import { clerkClient } from "@clerk/nextjs";
+
 // import { NextResponse } from "next/server";
 
 // This example protects all routes including api/trpc routes
@@ -7,12 +11,25 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 
 
-export default authMiddleware({
+export default  authMiddleware({
   afterAuth(auth, req, evt) {
     // handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }
+    // check for user metadata
+    
+    // if (!auth.session){
+    //   // if no sesion id get the user data from the db 
+    //   // getUserByClearkId(auth?.userId).then(console.log);
+    //   clerkClient.users.updateUserMetadata(auth.userId,{
+    //     privateMetadata: {
+    //       userid: 
+    // }
+    //   })
+      
+    // }
+    
 
     // on the succesfull user first signup that mean user is not not already exist in the database
     

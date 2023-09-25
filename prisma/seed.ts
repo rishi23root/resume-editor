@@ -15,6 +15,27 @@ const prisma = new PrismaClient({
 	errorFormat: "pretty",
 });
 
+// clear prisma database
+// async function fresh(){
+// 	await prisma.$connect();
+
+// 	const delUser = await prisma.user.deleteMany({
+// 		where: {}
+// 	});
+// 	// const delResume = await prisma.resumeData.deleteMany();
+// 	console.log(delUser);
+// }
+
+// fresh()
+// 	.then(async () => {
+// 		await prisma.$disconnect();
+// 	})
+// 	.catch(async (e) => {
+// 		console.error(e);
+// 		await prisma.$disconnect();
+// 		process.exit(1);
+// 	});
+
 // async function main() {
 	// Connect the client
 	// await prisma.$connect();

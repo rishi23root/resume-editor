@@ -13,7 +13,8 @@
     "ppull": "prisma db pull",
     "ppush": "prisma db push",
     "pv": "prisma validate",
-    "pf": "prisma format"
+    "pf": "prisma format",
+    "pSetup" : "npm run pf && npm run pgen && npm run ppush && npm run pstudio"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
