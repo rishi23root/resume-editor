@@ -9,6 +9,7 @@ const nextConfig = {
         styledComponents: true,
     },
     // headers() {
+    // https://report-uri.com/home/generate to solve it 
     //     return [
     //         {
     //             source: '/(.*)',

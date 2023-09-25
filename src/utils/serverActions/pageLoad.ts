@@ -26,6 +26,7 @@ export async function userLogined(): Promise<PrivateMetadata | {}> {
         })
 
         // 2. update user metadata for the application 
+        // for more info see https://clerk.com/docs/users/metadata
         // console.log("setting up user metadata: ",user?.id, newUser);
         await clerkClient.users.updateUserMetadata(user?.id as string,{
             "privateMetadata": {
