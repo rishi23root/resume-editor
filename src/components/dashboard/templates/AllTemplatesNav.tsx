@@ -1,5 +1,4 @@
 import { templateWithImages } from "@/types/utils";
-import { getTemplateDataWithImages } from "@/utils/actions";
 import Image from "next/image";
 import Link from "next/link";
 
