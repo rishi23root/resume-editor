@@ -147,7 +147,7 @@ function NavBtns(props: NavProps) {
           <div className="w-9 icon">
             <UserButton afterSwitchSessionUrl="/" afterSignOutUrl="/" />
           </div>
-          <div className=" w-fit md:hidden fc" >
+          <div className=" w-fit md:hidden fc">
             <HamburgerOnMobile {...props} />
           </div>
         </div>
@@ -221,7 +221,7 @@ function NotificationRenderer({
             }}
             key={noti.message + index}
             className={cn(
-              `m-1 p-2 max-h-12 bg-opacity-10 border rounded-lg border-opacity-10 shadow-sm border-white`,
+              `m-1 p-2  bg-opacity-10 border rounded-lg border-opacity-10 shadow-sm border-white text-sm md:text-xl h-fit`,
               classForNotification[noti.type],
               "relative",
               "cursor-pointer"
