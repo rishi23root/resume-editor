@@ -12,7 +12,7 @@ model User {
   clerkId String @unique
 
   name String
-  // email String
+  isLinkedLogin Boolean?
 
   defaultLabel String?
 

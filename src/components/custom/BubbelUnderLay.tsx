@@ -1,5 +1,5 @@
 "use client";
-
+import RenderCompleted from "@/hooks/RenderCompleted";
 import clsx from "clsx";
 import {
   AnimatePresence,
@@ -10,7 +10,7 @@ import {
 import React, { useMemo } from "react";
 import { useEffect } from "react";
 
-export function BubbleUnderlay({
+export default function BubbleUnderlay({
   className,
 }: {
   className?: string;
@@ -21,6 +21,8 @@ export function BubbleUnderlay({
     []
   );
 
+  const isRenderd = RenderCompleted();
+
   // Default values
   const bubbleColors = [
     "bg-sky-400",
@@ -30,6 +32,7 @@ export function BubbleUnderlay({
   ];
   const bubbleSizes = [64, 96, 72, 80];
 
+  if (!isRenderd) return <></>;
   return (
     <div className={className}>
       <AnimatePresence initial={true}>
@@ -124,8 +127,8 @@ function Bubble({
         scale: 1,
       }}
       transition={{
-        duration: 5,
-        delay: 0.5,
+        duration: 3,
+        delay: 0.2,
       }}
     >
       <motion.div

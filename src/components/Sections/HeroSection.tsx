@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 function HeroSection({ editorLink }: { editorLink: string }) {
   return (
@@ -90,24 +88,22 @@ function HeroSection({ editorLink }: { editorLink: string }) {
 
       {/* images  */}
       <div className="relative w-[26em] h-[30em] xl:scale-[1.1] lg:scale-[.9] md:scale-[.9] scale-[.65] translate-x-4 md:-translate-x-4   lg:-translate-x-2 xl:-translate-x-14 ">
-        <AspectRatio ratio={17/22}>
-          <Image
-            alt="example resume"
-            className="absolute rounded right-[0] top-[50%] -translate-y-1/2 scale-[1] brightness-[.95]  object-cover"
-            src="/exampleR/twoColumn.jpg"
-            priority={true}
-            width={900}
-            height={1500}
-            blurDataURL="/exampleR/twoColumn.jpg"
-            placeholder="blur"
-          />
-        </AspectRatio>
+        <Image
+          alt="example resume"
+          className="absolute rounded right-[0] top-[50%] -translate-y-1/2 scale-[1] brightness-[.95]  object-cover aspect-[17/22]"
+          src="/exampleR/twoColumn.jpg"
+          loading="lazy"
+          width={900}
+          height={1500}
+          blurDataURL="/exampleR/twoColumn.jpg"
+          placeholder="blur"
+        />
 
         <Image
           alt="example resume"
           className="absolute rounded right-[28%] top-[55%] -translate-y-1/2 scale-120 h-[28rem] w-[22rem] brightness-[.97] shadow-lg"
           src="/exampleR/singleColumn.jpg"
-          priority={true}
+          loading="lazy"
           width={900}
           height={1500}
           blurDataURL="/exampleR/singleColumn.jpg"

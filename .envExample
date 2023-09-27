@@ -13,6 +13,5 @@ WEBSITE_URL=0.0.0.0
 # db connections 
 DATABASE_URL=
 
+FRONTEND=http://localhost:3000
 BACKEND=https://api.buildyourresume.online
-
-

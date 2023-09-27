@@ -1,5 +1,10 @@
 import { clsx } from "clsx";
-import { BubbleUnderlay } from "../../components/custom/BubbelUnderLay";
+
+const BubbleUnderlay = dynamic(
+  () => import("@/components/custom/BubbelUnderLay")
+);
+
+import dynamic from "next/dynamic";
 import NoSSR from "../../hooks/NoSSR";
 
 export default function RootLayout({

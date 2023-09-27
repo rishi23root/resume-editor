@@ -3,19 +3,20 @@
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { templateWithImages } from "@/types/utils";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Render({ templateData }: { templateData: templateWithImages[] }) {
   // get template name from parameters
   const router = useRouter();
-  const templateName = useSearchParams().get("TemplateName");
+  const templateName = useSearchParams().get("templateName");
   const [images, setImages] = useState<string[]>([]);
   const isRendered = RenderCompleted();
 
   useEffect(() => {
     if (!templateName) {
-      router.push("/Templates?TemplateName=twoColumn");
+      router.push("/Templates?templateName=singleColumn");
     }
     // console.log(templateData, templateName);
     const currentTemplateImage = templateData.filter(
@@ -39,15 +40,20 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
                 alt="testing"
                 className="rounded-sm w-fit md:w-4/6 xl:w-2/6 lg:w-3/6"
               />
-              <button className="p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md">
+              <Link
+                href={`/New?mode=newResume&templateName=${templateName}`}
+                className="p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md"
+              >
                 use Template
-              </button>
+              </Link>
             </>
           )}
           {images.length == 0 && (
             <div className="self-center w-full m-auto text-2xl text-center text-red-100">
-              <span className="font-bold text-white">Template: {templateName}</span>
-			  <br />
+              <span className="font-bold text-white">
+                Template: {templateName}
+              </span>
+              <br />
               It seems not in the template database yet :(
             </div>
           )}

@@ -1,4 +1,4 @@
-import Nav from "../../components/Nav";
+import Nav from "../../components/Nav/index";
 
 import dynamic from "next/dynamic";
 
@@ -13,14 +13,20 @@ const Footer = dynamic(() => import("@/components/Footer"));
 import { SectionAbout } from "../../components/Sections/SectionAbout";
 import { SectionPrice } from "../../components/Sections/SectionPrice";
 
-import { BubbleUnderlay } from "@/components/custom/BubbelUnderLay";
+const BubbleUnderlay = dynamic(
+  () => import("@/components/custom/BubbelUnderLay")
+);
+
+// import  BubbleUnderlay  from "@/components/custom/BubbelUnderLay";
 import NoSSR from "@/hooks/NoSSR";
 import clsx from "clsx";
+import { auth } from "@clerk/nextjs";
 
 // import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 export default function Home() {
   const editorLink = "/dashboard";
+  const user = auth() 
 
   return (
     // make whole page with 10/12 width and center it on above medium screens
@@ -39,7 +45,7 @@ export default function Home() {
       </NoSSR>
       <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8 ">
         {/* paint each section */}
-        <Nav />
+        <Nav isSignedIn={user?.sessionId ? true : false} pathname="/" />
         <HeroSection editorLink={editorLink} />
         <Line />
         <Section2 editorLink={editorLink} />
