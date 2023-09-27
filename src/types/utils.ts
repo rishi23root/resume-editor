@@ -17,7 +17,7 @@ export type templateWithImages = {
 }
 
 export type PageProps = {
-  params: {};
+  params: {[key: string]: string} ;
   searchParams: { [key: string]: string | string[] | undefined } | newResumeSearchParams;
 };
 

@@ -33,16 +33,16 @@ export default async function New(props: PageProps) {
       <div className="gap-8 fc">
         <div className="gap-8 md:fr fc">
           <Link
-            href={"/404fornow"}
+            href={"/New/parsePDF/"}
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
               <div className="fcc fc">
                 <div className="text-2xl font-medium text-white ">
-                  Import from LinkedIn
+                  Import from LinkedIn / PDF
                 </div>
                 <div className="text-sm font-medium text-center text-white text-opacity-70 ">
-                  Leverage from your optimized linkedin profile.
+                  Import from your linkedin profile or resume pdf.
                 </div>
               </div>
               <div className="relative p-1 ">

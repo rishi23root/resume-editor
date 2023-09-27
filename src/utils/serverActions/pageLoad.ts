@@ -5,8 +5,6 @@ import { clerkClient } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { PageProps } from "@/types/utils";
 
-
-
 export async function userLogined(): Promise<PrivateMetadata | {}> {
     const user = await currentUser();
     
@@ -53,6 +51,9 @@ export async function userLogined(): Promise<PrivateMetadata | {}> {
 
 export async function handlePageProps(currentPath:string, params:PageProps){
     // console.log(currentPath, params);
+    // check for which user is currently on then prove the user with the necessary data accordingly
+
+    
 
     
 }
