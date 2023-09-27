@@ -101,6 +101,22 @@
       p-5 rounded-xl 
       /* bg-gradient-to-tr from-white/10 via-transparent to-white/10  */;
   }
+
+  .face{
+    /* background-color: red; */
+    animation: findEle 350ms alternate-reverse ease-in-out;
+    animation-iteration-count : 20;
+  }
+  @keyframes findEle {
+    from {
+      /* 0.5rem */
+      transform: translateX(0.5rem);
+    }
+    to {
+      transform: translateX(0.75rem);
+      /* @apply translate-x-3 ; */
+    }
+  }
 }
 
 @layer base {
@@ -159,3 +175,5 @@ body::-webkit-scrollbar-thumb {
   background-color: rgba(169, 169, 169, 0.3);
   border-radius: 0.5rem;
 }
+
+

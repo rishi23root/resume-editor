@@ -1,4 +1,4 @@
-import Nav from "@/components/Nav";
+import Nav from "@/components/Nav/index";
 import { userLogined } from "@/utils/serverActions/pageLoad";
 
 export default async function RootLayout({
@@ -6,23 +6,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // import the user data here
-  // const user = await currentUser();
-  // console.log("user private Data: ", user?.privateMetadata);
-  const data = await userLogined()
+  const data = await userLogined();
   // console.log(data.userDBid)
-
-  // const data = getUserId()
-  // console.log(data);
 
   return (
     <>
       <div className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8 w-full">
-        <Nav />
+        <Nav isSignedIn={data ? true : false} pathname="/dashboard" /> 
+        {/* pathname value is hardcoded here because it doesn't matter which path it is just not '/' */}
       </div>
       <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] lg:gap-10 gap-4 fr flex-1 ">
         {children}
-        {/* <TwScreenInfo /> */}
       </main>
     </>
   );

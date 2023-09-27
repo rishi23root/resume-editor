@@ -1,18 +1,11 @@
 import { type PageProps } from "@/types/utils";
+import { handlePageProps } from "@/utils/serverActions/pageLoad";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-// page route /New
 
-// user to create new resume
-// possibel search params are = mode, templateName, resumeId
-// parameters=> mode ['newResume', 'newLogin']
-// if newResume{
-// go to any one page and
-//     templateName [all list of templates]
-// }
-
-export default function New(props: PageProps) {
+export default async function New(props: PageProps) {
+  await handlePageProps("/New",props);
   if (!props.searchParams?.mode) {
     redirect("/New?mode=newResume");
   } else if (props.searchParams?.mode == "newResume") {
@@ -36,7 +29,7 @@ export default function New(props: PageProps) {
   }
   return (
     <div className="w-full gap-8 fc fcc md:glass">
-      <div className="text-5xl text-center">How do you want to proceed ?</div>
+      <div className="mb-4 text-4xl text-center md:text-5xl">How do you want to proceed ?</div>
       <div className="gap-8 fc">
         <div className="gap-8 md:fr fc">
           <Link
@@ -54,6 +47,7 @@ export default function New(props: PageProps) {
               </div>
               <div className="relative p-1 ">
                 <Image
+                  className="w-auto h-auto"
                   src={"/svgs/linkedinResume.svg"}
                   width={300}
                   height={200}
@@ -61,10 +55,10 @@ export default function New(props: PageProps) {
                 />
                 <Image
                   src={"/svgs/linkedin.svg"}
-                  width={30}
-                  height={20}
+                  width={10}
+                  height={10}
                   alt="linkedin.svg"
-                  className="absolute left-6 top-6"
+                  className="absolute w-8 h-8 left-8 top-8"
                 />
               </div>
             </div>
@@ -84,6 +78,7 @@ export default function New(props: PageProps) {
               </div>
               <div className="relative p-1 ">
                 <Image
+                  className="w-auto h-auto"
                   src={"/svgs/resume.svg"}
                   width={300}
                   height={200}
