@@ -29,4 +29,7 @@ const nextConfig = {
     // },
 }
 
-module.exports = nextConfig
+const withBundleAnalyzer = require("@next/bundle-analyzer")({ enabled: true });
+eval(process.env.ANALYZE) && console.log("\tIn site sizeView :", eval(process.env.ANALYZE));
+
+module.exports = eval(process.env.ANALYZE) ? withBundleAnalyzer({}) : nextConfig;
