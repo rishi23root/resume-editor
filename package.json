@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "npx prisma generate && next build",
     "start": "next start",
+    "sizeView": "export ANALYZE=true && next build && export ANALYZE=false",
     "lint": "next lint",
     "pgen": "prisma generate",
     "pstudio": "prisma studio",
@@ -19,6 +20,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.23.5",
     "@clerk/themes": "^1.7.5",
+    "@next/bundle-analyzer": "^13.5.3",
     "@prisma/client": "^5.3.1",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
