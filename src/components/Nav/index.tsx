@@ -83,12 +83,12 @@ function NavBtns(props: NavProps) {
           <div className="icon">
             <NotificationElement />
           </div>
-          <div className="relative w-8 h-8 overflow-hidden rounded-full -z-10 bg-slate-600">
-            <div className="z-10">
+          <div className="relative w-8 h-8 overflow-hidden rounded-full bg-slate-600 ">
+            <div className="absolute z-10">
               <UserButton />
             </div>
-            <div className="absolute top-0 left-0 w-3 h-3 translate-x-[0.5rem] translate-y-1 bg-black rounded-full -z-10 face"></div>
-            <div className="absolute top-0 left-0 w-6 h-6 translate-x-1 translate-y-3 bg-black rounded-full -z-10"></div>
+            <div className="absolute top-0 left-0 w-3 h-3 translate-x-[0.5rem] translate-y-1 bg-black rounded-full  face"></div>
+            <div className="absolute top-0 left-0 w-6 h-6 translate-x-1 translate-y-3 bg-black rounded-full "></div>
           </div>
           <div className="w-fit md:hidden fc">
             <HamburgerOnMobile {...props} />
