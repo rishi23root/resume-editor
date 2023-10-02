@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { clerkClient } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { PageProps } from "@/types/utils";
+import { ExternalAccount } from "@clerk/nextjs/server";
 
 export async function userLogined(): Promise<PrivateMetadata | {}> {
     const user = await currentUser();
@@ -52,8 +53,13 @@ export async function userLogined(): Promise<PrivateMetadata | {}> {
 export async function handlePageProps(currentPath:string, params:PageProps){
     // console.log(currentPath, params);
     // check for which user is currently on then prove the user with the necessary data accordingly
+}
 
-    
 
-    
+export async function checkIfFromLinkedin(): Promise< ExternalAccount| Boolean> {
+    const user = await currentUser();
+    console.log(user?.externalAccounts);
+    // loop through the accounts and check provider
+    let data = user?.externalAccounts.filter(account => account.provider.includes('oauth_linkedin')) as ExternalAccount[];
+    return data?.length > 0 ? data[0] : false
 }

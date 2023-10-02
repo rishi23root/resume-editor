@@ -16,17 +16,7 @@ export default async function New(props: PageProps) {
   }
   // show templates and ask user for his choices to template to use
   // and show old build resume if use that to create new or upload a resume to parse it
-
-  {
-    /* {props.searchParams &&
-    Object.keys(props.searchParams).map((key) => {
-      return (
-        <div className="text-xl " key={key}>
-          {key} = {props.searchParams[key]}
-        </div>
-      );
-    })} */
-  }
+  
   return (
     <div className="w-full gap-8 fc fcc md:glass">
       <div className="mb-4 text-4xl text-center md:text-5xl">How do you want to proceed ?</div>
@@ -58,7 +48,7 @@ export default async function New(props: PageProps) {
                   width={10}
                   height={10}
                   alt="linkedin.svg"
-                  className="absolute w-8 h-8 left-8 top-8"
+                  className="absolute w-10 h-10 left-7 top-7 "
                 />
               </div>
             </div>
