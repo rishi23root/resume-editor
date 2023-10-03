@@ -1,13 +1,16 @@
+import ExtractLinkedinProfile from "@/components/elements/extractLinkedinProfile";
 import UploadResume from "@/components/elements/upload";
-import { cn } from "@/lib/utils";
+import { PrivateMetadata } from "@/types/user";
 import { type PageProps } from "@/types/utils";
-import { checkIfFromLinkedin } from "@/utils/serverActions/pageLoad";
+import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 export default async function NewSlugPage(props: PageProps) {
   console.log(props);
-  const ifLinkedIn = await checkIfFromLinkedin();
-  // console.log(ifLinkedIn);
+  const user = await currentUser();
+
+  const ifLinkedIn = (user?.privateMetadata as PrivateMetadata).linkedin;
+  // await checkIfFromLinkedin();
 
   if (ifLinkedIn) {
     // render according to the current user authorization
@@ -17,28 +20,7 @@ export default async function NewSlugPage(props: PageProps) {
           Chose your Data Source !
         </div>
         <div className="gap-8 md:fr fc">
-          <div className="min-w-[24.5rem] h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105 bg-linkedin">
-            <div className="w-full gap-3 fcc fc ">
-              <Image
-                src={"/svgs/linkedin.svg"}
-                width={30}
-                height={30}
-                alt="linkedin.svg"
-                className="w-32 h-32 left-7 top-7 drop-shadow-lg"
-              />
-              <div className="text-center">
-                <div className="text-xl font-bold">
-                  Import data From your Profile{" "}
-                </div>
-                <div className="text-xs text-center text-white text-opacity-70">
-                  Our Ai will take the lead from here, you will be
-                  <br />
-                  able to update data in later phases
-                </div>
-              </div>
-            </div>
-          </div>
-          
+          <ExtractLinkedinProfile />
           <UploadResume />
         </div>
       </div>

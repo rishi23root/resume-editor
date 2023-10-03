@@ -4,8 +4,6 @@ import TwScreenInfo from "../../../components/custom/TwScreenInfo";
 import AnimateText from "../../../components/custom/AmimateText";
 import { AnimatePresence, motion } from "framer-motion";
 
-// import { UserButton, useAuth, useUser } from "@clerk/nextjs";
-
 export default function JobDescriptions() {
   // get userid from clerk
   // const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -18,7 +16,6 @@ export default function JobDescriptions() {
     <div className="border">
       this is JobDescriptions
       {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat, sequi est? Doloribus omnis, corporis, quibusdam quidem id minus aliquid repellat animi, dolor exercitationem sunt consequuntur veniam? Eius magnam neque eum enim delectus, assumenda reiciendis debitis commodi, quam deleniti, placeat tempore! */}
-      {/* <UserButton/> */}
     </div>
   );
 }

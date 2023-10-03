@@ -4,20 +4,22 @@ import { prisma } from "@/lib/prisma";
 import { clerkClient } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { PageProps } from "@/types/utils";
-import { ExternalAccount } from "@clerk/nextjs/server";
+import { ExternalAccount, User } from "@clerk/nextjs/server";
+import { PrivateMetadata } from "@/types/user";
 
 export async function userLogined(): Promise<PrivateMetadata | {}> {
     const user = await currentUser();
     
     if (!user) return {}
     
+    var redirectPage = ""
     // if user does not have private metadata that means user is new to platform 
     if (!Object.keys(user?.privateMetadata as object).length && user?.id) {
         // 1. create user in database 
         try{
         const newUser = await prisma.user.create({
             data: {
-                name: (user.firstName + ' ' + user.lastName),
+                name: (user.firstName ? user.firstName: "Blank_Name" ) +  (user?.lastName? " " + user.lastName:""),
                 clerkId: user.id
             },
             select: {
@@ -31,20 +33,61 @@ export async function userLogined(): Promise<PrivateMetadata | {}> {
         await clerkClient.users.updateUserMetadata(user?.id as string,{
             "privateMetadata": {
                 'userDBid': newUser.id,
-                'name': user.firstName + " " + user.lastName
+                'name': (user.firstName ? user.firstName: "Blank_Name" ) +  (user?.lastName? " " + user.lastName:"") 
             }}
         )        
         // 3 redict user to the first time login sequence 
-        redirect('/New?new=true') // update the correct search params here to start the resume building
+        redirectPage = '/New' 
         } catch (e){
+            console.error(e);
             return {}
         }
     } else{
-        console.log("seems user is already exiting",user?.privateMetadata);
+        console.debug("User is already exiting with private Metadata :",Object.keys(user?.privateMetadata as object));
     }
+    
+    // check if user have is from linkedin account 
+    if (!user?.privateMetadata?.linkedin) {
+        const linkedinUser = await checkIfFromLinkedin(user);
+        if (linkedinUser){
+            try{
+                // update the metadata
+                await clerkClient.users.updateUserMetadata(user?.id as string,{
+                    "privateMetadata": {
+                        'linkedin': linkedinUser ? true : false
+                    }}
+                )
+                // update the database
+                await prisma.user.update({
+                    data: {
+                        isLinkedLogin : linkedinUser ? true : false
+                    },
+                    where: {
+                        clerkId: user.id
+                    }
+                })
+                redirectPage = '/New/parsePDF' 
+            } catch (e){
+                console.error(e);
+                return {}
+            }
+        }
+    }
+
+    redirectPage && redirect(redirectPage)
     
     return user?.privateMetadata as PrivateMetadata
 }
+
+export async function checkIfFromLinkedin(user:User|null): Promise< ExternalAccount| Boolean> {
+    // console.log(user?.externalAccounts);
+    // loop through the accounts and check provider
+    var data = user?.externalAccounts.filter(account => account.verification?.strategy.includes('oauth_linkedin')) as ExternalAccount[];
+    var account : ExternalAccount| Boolean = false;
+    if (data.length > 0) account = data[0]
+    return account;
+}
+
 
 // add 
 // handle each page load event
@@ -53,13 +96,4 @@ export async function userLogined(): Promise<PrivateMetadata | {}> {
 export async function handlePageProps(currentPath:string, params:PageProps){
     // console.log(currentPath, params);
     // check for which user is currently on then prove the user with the necessary data accordingly
-}
-
-
-export async function checkIfFromLinkedin(): Promise< ExternalAccount| Boolean> {
-    const user = await currentUser();
-    console.log(user?.externalAccounts);
-    // loop through the accounts and check provider
-    let data = user?.externalAccounts.filter(account => account.provider.includes('oauth_linkedin')) as ExternalAccount[];
-    return data?.length > 0 ? data[0] : false
 }

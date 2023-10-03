@@ -17,6 +17,9 @@ export default async function New(props: PageProps) {
   // show templates and ask user for his choices to template to use
   // and show old build resume if use that to create new or upload a resume to parse it
   
+  // create a 
+
+  
   return (
     <div className="w-full gap-8 fc fcc md:glass">
       <div className="mb-4 text-4xl text-center md:text-5xl">How do you want to proceed ?</div>
