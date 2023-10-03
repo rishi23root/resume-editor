@@ -1,16 +1,8 @@
-// // basic info
-// export interface User {
-//     id: number;
-//     name: string;
-//     email: string;
-//     avatar: string;
-//     role: string;
-//     created_at: string;
-//     updated_at: string;
-// }
+import { ExternalAccount } from "@clerk/nextjs/server";
 
 
-type PrivateMetadata = {
+export type PrivateMetadata = {
     userDBid : string;
     name: string;
+    linkedin?: ExternalAccount
 }

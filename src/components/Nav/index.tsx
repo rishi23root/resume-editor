@@ -85,7 +85,10 @@ function NavBtns(props: NavProps) {
           </div>
           <div className="relative w-8 h-8 overflow-hidden rounded-full bg-slate-600 ">
             <div className="absolute z-10">
-              <UserButton />
+              <UserButton
+                afterSignOutUrl="/sign-in"
+                afterSwitchSessionUrl="/dashboard"
+              />
             </div>
             <div className="absolute top-0 left-0 w-3 h-3 translate-x-[0.5rem] translate-y-1 bg-black rounded-full  face"></div>
             <div className="absolute top-0 left-0 w-6 h-6 translate-x-1 translate-y-3 bg-black rounded-full "></div>

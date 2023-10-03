@@ -47,6 +47,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        linkedin: "#0077b5"
       },
       borderRadius: {
         lg: "var(--radius)",

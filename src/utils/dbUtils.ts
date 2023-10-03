@@ -1,18 +1,16 @@
-// import prisma from "../prisma/index";
-// import prisma from "@/prisma/index"
-// import { prisma } from "@/lib/prisma";
+// get linkedin data 
 
-// // get user 
-// export async function getUserByClearkId(clerkId: string|null) {
-//     if (clerkId === null) return null
-//     const user =  await prisma.user.findFirst({
-//         where: {
-//             cleckId: clerkId
-//         }
-//     })
-//     console.log(user);
-//     return user
+// import { auth } from "@clerk/nextjs"
+// import { Clerk } from "@clerk/nextjs/server"
+
+// async function getLinkedinData() {
+//     try {
+//     const { userId } = auth()
+
+//     // this returns an array of OauthAccessToken objects I'm just getting the first one
+//     const [OauthAccessToken] = await Clerk.users.getUserOauthAccessToken(
+//       userId || '',
+//       'oauth_google'
+//     )
+//     }
 // }
-
-
-// get user notifications
