@@ -26,4 +26,5 @@ export type newResumeSearchParams = {
     mode?: 'newResume' | 'newLogin';
     templateName?: string; // can just fetch name form list template api maybe in future
     resumedata?: string; // all the data that will going to use in the formation of resume
+    procegure?: 1|2|3|4; // procegure flow of the application 
 }
