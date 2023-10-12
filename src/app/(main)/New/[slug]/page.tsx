@@ -9,6 +9,11 @@ export default async function NewSlugPage(props: PageProps) {
   console.log(props);
   const user = await currentUser();
 
+  // slug can be
+  // jsonResume
+  // parsePDF
+  // 
+
   const ifLinkedIn = (user?.privateMetadata as PrivateMetadata).linkedin;
   // await checkIfFromLinkedin();
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function New(props: PageProps) {
-  await handlePageProps("/New",props);
+  await handlePageProps("/New", props);
   if (!props.searchParams?.mode) {
     redirect("/New?mode=newResume");
   } else if (props.searchParams?.mode == "newResume") {
@@ -16,17 +16,20 @@ export default async function New(props: PageProps) {
   }
   // show templates and ask user for his choices to template to use
   // and show old build resume if use that to create new or upload a resume to parse it
-  
-  // create a 
 
-  
+  // create a
+  // redirect to new page depends on current search params
+  // create util to manage that
+
   return (
     <div className="w-full gap-8 fc fcc md:glass">
-      <div className="mb-4 text-4xl text-center md:text-5xl">How do you want to proceed ?</div>
+      <div className="mb-4 text-4xl text-center md:text-5xl">
+        How do you want to proceed ?
+      </div>
       <div className="gap-8 fc">
         <div className="gap-8 md:fr fc">
           <Link
-            href={"/New/parsePDF/"}
+            href={"/New/parsePDF"}
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -57,7 +60,7 @@ export default async function New(props: PageProps) {
             </div>
           </Link>
           <Link
-            href={"/404fornow"}
+            href={"/Templates"}
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -83,13 +86,37 @@ export default async function New(props: PageProps) {
         </div>
         <Link
           href={"/404fornow"}
-          className="w-full duration-75 cursor-pointer glass fcc fc hover:scale-105"
+          className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
         >
           <div className="text-2xl font-medium text-white ">
             Choose from your existing resume
           </div>
           <div className="text-sm font-medium text-center text-white text-opacity-70 ">
             load existing resume data
+          </div>
+        </Link>
+        <Link
+          href={"/New/jsonResume"}
+          className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
+        >
+          <div className="text-2xl font-medium text-white ">
+            or upload your jsonresume schema template
+          </div>
+          <div className="text-sm font-medium text-center text-white text-opacity-70 ">
+            click to know more information
+            {/* &nbsp;
+            <div
+              href={"https://jsonresume.org/getting-started/"}
+              target="_blank"
+              className="group hover:scale-105 opacity-95"
+            >
+              <span className="group-hover:italic">
+                https://jsonresume.org/getting-started/
+              </span>
+              <span className="invisible group-hover:visible ">
+                &nbsp;--&raquo;
+              </span>
+            </div>   */}
           </div>
         </Link>
       </div>

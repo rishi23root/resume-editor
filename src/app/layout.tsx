@@ -2,6 +2,14 @@ import "@/styles/globals.css";
 import { clsx } from "clsx";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+const BubbleUnderlay = dynamic(
+  () => import("@/components/custom/BubbelUnderLay")
+);
+
+import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import NoSSR from "@/hooks/NoSSR";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -86,6 +94,21 @@ export default function RootLayout({
             "flex flex-col"
           )}
         >
+          {/* bg animations */}
+          <Suspense>
+            <NoSSR>
+              <BubbleUnderlay
+                className={cn(
+                  "fixed",
+                  "top-0 left-0",
+                  "w-full h-full",
+                  "-z-10",
+                  "pointer-events-none",
+                  "select-none"
+                )}
+              />
+            </NoSSR>
+          </Suspense>
           {children}
         </body>
       </html>
