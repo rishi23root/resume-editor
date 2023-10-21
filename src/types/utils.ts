@@ -16,9 +16,11 @@ export type templateWithImages = {
     pages: string[]
 }
 
+type keyValue<T> = {[key: string]: T}
+
 export type PageProps = {
-  params: {[key: string]: string} ;
-  searchParams: { [key: string]: string | string[] | undefined } | newResumeSearchParams;
+  params: keyValue<string> ;
+  searchParams: keyValue<string | string[] | undefined> | newResumeSearchParams;
 };
 
 // resume builder new page may have props
@@ -27,4 +29,7 @@ export type newResumeSearchParams = {
     templateName?: string; // can just fetch name form list template api maybe in future
     resumedata?: string; // all the data that will going to use in the formation of resume
     procegure?: 1|2|3|4; // procegure flow of the application 
+    jsonData?: string; // json data uuid form db
 }
+
+export type paramType = keyValue<string | string[] | undefined> | newResumeSearchParams;
