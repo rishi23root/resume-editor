@@ -1,5 +1,5 @@
-// /api/jobDiscription/[jobId]/
-import { jobIdAndNameType } from '@/types/jobDiscription';
+// /api/jobDescription/[jobId]/
+import { jobIdAndNameType } from '@/types/jobDescription';
 import { NextResponse } from 'next/server';
 
 import data from '../data.json';

@@ -1,21 +1,21 @@
-"use client";
+import JobDiscriptionTemplateShowcase from "@/components/pageSpecific/jobDes/jobDisShowCase";
+import JobSearch from "@/components/pageSpecific/jobDes/jobSearch";
+import { PageProps, keyValue } from "@/types/utils";
 
-import TwScreenInfo from "../../../components/custom/TwScreenInfo";
-import AnimateText from "../../../components/custom/AmimateText";
-import { AnimatePresence, motion } from "framer-motion";
+const getSeleteDiscriptionData = async () => {
+  const response = await fetch(process.env.FRONTEND + "/api/jobDescription/");
+  const data = await response.json();
+  return data as keyValue<string>;
+};
 
-export default function JobDescriptions() {
-  // get userid from clerk
-  // const { isLoaded, userId, sessionId, getToken } = useAuth();
-  // const { user } = useUser();
-  // console.log(userId, user);
+export default async function JobDescriptionsPage(props: PageProps) {
+  const jobId = (props.searchParams?.jobId as string) || "1";
 
-  // check if user is signed in if not then redirect to login pages else redirect to dashboard
+  const jobIdWithName = await getSeleteDiscriptionData();
   return (
-    // make whole page with 10/12 width and center it on above medium screens
-    <div className="border">
-      this is JobDescriptions
-      {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat, sequi est? Doloribus omnis, corporis, quibusdam quidem id minus aliquid repellat animi, dolor exercitationem sunt consequuntur veniam? Eius magnam neque eum enim delectus, assumenda reiciendis debitis commodi, quam deleniti, placeat tempore! */}
+    <div className="w-full fcc fc">
+      <JobSearch jobIdWithName={jobIdWithName} />
+      <JobDiscriptionTemplateShowcase jobId={jobId} />
     </div>
   );
 }
