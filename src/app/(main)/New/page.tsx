@@ -5,21 +5,24 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function New(props: PageProps) {
-  await handlePageProps("/New", props);
-  if (!props.searchParams?.mode) {
-    redirect("/New?mode=newResume");
-  } else if (props.searchParams?.mode == "newResume") {
-    // console.log(props);
-  } else if (props.searchParams?.mode == "newLogin") {
-    // ask user to upload the user from pc or load from linkedin or start generating the resume data
-    // ask user to use upload resume
-  }
-  // show templates and ask user for his choices to template to use
-  // and show old build resume if use that to create new or upload a resume to parse it
+  const pageProps = await handlePageProps("/New", props);
 
-  // create a
-  // redirect to new page depends on current search params
-  // create util to manage that
+  // const { stringifiedData, privateData } = useParamParser(props.searchParams);
+  // console.log(
+  //   stringifiedData,
+  //   privateData,
+  //   encodeJSONToBase64,
+  //   jsonToSearchParameters
+  // );
+
+  // if (!props.searchParams?.mode) {
+  //   redirect("/New?mode=newResume");
+  // } else if (props.searchParams?.mode == "newResume") {
+  //   // console.log(props);
+  // } else if (props.searchParams?.mode == "newLogin") {
+  //   // ask user to upload the user from pc or load from linkedin or start generating the resume data
+  //   // ask user to use upload resume
+  // }
 
   return (
     <div className="w-full gap-8 fc fcc md:glass">
