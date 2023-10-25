@@ -3,15 +3,15 @@ import Nav from "../../components/Nav/index";
 import dynamic from "next/dynamic";
 
 const Line = dynamic(() => import("@/components/Line"));
-const HeroSection = dynamic(() => import("@/components/Sections/HeroSection"));
-const Section2 = dynamic(() => import("@/components/Sections/Section2"));
+const HeroSection = dynamic(() => import("@/components/pageSpecific/home/HeroSection"));
+const Section2 = dynamic(() => import("@/components/pageSpecific/home/Section2"));
 const SectionFeatures = dynamic(
-  () => import("@/components/Sections/SectionFeatures")
+  () => import("@/components/pageSpecific/home/SectionFeatures")
 );
 const Footer = dynamic(() => import("@/components/Footer"));
 
-import { SectionAbout } from "../../components/Sections/SectionAbout";
-import { SectionPrice } from "../../components/Sections/SectionPrice";
+import { SectionAbout } from "../../components/pageSpecific/home/SectionAbout";
+import { SectionPrice } from "../../components/pageSpecific/home/SectionPrice";
 
 const BubbleUnderlay = dynamic(
   () => import("@/components/custom/BubbelUnderLay")

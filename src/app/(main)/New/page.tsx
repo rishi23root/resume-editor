@@ -1,11 +1,14 @@
-import { type PageProps } from "@/types/utils";
-import { handlePageProps } from "@/utils/serverActions/pageLoad";
+import { PageProps } from "@/types/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function New(props: PageProps) {
-  const pageProps = await handlePageProps("/New", props);
+  // fow the new page search parameters manupulation
+  // 1. updaet the current mode of the page under what condition it is rn
+  // 2. according to the current page props add or update the session param
+  // 3. maybe handle redirection from server side (idk rn if needed rn) make use of param handler for server for this  - useParamParser
+  // 4. that's it for now
 
   // const { stringifiedData, privateData } = useParamParser(props.searchParams);
   // console.log(

@@ -7,6 +7,7 @@ const Render = dynamic(
 
 import { getTemplateDataWithImages } from "@/utils/util";
 import { Suspense } from "react";
+import { Loadingstate } from "@/components/Fallbacks";
 
 export default async function Template() {
   const templateData = await getTemplateDataWithImages();
@@ -21,8 +22,3 @@ export default async function Template() {
   );
 }
 
-function Loadingstate() {
-  return (
-    <div className="text-center text-white border">loading please wait </div>
-  );
-}

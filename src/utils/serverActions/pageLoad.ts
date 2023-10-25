@@ -87,16 +87,3 @@ export async function checkIfFromLinkedin(user:User|null): Promise< ExternalAcco
     if (data.length > 0) account = data[0]
     return account;
 }
-
-
-// add 
-// handle each page load event
-// add custom search parameters and use existing parameters and take action accordingly
-
-export async function handlePageProps(currentPath:string, params:PageProps){
-    // check for which user is currently on then prove the user with the necessary data accordingly
-    // manupulate the parameters
-    
-    // console.log(currentPath, params);
-    return params
-}
