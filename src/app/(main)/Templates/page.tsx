@@ -1,9 +1,10 @@
-import GetTemplates from "@/components/dashboard/templates/AllTemplatesNav";
+import GetTemplates from "@/components/pageSpecific/templates/AllTemplatesNav";
 import dynamic from "next/dynamic";
 
-const Render = dynamic(() => import("@/components/dashboard/templates/Render"));
+const Render = dynamic(
+  () => import("@/components/pageSpecific/templates/Render")
+);
 
-// import Render from "@/components/dashboard/templates/Render";
 import { getTemplateDataWithImages } from "@/utils/util";
 import { Suspense } from "react";
 
@@ -13,7 +14,7 @@ export default async function Template() {
   return (
     <div className="w-full gap-4 md:h-[42rem] md:fr fc">
       <GetTemplates templateData={templateData} />
-      <Suspense fallback="lading">
+      <Suspense fallback={<Loadingstate />}>
         <Render templateData={templateData} />
       </Suspense>
     </div>
