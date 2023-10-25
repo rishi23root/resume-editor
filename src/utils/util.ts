@@ -1,6 +1,7 @@
 // handle most of the data extraction using prisma
 
-import { templateWithImages } from "@/types/utils";
+import { templateWithImages } from "@/types/templates";
+
 
 // notificaiton 
 // execute 2 commands 
