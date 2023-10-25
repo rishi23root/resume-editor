@@ -15,10 +15,9 @@ export default async function Template() {
   return (
     <div className="w-full gap-4 md:h-[42rem] md:fr fc">
       <GetTemplates templateData={templateData} />
-      <Suspense fallback={<Loadingstate />}>
+      <Suspense fallback={<Loadingstate className="text-xl" />}>
         <Render templateData={templateData} />
       </Suspense>
     </div>
   );
 }
-
