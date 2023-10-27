@@ -4,6 +4,10 @@ import { PrivateMetadata } from "@/types/user";
 import { clerkClient, currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { checkIfFromLinkedin } from "@/utils/linkedinUtil";
+import { encodeJSONToBase64, jsonToSearchParameters } from "./paramHandeler";
+
+
+
 
 export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     // effective only for new login accounts
@@ -36,7 +40,11 @@ export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
                 }}
             )        
             // 3 redict user to the first time login sequence 
-            redirectPage = '/New' 
+            redirectPage = '/New?'  + await jsonToSearchParameters({
+                _s: encodeJSONToBase64({
+                mode: "newLogin",
+                }),
+            }); 
         } catch (e){
             console.error(e);
             return {}

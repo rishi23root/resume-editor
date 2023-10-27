@@ -1,31 +1,31 @@
 import { PageProps } from "@/types/utils";
+import useParamParser, {
+  encodeJSONToBase64,
+  jsonToSearchParameters,
+} from "@/utils/paramHandeler";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+const startFreshSearchParams = {
+  _s: encodeJSONToBase64({
+    mode: "newResume",
+    procegure: 1,
+  }),
+};
+
 export default async function New(props: PageProps) {
-  // fow the new page search parameters manupulation
-  // 1. updaet the current mode of the page under what condition it is rn
-  // 2. according to the current page props add or update the session param
-  // 3. maybe handle redirection from server side (idk rn if needed rn) make use of param handler for server for this  - useParamParser
-  // 4. that's it for now
-
-  // const { stringifiedData, privateData } = useParamParser(props.searchParams);
-  // console.log(
-  //   stringifiedData,
-  //   privateData,
-  //   encodeJSONToBase64,
-  //   jsonToSearchParameters
-  // );
-
-  // if (!props.searchParams?.mode) {
-  //   redirect("/New?mode=newResume");
-  // } else if (props.searchParams?.mode == "newResume") {
-  //   // console.log(props);
-  // } else if (props.searchParams?.mode == "newLogin") {
-  //   // ask user to upload the user from pc or load from linkedin or start generating the resume data
-  //   // ask user to use upload resume
+  // if (!props.searchParams?._s || !props.searchParams.error) {
+  //   redirect("/New?" + (await jsonToSearchParameters(startFreshSearchParams)));
   // }
+  const { stringifiedData, privateData } = await useParamParser(
+    "/New",
+    props.searchParams
+  );
+
+  props.searchParams._s = privateData;
+  // console.log(stringifiedData);
+  // console.log(props.searchParams);
 
   return (
     <div className="w-full gap-8 fc fcc md:glass">
@@ -35,7 +35,7 @@ export default async function New(props: PageProps) {
       <div className="gap-8 fc">
         <div className="gap-8 md:fr fc">
           <Link
-            href={"/New/parsePDF"}
+            href={"/New/parsePDF?" + stringifiedData}
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -66,7 +66,10 @@ export default async function New(props: PageProps) {
             </div>
           </Link>
           <Link
-            href={"/Templates"}
+            href={
+              "/JobDescriptions?" +
+              (await jsonToSearchParameters(startFreshSearchParams))
+            }
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -90,19 +93,21 @@ export default async function New(props: PageProps) {
             </div>
           </Link>
         </div>
+        {privateData?.mode !== "newLogin" && (
+          <Link
+            href={"/dashboard"}
+            className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
+          >
+            <div className="text-2xl font-medium text-white ">
+              Choose from your existing resume
+            </div>
+            <div className="text-sm font-medium text-center text-white text-opacity-70 ">
+              load existing resume data
+            </div>
+          </Link>
+        )}
         <Link
-          href={"/404fornow"}
-          className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
-        >
-          <div className="text-2xl font-medium text-white ">
-            Choose from your existing resume
-          </div>
-          <div className="text-sm font-medium text-center text-white text-opacity-70 ">
-            load existing resume data
-          </div>
-        </Link>
-        <Link
-          href={"/New/jsonResume"}
+          href={"/New/jsonResume?" + stringifiedData}
           className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
         >
           <div className="text-2xl font-medium text-white ">
@@ -110,19 +115,6 @@ export default async function New(props: PageProps) {
           </div>
           <div className="text-sm font-medium text-center text-white text-opacity-70 ">
             click to know more information
-            {/* &nbsp;
-            <div
-              href={"https://jsonresume.org/getting-started/"}
-              target="_blank"
-              className="group hover:scale-105 opacity-95"
-            >
-              <span className="group-hover:italic">
-                https://jsonresume.org/getting-started/
-              </span>
-              <span className="invisible group-hover:visible ">
-                &nbsp;--&raquo;
-              </span>
-            </div>   */}
           </div>
         </Link>
       </div>

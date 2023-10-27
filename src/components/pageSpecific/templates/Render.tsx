@@ -47,7 +47,8 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
                   {
                     templateName: templateName,
                   },
-                  "/New"
+                  { procegure: 3 },
+                  "/New" // #update it to payment page if needed
                 )}
                 className="p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md"
               >

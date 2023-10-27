@@ -22,7 +22,7 @@ const UploadResume = (props: Props) => {
             className="invert"
           />
         </div>
-        <div className="text-xl font-bold">or Upload your pdf to parse</div>
+        <div className="text-xl font-bold">or Upload your Pdf/Schema to parse</div>
         <div className="text-xs text-center text-white text-opacity-70">
           Our Ai will take the lead from here, you will be
           <br />

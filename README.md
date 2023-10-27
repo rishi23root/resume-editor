@@ -1,10 +1,14 @@
 # todo 
-add chadcdn with theme and colors
-add clerk for the login
-build designs for the pages 
-create api for the data like professions and skills
+ - look into 
+    hooks/notification handeler
+    src/utils/util.ts 
+ - src/components/pageSpecific/templates/Render.tsx search for #update
 
-api paths 
 
-notificaiton type difined request on load data 
-look into hooks/notification handeler
+
+
+## procegure
+1. chose jobDiscription
+2. chose template
+3. ? payment
+4. build/edit resume 
