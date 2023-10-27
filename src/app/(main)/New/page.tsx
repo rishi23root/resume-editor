@@ -6,6 +6,7 @@ import useParamParser, {
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { privateData } from "../../../types/utils";
 
 const startFreshSearchParams = {
   _s: encodeJSONToBase64({
@@ -15,16 +16,28 @@ const startFreshSearchParams = {
 };
 
 export default async function New(props: PageProps) {
-  // if (!props.searchParams?._s || !props.searchParams.error) {
-  //   redirect("/New?" + (await jsonToSearchParameters(startFreshSearchParams)));
-  // }
+  if (!props.searchParams?._s && !props.searchParams.error) {
+    redirect("/New?" + (await jsonToSearchParameters(startFreshSearchParams)));
+  }
+
   const { stringifiedData, privateData } = await useParamParser(
     "/New",
     props.searchParams
   );
+  console.log("from new: ", stringifiedData, privateData);
 
+
+  // update the private data if not there
   props.searchParams._s = privateData;
-  // console.log(stringifiedData);
+  if (!privateData.mode) {
+    props.searchParams._s = encodeJSONToBase64({
+      ...(privateData as any),
+      mode: "newResume",
+    });
+    redirect("/New?" + (await jsonToSearchParameters(props.searchParams)));
+  }
+
+  // console.log(privateData);
   // console.log(props.searchParams);
 
   return (
