@@ -1,4 +1,4 @@
-import { templateWithImages } from "@/types/utils";
+import { templateWithImages } from "@/types/templates";
 import Image from "next/image";
 import Link from "next/link";
 

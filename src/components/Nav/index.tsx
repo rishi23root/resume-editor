@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NavLinks } from "./utils";
 import { HamburgerOnMobile, NotificationElement } from "./client";
+import { Suspense } from "react";
 
 function Nav({ isSignedIn, pathname }: NavProps) {
   return (
@@ -81,7 +82,9 @@ function NavBtns(props: NavProps) {
       return (
         <div className="gap-4 md:gap-8 fcc">
           <div className="icon">
-            <NotificationElement />
+            <Suspense>
+              <NotificationElement />
+            </Suspense>
           </div>
           <div className="relative w-8 h-8 overflow-hidden rounded-full bg-slate-600 ">
             <div className="absolute z-10">
@@ -94,7 +97,9 @@ function NavBtns(props: NavProps) {
             <div className="absolute top-0 left-0 w-6 h-6 translate-x-1 translate-y-3 bg-black rounded-full "></div>
           </div>
           <div className="w-fit md:hidden fc">
-            <HamburgerOnMobile {...props} />
+            <Suspense>
+              <HamburgerOnMobile {...props} />
+            </Suspense>
           </div>
         </div>
       );

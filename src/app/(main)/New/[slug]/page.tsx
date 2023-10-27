@@ -6,13 +6,11 @@ import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 export default async function NewSlugPage(props: PageProps) {
-  console.log(props);
+  // slug can be --> jsonResume |  parsePDF
   const user = await currentUser();
-
   const ifLinkedIn = (user?.privateMetadata as PrivateMetadata).linkedin;
-  // await checkIfFromLinkedin();
 
-  if (ifLinkedIn) {
+  if (ifLinkedIn && props.params.slug !== "jsonResume") {
     // render according to the current user authorization
     return (
       <div className="w-full gap-8 fc fcc md:glass">

@@ -1,32 +1,41 @@
-import { type PageProps } from "@/types/utils";
-import { handlePageProps } from "@/utils/serverActions/pageLoad";
+import { PageProps } from "@/types/utils";
+import useParamParser, {
+  encodeJSONToBase64,
+  jsonToSearchParameters,
+} from "@/utils/paramHandeler";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function New(props: PageProps) {
-  await handlePageProps("/New",props);
-  if (!props.searchParams?.mode) {
-    redirect("/New?mode=newResume");
-  } else if (props.searchParams?.mode == "newResume") {
-    // console.log(props);
-  } else if (props.searchParams?.mode == "newLogin") {
-    // ask user to upload the user from pc or load from linkedin or start generating the resume data
-    // ask user to use upload resume
-  }
-  // show templates and ask user for his choices to template to use
-  // and show old build resume if use that to create new or upload a resume to parse it
-  
-  // create a 
+const startFreshSearchParams = {
+  _s: encodeJSONToBase64({
+    mode: "newResume",
+    procegure: 1,
+  }),
+};
 
-  
+export default async function New(props: PageProps) {
+  // if (!props.searchParams?._s || !props.searchParams.error) {
+  //   redirect("/New?" + (await jsonToSearchParameters(startFreshSearchParams)));
+  // }
+  const { stringifiedData, privateData } = await useParamParser(
+    "/New",
+    props.searchParams
+  );
+
+  props.searchParams._s = privateData;
+  // console.log(stringifiedData);
+  // console.log(props.searchParams);
+
   return (
     <div className="w-full gap-8 fc fcc md:glass">
-      <div className="mb-4 text-4xl text-center md:text-5xl">How do you want to proceed ?</div>
+      <div className="mb-4 text-4xl text-center md:text-5xl">
+        How do you want to proceed ?
+      </div>
       <div className="gap-8 fc">
         <div className="gap-8 md:fr fc">
           <Link
-            href={"/New/parsePDF/"}
+            href={"/New/parsePDF?" + stringifiedData}
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -57,7 +66,10 @@ export default async function New(props: PageProps) {
             </div>
           </Link>
           <Link
-            href={"/404fornow"}
+            href={
+              "/JobDescriptions?" +
+              (await jsonToSearchParameters(startFreshSearchParams))
+            }
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
             <div className="w-full gap-4 translate-y-2 fcc fc">
@@ -81,15 +93,28 @@ export default async function New(props: PageProps) {
             </div>
           </Link>
         </div>
+        {privateData?.mode !== "newLogin" && (
+          <Link
+            href={"/dashboard"}
+            className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
+          >
+            <div className="text-2xl font-medium text-white ">
+              Choose from your existing resume
+            </div>
+            <div className="text-sm font-medium text-center text-white text-opacity-70 ">
+              load existing resume data
+            </div>
+          </Link>
+        )}
         <Link
-          href={"/404fornow"}
-          className="w-full duration-75 cursor-pointer glass fcc fc hover:scale-105"
+          href={"/New/jsonResume?" + stringifiedData}
+          className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
         >
           <div className="text-2xl font-medium text-white ">
-            Choose from your existing resume
+            or upload your jsonresume schema template
           </div>
           <div className="text-sm font-medium text-center text-white text-opacity-70 ">
-            load existing resume data
+            click to know more information
           </div>
         </Link>
       </div>
