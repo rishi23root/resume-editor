@@ -7,9 +7,9 @@ const Render = dynamic(
 
 import { Loadingstate } from "@/components/Fallbacks";
 import { PageProps } from "@/types/utils";
+import useParamParser from "@/utils/paramHandeler";
 import { getTemplateDataWithImages } from "@/utils/util";
 import { Suspense } from "react";
-import useParamParser from "@/utils/paramHandeler";
 
 export default async function Template(props: PageProps) {
   const templateData = await getTemplateDataWithImages();

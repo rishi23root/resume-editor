@@ -6,7 +6,6 @@ import useParamParser, {
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { privateData } from "../../../types/utils";
 
 const startFreshSearchParams = {
   _s: encodeJSONToBase64({
