@@ -20,7 +20,7 @@ function useRedirectHandler() {
   const urlWithAddedParams = (
     newSearchParams: searchParamType,
     updatePrivate: searchParamType["_s"] = {},
-    pathName: string | undefined = undefined
+    pathName: string | undefined = ""
   ) => {
     if (Object.keys(updatePrivate).length) {
       // decode the _s
@@ -36,9 +36,10 @@ function useRedirectHandler() {
       });
       newSearchParams = { ...newSearchParams, _s: encodedprivateData };
     }
-    // console.log(newSearchParams);
+    // console.log(pathName , pathname);
     return (
-      (pathName ? pathName : pathname) + addToCurrentQuery(newSearchParams)
+      (pathName?.length ? pathName : pathname) +
+      addToCurrentQuery(newSearchParams)
     );
   };
 
