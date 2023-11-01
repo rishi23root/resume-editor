@@ -7,15 +7,18 @@ const Render = dynamic(
 
 import { Loadingstate } from "@/components/Fallbacks";
 import { PageProps } from "@/types/utils";
+import useParamParser from "@/utils/paramHandeler";
 import { getTemplateDataWithImages } from "@/utils/util";
 import { Suspense } from "react";
 
 export default async function Template(props: PageProps) {
   const templateData = await getTemplateDataWithImages();
-  // const { stringifiedData, privateData } = await useParamParser(
-  //   "/New",
-  //   props.searchParams
-  // );
+
+  const { stringifiedData, privateData } = await useParamParser(
+    "/Templates",
+    props.searchParams
+  );
+  console.log("from templates: ", stringifiedData, privateData);
 
   // props.searchParams._s = privateData;
   // // console.log(stringifiedData);

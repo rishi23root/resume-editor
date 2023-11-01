@@ -1,10 +1,50 @@
 "use client";
+import { getLinkedinAuth } from "@/utils/linkedinUtil";
 import Image from "next/image";
+import { useToast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
+import { useRouter } from "next/navigation";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 
 const ExtractLinkedinProfile = () => {
+  const { toast } = useToast();
+  const router = useRouter();
+  const { urlWithAddedParams } = useRedirectHandler();
+
   function handleLinkedInProfileExtraction() {
     console.log("element clicked");
-    // convert this function to server function that will be responsible to extracting data from the linkedin and redirect the user to the new page 
+    // show toast that extracting linkeding profile please wait
+    toast({
+      type: "background",
+      title: "Accessing Linkeding Profile :)",
+      description: "Extracting linkeding profile please wait...",
+    });
+    getLinkedinAuth().then((res) => {
+      if (res.hasOwnProperty("error")) {
+        toast({
+          variant: "destructive",
+          title: "Error extracting linkedin data",
+          description: res.error,
+          action: (
+            <ToastAction
+              altText="Try other methods till"
+              onClick={() => {
+                const redirectUrl = urlWithAddedParams(
+                  {},
+                  {},
+                  "/New/jsonResume"
+                );
+                console.log(redirectUrl);
+
+                router.push(redirectUrl);
+              }}
+            >
+              other Methods {"->"}
+            </ToastAction>
+          ),
+        });
+      }
+    });
   }
   return (
     <div

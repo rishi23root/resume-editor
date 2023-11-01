@@ -10,12 +10,24 @@ import {
 import useRedirectHandler from "@/hooks/redirectionHandlers";
 import { keyValue } from "@/types/utils";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-const JobSearch = ({ jobIdWithName }: { jobIdWithName: keyValue<string> }) => {
+const getSeleteDiscriptionData = async () => {
+  const response = await fetch("/api/jobDescription/");
+  const data = await response.json();
+  return data as keyValue<string>;
+};
 
+const JobSearch = () => {
+  const [jobIdWithName, setJobIdWithName] = useState<keyValue<string>>({});
   const router = useRouter();
   const { urlWithAddedParams } = useRedirectHandler();
+
+  useEffect(() => {
+    getSeleteDiscriptionData().then((discriptionData) => {
+      setJobIdWithName(discriptionData);
+    });
+  });
 
   const updateSelection = async (e: any) => {
     router.push(urlWithAddedParams({ jobId: e }));
