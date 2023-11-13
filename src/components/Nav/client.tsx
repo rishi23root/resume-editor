@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./utils";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 
 // notification components
 export function NotificationElement() {
@@ -120,7 +121,38 @@ export function HamburgerOnMobile(props: NavProps) {
   );
 }
 
+export function NavLinksDashboard() {
+  const { urlWithAddedParams } = useRedirectHandler();
 
+  return (
+    <>
+      <Link
+        href={urlWithAddedParams({}, {}, "/New")}
+        className="text-violet-50"
+      >
+        New +
+      </Link>
+      <Link
+        href={urlWithAddedParams(
+          {
+            templateName: "singleColumn",
+          },
+          {},
+          "/Templates"
+        )}
+        className="text-violet-50"
+      >
+        Templates
+      </Link>
+      <Link
+        href={urlWithAddedParams({}, {}, "/JobDescriptions")}
+        className="text-violet-50"
+      >
+        Job Descriptions
+      </Link>
+    </>
+  );
+}
 
 function NotificationRenderer({
   notification,
@@ -172,5 +204,3 @@ function NotificationRenderer({
     </>
   );
 }
-
-

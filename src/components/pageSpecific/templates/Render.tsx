@@ -15,7 +15,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
   const [images, setImages] = useState<string[]>([]);
   const isRendered = RenderCompleted();
   const { urlWithAddedParams } = useRedirectHandler();
-
+  
   useEffect(() => {
     if (!templateName) {
       router.push(urlWithAddedParams({ templateName: "singleColumn" }));
