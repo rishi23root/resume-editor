@@ -91,7 +91,7 @@ export default function RootLayout({
             "min-h-screen",
             "min-w-full pb-8",
             "relative ",
-            "flex flex-col"
+            "fc "
           )}
         >
           {/* bg animations */}

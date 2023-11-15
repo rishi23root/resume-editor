@@ -3,6 +3,7 @@ import { newUserLoginHandler } from "@/utils/pageLoad";
 
 import { Toaster } from "@/components/ui/toaster";
 import ShowErrorIfany from "@/components/elements/errorRender";
+import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 export default async function RootLayout({
   children,
@@ -25,6 +26,7 @@ export default async function RootLayout({
         {children}
       </main>
       <ShowErrorIfany />
+      <TwScreenInfo />
     </>
   );
 }
