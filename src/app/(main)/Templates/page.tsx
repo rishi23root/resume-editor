@@ -25,7 +25,7 @@ export default async function Template(props: PageProps) {
   // console.log(props.searchParams);
   return (
     <div className="w-full gap-4 md:h-[42rem] md:fr fc">
-      <GetTemplates templateData={templateData} />
+      <GetTemplates templateData={templateData} pageParams={props.searchParams}/>
       <Suspense fallback={<Loadingstate className="text-xl" />}>
         <Render templateData={templateData} />
       </Suspense>

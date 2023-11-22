@@ -11,15 +11,15 @@ import { Suspense, useEffect, useState } from "react";
 function Render({ templateData }: { templateData: templateWithImages[] }) {
   // get template name from parameters
   const router = useRouter();
-  const templateName = useSearchParams().get("templateName") as resumeTemplates;
+  const templateName = useSearchParams().get("templateName") as resumeTemplates || "singleColumn";
   const [images, setImages] = useState<string[]>([]);
   const isRendered = RenderCompleted();
   const { urlWithAddedParams } = useRedirectHandler();
   
   useEffect(() => {
-    if (!templateName) {
-      router.push(urlWithAddedParams({ templateName: "singleColumn" }));
-    }
+    // if (!templateName) {
+    //   router.push(urlWithAddedParams({ templateName: "singleColumn" }));
+    // }
     // console.log(templateData, templateName);
     const currentTemplateImage = templateData.filter(
       (data) => data.name === templateName
@@ -48,7 +48,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
                     templateName: templateName,
                   },
                   { procegure: 3 },
-                  "/New" // #update it to payment page if needed
+                  "/Payment" 
                 )}
                 className="p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md"
               >

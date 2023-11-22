@@ -3,7 +3,9 @@ export default async function builder() {
   return (
     // make whole page with 10/12 width and center it on above medium screens
     <>
+      <div className=""></div>
       this is builder page
     </>
   );
 }
+  

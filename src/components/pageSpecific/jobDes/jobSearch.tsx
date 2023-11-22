@@ -27,7 +27,7 @@ const JobSearch = () => {
     getSeleteDiscriptionData().then((discriptionData) => {
       setJobIdWithName(discriptionData);
     });
-  });
+  }, []);
 
   const updateSelection = async (e: any) => {
     router.push(urlWithAddedParams({ jobId: e }));

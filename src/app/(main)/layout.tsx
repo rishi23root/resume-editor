@@ -4,6 +4,7 @@ import { newUserLoginHandler } from "@/utils/pageLoad";
 import { Toaster } from "@/components/ui/toaster";
 import ShowErrorIfany from "@/components/elements/errorRender";
 import TwScreenInfo from "@/components/custom/TwScreenInfo";
+import ProcegureRender from "@/components/pageSpecific/ProcegureRender";
 
 export default async function RootLayout({
   children,
@@ -22,8 +23,9 @@ export default async function RootLayout({
         <Nav isSignedIn={data ? true : false} pathname="/dashboard" />
         {/* pathname value is hardcoded here because it doesn't matter which path it is just not '/' */}
       </div>
-      <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] lg:gap-10 gap-4 fr flex-1">
-        {children}
+      <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2rem] gap-4 fc flex-1">
+        <ProcegureRender  />
+        <div className="lg:gap-10 gap-4 fr flex-1 ">{children}</div>
       </main>
       <ShowErrorIfany />
       <TwScreenInfo />

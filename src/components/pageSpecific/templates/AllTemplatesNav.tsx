@@ -1,11 +1,14 @@
 import { templateWithImages } from "@/types/templates";
+import { PageProps } from "@/types/utils";
 import Image from "next/image";
 import Link from "next/link";
 
 async function GetTemplates({
   templateData,
+  pageParams
 }: {
   templateData: templateWithImages[];
+  pageParams : PageProps['searchParams']
 }) {
   return (
     <div className="items-center w-full md:w-1/6 fc glass md:h-full h-2/6">
@@ -17,6 +20,7 @@ async function GetTemplates({
               href={{
                 pathname: `/Templates/`,
                 query: {
+                  ...pageParams as any,
                   templateName: ele.name,
                 },
               }}

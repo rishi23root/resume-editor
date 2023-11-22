@@ -28,7 +28,7 @@ const Card = ({
 
   return (
     <>
-      <motion.div className="relative h-56 shadow-xl w-44 glass fcc group overflow-hidden p-1">
+      <motion.div className="relative h-56 shadow-xl w-44 glass fcc group overflow-hidden p-1 ">
         <div
           onClick={() => {
             setShowModel(true);
@@ -49,8 +49,8 @@ const Card = ({
           <motion.div
             className={cn(
               "border border-zinc-500 bg-zinc-200 text-center w-full text-black py-2 mx-1",
-              "scale-95 shadow-xl rounded-sm opacity-80 text-md ",
-              "hover:scale-100 hover:shadow-2xl hover:rounded-md  hover:opacity-100 hover:text-xl hover:-translate-y-1",
+              "shadow-xl rounded-sm opacity-80 text-md ",
+              "hover:shadow-2xl hover:rounded-md hover:opacity-100 hover:-translate-y-1",
               "transition-all ease-in-out "
             )}
           >

@@ -16,7 +16,7 @@ export default async function NewSlugPage(props: PageProps) {
       <div className="w-full gap-8 fc fcc md:glass">
         <div className="mb-4 text-4xl text-center md:text-5xl">
           Chose your Data Source !
-        </div>
+      </div>
         <div className="gap-8 md:fr fc">
           <ExtractLinkedinProfile />
           <UploadResume />

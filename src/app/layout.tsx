@@ -6,13 +6,14 @@ const BubbleUnderlay = dynamic(
   () => import("@/components/custom/BubbelUnderLay")
 );
 
+import NoSSR from "@/hooks/NoSSR";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import NoSSR from "@/hooks/NoSSR";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -89,11 +90,12 @@ export default function RootLayout({
             "bg-[#12141D]",
             "text-[#E0E0E0]",
             "min-h-screen",
-            "min-w-full pb-8",
+            "min-w-full ",
             "relative ",
             "fc "
           )}
         >
+          <NextTopLoader height={3} color="#3b82f6" />
           {/* bg animations */}
           <Suspense>
             <NoSSR>
