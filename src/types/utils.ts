@@ -39,6 +39,7 @@ export type newResumeSearchParams = {
 
   // page base keywords
   jobId?: string; // job id to chose a specific job type like profession
+  payId?: string; // pay id to chose a specific pay type [basic, advance]
 }
 
 export type paramType = keyValue<string | string[] | undefined> | newResumeSearchParams;

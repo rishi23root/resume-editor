@@ -3,7 +3,8 @@
     hooks/notification handeler
     src/utils/util.ts 
  - src/components/pageSpecific/templates/Render.tsx search for #update
-
+ - src/app/(main)/Payment/page.tsx search for #update to add payment
+ 
 
 
 

@@ -33,7 +33,7 @@ function ProcegureRender() {
           />
           <ProcegureElement
             count={4}
-            discription={"I don't think so"}
+            discription={"Build your Resume ;)"}
             currentProcegure={data.procegure}
           />
         </motion.div>
@@ -85,7 +85,7 @@ const ProcegureElement = ({
                   delay: 0.1,
                 },
               }}
-              className="whitespace-nowrap -z-2 text-md md:text-xl font-semibold p-2 border "
+              className="whitespace-nowrap -z-2 text-md md:text-xl font-semibold p-2"
             >
               {discription}
             </motion.div>

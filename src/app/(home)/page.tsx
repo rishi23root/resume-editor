@@ -3,8 +3,12 @@ import Nav from "../../components/Nav/index";
 import dynamic from "next/dynamic";
 
 const Line = dynamic(() => import("@/components/Line"));
-const HeroSection = dynamic(() => import("@/components/pageSpecific/home/HeroSection"));
-const Section2 = dynamic(() => import("@/components/pageSpecific/home/Section2"));
+const HeroSection = dynamic(
+  () => import("@/components/pageSpecific/home/HeroSection")
+);
+const Section2 = dynamic(
+  () => import("@/components/pageSpecific/home/Section2")
+);
 const SectionFeatures = dynamic(
   () => import("@/components/pageSpecific/home/SectionFeatures")
 );
@@ -26,7 +30,7 @@ import { auth } from "@clerk/nextjs";
 
 export default function Home() {
   const editorLink = "/dashboard";
-  const user = auth() 
+  const user = auth();
 
   return (
     // make whole page with 10/12 width and center it on above medium screens
@@ -54,7 +58,7 @@ export default function Home() {
         <Line />
         <SectionAbout editorLink={editorLink} />
         <Line />
-        <SectionPrice editorLink={editorLink} />
+        <SectionPrice />
         <Line />
         <Footer />
 
