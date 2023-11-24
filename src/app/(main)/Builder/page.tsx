@@ -16,3 +16,10 @@ export default async function builderPage(props: PageProps) {
     </main>
   );
 }
+
+
+// for this page to work 
+// we need to have a data object in the url inside _s (to the safe side, and it will be easy to work with in future) to extract the data from db
+// if able to be extracted then we can build the page else redirect to error page
+// that will be provided from the payment page on the success on the payment
+

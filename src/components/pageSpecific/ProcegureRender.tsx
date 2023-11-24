@@ -5,42 +5,86 @@ import { privateData } from "@/types/utils";
 import { decodeBase64ToJSON } from "@/utils/paramHandeler";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import RenderCompleted from "@/hooks/RenderCompleted";
 
 function ProcegureRender() {
   const privateSessionData = useSearchParams().get("_s");
   let data = decodeBase64ToJSON(privateSessionData as string) as privateData;
-  // {data?.procegure}
+  const isRendered = RenderCompleted();
 
-  if (privateSessionData !== null && data.procegure !== undefined) {
-    return (
-      <div className={cn("fc fcc md:glass min-h-12", "md:p-2")}>
-        <motion.div layout className="w-full md:w-[70%] fr fcb gap-4">
-          <ProcegureElement
-            count={1}
-            discription={"Chose your Job type"}
-            currentProcegure={data.procegure}
-          />
-          <ProcegureElement
-            count={2}
-            discription={"Select a Template"}
-            currentProcegure={data.procegure}
-          />
-          <ProcegureElement
-            count={3}
-            discription={"Completer payment"}
-            currentProcegure={data.procegure}
-          />
-          <ProcegureElement
-            count={4}
-            discription={"Build your Resume ;)"}
-            currentProcegure={data.procegure}
-          />
-        </motion.div>
-      </div>
-    );
+  const [showProcegureRender, setProcegureRender] = useState(true);
+
+  useEffect(() => {
+    var timeout: NodeJS.Timeout;
+    if (data.procegure === 4) {
+      timeout = setTimeout(() => {
+        setProcegureRender(false);
+      }, 2000);
+    }
+    if (data.procegure !== 4) {
+      setProcegureRender(true);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [data, privateSessionData]);
+
+  // for hydaration sake
+  if (!isRendered) {
+    return null;
   }
-  return null;
+
+  return (
+    <>
+      <AnimatePresence mode="wait" initial={false}>
+        {privateSessionData !== null &&
+        data.procegure !== undefined &&
+        showProcegureRender ? (
+          <motion.div
+            layout
+            initial={{ height: 0, opacity: 0 }}
+            animate={{
+              height: "auto",
+              opacity: 1,
+              transition: { duration: 0.2 },
+            }}
+            exit={{ height: 0, transition: { duration: 0.5, delay: 2 } }}
+            className="fc fcc md:glass min-h-12 md:p-2"
+          >
+            <motion.div
+              layout
+              className={cn(
+                "w-full md:w-[70%] fr fcb gap-4 transition-all duration-200 ease-in-out",
+                data.procegure === 4 && "justify-center" // if the procegure is 4 then center the procegure render
+              )}
+            >
+              <ProcegureElement
+                count={1}
+                discription={"Chose your Job type"}
+                currentProcegure={data.procegure}
+              />
+              <ProcegureElement
+                count={2}
+                discription={"Select a Template"}
+                currentProcegure={data.procegure}
+              />
+              <ProcegureElement
+                count={3}
+                discription={"Completer payment"}
+                currentProcegure={data.procegure}
+              />
+              <ProcegureElement
+                count={4}
+                discription={"Build your Resume ;)"}
+                currentProcegure={data.procegure}
+              />
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </>
+  );
 }
 
 const ProcegureElement = ({
@@ -52,48 +96,87 @@ const ProcegureElement = ({
   discription: string;
   currentProcegure: number;
 }) => {
+  const [toRemore, setToRemove] = useState(false);
+  useEffect(() => {
+    var timeout: NodeJS.Timeout;
+    if (currentProcegure === 4) {
+      timeout = setTimeout(() => {
+        setToRemove(true);
+      }, 1500);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [count, currentProcegure]);
+
   return (
-    <Fragment key="loading_animator">
-      <motion.div className="fcc fr gap-3">
+    <Fragment>
+      {(currentProcegure !== 4 || count === 4) && (
         <motion.div
-          className={cn(
-            "rounded-[1.3rem] p-2 w-12 h-12 fcc glass shadow-md hover:shadow-zinc-700 text-xl",
-            count === currentProcegure
-              ? "bg-[#6255C2] shadow-zinc-700 hover:shadow-xl"
-              : ""
-          )}
+          layout
+          className="fcc fr gap-3 transition-all duration-200 ease-in-out"
+          key={count}
         >
-          {count}
+          <AnimatePresence mode="wait" initial={false}>
+            {!toRemore && (
+              <motion.div
+                initial={{ opacity: 0.5 }}
+                animate={{
+                  opacity: 1,
+                  transition: {
+                    duration: 0.2,
+                    delay: 0.2,
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: [1.05, 1, 0],
+                  x: -5,
+                  transition: {
+                    duration: 0.2,
+                  },
+                }}
+                className={cn(
+                  "rounded-[1.3rem] p-2 w-12 h-12 fcc glass shadow-md hover:shadow-zinc-700 text-xl",
+                  count === currentProcegure
+                    ? "bg-[#6255C2] shadow-zinc-700 hover:shadow-xl"
+                    : ""
+                )}
+              >
+                {count}
+              </motion.div>
+            )}
+
+            {count === currentProcegure && !toRemore && (
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  transition: {
+                    duration: 0.2,
+                    delay: 0.5,
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  ...(count === 4 ? {} : { width: 0 }),
+                  transition: {
+                    duration: 0.3,
+                    delay: count === 4 ? 2 : 0.1,
+                  },
+                }}
+                className={cn(
+                  "whitespace-nowrap -z-2 text-md md:text-xl font-semibold p-2 h-12",
+                  currentProcegure === 4 && "md:text-2xl"
+                )}
+              >
+                {discription}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
-        <AnimatePresence mode="wait" initial={false}>
-          {count === currentProcegure ? (
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                transition: {
-                  duration: 0.2,
-                  delay: 0.5,
-                },
-              }}
-              exit={{
-                opacity: 0,
-                width: 0,
-                transition: {
-                  duration: 0.1,
-                  delay: 0.1,
-                },
-              }}
-              className="whitespace-nowrap -z-2 text-md md:text-xl font-semibold p-2"
-            >
-              {discription}
-            </motion.div>
-          ) : (
-            ""
-          )}
-        </AnimatePresence>
-      </motion.div>
+      )}
     </Fragment>
   );
 };
