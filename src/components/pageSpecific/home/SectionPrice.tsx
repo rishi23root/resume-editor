@@ -45,7 +45,6 @@ function EachCard({
   className?: ClassValue;
   buttonStyle?: ClassValue;
 }) {
-  
   return (
     <div
       className={cn(
@@ -72,8 +71,8 @@ function EachCard({
             What&lsquo;s incuded:
           </div>
           <div className="w-full h-48 gap-3 text-sm font-medium fss fc text-zinc-400 text-opacity-80">
-            {data.features.map((val) => {
-              return <span>{val}</span>;
+            {data.features.map((val, index) => {
+              return <span key={index}>{val}</span>;
             })}
           </div>
         </div>

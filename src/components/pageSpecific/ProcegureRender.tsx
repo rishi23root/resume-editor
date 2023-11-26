@@ -113,7 +113,6 @@ const ProcegureElement = ({
     <Fragment>
       {(currentProcegure !== 4 || count === 4) && (
         <motion.div
-          layout
           className="fcc fr gap-3 transition-all duration-200 ease-in-out"
           key={count}
         >
