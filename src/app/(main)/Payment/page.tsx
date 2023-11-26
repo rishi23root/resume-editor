@@ -86,8 +86,8 @@ function PaymentCard({
               What&lsquo;s incuded:
             </div>
             <div className="w-full gap-2 text-xl font-medium fss fc text-zinc-400 text-opacity-80">
-              {data.features.map((feature: string) => (
-                <li className="list-item hover:list-decimal duration-200">
+              {data.features.map((feature: string,index) => (
+                <li key={index} className="list-item hover:list-decimal duration-200">
                   {feature}
                 </li>
               ))}
