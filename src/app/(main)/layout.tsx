@@ -6,7 +6,7 @@ import ShowErrorIfany from "@/components/elements/errorRender";
 import TwScreenInfo from "@/components/custom/TwScreenInfo";
 import ProcegureRender from "@/components/pageSpecific/ProcegureRender";
 import { Suspense } from "react";
-import TRPCProvider from "../_trpc/Provider";
+import TRPCProvider from "../../serverTRPC/Provider";
 
 export default async function RootLayout({
   children,
@@ -17,7 +17,7 @@ export default async function RootLayout({
   // console.log(data.userDBid)
 
   return (
-    <TRPCProvider>
+    <TRPCProvider>  {/* trpc context provider or wrapper the main pages only  */}
       {/* addeding toast component */}
       <Toaster />
       {/* main layout for all pages  */}

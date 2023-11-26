@@ -1,7 +1,7 @@
 
 // import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
-import { router, procedure } from "./trpc";
+import { router, procedure } from "../trpc";
 
 export const appRouter = router({
     hello: procedure

@@ -1,6 +1,6 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-import { appRouter } from "@/server";
+import { appRouter } from "@/serverTRPC/routes";
 
 // servers only one purpose of handling the request and returning the response
 
@@ -9,7 +9,10 @@ const handler = (req: Request) =>{
         endpoint: "/api/trpc",
         req,
         router: appRouter,
-        createContext: () => ({})
+        createContext: () => ({
+            // add clerk auth context here
+
+        })
     });
 }
 

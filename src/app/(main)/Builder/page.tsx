@@ -1,7 +1,7 @@
 import { PageProps } from "@/types/utils";
 import useParamParser from "@/utils/paramHandeler";
-import { serverAPI } from "@/app/_trpc/serverAPI";
-import TrpcTEST from "@/components/pageSpecific/builder/TrpcTEST";
+import { serverAPI } from "@/serverTRPC/serverAPI";
+import TrpcTEST from "@/components/pageSpecific/builder/FormElementManager";
 
 export default async function builderPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
@@ -11,9 +11,8 @@ export default async function builderPage(props: PageProps) {
   console.log("from builder: ", stringifiedData, privateData);
   // if no prams then redirect to the dashboard
 
-  const data = await serverAPI.hello();
-
-
+  const data = await serverAPI.hello()
+  
   return (
     // make whole page with 10/12 width and center it on above medium screens
     <main className="glass flex-1">
