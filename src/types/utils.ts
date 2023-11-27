@@ -38,7 +38,7 @@ export type newResumeSearchParams = {
   }; // json data or in base64 format
 
   // page base keywords
-  jobId?: string; // job id to chose a specific job type like profession
+  jobId?: number; // job id to chose a specific job type like profession
   payId?: string; // pay id to chose a specific pay type [basic, advance]
 }
 

@@ -37,7 +37,7 @@ function ProcegureRender() {
 
   return (
     <>
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         {privateSessionData !== null &&
         data.procegure !== undefined &&
         showProcegureRender ? (
@@ -110,15 +110,16 @@ const ProcegureElement = ({
   }, [count, currentProcegure]);
 
   return (
-    <Fragment>
+    <Fragment key={count}>
       {(currentProcegure !== 4 || count === 4) && (
         <motion.div
           className="fcc fr gap-3 transition-all duration-200 ease-in-out"
           key={count}
         >
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait">
             {!toRemore && (
               <motion.div
+                key={"number element" + count}
                 initial={{ opacity: 0.5 }}
                 animate={{
                   opacity: 1,
@@ -145,9 +146,12 @@ const ProcegureElement = ({
                 {count}
               </motion.div>
             )}
-
+          </AnimatePresence>
+          {/* idk why, but need to use sperate animation presence for each elelment else giving key warning :< */}
+          <AnimatePresence mode="wait">
             {count === currentProcegure && !toRemore && (
               <motion.div
+                key={"discription element" + count}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{
                   opacity: 1,

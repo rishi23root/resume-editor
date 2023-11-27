@@ -1,7 +1,8 @@
 
 // import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
-import { router, procedure } from "../trpc";
+import { router, procedure } from "@/serverTRPC/trpc";
+import { jobDescriptionRouter } from "./jobDescription";
 
 export const appRouter = router({
     hello: procedure
@@ -19,6 +20,7 @@ export const appRouter = router({
                 greeting: `hello ${opts.input.text}`,
             };
         }),
+    jobDis: jobDescriptionRouter
 });
 
 export type AppRouter = typeof appRouter;

@@ -8,30 +8,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useRedirectHandler from "@/hooks/redirectionHandlers";
-import { keyValue } from "@/types/utils";
+import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 
-const getSeleteDiscriptionData = async () => {
-  const response = await fetch("/api/jobDescription/");
-  const data = await response.json();
-  return data as keyValue<string>;
-};
 
 const JobSearch = () => {
-  const [jobIdWithName, setJobIdWithName] = useState<keyValue<string>>({});
+  // const [jobIdWithName, setJobIdWithName] = useState<keyValue<string>>({});
   const router = useRouter();
   const { urlWithAddedParams } = useRedirectHandler();
 
-  useEffect(() => {
-    getSeleteDiscriptionData().then((discriptionData) => {
-      setJobIdWithName(discriptionData);
-    });
-  }, []);
+  const {
+    data: jobIdWithName,
+    isError,
+    isLoading,
+  } = trpc.jobDis.all.useQuery(undefined, {
+    // make it to never refetch the data from the server
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+  });
 
   const updateSelection = async (e: any) => {
     router.push(urlWithAddedParams({ jobId: e }));
   };
+
+  useEffect(() => {
+    if (isError) {
+      // add error param to the url
+      router.replace(
+        urlWithAddedParams({ error: "unable to process the API request !" })
+      );
+    }
+  }, [isError]);
 
   return (
     <Suspense>
@@ -41,13 +53,16 @@ const JobSearch = () => {
             <SelectValue placeholder="JOB Title" />
           </SelectTrigger>
           <SelectContent>
-            {Object.entries(jobIdWithName).map(([key, value]) => {
-              return (
-                <SelectItem key={key} value={key}>
-                  {value}
-                </SelectItem>
-              );
-            })}
+            {isLoading && <SelectItem value="1">Loading...</SelectItem>}
+            {!isLoading &&
+              jobIdWithName &&
+              Object.entries(jobIdWithName).map(([key, value]) => {
+                return (
+                  <SelectItem key={key} value={key}>
+                    {value}
+                  </SelectItem>
+                );
+              })}
           </SelectContent>
         </Select>
       </div>

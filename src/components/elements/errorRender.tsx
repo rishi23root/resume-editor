@@ -34,7 +34,7 @@ const ShowErrorIfany = () => {
     }
   }, [searchParams]);
 
-  return <></>;
+  return null;
 };
 
 export default ShowErrorIfany;

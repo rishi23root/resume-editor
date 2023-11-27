@@ -19,7 +19,7 @@ const Card = ({
   jobId,
   templateData,
 }: {
-  jobId: string;
+  jobId: number;
   templateData: templateArrayTypes;
 }) => {
   const [showModel, setShowModel] = useState(false);
