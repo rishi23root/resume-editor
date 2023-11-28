@@ -30,8 +30,6 @@ const ExtractLinkedinProfile = () => {
               altText="Try other methods till"
               onClick={() => {
                 const redirectUrl = urlWithAddedParams(
-                  {},
-                  {},
                   "/New/jsonResume"
                 );
                 console.log(redirectUrl);

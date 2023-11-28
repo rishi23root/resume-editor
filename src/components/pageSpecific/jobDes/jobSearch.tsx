@@ -12,7 +12,6 @@ import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
-
 const JobSearch = () => {
   // const [jobIdWithName, setJobIdWithName] = useState<keyValue<string>>({});
   const router = useRouter();
@@ -33,14 +32,14 @@ const JobSearch = () => {
   });
 
   const updateSelection = async (e: any) => {
-    router.push(urlWithAddedParams({ jobId: e }));
+    router.push(urlWithAddedParams("", { jobId: e }));
   };
 
   useEffect(() => {
     if (isError) {
       // add error param to the url
       router.replace(
-        urlWithAddedParams({ error: "unable to process the API request !" })
+        urlWithAddedParams("",{ error: "unable to process the API request !" })
       );
     }
   }, [isError]);

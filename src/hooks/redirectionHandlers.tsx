@@ -18,9 +18,9 @@ function useRedirectHandler() {
   );
 
   const urlWithAddedParams = (
-    newSearchParams: searchParamType,
-    updatePrivate: searchParamType["_s"] = {},
-    pathName: string | undefined = ""
+    pathName: string = "",
+    newSearchParams: searchParamType = {},
+    updatePrivate: searchParamType["_s"] = {}
   ) => {
     if (Object.keys(updatePrivate).length) {
       // decode the _s
@@ -44,9 +44,9 @@ function useRedirectHandler() {
   };
 
   const urlWithOnlyTheseParams = (
-    newSearchParams: searchParamType,
+    pathName: string = "",
+    newSearchParams: searchParamType= {},
     updatePrivate: searchParamType["_s"] = {},
-    pathName: string | undefined = ""
   ) => {
     if (Object.keys(updatePrivate).length) {
       const encodedprivateData = encodeJSONToBase64({

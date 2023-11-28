@@ -41,9 +41,9 @@ const Card = ({
         <Link
           className="absolute hidden group-hover:flex bottom-1 w-full fcc"
           href={urlWithAddedParams(
+            "/Templates",
             { jobId: jobId },
-            { procegure: 2 },
-            "/Templates"
+            { procegure: 2 }
           )}
         >
           <motion.div

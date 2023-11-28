@@ -158,24 +158,23 @@ export function NavLinksDashboard() {
     <>
       <Link
         href={urlWithOnlyTheseParams(
+          "/Templates",
           {
             templateName: "singleColumn",
-          },
-          {},
-          "/Templates"
+          }
         )}
         className="text-violet-50"
       >
         Templates
       </Link>
       <Link
-        href={urlWithOnlyTheseParams({}, {}, "/Payment")}
+        href={urlWithOnlyTheseParams("/Payment")}
         className="text-violet-50"
       >
         Price
       </Link>
       <Link
-        href={urlWithOnlyTheseParams({}, {}, "/JobDescriptions")}
+        href={urlWithOnlyTheseParams("/JobDescriptions")}
         className="text-violet-50"
       >
         Job Descriptions

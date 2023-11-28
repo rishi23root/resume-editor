@@ -47,11 +47,11 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
         {images.length > 0 && (
           <Link
             href={urlWithAddedParams(
+              "/Payment",
               {
                 templateName: templateName,
               },
               { procegure: 3 },
-              "/Payment"
             )}
             className={cn(
               "p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md m-auto text-white text-center",

@@ -1,7 +1,7 @@
 import { PageProps } from "@/types/utils";
 import useParamParser from "@/utils/paramHandeler";
 import { serverAPI } from "@/serverTRPC/serverAPI";
-import TrpcTEST from "@/components/pageSpecific/builder/FormElementManager";
+import FormManager from "@/components/pageSpecific/builder/FormElementManager";
 
 export default async function builderPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
@@ -20,7 +20,7 @@ export default async function builderPage(props: PageProps) {
         this is builder page main action here is to build the page
       </div>
       {data}
-      <TrpcTEST/>
+      <FormManager/>
     </main>
   );
 }
