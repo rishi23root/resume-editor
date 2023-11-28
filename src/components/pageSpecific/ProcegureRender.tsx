@@ -49,7 +49,11 @@ function ProcegureRender() {
               opacity: 1,
               transition: { duration: 0.2 },
             }}
-            exit={{ height: 0, transition: { duration: 0.5, delay: 2 } }}
+            exit={{
+              height: 0,
+              opacity: 0,
+              transition: { duration: 0.5, delay: 2 },
+            }}
             className="fc fcc md:glass min-h-12 md:p-2"
           >
             <motion.div
