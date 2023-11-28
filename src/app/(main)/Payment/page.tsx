@@ -57,6 +57,7 @@ function PaymentCard({
   // read existing data from the url and add the procegure to it and payid to it
   // work on payment handeler from rozerpay ## to do / #updates
 
+  // no need to update the redirect url as it will be updated in the payment page because it will be the last page before the builder page
   const linkToNextStep = onSuceessRedirectUrl + "&payId=" + data.id;
 
   return (

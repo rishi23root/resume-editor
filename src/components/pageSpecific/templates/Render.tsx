@@ -27,6 +27,14 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
     }
   }, [templateName]);
 
+  // check if we have a param of redirectPage in the url
+  const searchParams = useSearchParams();
+  const redirectPage = searchParams.get("redirectPage");
+  // if we have a redirectPage param then we will redirect to that page
+  const toRedirectUrl = redirectPage
+    ? urlWithAddedParams(redirectPage, { templateName }, { procegure: 4 })
+    : urlWithAddedParams("/Payment", { templateName }, { procegure: 3 });
+
   if (isRendered) {
     return (
       <>
@@ -46,13 +54,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
 
         {images.length > 0 && (
           <Link
-            href={urlWithAddedParams(
-              "/Payment",
-              {
-                templateName: templateName,
-              },
-              { procegure: 3 },
-            )}
+            href={toRedirectUrl}
             className={cn(
               "p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md m-auto text-white text-center",
               images.length == 1 ? "w-[50%]" : "w-[90%]"

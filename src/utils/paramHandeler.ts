@@ -28,6 +28,7 @@ export const jsonToSearchParameters = async (jsonData: JsonType):Promise<string>
   return searchParams.toString()
 }
 
+// function to convert URL search parameters to JSON object (mostly used to decode)
 const useParamParser = async (currentPage: string, params: searchParamType) => {
   // aim :
   // read current params 
@@ -48,5 +49,9 @@ const useParamParser = async (currentPage: string, params: searchParamType) => {
     privateData,
   };
 };
+
+// need to work on this function
+// replica of the client side function but for server side
+// const 
 
 export default useParamParser;

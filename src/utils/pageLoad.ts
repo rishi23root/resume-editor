@@ -4,7 +4,8 @@ import { PrivateMetadata } from "@/types/user";
 import { clerkClient, currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { checkIfFromLinkedin } from "@/utils/linkedinUtil";
-import { encodeJSONToBase64, jsonToSearchParameters } from "./paramHandeler";
+import useParamParser, { encodeJSONToBase64, jsonToSearchParameters } from "./paramHandeler";
+import { PageProps } from '../types/utils';
 
 
 
@@ -89,4 +90,47 @@ export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     return user?.privateMetadata as PrivateMetadata
 }
 
+
+
+// builderPage params validator
+export async function builderPageParamsValidator({searchParams}: PageProps){
+    // copy the search params to avoid mutation
+    const SearchParams = {...searchParams}
+    // extract the readable data from the search params
+    const { privateData } = await useParamParser("",SearchParams);
+
+    // if (private data or _s session string) is not found or empty object then redirect to the dashboard
+    if (!Object.keys(privateData).length || !SearchParams._s) 
+    {
+        SearchParams.error = "error decoding data, have to restart building :( ";
+        return redirect("/dashboard?"+ await jsonToSearchParameters(SearchParams) );
+    }
+
+    // add param to activate mean mode where only those path with no 
+    // add the next redirect page info
+    SearchParams.redirectPage = "/Builder";
+    privateData.mode = "newResume";
+
+    // jobId is not found then redirect to the jobDis page
+    if (!SearchParams.jobId) {
+        privateData.procegure = 1;
+        SearchParams._s = encodeJSONToBase64(privateData);
+        return redirect("/JobDescriptions?" + await jsonToSearchParameters(SearchParams) );
+    }
+    // templateName is not found then redirect to the Template page
+    if (!SearchParams.templateName) {
+        privateData.procegure = 2;
+        SearchParams._s = encodeJSONToBase64(privateData);
+        return redirect("/Templates?" + await jsonToSearchParameters(SearchParams) );
+    }
+    // payId is not found then redirect to the Payment page
+    if (!SearchParams.payId) {
+        // update the session data with right procegure info
+        privateData.procegure = 3;
+        SearchParams._s = encodeJSONToBase64(privateData);
+        return redirect("/Payment?" + await jsonToSearchParameters(SearchParams) );
+    }   
+
+    return 
+}
 

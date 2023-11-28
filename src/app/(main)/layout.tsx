@@ -16,8 +16,9 @@ export default async function RootLayout({
   const data = await newUserLoginHandler(); // effective for only first login
   // console.log(data.userDBid)
 
+  // trpc context provider or wrapper the main pages only
   return (
-    <TRPCProvider>  {/* trpc context provider or wrapper the main pages only  */}
+    <TRPCProvider>
       {/* addeding toast component */}
       <Toaster />
       {/* main layout for all pages  */}
@@ -29,7 +30,9 @@ export default async function RootLayout({
         <Suspense>
           <ProcegureRender />
         </Suspense>
-        <div className="lg:gap-10 gap-4 fr flex-1 ">{children}</div>
+        <div className="lg:gap-10 gap-4 fr flex-1 ">
+          <Suspense>{children}</Suspense>
+        </div>
       </main>
       <ShowErrorIfany />
       <TwScreenInfo />

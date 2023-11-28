@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { templateArrayTypes } from "@/types/jobDescription";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
 const Card = ({
@@ -25,6 +26,14 @@ const Card = ({
   const [showModel, setShowModel] = useState(false);
   const ifRendered = RenderCompleted();
   const { urlWithAddedParams } = useRedirectHandler();
+
+  // check if we have a param of redirectPage in the url
+  const searchParams = useSearchParams();
+  const redirectPage = searchParams.get("redirectPage");
+  // if we have a redirectPage param then we will redirect to that page
+  const toRedirectUrl = redirectPage
+    ? urlWithAddedParams(redirectPage, { jobId: jobId }, { procegure: 4 })
+    : urlWithAddedParams("/Templates", { jobId: jobId }, { procegure: 2 });
 
   return (
     <>
@@ -40,11 +49,7 @@ const Card = ({
 
         <Link
           className="absolute hidden group-hover:flex bottom-1 w-full fcc"
-          href={urlWithAddedParams(
-            "/Templates",
-            { jobId: jobId },
-            { procegure: 2 }
-          )}
+          href={toRedirectUrl}
         >
           <motion.div
             className={cn(
