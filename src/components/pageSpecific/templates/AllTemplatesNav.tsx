@@ -12,7 +12,9 @@ async function GetTemplates({
 }) {
   return (
     <div className="items-center w-full md:w-1/6 fc glass md:h-full h-2/6">
-      <h1 className="self-start mb-4 text-2xl">Templates</h1>
+      <h1 className="self-start mb-4 sm:text-2xl md:text-sm lg:text-2xl">
+        Templates
+      </h1>
       <div className="flex-1 w-full h-24 gap-6 m-1 overflow-scroll overflow-y-hidden fr md:fc md:overflow-x-hidden md:overflow-y-scroll">
         {templateData.map((ele) => {
           return (
@@ -20,7 +22,7 @@ async function GetTemplates({
               href={{
                 pathname: `/Templates/`,
                 query: {
-                  ...pageParams as any,
+                  ...(pageParams as any),
                   templateName: ele.name,
                 },
               }}
