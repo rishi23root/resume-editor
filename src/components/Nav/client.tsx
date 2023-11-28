@@ -19,10 +19,40 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./utils";
 import useRedirectHandler from "@/hooks/redirectionHandlers";
+
+// logo element
+export function LogoElementWithLink() {
+  // check for the pathname
+  const pathname = usePathname();
+
+  // for the nav link conditions
+  // if on / page then show dashboard link
+  // if on dashboard page then show / link
+  // if any on any other page then show dashboard link
+  const currentRedirectingPath =
+    pathname === "/"
+      ? "/dashboard"
+      : pathname === "/dashboard"
+      ? "/"
+      : "/dashboard";
+
+  return (
+    <Link href={currentRedirectingPath}>
+      <Image
+        className="w-40 h-12 lg:w-72 lg:h-16"
+        alt="main logo"
+        src="/logo.png"
+        width={275}
+        height={65}
+        priority
+      />
+    </Link>
+  );
+}
 
 // notification components
 export function NotificationElement() {
@@ -122,18 +152,12 @@ export function HamburgerOnMobile(props: NavProps) {
 }
 
 export function NavLinksDashboard() {
-  const { urlWithAddedParams } = useRedirectHandler();
+  const { urlWithOnlyTheseParams } = useRedirectHandler();
 
   return (
     <>
       <Link
-        href={urlWithAddedParams({}, {}, "/New")}
-        className="text-violet-50"
-      >
-        New +
-      </Link>
-      <Link
-        href={urlWithAddedParams(
+        href={urlWithOnlyTheseParams(
           {
             templateName: "singleColumn",
           },
@@ -145,7 +169,13 @@ export function NavLinksDashboard() {
         Templates
       </Link>
       <Link
-        href={urlWithAddedParams({}, {}, "/JobDescriptions")}
+        href={urlWithOnlyTheseParams({}, {}, "/Payment")}
+        className="text-violet-50"
+      >
+        Price
+      </Link>
+      <Link
+        href={urlWithOnlyTheseParams({}, {}, "/JobDescriptions")}
         className="text-violet-50"
       >
         Job Descriptions

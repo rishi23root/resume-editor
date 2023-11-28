@@ -3,22 +3,17 @@ import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { NavLinks } from "./utils";
-import { HamburgerOnMobile, NotificationElement } from "./client";
+import {
+  HamburgerOnMobile,
+  LogoElementWithLink,
+  NotificationElement,
+} from "./client";
 import { Suspense } from "react";
 
 function Nav({ isSignedIn, pathname }: NavProps) {
   return (
     <div className="pr-2 fcb">
-      <Link href={pathname != "/dashboard" ? "/dashboard" : "/"}>
-        <Image
-          className="w-40 h-12 lg:w-72 lg:h-16 "
-          alt="main logo"
-          src="/logo.png"
-          width={275}
-          height={65}
-          priority
-        />
-      </Link>
+      <LogoElementWithLink />
       <div className="hidden gap-3 fcc lg:gap-12 lg:text-2xl font-base md:flex">
         <NavLinks isSignedIn={isSignedIn} pathname={pathname} />
       </div>

@@ -13,20 +13,29 @@ function ProcegureRender() {
   let data = decodeBase64ToJSON(privateSessionData as string) as privateData;
   const isRendered = RenderCompleted();
 
-  const [showProcegureRender, setProcegureRender] = useState(true);
+  const [keepProcegureRender, setkeepProcegureRender] = useState(true);
+  const [keepProcegureRenderChildren, setkeepProcegureRenderChildren] =
+    useState(true);
 
   useEffect(() => {
     var timeout: NodeJS.Timeout;
+    var timeoutForChildren: NodeJS.Timeout;
     if (data.procegure === 4) {
       timeout = setTimeout(() => {
-        setProcegureRender(false);
+        setkeepProcegureRender(false);
       }, 2000);
+      timeoutForChildren = setTimeout(() => {
+        setkeepProcegureRenderChildren(false);
+      }, 1000);
     }
+
     if (data.procegure !== 4) {
-      setProcegureRender(true);
+      setkeepProcegureRender(true);
+      setkeepProcegureRenderChildren(true);
     }
     return () => {
       clearTimeout(timeout);
+      clearTimeout(timeoutForChildren);
     };
   }, [data, privateSessionData]);
 
@@ -38,9 +47,10 @@ function ProcegureRender() {
   return (
     <>
       <AnimatePresence mode="wait">
-        {privateSessionData !== null &&
+        {
+        // privateSessionData !== null &&
         data.procegure !== undefined &&
-        showProcegureRender ? (
+        keepProcegureRender ? (
           <motion.div
             layout
             initial={{ height: 0, opacity: 0 }}
@@ -67,21 +77,25 @@ function ProcegureRender() {
                 count={1}
                 discription={"Chose your Job type"}
                 currentProcegure={data.procegure}
+                keepProcegureRenderChildren={keepProcegureRenderChildren}
               />
               <ProcegureElement
                 count={2}
                 discription={"Select a Template"}
                 currentProcegure={data.procegure}
+                keepProcegureRenderChildren={keepProcegureRenderChildren}
               />
               <ProcegureElement
                 count={3}
                 discription={"Completer payment"}
                 currentProcegure={data.procegure}
+                keepProcegureRenderChildren={keepProcegureRenderChildren}
               />
               <ProcegureElement
                 count={4}
                 discription={"Build your Resume ;)"}
                 currentProcegure={data.procegure}
+                keepProcegureRenderChildren={keepProcegureRenderChildren}
               />
             </motion.div>
           </motion.div>
@@ -95,10 +109,12 @@ const ProcegureElement = ({
   count,
   discription,
   currentProcegure,
+  keepProcegureRenderChildren,
 }: {
   count: number;
   discription: string;
   currentProcegure: number;
+  keepProcegureRenderChildren: boolean;
 }) => {
   const [toRemore, setToRemove] = useState(false);
   useEffect(() => {
@@ -121,7 +137,7 @@ const ProcegureElement = ({
           key={count}
         >
           <AnimatePresence mode="wait">
-            {!toRemore && (
+            {!toRemore && keepProcegureRenderChildren && (
               <motion.div
                 key={"number element" + count}
                 initial={{ opacity: 0.5 }}
