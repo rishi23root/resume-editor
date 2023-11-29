@@ -27,15 +27,13 @@ export default async function RootLayout({
         {/* pathname value is hardcoded here because it doesn't matter which path it is just not '/' */}
       </div>
       <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2rem] gap-4 fc flex-1">
-        <Suspense>
-          <ProcegureRender />
-        </Suspense>
+        <ProcegureRender />
         <div className="lg:gap-10 gap-4 fr flex-1 ">
           <Suspense>{children}</Suspense>
         </div>
       </main>
       <ShowErrorIfany />
-      <TwScreenInfo />
+      {/* <TwScreenInfo /> */}
     </TRPCProvider>
   );
 }
