@@ -1,17 +1,20 @@
-import { PageProps } from "@/types/utils";
-import useParamParser from "@/utils/paramHandeler";
-import { serverAPI } from "@/serverTRPC/serverAPI";
 import FormManager from "@/components/pageSpecific/builder/FormElementManager";
-import { redirect } from "next/navigation";
-import { builderPageParamsValidator } from "@/utils/pageLoad";
+import { serverAPI } from "@/serverTRPC/serverAPI";
+import { PageProps } from "@/types/utils";
+import {
+  builderPageParamsRedirectHandeler,
+  builderPageParamsValidator,
+} from "@/utils/pageLoad";
+import useParamParser from "@/utils/paramHandeler";
 
 export default async function builderPage(props: PageProps) {
-  // const { stringifiedData, privateData } = await useParamParser(
-  //   "/Builder",
-  //   props.searchParams
-  // );
-  // console.log("from builder: ", stringifiedData, privateData);
+  const { stringifiedData, privateData } = await useParamParser(
+    "/Builder",
+    props.searchParams
+  );
+  console.log("from builder: ", stringifiedData, privateData);
 
+  await builderPageParamsRedirectHandeler(props);
   await builderPageParamsValidator(props);
 
   const data = await serverAPI.hello();

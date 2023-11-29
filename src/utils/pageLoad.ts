@@ -93,7 +93,7 @@ export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
 
 
 // builderPage params validator
-export async function builderPageParamsValidator({searchParams}: PageProps){
+export async function builderPageParamsRedirectHandeler({searchParams}: PageProps){
     // copy the search params to avoid mutation
     const SearchParams = {...searchParams}
     // extract the readable data from the search params
@@ -132,5 +132,10 @@ export async function builderPageParamsValidator({searchParams}: PageProps){
     }   
 
     return 
+}
+
+// validate the params for the builder page like payment id and jsondataId
+export async function builderPageParamsValidator({searchParams}: PageProps){
+    return true
 }
 
