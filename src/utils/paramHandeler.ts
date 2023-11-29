@@ -51,7 +51,52 @@ const useParamParser = async (currentPage: string, params: searchParamType) => {
 };
 
 // need to work on this function
-// replica of the client side function but for server side
+// replica of the client side function but for server side urlWithAddedParams
 // const 
+export const urlWithAddedParams = (
+    pathName: string,
+    params: searchParamType,
+    newSearchParams: searchParamType = {},
+    updatePrivate: searchParamType["_s"] = {}
+  ) => {
+    if (Object.keys(updatePrivate).length) {
+      // decode the _s
+      // add data and update it
+      var privateData = {};
+      if (params._s) {
+        privateData = decodeBase64ToJSON(params._s as string);
+        // console.log(searchParams.get("_s") || {}, privateData);
+      }
+      const encodedprivateData = encodeJSONToBase64({
+        ...privateData,
+        ...(updatePrivate as any),
+      });
+      newSearchParams = { ...newSearchParams, _s: encodedprivateData };
+    }
+
+    const addToCurrentQuery = (data: searchParamType) => {
+      const Params = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => Params.set(key, value));
+      Object.entries(data).forEach(([key, value]) => Params.set(key, value));
+      return Params.toString() ? "?" + Params.toString() : "";
+    }
+
+    return (
+      pathName  + addToCurrentQuery(newSearchParams)
+    );
+};
+
+
+// Example of how to use the function
+
+// const test = urlWithAddedParams(
+//     "/Builder",
+//     props.searchParams,
+//     { templateName: "singleColumn" },
+//     { procegure: 1 }
+//   );
+//   console.log(test);
+
+
 
 export default useParamParser;
