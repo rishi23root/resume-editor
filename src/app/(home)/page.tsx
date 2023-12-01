@@ -29,7 +29,7 @@ import { auth } from "@clerk/nextjs";
 // import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 export default function Home() {
-  const editorLink = "/dashboard";
+  const editorLink = "/Dashboard";
   const user = auth();
 
   return (

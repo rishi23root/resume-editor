@@ -35,7 +35,8 @@ export const jobDescriptionRouter = router({
                 return dataForId;
             }
             return {} as templateArrayTypes[];
-        })
+        }),
+    
 });
     
 // z.object({

@@ -9,7 +9,7 @@ import { PageProps } from "@/types/utils";
 
 export default async function DashboardPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
-    "/dashboard",
+    "/Dashboard",
     props.searchParams
   );
   console.log("from dashboard: ", stringifiedData, privateData);

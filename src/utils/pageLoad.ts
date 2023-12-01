@@ -103,7 +103,7 @@ export async function builderPageParamsRedirectHandeler({searchParams}: PageProp
     if (!Object.keys(privateData).length || !SearchParams._s) 
     {
         SearchParams.error = "error decoding data, have to restart building :( ";
-        return redirect("/dashboard?"+ await jsonToSearchParameters(SearchParams) );
+        return redirect("/Dashboard?"+ await jsonToSearchParameters(SearchParams) );
     }
 
     // add param to activate mean mode where only those path with no 

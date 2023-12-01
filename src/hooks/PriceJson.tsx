@@ -17,7 +17,7 @@ export const priceData: priceDataType[] = [
       "ATS integration",
       "Single click builder",
     ],
-    link: "/dashboard",
+    link: "/Dashboard",
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export const priceData: priceDataType[] = [
       "Mentor Review",
       "Create Resume according to Job Description",
     ],
-    link: "/dashboard",
+    link: "/Dashboard",
   },
   {
     id: 3,
@@ -44,7 +44,7 @@ export const priceData: priceDataType[] = [
       "Price discussion",
       "Updates According to need (organization logo, etc)",
     ],
-    link: "/dashboard",
+    link: "/Dashboard",
   },
 ];
 
