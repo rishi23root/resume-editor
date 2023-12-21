@@ -1,4 +1,4 @@
-import usePriceJson, { priceData } from "@/hooks/PriceJson";
+import usePriceJson from "@/hooks/PriceJson";
 import { cn } from "@/lib/utils";
 import { priceDataType } from "@/types/payment";
 import { ClassValue } from "clsx";

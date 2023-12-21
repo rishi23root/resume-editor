@@ -4,7 +4,7 @@ import { priceDataType } from "@/types/payment";
 import { JsonType, PageProps } from "@/types/utils";
 import useParamParser, {
   encodeJSONToBase64,
-  jsonToSearchParameters
+  jsonToSearchParameters,
 } from "@/utils/paramHandeler";
 import { ClassValue } from "clsx";
 import Link from "next/link";
@@ -26,6 +26,7 @@ export default async function paymentPage(props: PageProps) {
   });
 
   const data = await usePriceJson(true);
+
   return (
     // make whole page with 10/12 width and center it on above medium screens
     <main className="flex-1 md:fr fc gap-4 justify-center ">
@@ -58,6 +59,10 @@ function PaymentCard({
   // work on payment handeler from rozerpay ## to do / #updates
 
   // no need to update the redirect url as it will be updated in the payment page because it will be the last page before the builder page
+
+  // console.log(await serverAPI.price.byId({ payId: data.id}));
+  // update the redirect url the payment provider will redirect to the payment page with the payid and procegure
+
   const linkToNextStep = onSuceessRedirectUrl + "&payId=" + data.id;
 
   return (
@@ -87,8 +92,11 @@ function PaymentCard({
               What&lsquo;s incuded:
             </div>
             <div className="w-full gap-2 text-xl font-medium fss fc text-zinc-400 text-opacity-80">
-              {data.features.map((feature: string,index) => (
-                <li key={index} className="list-item hover:list-decimal duration-200">
+              {data.features.map((feature: string, index) => (
+                <li
+                  key={index}
+                  className="list-item hover:list-decimal duration-200"
+                >
                   {feature}
                 </li>
               ))}

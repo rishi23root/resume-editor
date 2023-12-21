@@ -3,12 +3,9 @@
 import { z } from "zod";
 import { router, procedure } from "@/serverTRPC/trpc";
 import { jobDescriptionRouter } from "./jobDescription";
+import { priceRouter } from "./payment";
 
 export const appRouter = router({
-    hello: procedure
-        .query(() => {
-            return "ligit hello"
-        }),
     hello2: procedure
         .input(
             z.object({
@@ -20,7 +17,9 @@ export const appRouter = router({
                 greeting: `hello ${opts.input.text}`,
             };
         }),
-    jobDis: jobDescriptionRouter
+    jobDis: jobDescriptionRouter,
+    price: priceRouter,
+
 });
 
 export type AppRouter = typeof appRouter;
