@@ -1,0 +1,197 @@
+{
+  "basics": {
+    "name": "John show",
+    "label": "HR Specialist",
+    "image": "",
+    "email": "john.show@example.com",
+    "phone": "+1 123-456-7890",
+    "url": "www.johnshow-resume.com",
+    "summary": "Experienced HR Specialist with a focus on talent acquisition, employee relations, and fostering a positive workplace culture.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "Noida",
+      "countryCode": "",
+      "region": ""
+    },
+    "profiles": [
+      {
+        "network": "linkedin",
+        "username": "johnshow",
+        "url": "https://www.linkedin.com/in/johnshow/"
+      },
+      {
+        "network": "twitter",
+        "username": "johnshow",
+        "url": "https://www.twitter.com/johnshow/"
+      },
+      {
+        "network": "github",
+        "username": "johnshow",
+        "url": "https://github.com/johnshow/"
+      }
+    ]
+  },
+  "skills": {
+    "core": [
+      {
+        "keywords": ["Talent Acquisition", "Employee Relations", "HR Policies"],
+        "level": "Master",
+        "name": "Human Resources"
+      }
+    ],
+    "interests": [
+      {
+        "name": "Employee Development"
+      }
+    ],
+    "languages": [
+      {
+        "name": "Interviewing",
+        "level": 90
+      },
+      {
+        "name": "Resume Screening",
+        "level": 80
+      },
+      {
+        "name": "Onboarding",
+        "level": 80
+      }
+    ],
+    "libraries": [
+      {
+        "name": "Conflict Resolution",
+        "level": 70
+      },
+      {
+        "name": "Employee Engagement",
+        "level": 70
+      }
+    ],
+    "tools": [
+      {
+        "name": "HRIS",
+        "level": 3
+      },
+      {
+        "name": "Recruitment Software",
+        "level": 3
+      },
+      {
+        "name": "Microsoft Office",
+        "level": 3
+      }
+    ],
+    "frameworks": [],
+    "technologies": [],
+    "databases": [],
+    "mask": {
+      "interests": "interests",
+      "recruitment": "recruitment",
+      "employee_relations": "employee_relations",
+      "tools": "tools"
+    }
+  },
+  "work": [
+    {
+      "id": "1",
+      "name": "Talent Solutions Inc.",
+      "position": "Senior HR Specialist",
+      "url": "https://www.johnshow.com/",
+      "startDate": "Apr 2020",
+      "isWorkingHere": true,
+      "endDate": null,
+      "summary": "<ul><li>Managed end-to-end recruitment processes, including sourcing, interviewing, and onboarding</li><li>Implemented employee engagement initiatives to enhance workplace satisfaction</li><li>Provided guidance on HR policies, resolving employee queries and concerns</li><li>Conducted training sessions on various HR topics for staff development</li></ul>",
+      "years": ""
+    },
+    {
+      "id": "2",
+      "name": "People Dynamics Ltd.",
+      "position": "HR Generalist",
+      "url": "",
+      "startDate": "Jun 2017",
+      "isWorkingHere": false,
+      "endDate": "Mar 2020",
+      "summary": "<ul><li>Handled day-to-day HR operations, including employee relations and performance management</li><li>Collaborated with department heads to understand staffing needs and develop recruitment strategies</li><li>Facilitated training programs to promote a positive and inclusive work culture</li><li>Maintained accurate HR records and ensured compliance with labor laws</li></ul>",
+      "years": "3 years"
+    },
+    {
+      "id": "3",
+      "name": "HR Academy",
+      "position": "HR Intern",
+      "url": "",
+      "startDate": "Aug 2015",
+      "isWorkingHere": false,
+      "endDate": "May 2017",
+      "summary": "<ul><li>Assisted in various HR functions, including recruitment, onboarding, and training coordination</li><li>Gained practical experience in drafting HR documents and policies</li><li>Participated in workshops and seminars on HR best practices</li></ul>",
+      "years": "2 years"
+    }
+  ],
+  "education": [
+    {
+      "id": "1",
+      "institution": "HR Institute",
+      "url": "https://www.hrinstitute.edu/",
+      "studyType": "Masters",
+      "area": "Human Resource Management",
+      "startDate": "2013",
+      "isStudyingHere": false,
+      "endDate": "2015",
+      "score": "78%"
+    },
+    {
+      "id": "2",
+      "institution": "Business University",
+      "url": "https://www.businessuniversity.edu/",
+      "studyType": "Bachelors",
+      "area": "Business Administration",
+      "startDate": "2009",
+      "isStudyingHere": false,
+      "endDate": "2013",
+      "score": "3.7 GPA"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Employee Engagement Program",
+      "url": "https://www.johnshow.com/employee-engagement",
+      "languages": "Training Sessions, Team Building Events",
+      "description": "<ul><li>Designed and implemented an employee engagement program to boost morale</li><li>Conducted training sessions and organized team-building events</li><li>Received positive feedback on improved workplace satisfaction</li></ul>"
+    },
+    {
+      "id": "2",
+      "name": "Recruitment Process Optimization",
+      "url": "https://www.peopledynamics.com/recruitment-optimization",
+      "languages": "HRIS, Recruitment Software",
+      "description": "<ul><li>Led a project to optimize the recruitment process for efficiency and accuracy</li><li>Implemented HRIS and recruitment software for streamlined processes</li><li>Reduced time-to-hire and improved the quality of hires</li></ul>"
+    }
+  ],
+  "awards": [
+    {
+      "title": "HR Excellence Award",
+      "date": "2016-10-01",
+      "awarder": "HR Association",
+      "summary": "Recognized for outstanding contributions to the field of Human Resources",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "1"
+    },
+    {
+      "title": "Employee Relations Achievement",
+      "date": "2019-07-01",
+      "awarder": "Workplace Harmony Foundation",
+      "summary": "Acknowledged for successfully managing employee relations and fostering a positive workplace culture",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "2"
+    }
+  ],
+  "mask": {
+    "basics": "basics",
+    "skills": "skills",
+    "education": "education",
+    "work": "work",
+    "projects": "projects",
+    "awards": "awards"
+  }
+}

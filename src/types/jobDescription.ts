@@ -1,12 +1,12 @@
 import { keyValue } from "./utils";
 
-export type templateArrayTypes = {
+export type jobDescriptionDataType = {
         title:string,
-        description:string,      
+        templates:{title:string}[],
+        jobDes:string,
+        mask: keyValue<string>,
+        image?: keyValue<string>,
     }
 
 export type jobIdAndNameType = 
-    keyValue<{
-        title:string,
-        templates:templateArrayTypes[]
-    }>
+    keyValue<jobDescriptionDataType>

@@ -1,9 +1,8 @@
 // working under issue #35
 
-// this component have single task to show pdf file in the browser 
-// using react-pdf library 
+// this component have single task to show pdf file in the browser
+// using react-pdf library
 // take pdf file as props and show it in the browser or take id to request pdf file from server
-
 
 "use client";
 
@@ -19,7 +18,11 @@ function PDFviewer() {
   // console.log("this is the way: ");
   // console.log("this is the way: ",data2);
 
-  return <div className="border glass">{data?.greeting}</div>;
+  return (
+    <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2">
+      {data?.greeting}
+    </div>
+  );
 }
 
 export default PDFviewer;

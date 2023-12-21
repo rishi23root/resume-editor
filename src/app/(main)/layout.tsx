@@ -33,7 +33,7 @@ export default async function RootLayout({
         </div>
       </main>
       <ShowErrorIfany />
-      {/* <TwScreenInfo /> */}
+      <TwScreenInfo />
     </TRPCProvider>
   );
 }

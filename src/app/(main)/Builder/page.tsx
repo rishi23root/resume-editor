@@ -1,4 +1,5 @@
 import FormManager from "@/components/pageSpecific/builder/FormElementManager";
+import PDFviewer from "@/components/pageSpecific/builder/PDFviewer";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
 import {
@@ -17,16 +18,13 @@ export default async function builderPage(props: PageProps) {
   await builderPageParamsRedirectHandeler(props);
   await builderPageParamsValidator(props);
 
-  const data = await serverAPI.hello();
+  // const data = await serverAPI.hello();
 
   return (
     // make whole page with 10/12 width and center it on above medium screens
-    <main className="glass flex-1">
-      <div className="">
-        this is builder page main action here is to build the page
-      </div>
-      {data}
+    <main className="flex-1 fr gap-4">
       <FormManager />
+      <PDFviewer />
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import JobDiscriptionTemplateShowcase from "@/components/pageSpecific/jobDes/jobDisShowCase";
 import JobSearch from "@/components/pageSpecific/jobDes/jobSearch";
-import { PageProps } from "@/types/utils";
+import { PageProps } from '@/types/utils';
 import useParamParser from "@/utils/paramHandeler";
 
 export default async function JobDescriptionsPage(props: PageProps) {
@@ -15,7 +15,10 @@ export default async function JobDescriptionsPage(props: PageProps) {
   return (
     <div className="w-full fcc fc">
       <JobSearch />
-      <JobDiscriptionTemplateShowcase jobId={jobId} />
+      <JobDiscriptionTemplateShowcase
+        jobId={jobId}
+        searchParam={props.searchParams}
+      />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import useRedirectHandler from "@/hooks/redirectionHandlers";
 import { cn } from "@/lib/utils";
@@ -53,15 +54,16 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
         )}
 
         {images.length > 0 && (
-          <Link
-            href={toRedirectUrl}
+          <Button
             className={cn(
-              "p-3 my-2 text-xl capitalize bg-blue-500 border rounded-md m-auto text-white text-center",
+              "p-3 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center fcc",
+              "transition ease-in-out delay-150", //animate
+              "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
               images.length == 1 ? "w-[50%]" : "w-[90%]"
             )}
           >
-            use Template
-          </Link>
+            <Link href={toRedirectUrl}>use Template</Link>
+          </Button>
         )}
 
         {images.length == 0 && (
