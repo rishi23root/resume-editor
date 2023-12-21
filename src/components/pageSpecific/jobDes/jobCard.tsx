@@ -1,5 +1,6 @@
 "use client";
 
+import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -138,14 +139,14 @@ const Card = ({
                     </Button>
                   </span>
                   <span className="w-[40%] hidden lg:flex fcc">
-                    <span className="flex align-middle">
+                    <span className="flex align-middle w-full h-full">
                       {templateData.image && (
-                        <Image
+                        <ZoomerImage
                           src={templateData.image[templateName]}
                           alt={templateData.title}
                           width={500}
                           height={500}
-                          className="rounded-md shadow-xl h-auto w-auto"
+                          className="h-auto w-auto"
                         />
                       )}
                     </span>
