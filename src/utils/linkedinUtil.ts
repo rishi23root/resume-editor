@@ -15,7 +15,7 @@ export async function checkIfFromLinkedin(user:User|null): Promise< ExternalAcco
 export async function getLinkedinAuth(): Promise<null|any> {
     const user = await currentUser();
     return {
-        error: "unable to integrate due to linkedin authentication constraint"
+        error: "unable to integrate due to linkedin authentication constraints"
     }
     // get auth token from clerk
     const res = await fetch(
