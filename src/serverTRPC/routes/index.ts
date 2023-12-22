@@ -1,25 +1,12 @@
-
-// import { publicProcedure, router } from "./trpc";
-import { z } from "zod";
-import { router, procedure } from "@/serverTRPC/trpc";
+import { router } from "@/serverTRPC/trpc";
 import { jobDescriptionRouter } from "./jobDescription";
+import { pdfRouter } from "./pdf";
 import { priceRouter } from "./payment";
 
 export const appRouter = router({
-    hello2: procedure
-        .input(
-            z.object({
-                text: z.string(),
-            }),
-        )
-        .query((opts) => {
-            return {
-                greeting: `hello ${opts.input.text}`,
-            };
-        }),
     jobDis: jobDescriptionRouter,
     price: priceRouter,
-
+    pdf: pdfRouter, // all pdf related routes
 });
 
 export type AppRouter = typeof appRouter;

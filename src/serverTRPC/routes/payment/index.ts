@@ -3,7 +3,6 @@ import { priceData } from "@/JSONapiData/paymentData";
 import { procedure, router } from "@/serverTRPC/trpc";
 import { priceDataType } from "@/types/payment";
 import { z } from "zod";
-// import {1,2,3,4} from '@/JSONapiData/exampleTemplates' assert {type: 'json'};
 
 export const priceRouter = router({
   all: procedure.query(() => {
