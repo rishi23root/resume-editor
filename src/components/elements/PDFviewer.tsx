@@ -9,7 +9,7 @@
 import { trpc } from "@/serverTRPC/client";
 
 function PDFviewer() {
-  const { data } = trpc.hello2.useQuery({ text: "tesing the world" });
+  // const { data } = trpc.hello2.useQuery({ text: "tesing the world" });
 
   // const { data : data2 } = trpc.jobDescription.useQuery({
   //   jobId: 1,
@@ -20,7 +20,7 @@ function PDFviewer() {
 
   return (
     <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2">
-      {data?.greeting}
+      {/* {data?.greeting} */}
     </div>
   );
 }

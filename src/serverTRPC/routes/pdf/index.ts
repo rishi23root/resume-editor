@@ -7,10 +7,13 @@ export const pdfRouter = router({
   parse: procedure.input(
         z.object({
             pdf: pdfFileSchema
+            // pdf: pdfFileSchema
         }),
     ).query((opts) => {
         // take the file and and extract information from it
-        opts.input.pdf 
+
+        // make eh openai request here
+        // opts.input.pdf 
         return {
             tesing: "success",
         };
