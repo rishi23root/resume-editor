@@ -17,11 +17,8 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FormInput } from "./formInput";
+import { Inputs } from "@/types/builder";
 
-type Inputs = {
-  example: string;
-  exampleRequired: string;
-};
 
 export default function FormManager() {
   const {

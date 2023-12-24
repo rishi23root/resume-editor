@@ -60,6 +60,8 @@ function PaymentCard({
 
   // no need to update the redirect url as it will be updated in the payment page because it will be the last page before the builder page
 
+  // ########################################3333
+
   // console.log(await serverAPI.price.byId({ payId: data.id}));
   // update the redirect url the payment provider will redirect to the payment page with the payid and procegure
 

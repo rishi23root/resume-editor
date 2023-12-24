@@ -2,6 +2,7 @@
 // Path: src/components/pageSpecific/builder/formInput.tsx
 
 import { Input, InputProps } from "@/components/ui/input";
+import { Inputs } from "@/types/builder";
 import React, { InputHTMLAttributes } from "react";
 import { FieldErrors } from "react-hook-form";
 
@@ -18,7 +19,7 @@ export function FormInput(
     <div className="w-full fr">
       <Input type="text" className="w-full" />
       {/* error state */}
-      <div className="">{error.data}</div>
+      {/* <div className="">{error.toString()}</div> */}
     </div>
   );
 }
