@@ -58,7 +58,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
             className={cn(
               "p-3 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center fcc",
               "transition ease-in-out delay-150", //animate
-              "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
+              "hover:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
               images.length == 1 ? "w-[50%]" : "w-[90%]"
             )}
           >

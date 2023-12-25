@@ -1,47 +1,92 @@
-// import { Input } from "@/components/ui/input";
-
-// // form manager for the form builder handle all the fields and their data to make a single resume
-// async function FormManager() {
-//   // get the data from the server
-//   // in xl screens show the form in the left side of the screen
-//   return (
-//     <div className="items-center w-full md:w-[40%] fc glass md:h-full h-1/2 gap-4 ">
-//       <h1 className="capitalize text-xl">data fields for the form</h1>
-//       <Input type="text" />
-//       <Input type="text" />
-//     </div>
-//   );
-// }
-
-// export default FormManager;
-
-import { useForm, SubmitHandler } from "react-hook-form";
-import { FormInput } from "./formInput";
+"use client";
+import { Button } from "@/components/ui/button";
 import { Inputs } from "@/types/builder";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { useRef } from "react";
+import { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { Basic } from "./customFormFields/sections/FormSection";
+import { cn } from "@/lib/utils";
 
+// console.log(watch("email")); // watch input value by passing the name of it
 
-export default function FormManager() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+export default function FormManager({
+  register,
+  handleSubmit,
+  watch,
+  formState: { errors },
+  onSubmit,
+}: UseFormReturn<Inputs, any, undefined> & {
+  onSubmit: SubmitHandler<Inputs>;
+}) {
+  const ref = useRef<HTMLFormElement>(null);
+  const formOverLayDivRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    container: ref,
+    offset: ["start start", "end end"],
+  });
 
-  console.log(watch("example")); // watch input value by passing the name of it
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (scrollYProgress.get() == 0) {
+      // console.log("top");
+      formOverLayDivRef.current?.style.setProperty(
+        "--topBlurColor",
+        "transparent"
+      );
+      formOverLayDivRef.current?.style.setProperty(
+        "--bottomBlurColor",
+        "rgb(255, 255, 255)"
+      );
+    } else if (scrollYProgress.get() == 1) {
+      // console.log("bottom");
+      formOverLayDivRef.current?.style.setProperty(
+        "--bottomBlurColor",
+        "transparent"
+      );
+      formOverLayDivRef.current?.style.setProperty(
+        "--topBlurColor",
+        "rgb(255, 255, 255)"
+      );
+    } else {
+      formOverLayDivRef.current?.style.setProperty(
+        "--bottomBlurColor",
+        "rgb(255, 255, 255)"
+      );
+      formOverLayDivRef.current?.style.setProperty(
+        "--topBlurColor",
+        "rgb(255, 255, 255)"
+      );
+    }
+  });
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* register your input into the hook by invoking the "register" function */}
-      <input defaultValue="test" {...register("example")} />
-      <FormInput type="" error={errors} />
-      {/* include validation with required or other standard HTML validation rules */}
-      <input {...register("exampleRequired", { required: true })} />
-      {/* errors will return when field validation fails  */}
-      {errors.exampleRequired && <span>This field is required</span>}
-      <input type="submit" />
-    </form>
+    <div
+      className={cn(
+        "items-center w-full md:w-[40%] fc md:h-full gap-4 relative rounded-md",
+        "formOverLay"
+      )}
+      ref={formOverLayDivRef}
+    >
+      <motion.form
+        ref={ref}
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
+      >
+        <Basic register={register} error={errors} />
+        <Button
+          className={cn(
+            "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
+            "transition ease-in-out delay-150", //animate
+            "hover:shadow-md hover:shadow-zinc-500"
+          )}
+        >
+          <input type="submit" className="text-primary text-xl font-bold" />
+        </Button>
+      </motion.form>
+    </div>
   );
 }
+
+// must have data
+// default value (spread props)
+// register object data (spread props)
+// error state, custom error message

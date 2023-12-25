@@ -1,6 +1,4 @@
-import FormManager from "@/components/pageSpecific/builder/FormElementManager";
-import PDFviewer from "@/components/elements/PDFviewer";
-import { serverAPI } from "@/serverTRPC/serverAPI";
+import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
 import { PageProps } from "@/types/utils";
 import {
   builderPageParamsRedirectHandeler,
@@ -18,11 +16,9 @@ export default async function builderPage(props: PageProps) {
   await builderPageParamsRedirectHandeler(props);
   await builderPageParamsValidator(props);
 
-  // const data = await serverAPI.pdf.parse();
   return (
-    <main className="flex-1 fr gap-4">
-      <FormManager />
-      <PDFviewer />
+    <main className="flex-1 fr gap-4 max-h-[75vh]">
+      <BuilderClient />
     </main>
   );
 }

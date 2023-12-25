@@ -55,49 +55,59 @@ export const jobDescriptionRouter = router({
           let sequenceRequestSuccess = true;
 
           // create a resume with that template and convert it to a image
-          const request = await fetch(process.env.BACKEND + "/create_resume", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              data: templateData,
-              template: templatedata.title,
-            }),
-          });
-
-          // console.log(request.status);
-          if (request.status === 200) {
-            // convert pdf to base64
-            const pdfData = await request.blob();
-            const formData = new FormData();
-            formData.append("file", pdfData, "file.pdf");
-
-            const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
+          try {
+            const request = await fetch(process.env.BACKEND + "/create_resume", {
               method: "POST",
-              body: formData,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                data: templateData,
+                template: templatedata.title,
+              }),
             });
-            // console.log(image.status);
-            if (image.status === 200) {
-              const imageLink = await image.json();
-              if (data.image) {
-                data.image[templatedata.title] = imageLink[0];
+
+            // console.log(request.status);
+            if (request.status === 200) {
+              // convert pdf to base64
+              const pdfData = await request.blob();
+              const formData = new FormData();
+              formData.append("file", pdfData, "file.pdf");
+              
+              const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
+                method: "POST",
+                body: formData,
+              });
+              // console.log(image.status);
+              if (image.status === 200) {
+                const imageLink = await image.json();
+                if (data.image) {
+                  data.image[templatedata.title] = imageLink[0];
+                } else {
+                  data.image = {};
+                  data.image[templatedata.title] = imageLink[0];
+                }
               } else {
-                data.image = {};
-                data.image[templatedata.title] = imageLink[0];
+                console.log(image.body);
+                sequenceRequestSuccess = false;
               }
-            } else {
-              console.log(image.body);
-              sequenceRequestSuccess = false;
             }
           }
-
-          if (!sequenceRequestSuccess) {
-            if (data.image) {
-                data.image[templatedata.title] = "";
-              data.image[templatedata.title] = "" ;
-            } else {
-              data.image = {};
+          catch(err) {
+            // request failed 
+            // show some other image if the request failed (maybe a default image)
+            // sequenceRequestSuccess = true;
+            // if (data.image){
+            //   data.image[templatedata.title] = //image in base64 default image hardcoded ; 
+            // }
+          }
+          finally {            
+            if (!sequenceRequestSuccess) {
+              if (data.image) {
+                data.image[templatedata.title] = "" ;
+              } else {
+                data.image = {};
+              }
             }
           }
         }));
