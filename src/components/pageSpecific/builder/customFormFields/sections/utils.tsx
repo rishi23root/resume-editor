@@ -65,7 +65,7 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
 */
 const ignoreCircularReferences = () => {
   const seen = new WeakSet();
-  return (key: string, value: WeakKey | null) => {
+  return (key: string, value: any | null) => {
     if (key.startsWith("_")) return; // Don't compare React's internal props.
     if (typeof value === "object" && value !== null) {
       if (seen.has(value)) return;
