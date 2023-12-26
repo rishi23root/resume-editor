@@ -1,8 +1,7 @@
 import JobDiscriptionTemplateShowcase from "@/components/pageSpecific/jobDes/jobDisShowCase";
 import JobSearch from "@/components/pageSpecific/jobDes/jobSearch";
-import { PageProps, keyValue } from "@/types/utils";
+import { PageProps } from "@/types/utils";
 import useParamParser from "@/utils/paramHandeler";
-
 
 export default async function JobDescriptionsPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
@@ -11,12 +10,15 @@ export default async function JobDescriptionsPage(props: PageProps) {
   );
   console.log("form jobDes: ", stringifiedData, privateData);
 
-  const jobId = (props.searchParams?.jobId as string) || "1";
+  const jobId = (props.searchParams?.jobId as number) || 1;
 
   return (
     <div className="w-full fcc fc">
       <JobSearch />
-      <JobDiscriptionTemplateShowcase jobId={jobId} />
+      <JobDiscriptionTemplateShowcase
+        jobId={jobId}
+        searchParam={props.searchParams}
+      />
     </div>
   );
 }

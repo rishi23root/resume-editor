@@ -18,9 +18,9 @@ function useRedirectHandler() {
   );
 
   const urlWithAddedParams = (
-    newSearchParams: searchParamType,
-    updatePrivate: searchParamType["_s"] = {},
-    pathName: string | undefined = ""
+    pathName: string = "",
+    newSearchParams: searchParamType = {},
+    updatePrivate: searchParamType["_s"] = {}
   ) => {
     if (Object.keys(updatePrivate).length) {
       // decode the _s
@@ -43,7 +43,24 @@ function useRedirectHandler() {
     );
   };
 
-  return { urlWithAddedParams };
+  const urlWithOnlyTheseParams = (
+    pathName: string = "",
+    newSearchParams: searchParamType= {},
+    updatePrivate: searchParamType["_s"] = {},
+  ) => {
+    if (Object.keys(updatePrivate).length) {
+      const encodedprivateData = encodeJSONToBase64({
+        ...(updatePrivate as any),
+      });
+      newSearchParams = { ...newSearchParams, _s: encodedprivateData };
+    }
+    return (
+      (pathName?.length ? pathName : pathname) +
+      addToCurrentQuery(newSearchParams)
+    );
+  };
+
+  return { urlWithAddedParams, urlWithOnlyTheseParams };
 }
 
 export default useRedirectHandler;

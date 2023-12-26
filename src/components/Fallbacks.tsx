@@ -4,7 +4,13 @@ import { type ClassValue } from "clsx";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export function Loadingstate({ className }: { className?: ClassValue }) {
+export function Loadingstate({
+  className,
+  text,
+}: {
+  className?: ClassValue;
+  text?: string;
+}) {
   const [Dots, setDots] = useState<string>("");
   useEffect(() => {
     const tout = setInterval(() => {
@@ -27,9 +33,13 @@ export function Loadingstate({ className }: { className?: ClassValue }) {
       animate={{
         opacity: 1,
       }}
-      className={cn("text-center text-white border w-full fcc ", className)}
+      style={{
+        width: (text ? text.length : 25) + "ch",
+      }}
+      className={cn("text-center text-white fcc", className)}
     >
-      Loading please wait {Dots}
+      {/* Loading please wait */}
+      {Dots} {text ? text : "Loading please wait"} {Dots}
     </motion.div>
   );
 }

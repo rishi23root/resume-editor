@@ -1,0 +1,197 @@
+{
+  "basics": {
+    "name": "John Show",
+    "label": "Chef",
+    "image": "",
+    "email": "john.show@example.com",
+    "phone": "+1 123-456-7890",
+    "url": "www.johnshow-resume.com",
+    "summary": "Experienced Chef with expertise in culinary arts and a passion for creating delightful dining experiences.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "Noida",
+      "countryCode": "",
+      "region": ""
+    },
+    "profiles": [
+      {
+        "network": "linkedin",
+        "username": "johnshow",
+        "url": "https://www.linkedin.com/in/johnshow/"
+      },
+      {
+        "network": "twitter",
+        "username": "johnshow",
+        "url": "https://www.twitter.com/johnshow/"
+      },
+      {
+        "network": "github",
+        "username": "johnshow",
+        "url": "https://github.com/johnshow/"
+      }
+    ]
+  },
+  "skills": {
+    "core": [
+      {
+        "keywords": ["Culinary Arts", "Menu Planning", "Food Presentation"],
+        "level": "Master",
+        "name": "Cooking"
+      }
+    ],
+    "interests": [
+      {
+        "name": "Gastronomy"
+      }
+    ],
+    "languages": [
+      {
+        "name": "Italian",
+        "level": 90
+      },
+      {
+        "name": "French",
+        "level": 80
+      },
+      {
+        "name": "Asian",
+        "level": 80
+      }
+    ],
+    "technologies": [
+      {
+        "name": "Sous Vide",
+        "level": 70
+      },
+      {
+        "name": "Grilling",
+        "level": 70
+      }
+    ],
+    "frameworks": [],
+    "libraries": [],
+    "databases": [],
+    "tools": [
+      {
+        "name": "Chef's Knife",
+        "level": 3
+      },
+      {
+        "name": "Sous Vide Machine",
+        "level": 3
+      },
+      {
+        "name": "Mixing Bowls",
+        "level": 3
+      }
+    ],
+    "mask": {
+      "interests": "interests",
+      "languages": "cuisines",
+      "techniques": "techniques",
+      "tools": "tools"
+    }
+  },
+  "work": [
+    {
+      "id": "1",
+      "name": "Gourmet Delights",
+      "position": "Head Chef",
+      "url": "https://www.johnshow.com/",
+      "startDate": "Apr 2019",
+      "isWorkingHere": true,
+      "endDate": null,
+      "summary": "<ul><li>Led the culinary team in creating innovative and delicious dishes for a high-end dining experience</li><li>Maintained the highest standards of food quality and presentation</li><li>Collaborated with suppliers to source fresh and high-quality ingredients</li><li>Developed new recipes and updated menus to meet changing customer preferences</li></ul>",
+      "years": ""
+    },
+    {
+      "id": "2",
+      "name": "Flavors of Fusion",
+      "position": "Sous Chef",
+      "url": "",
+      "startDate": "Jun 2015",
+      "isWorkingHere": false,
+      "endDate": "Dec 2018",
+      "summary": "<ul><li>Assisted the head chef in menu planning and food preparation</li><li>Supervised kitchen staff and ensured a smooth workflow</li><li>Implemented creative cooking techniques to enhance dish flavors</li><li>Contributed to the development of new and exciting culinary creations</li></ul>",
+      "years": "3 years"
+    },
+    {
+      "id": "3",
+      "name": "Culinary Arts Institute",
+      "position": "Apprentice Chef",
+      "url": "",
+      "startDate": "Aug 2012",
+      "isWorkingHere": false,
+      "endDate": "May 2015",
+      "summary": "<ul><li>Learned and applied fundamental cooking techniques and principles</li><li>Worked under the guidance of experienced chefs to develop culinary skills</li><li>Participated in various culinary events and competitions to showcase skills</li></ul>",
+      "years": "3 years"
+    }
+  ],
+  "education": [
+    {
+      "id": "1",
+      "institution": "Culinary Institute of Arts",
+      "url": "https://www.culinaryarts.edu/",
+      "studyType": "Masters",
+      "area": "Culinary Arts",
+      "startDate": "2010",
+      "isStudyingHere": false,
+      "endDate": "2012",
+      "score": "75%"
+    },
+    {
+      "id": "2",
+      "institution": "International School of Gastronomy",
+      "url": "https://www.gastronomyschool.edu/",
+      "studyType": "Diploma",
+      "area": "Gastronomy",
+      "startDate": "2008",
+      "isStudyingHere": false,
+      "endDate": "2010",
+      "score": "Distinction"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Signature Dish Creations",
+      "url": "https://www.johnshow.com/signature-dishes",
+      "languages": "Italian, French, Asian",
+      "description": "<ul><li>Developed and presented a collection of signature dishes showcasing culinary expertise</li><li>Featured in the restaurant's menu to attract and delight customers</li></ul>"
+    },
+    {
+      "id": "2",
+      "name": "Gastronomic Fusion Nights",
+      "url": "https://www.flavorsoffusion.com",
+      "languages": "Sous Vide, Grilling",
+      "description": "<ul><li>Organized and hosted special gastronomic nights featuring innovative cooking techniques</li><li>Received acclaim for the fusion of flavors and unique culinary experiences</li></ul>"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Master of Culinary Arts",
+      "date": "2013-06-01",
+      "awarder": "Gourmet Guild",
+      "summary": "Recognized as a master in the art of culinary delights",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "1"
+    },
+    {
+      "title": "Innovative Chef Award",
+      "date": "2017-08-01",
+      "awarder": "Culinary Excellence Foundation",
+      "summary": "Acknowledged for innovative contributions to the culinary world",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "2"
+    }
+  ],
+  "mask": {
+    "basics": "basics",
+    "skills": "skills",
+    "education": "education",
+    "work": "work",
+    "projects": "projects",
+    "awards": "awards"
+  }
+}

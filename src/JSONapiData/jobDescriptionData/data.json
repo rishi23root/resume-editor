@@ -1,0 +1,82 @@
+{
+  "1": {
+    "title": "Software Developer",
+    "templates": [
+      {
+        "title": "singleColumn"
+      },
+      {
+        "title": "twoColumn"
+      }
+    ],
+    "jobDes": "We're seeking a Software Developer to join our team. In this role, you'll be coding, testing, and fixing software, collaborating with teams to understand project needs, and ensuring code quality. A degree in Computer Science or a related field is required, along with proficiency in a programming language like Java or Python. Familiarity with software tools, problem-solving skills, and the ability to work in a team are crucial. If you're passionate about staying updated on tech trends and eager to learn, we want to hear from you. We offer competitive pay, benefits, and opportunities for career growth. To apply, send your resume and a note, including examples of past projects or a portfolio link, to [email@example.com]. Join us in creating innovative solutions and advancing your career in a dynamic work environment.",
+    "mask": {
+      "basics": "basics",
+      "skills": "skills",
+      "education": "education",
+      "work": "work",
+      "projects": "projects",
+      "awards": "certificates"
+    }
+  },
+  "2": {
+    "title": "HR Manager",
+    "templates": [
+      {
+        "title": "singleColumn"
+      },
+      {
+        "title": "twoColumn"
+      }
+    ],
+    "jobDes": "Join our team as an HR Specialist, where you'll be a crucial support in managing employee records, aiding in recruitment, and fostering a positive workplace. Ideal candidates bring organizational prowess, attention to detail, and excellent communication skills. Previous HR experience is beneficial, along with familiarity with HR processes and tools. We value a positive attitude and commitment to maintaining a healthy work culture. As part of our team, you'll enjoy competitive compensation, comprehensive benefits, and opportunities for professional growth. If you're ready to contribute to our dynamic work environment, please submit your resume and a cover letter detailing your alignment with the role to [email@example.com]. We look forward to welcoming a dedicated HR professional to our team.",
+    "mask": {
+      "basics": "basics",
+      "skills": "skills",
+      "education": "education",
+      "work": "work",
+      "projects": "projects",
+      "awards": "certificates"
+    }
+  },
+  "3": {
+    "title": "Chef",
+    "templates": [
+      {
+        "title": "singleColumn"
+      },
+      {
+        "title": "twoColumn"
+      }
+    ],
+    "jobDes": "We are seeking a skilled Chef to lead our kitchen operations, responsible for menu planning, team management, and ensuring the highest culinary standards. The ideal candidate possesses a culinary degree, hands-on experience in a high-volume setting, and a creative flair for developing new recipes. Strong leadership, organizational skills, and a commitment to food safety are essential. If you thrive in a fast-paced environment, bring innovative culinary expertise, and can foster a positive kitchen culture, we invite you to apply. Competitive salary, benefits, and opportunities for professional development await the successful candidate. Submit your resume and portfolio to [email@example.com] with a cover letter showcasing your culinary philosophy and experiences.",
+    "mask": {
+      "basics": "basics",
+      "skills": "skills",
+      "education": "education",
+      "work": "Work Experience ",
+      "projects": "Projects or Signature Dishes",
+      "awards": "Awards or Recognitions"
+    }
+  },
+  "4": {
+    "title": "other",
+    "templates": [
+      {
+        "title": "singleColumn"
+      },
+      {
+        "title": "twoColumn"
+      }
+    ],
+    "jobDes": "Any other job description, you will be able to update the section names in the later stage.",
+    "mask": {
+      "basics": "basics",
+      "skills": "skills",
+      "education": "education",
+      "work": "Work",
+      "projects": "Projects",
+      "awards": "certificates"
+    }
+  }
+}

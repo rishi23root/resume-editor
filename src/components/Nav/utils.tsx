@@ -1,5 +1,6 @@
 import { NavProps } from "@/types/utils";
 import Link from "next/link";
+import { NavLinksDashboard } from "./client";
 
 export function NavLinks({ isSignedIn, pathname }: NavProps) {
   if (!isSignedIn || pathname == "/")
@@ -16,20 +17,5 @@ export function NavLinks({ isSignedIn, pathname }: NavProps) {
         </Link>
       </>
     );
-  return (
-    <>
-      <Link href={"/New"} className="text-violet-50">
-        New +
-      </Link>
-      <Link
-        href={"/Templates?templateName=singleColumn"}
-        className="text-violet-50"
-      >
-        Templates
-      </Link>
-      <Link href={"/JobDescriptions"} className="text-violet-50">
-        Job Descriptions
-      </Link>
-    </>
-  );
+  return <NavLinksDashboard />;
 }

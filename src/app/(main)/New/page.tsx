@@ -10,6 +10,12 @@ import { redirect } from "next/navigation";
 const startFreshSearchParams = {
   _s: encodeJSONToBase64({
     mode: "newResume",
+    // procegure: 1,
+  }),
+};
+const startFreshToDecSearchParams = {
+  _s: encodeJSONToBase64({
+    mode: "newResume",
     procegure: 1,
   }),
 };
@@ -80,7 +86,7 @@ export default async function New(props: PageProps) {
           <Link
             href={
               "/JobDescriptions?" +
-              (await jsonToSearchParameters(startFreshSearchParams))
+              (await jsonToSearchParameters(startFreshToDecSearchParams))
             }
             className="w-full h-64 overflow-hidden duration-75 shadow-2xl cursor-pointer rounded-xl glass hover:scale-105"
           >
@@ -107,7 +113,7 @@ export default async function New(props: PageProps) {
         </div>
         {privateData?.mode !== "newLogin" && (
           <Link
-            href={"/dashboard"}
+            href={"/Dashboard"}
             className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
           >
             <div className="text-2xl font-medium text-white ">

@@ -1,0 +1,233 @@
+{
+  "basics": {
+    "name": "",
+    "label": "",
+    "image": "",
+    "email": "",
+    "phone": "",
+    "url": "",
+    "summary": "",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "countryCode": "",
+      "region": ""
+    },
+    "profiles": [
+      {
+        "network": "linkedin",
+        "username": "",
+        "url": ""
+      }
+    ]
+  },
+  "skills": {
+    "core": [
+      {
+        "keywords": ["HTML", "CSS", "JavaScript"],
+        "level": "Master",
+        "name": "Web Development"
+      }
+    ],
+    "interests": [
+      {
+        "name": "Wildlife"
+      }
+    ],
+    "languages": [
+      {
+        "name": "JavaScript",
+        "level": 90
+      },
+      {
+        "name": "HTML5",
+        "level": 80
+      },
+      {
+        "name": "CSS",
+        "level": 80
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "React",
+        "level": 70
+      },
+      {
+        "name": "Angular",
+        "level": 70
+      }
+    ],
+    "technologies": [
+      {
+        "name": "Algorithms",
+        "level": 3
+      },
+      {
+        "name": "Progressive Web Apps",
+        "level": 3
+      },
+      {
+        "name": "SQL",
+        "level": 3
+      },
+      {
+        "name": "Data Structures",
+        "level": 3
+      }
+    ],
+    "libraries": [
+      {
+        "name": "jQuery",
+        "level": 3
+      },
+      {
+        "name": "Redux",
+        "level": 3
+      }
+    ],
+    "databases": [
+      {
+        "name": "Firebase",
+        "level": 3
+      }
+    ],
+    "tools": [
+      {
+        "name": "Git",
+        "level": 3
+      },
+      {
+        "name": "VS Code",
+        "level": 3
+      },
+      {
+        "name": "Jira",
+        "level": 3
+      },
+      {
+        "name": "Webpack",
+        "level": 3
+      },
+      {
+        "name": "Eclipse",
+        "level": 3
+      },
+      {
+        "name": "Bitbucket",
+        "level": 3
+      }
+    ],
+    "mask": {
+      "interests": "interests",
+      "languages": "languages",
+      "frameworks": "frameworks",
+      "technologies": "technologies",
+      "libraries": "libraries",
+      "databases": "databases",
+      "tools": "tools"
+    }
+  },
+  "work": [
+    {
+      "id": "1",
+      "name": "Tech Innovators",
+      "position": "Senior Software Developer",
+      "url": "https://github.com/johndoe/",
+      "startDate": "Apr 2021",
+      "isWorkingHere": true,
+      "endDate": null,
+      "summary": "<ul><li>Utilized extensive experience in front-end development to define project structures and components for reusability</li><li>Maintained high code quality by reviewing code from other developers and suggesting improvements</li><li>Collaborated with designers to translate design concepts into functional code</li><li>Contributed to E-commerce maintenance with Fastcommerce, a Brazilian e-commerce platform</li></ul>",
+      "years": ""
+    },
+    {
+      "id": "2",
+      "name": "Digital Solutions Ltd.",
+      "position": "Software Developer",
+      "url": "",
+      "startDate": "Jun 2015",
+      "isWorkingHere": false,
+      "endDate": "Dec 2017",
+      "summary": "<ul><li>Developed web applications based on Sharepoint, Drupal 8, and Episerver</li><li>Led a team of 10 front-end developers, providing support to the client's multi-cultural team, offering feedback, clarifying requirements, and assisting with technical questions</li><li>Ensured project progress updates were communicated to the Project Manager and IT Leads</li><li>Maintained code and features implemented by other developers in accordance with requirements</li></ul>",
+      "years": "2 years"
+    },
+    {
+      "id": "3",
+      "name": "Innovate Tech Solutions",
+      "position": "Trainee Developer",
+      "url": "",
+      "startDate": "Aug 2011",
+      "isWorkingHere": false,
+      "endDate": "May 2015",
+      "summary": "<ul><li>Designed user-friendly interfaces and exceptional user experiences for digital platforms of small companies</li><li>Conducted Wordpress development, including theme creation or customization, custom plugin development, and training</li><li>Contributed to E-commerce maintenance with Fastcommerce, a Brazilian e-commerce platform</li><li>Developed E-commerce solutions with Magento, customizing preexisting themes and integrating external services such as payment and delivery into Magento solutions</li></ul>",
+      "years": "4 years"
+    }
+  ],
+  "education": [
+    {
+      "id": "1",
+      "institution": "MIT, University",
+      "url": "https://www.mit.edu/",
+      "studyType": "Masters",
+      "area": "Cloud Technology",
+      "startDate": "2014",
+      "isStudyingHere": false,
+      "endDate": "2016",
+      "score": "68%"
+    },
+    {
+      "id": "2",
+      "institution": "NMAMIT, Nitte",
+      "url": "https://www.nmamit.nitte.edu.in/",
+      "studyType": "B.Tech",
+      "area": "Computer Science",
+      "startDate": "2010",
+      "isStudyingHere": false,
+      "endDate": "2014",
+      "score": "8.3 CGPA"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Portfolio Website",
+      "url": "https://www.johndoe.com/portfolio",
+      "languages": "HTML, CSS, JavaScript",
+      "description": "<ul><li>Developed and maintained a dynamic personal portfolio website.</li><li>Showcased projects and skills in HTML, CSS, and JavaScript.</li></ul>"
+    },
+    {
+      "id": "2",
+      "name": "E-commerce Platform",
+      "url": "https://www.techinnovators.com",
+      "languages": "React, Redux, Firebase",
+      "description": "<ul><li>Contributed to building and maintaining an e-commerce platform.</li><li>Used React, Redux, and Firebase to enhance user experience and functionality.</li></ul>"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Certificate of Exceptional Bug Finder",
+      "date": "2014-11-01",
+      "awarder": "XYZ Client",
+      "summary": "* Recognized for zero-defect delivery",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "1"
+    },
+    {
+      "title": "Certificate of Best Frontend Developer",
+      "date": "2016-11-01",
+      "awarder": "XYZ Client",
+      "summary": "Acknowledged for exceptional improvements made to enhance user experience",
+      "url": "https://drive.google.com/file/d/1btwUi5c5t2rQ2gISsCOkLZiS01-g17OL/view?usp=sharing",
+      "id": "2"
+    }
+  ],
+  "mask": {
+    "basics": "basics",
+    "skills": "skills",
+    "education": "education",
+    "work": "work",
+    "projects": "projects",
+    "awards": "certificates"
+  }
+}

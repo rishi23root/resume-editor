@@ -29,11 +29,7 @@ const ExtractLinkedinProfile = () => {
             <ToastAction
               altText="Try other methods till"
               onClick={() => {
-                const redirectUrl = urlWithAddedParams(
-                  {},
-                  {},
-                  "/New/jsonResume"
-                );
+                const redirectUrl = urlWithAddedParams("/New/jsonResume");
                 console.log(redirectUrl);
 
                 router.push(redirectUrl);

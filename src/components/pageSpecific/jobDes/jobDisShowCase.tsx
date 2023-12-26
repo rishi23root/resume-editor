@@ -1,87 +1,74 @@
-"use client";
-
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
-import { templateArrayTypes } from "@/types/jobDescription";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { serverAPI } from "@/serverTRPC/serverAPI";
+import { Suspense } from "react";
 import Card from "./jobCard";
+import { Button } from "@/components/ui/button";
+import { urlWithAddedParams } from "@/utils/paramHandeler";
+import { searchParamType } from "@/types/utils";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-type Props = {
-  jobId: string;
-};
+const JobDiscriptionTemplateShowcase = async ({
+  jobId,
+  searchParam,
+}: {
+  jobId: number;
+  searchParam: searchParamType;
+}) => {
+  console.log("jobIdData component");
 
-// todos
-// update data intake from api
-// use custom searchparams for use this template
-
-const getTemplateData = async (
-  jobId: string
-): Promise<templateArrayTypes[]> => {
-  try {
-    const response = await fetch(`/api/jobDescription/${jobId}`);
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch job description: ${response.status} - ${response.statusText}`
+  // console.log(jobId, typeof jobId); // 1 'number' but returning `1 'string'`
+  const jobIdData = await serverAPI.jobDis.byId({
+    jobId: parseInt(jobId.toString()),
+  });
+  // console.log(jobIdData);
+  const redirectPage = searchParam.redirectPage as string;
+  const toRedirectUrl = redirectPage
+    ? urlWithAddedParams(
+        redirectPage,
+        searchParam,
+        { jobId: jobId },
+        { procegure: 4 }
+      )
+    : urlWithAddedParams(
+        "/Templates",
+        searchParam,
+        { jobId: jobId },
+        { procegure: 2 }
       );
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    throw new Error(`Error while fetching job description: ${error}`);
-  }
-};
-
-const JobDiscriptionTemplateShowcase = ({ jobId }: Props) => {
-  const [jobIdData, setJobIdData] = useState<templateArrayTypes[]>([]);
-  const { toast } = useToast();
-  const router = useRouter();
-
-  useEffect(() => {
-    getTemplateData(jobId)
-      .then((data) => {
-        console.log("data fetched for: ", jobId);
-        setJobIdData(data);
-      })
-      .catch((err) => {
-        // console.log(err);
-        setJobIdData([
-          {
-            title: "Error with Id",
-            description: "Error with JobId or in request",
-          },
-        ]);
-
-        // add toast for notification of failed job
-        toast({
-          variant: "destructive",
-          title: "Error with fetching data",
-          description: "Try again fresh",
-          action: (
-            <ToastAction
-              altText="Try again"
-              onClick={() => {
-                router.push("/dashboard");
-              }}
-            >
-              Dashboard {"->"}
-            </ToastAction>
-          ),
-        });
-      });
-  }, [jobId]);
 
   return (
     <>
       {/* item cards */}
-      <div className="flex flex-wrap w-full h-full gap-4 pt-16 border glass">
-        {/* render element of image of templates */}
-        <Suspense fallback={<>loading resume template for this job..</>}>
-          {jobIdData.map((item) => (
-            <Card key={item.title} jobId={jobId} templateData={item} />
-          ))}
-        </Suspense>
+      <div className="w-full h-full fc gap-2 glass pt-16">
+        <div className="flex-1 fr flex-wrap w-full h-full gap-6 justify-center">
+          {/* render element of image of templates */}
+          <Suspense fallback={<>loading resume template for this job..</>}>
+            {jobIdData.templates.map((item) => {
+              return (
+                <Card
+                  key={item.title}
+                  jobId={jobId}
+                  templateName={item.title}
+                  templateData={jobIdData}
+                />
+              );
+            })}
+          </Suspense>
+        </div>
+        <div className="w-full fcc">
+          <Button
+            className={cn(
+              "p-6 my-2 text-2xl capitalize bg-blue-500 border rounded-md m-auto text-white text-center w-full lg:w-[60%] ",
+              "transition ease-in-out delay-150", //animate
+              "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black"
+            )}
+          >
+            <Link href={toRedirectUrl} className="w-full">
+              Continue with &nbsp;
+              <span className="bold italic">{jobIdData.title}</span>
+            </Link>
+          </Button>
+        </div>
       </div>
     </>
   );

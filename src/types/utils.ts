@@ -18,7 +18,10 @@ export type keyValue<T> = {[key: string]: T}
 export type JsonType = keyValue<any>
 
 // search params types
-export type searchParamType = keyValue<string | string[] | undefined> | newResumeSearchParams & {error?: string}
+export type searchParamType = keyValue<string | string[] | undefined> | newResumeSearchParams & {
+  error?: string
+  redirectPage?: string
+}
 
 // nextjs page params 
 export type PageProps = {
@@ -28,17 +31,17 @@ export type PageProps = {
 
 // resume builder new page may have props
 export type newResumeSearchParams = {
+  // page base keywords
   templateName?: resumeTemplates; // template in use name 
+  jobId?: number; // job id to chose a specific job type like profession
+  payId?: string; // pay id to chose a specific pay type [basic, advance]
 
   // sesssion data in use
   _s?: string | {
       mode?: 'newResume' | 'newLogin';
       procegure?: 1|2|3|4; // procegure flow of the application 
-      jsonDataId?: string; // json data uuid form d    
+      jsonDataId?: string; // json data uuid form database
   }; // json data or in base64 format
-
-  // page base keywords
-  jobId?: string; // job id to chose a specific job type like profession
 }
 
 export type paramType = keyValue<string | string[] | undefined> | newResumeSearchParams;

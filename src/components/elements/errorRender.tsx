@@ -24,7 +24,7 @@ const ShowErrorIfany = () => {
           <ToastAction
             altText="Try again"
             onClick={() => {
-              router.push("/dashboard");
+              router.push("/Dashboard");
             }}
           >
             Dashboard {"->"}
@@ -34,7 +34,7 @@ const ShowErrorIfany = () => {
     }
   }, [searchParams]);
 
-  return <></>;
+  return null;
 };
 
 export default ShowErrorIfany;

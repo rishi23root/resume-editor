@@ -19,9 +19,40 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NavLinks } from "./utils";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
+
+// logo element
+export function LogoElementWithLink() {
+  // check for the pathname
+  const pathname = usePathname();
+
+  // for the nav link conditions
+  // if on / page then show dashboard link
+  // if on dashboard page then show / link
+  // if any on any other page then show dashboard link
+  const currentRedirectingPath =
+    pathname === "/"
+      ? "/Dashboard"
+      : pathname === "/Dashboard"
+      ? "/"
+      : "/Dashboard";
+
+  return (
+    <Link href={currentRedirectingPath}>
+      <Image
+        className="w-40 h-12 lg:w-72 lg:h-16"
+        alt="main logo"
+        src="/logo.png"
+        width={275}
+        height={65}
+        priority
+      />
+    </Link>
+  );
+}
 
 // notification components
 export function NotificationElement() {
@@ -99,9 +130,9 @@ export function HamburgerOnMobile(props: NavProps) {
         <div className="flex-1 "></div>
 
         {/* if not on dashboard page */}
-        {props.pathname != "/dashboard" && (
+        {props.pathname != "/Dashboard" && (
           <Link
-            href={"/dashboard"}
+            href={"/Dashboard"}
             className="items-center gap-4 fr"
             onClick={(_) => setOpen(false)}
           >
@@ -120,7 +151,37 @@ export function HamburgerOnMobile(props: NavProps) {
   );
 }
 
+export function NavLinksDashboard() {
+  const { urlWithOnlyTheseParams } = useRedirectHandler();
 
+  return (
+    <>
+      <Link
+        href={urlWithOnlyTheseParams(
+          "/Templates",
+          {
+            templateName: "singleColumn",
+          }
+        )}
+        className="text-violet-50"
+      >
+        Templates
+      </Link>
+      <Link
+        href={urlWithOnlyTheseParams("/Payment")}
+        className="text-violet-50"
+      >
+        Price
+      </Link>
+      <Link
+        href={urlWithOnlyTheseParams("/JobDescriptions")}
+        className="text-violet-50"
+      >
+        Job Descriptions
+      </Link>
+    </>
+  );
+}
 
 function NotificationRenderer({
   notification,
@@ -172,5 +233,3 @@ function NotificationRenderer({
     </>
   );
 }
-
-

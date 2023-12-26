@@ -29,6 +29,10 @@ yarn-error.log*
 .env*.local
 .env
 
+# testing into dev 
+devdev/
+
+
 # vercel
 .vercel
 

@@ -3,22 +3,17 @@ import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { NavLinks } from "./utils";
-import { HamburgerOnMobile, NotificationElement } from "./client";
+import {
+  HamburgerOnMobile,
+  LogoElementWithLink,
+  NotificationElement,
+} from "./client";
 import { Suspense } from "react";
 
 function Nav({ isSignedIn, pathname }: NavProps) {
   return (
     <div className="pr-2 fcb">
-      <Link href={pathname != "/dashboard" ? "/dashboard" : "/"}>
-        <Image
-          className="w-40 h-12 lg:w-72 lg:h-16 "
-          alt="main logo"
-          src="/logo.png"
-          width={275}
-          height={65}
-          priority
-        />
-      </Link>
+      <LogoElementWithLink />
       <div className="hidden gap-3 fcc lg:gap-12 lg:text-2xl font-base md:flex">
         <NavLinks isSignedIn={isSignedIn} pathname={pathname} />
       </div>
@@ -62,7 +57,7 @@ function NavBtns(props: NavProps) {
     if (pathname == "/") {
       return (
         <Link
-          href={"/dashboard"}
+          href={"/Dashboard"}
           className="p-2 md:px-5 rounded-xl border-stone-500 bg-gradient-to-r from-blue-600 to-fuchsia-500 fcc"
         >
           <div className="gap-2 font-medium text-center lg:text-2xl text-neutral-200 fcc">
@@ -90,7 +85,7 @@ function NavBtns(props: NavProps) {
             <div className="absolute z-10">
               <UserButton
                 afterSignOutUrl="/sign-in"
-                afterSwitchSessionUrl="/dashboard"
+                afterSwitchSessionUrl="/Dashboard"
               />
             </div>
             <div className="absolute top-0 left-0 w-3 h-3 translate-x-[0.5rem] translate-y-1 bg-black rounded-full  face"></div>

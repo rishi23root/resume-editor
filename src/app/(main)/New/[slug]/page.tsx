@@ -36,7 +36,7 @@ export default async function NewSlugPage(props: PageProps) {
             height={400}
             width={400}
             alt="how to get pdf "
-            className=""
+            // className="aspect-[1/0.7]"
           />
         </div>
         <UploadResume />
