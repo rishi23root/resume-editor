@@ -1,7 +1,7 @@
 import { Input, InputProps } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, FieldPath, UseFormRegister } from "react-hook-form";
 
 export function FormInput({
   type,
@@ -10,16 +10,20 @@ export function FormInput({
   register,
 }: {
   type: InputProps["type"];
-  fieldTitle: keyof Inputs;
+  fieldTitle: FieldPath<Inputs>;
   validationError: FieldErrors<Inputs> | any;
   register: UseFormRegister<Inputs>;
 }) {
   return (
     <div className="w-full fc ">
-      <label className="capitalize bold text-gray-200/80">
-        &nbsp;{fieldTitle}
+      <label
+        className="capitalize bold text-gray-200/80 cursor-pointer"
+        htmlFor={fieldTitle}
+      >
+        &nbsp;{fieldTitle.split(".").pop()}
       </label>
       <Input
+        id={fieldTitle}
         type={type}
         {...register(fieldTitle)}
         className={cn(

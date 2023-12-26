@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
 import { Basic } from "./customFormFields/sections/FormSection";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ export default function FormManager({
   register,
   handleSubmit,
   watch,
+  control,
   formState: { errors },
   onSubmit,
 }: UseFormReturn<Inputs, any, undefined> & {
@@ -71,7 +72,7 @@ export default function FormManager({
         onSubmit={handleSubmit(onSubmit)}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
-        <Basic register={register} error={errors} />
+        <Basic register={register} control={control} error={errors} />
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",

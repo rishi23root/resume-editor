@@ -3,13 +3,21 @@ import PDFviewer from "@/components/elements/PDFviewer";
 import { Inputs } from "@/types/builder";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
+import { searchParamType } from "@/types/utils";
+import { trpc } from "@/serverTRPC/client";
+import { Suspense, useEffect, useState } from "react";
 
-export default function BuilderClient() {
+export default function BuilderClient({
+  searchParams,
+  defaultData,
+}: {
+  searchParams: searchParamType;
+  defaultData: Inputs;
+}) {
+  // console.log(defaultData);
+
   const formHandeler = useForm<Inputs>({
-    defaultValues: {
-      name: "John Doe",
-      summary: "I am a software engineer, or am i",
-    },
+    defaultValues: defaultData,
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -18,9 +26,9 @@ export default function BuilderClient() {
   };
 
   return (
-    <>
+    <Suspense>
       <FormManager {...formHandeler} onSubmit={onSubmit} />
       <PDFviewer />
-    </>
+    </Suspense>
   );
 }
