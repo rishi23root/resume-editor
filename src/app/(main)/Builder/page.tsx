@@ -20,6 +20,8 @@ export default async function builderPage(props: PageProps) {
   // api requst on server
   // get temaplate from trpc api for default values
   const data = await serverAPI.builder.getDefault();
+  // clean the default data from data.json file in jsonApi
+
   return (
     <main className="flex-1 fr gap-4 max-h-[75vh]">
       <BuilderClient searchParams={props.searchParams} defaultData={data} />

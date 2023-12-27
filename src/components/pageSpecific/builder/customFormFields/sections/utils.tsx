@@ -8,6 +8,7 @@ import {
   FieldPath,
   UseFieldArrayReturn,
   useFieldArray,
+  useWatch,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
 
@@ -103,13 +104,14 @@ export function SectionWrapper({
         className={cn(
           "w-full text-2xl bold fr justify-between align-middle",
           "transition ease-in-out delay-50",
-          visible ? "mb-3" : "mb-0"
+          visible ? "mb-3" : "mb-0",
+          visible ? "" : "cursor-pointer"
         )}
-        // onClick={() => {
-        //   if (!visible) {
-        //     setVisible(visible);
-        //   }
-        // }}
+        onClick={() => {
+          if (!visible) {
+            setVisible(!visible);
+          }
+        }}
       >
         <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         <div className="fr fce gap-2">
@@ -190,4 +192,21 @@ export function SectionWrapper({
       </MotionConfig>
     );
   }
+}
+
+export function WatchedValue({
+  watchKey,
+  control,
+}: {
+  watchKey: FieldPath<Inputs>;
+  control: Control<Inputs>;
+}) {
+  // watch for this element to update
+  const value = useWatch({
+    control,
+    name: watchKey,
+    // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+  });
+
+  return <>{value}</>;
 }

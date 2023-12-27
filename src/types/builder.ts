@@ -1,4 +1,3 @@
-import { keyValue } from './utils';
 // json template
 
 export type BasicsT = {
@@ -57,17 +56,39 @@ export type ProjectsT = {
   description: string;
 };
 
-  // "skills": [
-  //   {
-  //     "id": "1",
-  //     "name": "HTML",
-  //     "level": "Master"
-  //   },
+// "skills": {
+export type SkillsCoreT ={
+  keywords: string[];
+  level: string;
+  name: string;
+}
+export type SkillsSectionT = {
+  name: string;
+  level: number;
+}
+
+export type SkillsInterestsT = {
+    name: string;
+  }
 
 export type SkillsT = {
-  id: string;
-  name: string;
-  level: string;
+  core: SkillsCoreT[];
+  interests: SkillsInterestsT[];
+  languages: SkillsSectionT[];
+  frameworks: SkillsSectionT[];
+  technologies: SkillsSectionT[];
+  libraries: SkillsSectionT[];
+  databases: SkillsSectionT[];
+  tools: SkillsSectionT[];
+  mask: {
+    interests: string;
+    languages: string;
+    frameworks: string;
+    technologies: string;
+    libraries: string;
+    databases: string;
+    tools: string;
+  };
 };
 
 export type awardsT = {
@@ -79,6 +100,17 @@ export type awardsT = {
   id: string;
 };
 
+export type masksT = {
+  basics: string;
+  skills: string;
+  education: string;
+  work: string;
+  projects: string;
+  awards: string;
+}
+
+
+// utils
 export type allArrayKeys = keyof profilesT| keyof SkillsT | keyof WorkT | keyof EducationT | keyof ProjectsT | keyof awardsT
 
 // Record<allArrayKeys, any>
@@ -87,6 +119,10 @@ export type ArrayKeysRecord<T> = {[key in keyof T]: any}
 // export type Inputs = BasicT;
 export type Inputs = {
   basics:BasicsT
-  // skills:BasicsT
+  skills:BasicsT
   work:WorkT[]
+  education:EducationT[]
+  projects:ProjectsT[]
+  awards:awardsT[]
+  masks:masksT
 };

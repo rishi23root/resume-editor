@@ -1,13 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Basic, Work } from "./customFormFields/sections/FormSection";
-import { cn } from "@/lib/utils";
-
-// console.log(watch("email")); // watch input value by passing the name of it
+import { Basic } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({
   register,
@@ -72,8 +70,12 @@ export default function FormManager({
         onSubmit={handleSubmit(onSubmit)}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
-        <Basic register={register} control={control} error={errors} />
-        <Work register={register} control={control} error={errors} />
+        <Basic
+          watch={watch}
+          register={register}
+          control={control}
+          error={errors}
+        />
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
@@ -87,8 +89,3 @@ export default function FormManager({
     </div>
   );
 }
-
-// must have data
-// default value (spread props)
-// register object data (spread props)
-// error state, custom error message

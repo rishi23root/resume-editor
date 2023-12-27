@@ -1,21 +1,24 @@
+import { cn } from "@/lib/utils";
 import { ArrayKeysRecord, Inputs, profilesT } from "@/types/builder";
+import { motion } from "framer-motion";
+import { Trash2 } from "lucide-react";
 import {
   Control,
   FieldErrors,
+  FieldPath,
   UseFormRegister,
   useWatch,
 } from "react-hook-form";
 import { FormInput } from "../formInput";
-import { SectionWrapper } from "./utils";
-import { motion } from "framer-motion";
-import { Trash2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { SectionWrapper, WatchedValue } from "./utils";
 
 export function Basic({
+  watch,
   register,
   control,
   error,
 }: {
+  watch: UseFormRegister<Inputs>;
   register: UseFormRegister<Inputs>;
   control: Control<Inputs, any>;
   error: FieldErrors<Inputs>;
@@ -98,21 +101,14 @@ export function Basic({
       >
         {({ fields, remove }) =>
           fields.map((item, index) => {
+            // update the type of item profile typex
             const eachEntry = item as typeof item & ArrayKeysRecord<profilesT>;
-            // watch for this element to update
-            // const watchNetwork = useWatch(`basics.profiles.${index}.network`);
-            return (
-              // update the type of item profile type
 
+            return (
               <div
                 className="w-full fc gap-2 p-2 border-2 inset-2 border-gray-500/25 glass rounded-md"
                 key={eachEntry.id}
               >
-                {/* 
-              make it inter changable on hover or focus  
-              make only add more when last is filled up
-              make a button to remove
-              */}
                 <motion.div className="fr gap-2">
                   <motion.div
                     className={cn(
@@ -120,9 +116,7 @@ export function Basic({
                       "transition ease-in-out delay-300" //animate
                     )}
                   >
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                    <div
                       className={cn(
                         "absolute bold text-xl p-1",
                         " hidden transition ease-in-out delay-500",
@@ -131,8 +125,11 @@ export function Basic({
                         "group-[:has(.formInput:focus-visible)]:hidden"
                       )}
                     >
-                      {eachEntry?.network}
-                    </motion.div>
+                      <WatchedValue
+                        watchKey={`basics.profiles.${index}.network`}
+                        control={control}
+                      />
+                    </div>
                     <FormInput
                       fieldTitle={`basics.profiles.${index}.network`}
                       type="text"
@@ -147,9 +144,16 @@ export function Basic({
                       }}
                     />
                   </motion.div>
-                  <motion.button className="hover:text-red-400 hover:opacity-100 opacity-50">
-                    <Trash2 />
-                  </motion.button>
+                  {fields.length > 1 && (
+                    <motion.button
+                      className="hover:text-red-400 hover:opacity-100 opacity-50"
+                      onClick={() => {
+                        remove(index);
+                      }}
+                    >
+                      <Trash2 />
+                    </motion.button>
+                  )}
                 </motion.div>
                 <FormInput
                   fieldTitle={`basics.profiles.${index}.username`}
@@ -166,60 +170,6 @@ export function Basic({
               </div>
             );
           })
-        }
-      </SectionWrapper>
-    </div>
-  );
-}
-
-export function Work({
-  register,
-  control,
-  error,
-}: {
-  register: UseFormRegister<Inputs>;
-  control: Control<Inputs, any>;
-  error: FieldErrors<Inputs>;
-}) {
-  return (
-    <div className="w-full fc  gap-2">
-      {/* profile tab */}
-      <SectionWrapper
-        sectionKey="work"
-        fieldArraySection={true}
-        control={control}
-      >
-        {({ fields }) =>
-          fields.map((item, index) => (
-            <div className="w-full fc gap-2" key={item.id}>
-              <>
-                {/* 
-                make it inter changable on hover or focus  
-                make only add more when last is filled up
-                make a button to remove
-                */}
-                {/* <div className="">{item?.network}</div> */}
-                {/* <FormInput
-                  fieldTitle={`basics.profiles.${index}.network`}
-                  type="text"
-                  register={register}
-                  validationError={error}
-                /> */}
-              </>
-              {/* <FormInput
-                fieldTitle={`basics.profiles.${index}.username`}
-                type="text"
-                register={register}
-                validationError={error}
-              />
-              <FormInput
-                fieldTitle={`basics.profiles.${index}.url`}
-                type="url"
-                register={register}
-                validationError={error}
-              /> */}
-            </div>
-          ))
         }
       </SectionWrapper>
     </div>
