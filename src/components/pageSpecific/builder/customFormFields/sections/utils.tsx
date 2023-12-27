@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Inputs, masksT } from "@/types/builder";
+import { Inputs, maskT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
 import { useState } from "react";
@@ -117,7 +117,6 @@ export function SectionWrapper({
       <div
         className={cn(
           "w-full text-2xl bold fr justify-between align-middle",
-          "transition ease-in-out delay-50",
           visible ? "mb-3" : "mb-0",
           editableTitle ? "cursor-text" : "cursor-not-allowed",
           visible ? "" : "cursor-pointer"
@@ -138,7 +137,9 @@ export function SectionWrapper({
             >
               <div
                 className={cn(
-                  "absolute bold text-xl p-1",
+                  "absolute bold p-1 uppercase",
+                  "transition ease-in-out delay-300",
+                  "w-full text-2xl bold fr justify-between align-middle",
                   " hidden transition ease-in-out delay-500",
                   "group-[:not(:hover)]:block",
                   // if group have a input element in focus then hide this
@@ -146,13 +147,13 @@ export function SectionWrapper({
                 )}
               >
                 <WatchedValue
-                  watchKey={`masks.${sectionKey as keyof masksT}`}
+                  watchKey={`mask.${sectionKey as keyof maskT}`}
                   // watchKey={`work.${index}.network`}
                   control={editableTitle.control}
                 />
               </div>
               <FormInput
-                fieldTitle={`masks.${sectionKey as keyof masksT}`}
+                fieldTitle={`mask.${sectionKey as keyof maskT}`}
                 type="text"
                 register={editableTitle.register}
                 validationError={editableTitle.error}

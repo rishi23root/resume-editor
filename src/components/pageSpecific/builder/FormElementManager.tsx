@@ -1,4 +1,5 @@
 "use client";
+// "yes, it is inportant to have this file !"
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
@@ -60,7 +61,7 @@ export default function FormManager({
   return (
     <div
       className={cn(
-        "items-center w-full md:w-[40%] fc md:h-full gap-4 relative rounded-md",
+        "items-center w-full md:w-[60%] fc md:h-full gap-4 relative rounded-md",
         "formOverLay"
       )}
       ref={formOverLayDivRef}
@@ -70,18 +71,8 @@ export default function FormManager({
         onSubmit={handleSubmit(onSubmit)}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
-        <Basic
-          watch={watch}
-          register={register}
-          control={control}
-          error={errors}
-        />
-        <Work
-          watch={watch}
-          register={register}
-          control={control}
-          error={errors}
-        />
+        <Basic register={register} control={control} error={errors} />
+        <Work register={register} control={control} error={errors} />
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",

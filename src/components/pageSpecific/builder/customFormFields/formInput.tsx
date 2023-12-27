@@ -10,6 +10,9 @@ export function FormInput({
   validationError,
   register,
   headerInput,
+  InputClassValue,
+  LabelClassValue,
+  parentClassValue,
 }: {
   type: InputProps["type"];
   fieldTitle: FieldPath<Inputs>;
@@ -20,6 +23,9 @@ export function FormInput({
     LabelClassValue: string;
     parentClassValue: string;
   };
+  InputClassValue?: string;
+  LabelClassValue?: string;
+  parentClassValue?: string;
 }) {
   return (
     <motion.div

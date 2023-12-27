@@ -14,7 +14,7 @@ export default function BuilderClient({
   searchParams: searchParamType;
   defaultData: Inputs;
 }) {
-  // console.log(defaultData);
+  // console.log(defaultData.mask);
 
   const formHandeler = useForm<Inputs>({
     defaultValues: defaultData,

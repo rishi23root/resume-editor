@@ -7,12 +7,10 @@ import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
 
 export function Basic({
-  watch,
   register,
   control,
   error,
 }: {
-  watch: UseFormRegister<Inputs>;
   register: UseFormRegister<Inputs>;
   control: Control<Inputs, any>;
   error: FieldErrors<Inputs>;
@@ -172,12 +170,10 @@ export function Basic({
   );
 }
 export function Work({
-  watch,
   register,
   control,
   error,
 }: {
-  watch: UseFormRegister<Inputs>;
   register: UseFormRegister<Inputs>;
   control: Control<Inputs, any>;
   error: FieldErrors<Inputs>;

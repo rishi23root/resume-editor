@@ -100,7 +100,7 @@ export type awardsT = {
   id: string;
 };
 
-export type masksT = {
+export type maskT = {
   basics: string;
   skills: string;
   education: string;
@@ -124,5 +124,5 @@ export type Inputs = {
   education:EducationT[]
   projects:ProjectsT[]
   awards:awardsT[]
-  masks:masksT
+  mask:maskT
 };
