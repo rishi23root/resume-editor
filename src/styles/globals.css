@@ -125,7 +125,7 @@
   .formOverLay::after {
     content: "";
     @apply absolute inset-0 z-10 top-0 left-0 w-full h-full pointer-events-none;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(3px);
     -webkit-mask: linear-gradient(
       var(--topBlurColor, transparent) 0%,
       transparent 10%,

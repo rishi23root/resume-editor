@@ -2,34 +2,51 @@ import { Input, InputProps } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
 import { FieldErrors, FieldPath, UseFormRegister } from "react-hook-form";
+import { motion } from "framer-motion";
 
 export function FormInput({
   type,
   fieldTitle,
   validationError,
   register,
+  headerInput,
 }: {
   type: InputProps["type"];
   fieldTitle: FieldPath<Inputs>;
   validationError: FieldErrors<Inputs> | any;
   register: UseFormRegister<Inputs>;
+  headerInput?: {
+    InputClassValue: string;
+    LabelClassValue: string;
+    parentClassValue: string;
+  };
 }) {
   return (
-    <div className="w-full fc ">
-      <label
-        className="capitalize bold text-gray-200/80 cursor-pointer"
+    <motion.div
+      className={cn(
+        "w-full fc ",
+        headerInput?.parentClassValue ? headerInput.parentClassValue : ""
+      )}
+    >
+      <motion.label
+        className={cn(
+          "capitalize bold text-gray-200/80 cursor-pointer",
+          "transition ease-in-out delay-50",
+          headerInput?.LabelClassValue ? headerInput.LabelClassValue : ""
+        )}
         htmlFor={fieldTitle}
       >
         &nbsp;{fieldTitle.split(".").pop()}
-      </label>
+      </motion.label>
       <Input
         id={fieldTitle}
         type={type}
         {...register(fieldTitle)}
         className={cn(
-          "w-full rounded-lg bg-background/30 text-slate-100",
+          "formInput w-full rounded-lg bg-background/30 text-slate-100",
           "focus-visible:ring-1 focus-visible:ring-slate-600 focus-visible:ring-offset-1 focus-visible:bg-background/50",
-          "transition ease-in-out delay-50" //animate
+          "transition ease-in-out delay-50", //animate
+          headerInput?.InputClassValue ? headerInput.InputClassValue : ""
         )}
       />
       {/* error state */}
@@ -38,7 +55,7 @@ export function FormInput({
           {Object(validationError)[fieldTitle]}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

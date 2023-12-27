@@ -105,6 +105,11 @@ export function SectionWrapper({
           "transition ease-in-out delay-50",
           visible ? "mb-3" : "mb-0"
         )}
+        // onClick={() => {
+        //   if (!visible) {
+        //     setVisible(visible);
+        //   }
+        // }}
       >
         <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         <div className="fr fce gap-2">
@@ -172,7 +177,12 @@ export function SectionWrapper({
             </motion.button>
           </TitleSection>
           <ResizablePanel>
-            <motion.div className={cn(visible ? "block" : "hidden")}>
+            <motion.div
+              className={cn(
+                "flex flex-wrap gap-2 justify-evenly",
+                visible ? "flex" : "hidden"
+              )}
+            >
               {children(fieldArrayObject)}
             </motion.div>
           </ResizablePanel>
