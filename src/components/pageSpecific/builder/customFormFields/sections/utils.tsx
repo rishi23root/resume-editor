@@ -1,16 +1,19 @@
 import { cn } from "@/lib/utils";
-import { Inputs } from "@/types/builder";
+import { Inputs, masksT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
 import { useState } from "react";
 import {
   Control,
+  FieldErrors,
   FieldPath,
   UseFieldArrayReturn,
+  UseFormRegister,
   useFieldArray,
   useWatch,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
+import { FormInput } from "../formInput";
 
 const duration = 0.25;
 
@@ -26,7 +29,8 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       animate={{ height: height || "auto" }}
-      className="relative overflow-hidden"
+      className="relative "
+      // className="relative overflow-hidden"
     >
       <AnimatePresence initial={false}>
         <motion.div
@@ -49,7 +53,6 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
           <div
             ref={ref}
             className={`${height ? "absolute" : "relative"} w-full`}
-            // className="w-full"
           >
             {children}
           </div>
@@ -81,12 +84,18 @@ export function SectionWrapper({
   children,
   fieldArraySection,
   control,
+  editableTitle,
 }:
   | {
       sectionKey: FieldPath<Inputs>;
       children: React.ReactNode;
       fieldArraySection?: false;
       control?: undefined;
+      editableTitle?: {
+        register: UseFormRegister<Inputs>;
+        control: Control<Inputs, any>;
+        error: FieldErrors<Inputs> | any;
+      };
     }
   | {
       sectionKey: FieldPath<Inputs>;
@@ -95,6 +104,11 @@ export function SectionWrapper({
       ) => React.ReactNode;
       fieldArraySection: true;
       control: Control<Inputs, any>;
+      editableTitle?: {
+        register: UseFormRegister<Inputs>;
+        control: Control<Inputs, any>;
+        error: FieldErrors<Inputs> | any;
+      };
     }) {
   const [visible, setVisible] = useState(true);
 
@@ -105,6 +119,7 @@ export function SectionWrapper({
           "w-full text-2xl bold fr justify-between align-middle",
           "transition ease-in-out delay-50",
           visible ? "mb-3" : "mb-0",
+          editableTitle ? "cursor-text" : "cursor-not-allowed",
           visible ? "" : "cursor-pointer"
         )}
         onClick={() => {
@@ -113,7 +128,47 @@ export function SectionWrapper({
           }
         }}
       >
-        <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
+        {editableTitle ? (
+          <>
+            <motion.div
+              className={cn(
+                "flex-1 group relative h-10",
+                "transition ease-in-out delay-300" //animate
+              )}
+            >
+              <div
+                className={cn(
+                  "absolute bold text-xl p-1",
+                  " hidden transition ease-in-out delay-500",
+                  "group-[:not(:hover)]:block",
+                  // if group have a input element in focus then hide this
+                  "group-[:has(.formInput:focus-visible)]:hidden"
+                )}
+              >
+                <WatchedValue
+                  watchKey={`masks.${sectionKey as keyof masksT}`}
+                  // watchKey={`work.${index}.network`}
+                  control={editableTitle.control}
+                />
+              </div>
+              <FormInput
+                fieldTitle={`masks.${sectionKey as keyof masksT}`}
+                type="text"
+                register={editableTitle.register}
+                validationError={editableTitle.error}
+                headerInput={{
+                  InputClassValue:
+                    "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                  LabelClassValue:
+                    "hidden focus-visible:block transition ease-in-out delay-300",
+                  parentClassValue: "absolute ",
+                }}
+              />
+            </motion.div>
+          </>
+        ) : (
+          <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
+        )}
         <div className="fr fce gap-2">
           {children ? children : null}
           <motion.button
@@ -156,7 +211,7 @@ export function SectionWrapper({
     // return a callback with the fields array render children here
     return (
       <MotionConfig transition={{ duration }}>
-        <motion.div className="w-full fc glass gap-2">
+        <motion.div className="w-full fc glass gap-2 ">
           <TitleSection>
             <motion.button
               variants={variantsActionButton}

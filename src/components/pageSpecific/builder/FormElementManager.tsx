@@ -5,7 +5,7 @@ import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Basic } from "./customFormFields/sections/FormSection";
+import { Basic, Work } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({
   register,
@@ -71,6 +71,12 @@ export default function FormManager({
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
         <Basic
+          watch={watch}
+          register={register}
+          control={control}
+          error={errors}
+        />
+        <Work
           watch={watch}
           register={register}
           control={control}
