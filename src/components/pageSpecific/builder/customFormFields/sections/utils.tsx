@@ -94,7 +94,7 @@ export function SectionWrapper({
       editableTitle?: {
         register: UseFormRegister<Inputs>;
         control: Control<Inputs, any>;
-        error: FieldErrors<Inputs> | any;
+        errors: FieldErrors<Inputs> | any;
       };
     }
   | {
@@ -107,7 +107,7 @@ export function SectionWrapper({
       editableTitle?: {
         register: UseFormRegister<Inputs>;
         control: Control<Inputs, any>;
-        error: FieldErrors<Inputs> | any;
+        errors: FieldErrors<Inputs> | any;
       };
     }) {
   const [visible, setVisible] = useState(true);
@@ -156,7 +156,7 @@ export function SectionWrapper({
                 fieldTitle={`mask.${sectionKey as keyof maskT}`}
                 type="text"
                 register={editableTitle.register}
-                validationError={editableTitle.error}
+                validationError={editableTitle.errors}
                 headerInput={{
                   InputClassValue:
                     "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
@@ -192,10 +192,15 @@ export function SectionWrapper({
   if (!fieldArraySection) {
     return (
       <MotionConfig transition={{ duration }}>
-        <motion.div className="w-full fc glass gap-2">
+        <motion.div className="fc glass gap-2 ">
           <TitleSection />
           <ResizablePanel>
-            <motion.div className={cn(visible ? "block" : "hidden")}>
+            <motion.div
+              className={cn(
+                "flex flex-wrap gap-2 justify-start",
+                visible ? "flex" : "hidden"
+              )}
+            >
               {children}
             </motion.div>
           </ResizablePanel>
@@ -237,7 +242,7 @@ export function SectionWrapper({
           <ResizablePanel>
             <motion.div
               className={cn(
-                "flex flex-wrap gap-2 justify-evenly",
+                "flex flex-wrap gap-2 justify-start",
                 visible ? "flex" : "hidden"
               )}
             >

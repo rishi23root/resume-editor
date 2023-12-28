@@ -2,19 +2,22 @@ import { cn } from "@/lib/utils";
 import { ArrayKeysRecord, Inputs, WorkT, profilesT } from "@/types/builder";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
-import { Control, FieldErrors, UseFormRegister } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  UseFormRegister,
+  UseFormReturn,
+  UseFormSetValue,
+} from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
 
 export function Basic({
   register,
   control,
-  error,
-}: {
-  register: UseFormRegister<Inputs>;
-  control: Control<Inputs, any>;
-  error: FieldErrors<Inputs>;
-}) {
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper sectionKey="basics">
@@ -23,43 +26,57 @@ export function Basic({
           fieldTitle="basics.name"
           type="text"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.label"
           type="text"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
-        {/* <FormInput
-        fieldTitle="basics.image"
-        type="image"
-        register={register}
-        validationError={error}
-      /> */}
+        <FormInput
+          fieldTitle="basics.image"
+          type="image"
+          register={register}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
+        />
         <FormInput
           fieldTitle="basics.email"
           type="email"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.phone"
           type="number"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.url"
           type="url"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.summary"
-          type="text"
+          type="summary"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-full"
         />
       </SectionWrapper>
 
@@ -69,19 +86,25 @@ export function Basic({
           fieldTitle="basics.location.address"
           type="text"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.location.city"
           type="text"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
         <FormInput
           fieldTitle="basics.location.countryCode"
           type="text"
           register={register}
-          validationError={error}
+          validationError={errors}
+          setValue={setValue}
+          parentClassValue="w-[48%]"
         />
       </SectionWrapper>
 
@@ -99,7 +122,7 @@ export function Basic({
             return (
               <div
                 className={cn(
-                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-[48%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
                 key={eachEntry.id}
               >
@@ -128,7 +151,8 @@ export function Basic({
                       fieldTitle={`basics.profiles.${index}.network`}
                       type="text"
                       register={register}
-                      validationError={error}
+                      validationError={errors}
+                      setValue={setValue}
                       headerInput={{
                         InputClassValue:
                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
@@ -140,7 +164,7 @@ export function Basic({
                   </motion.div>
                   {fields.length > 1 && (
                     <motion.button
-                      className="hover:text-red-400 hover:opacity-100 opacity-50"
+                      className="hover:text-red-480 hover:opacity-100 opacity-50"
                       onClick={() => {
                         remove(index);
                       }}
@@ -153,13 +177,15 @@ export function Basic({
                   fieldTitle={`basics.profiles.${index}.username`}
                   type="text"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
                 <FormInput
                   fieldTitle={`basics.profiles.${index}.url`}
                   type="url"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
               </div>
             );
@@ -172,12 +198,9 @@ export function Basic({
 export function Work({
   register,
   control,
-  error,
-}: {
-  register: UseFormRegister<Inputs>;
-  control: Control<Inputs, any>;
-  error: FieldErrors<Inputs>;
-}) {
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
@@ -187,7 +210,7 @@ export function Work({
         editableTitle={{
           control: control,
           register: register,
-          error: error,
+          errors: errors,
         }}
       >
         {({ fields, remove }) =>
@@ -207,7 +230,7 @@ export function Work({
             return (
               <div
                 className={cn(
-                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-[48%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
                 key={eachEntry.id}
               >
@@ -237,7 +260,8 @@ export function Work({
                       fieldTitle={`work.${index}.name`}
                       type="text"
                       register={register}
-                      validationError={error}
+                      validationError={errors}
+                      setValue={setValue}
                       headerInput={{
                         InputClassValue:
                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
@@ -249,7 +273,7 @@ export function Work({
                   </motion.div>
                   {fields.length > 1 && (
                     <motion.button
-                      className="hover:text-red-400 hover:opacity-100 opacity-50"
+                      className="hover:text-red-480 hover:opacity-100 opacity-50"
                       onClick={() => {
                         remove(index);
                       }}
@@ -262,13 +286,15 @@ export function Work({
                   fieldTitle={`work.${index}.position`}
                   type="text"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
                 <FormInput
                   fieldTitle={`work.${index}.url`}
                   type="url"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
                 {/* // startDate: string; // isWorkingHere: boolean; // endDate:
                 string; // summary: string; // years: string; */}
@@ -276,7 +302,8 @@ export function Work({
                   fieldTitle={`work.${index}.startDate`}
                   type="date"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
                 <>
                   {/* make this section programmitically editable either ways */}
@@ -284,26 +311,30 @@ export function Work({
                     fieldTitle={`work.${index}.endDate`}
                     type="date"
                     register={register}
-                    validationError={error}
+                    validationError={errors}
+                    setValue={setValue}
                   />
                   <FormInput
                     fieldTitle={`work.${index}.isWorkingHere`}
                     type="checkbox"
                     register={register}
-                    validationError={error}
+                    validationError={errors}
+                    setValue={setValue}
                   />
                 </>
                 <FormInput
                   fieldTitle={`work.${index}.summary`}
-                  type="text"
+                  type="summary"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
                 <FormInput
                   fieldTitle={`work.${index}.years`}
                   type="text"
                   register={register}
-                  validationError={error}
+                  validationError={errors}
+                  setValue={setValue}
                 />
               </div>
             );

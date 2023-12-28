@@ -9,15 +9,13 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form";
 import { Basic, Work } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({
-  register,
-  handleSubmit,
-  watch,
-  control,
-  formState: { errors },
   onSubmit,
+  ...formHandelerCall
 }: UseFormReturn<Inputs, any, undefined> & {
   onSubmit: SubmitHandler<Inputs>;
 }) {
+  const { handleSubmit } = formHandelerCall;
+
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -71,8 +69,15 @@ export default function FormManager({
         onSubmit={handleSubmit(onSubmit)}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
-        <Basic register={register} control={control} error={errors} />
-        <Work register={register} control={control} error={errors} />
+        <Basic {...formHandelerCall} />
+        <Work {...formHandelerCall} />
+        {/* <Work
+          register={register}
+          control={control}
+          error={errors}
+          setValue={setValue}
+          // setValue={setValue}
+        /> */}
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
