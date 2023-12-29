@@ -202,6 +202,11 @@ export function Basic({
 // skills
 // error # update
 // error del element form any list will cause form submit have to prevent it somehow 
+// core -> 
+// keywords": [],
+// "level": "",
+// "name": ""
+// work on tag input
 
 export function Skills({
   register,
