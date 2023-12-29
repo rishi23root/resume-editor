@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ArrayKeysRecord, Inputs, ProjectsT, WorkT, profilesT } from "@/types/builder";
+import { ArrayKeysRecord, EducationT, Inputs, ProjectsT, WorkT, awardsT, profilesT } from "@/types/builder";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import {
@@ -24,7 +24,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.label"
@@ -32,7 +32,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.image"
@@ -40,7 +40,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.email"
@@ -48,7 +48,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.phone"
@@ -56,7 +56,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.url"
@@ -64,7 +64,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.summary"
@@ -84,7 +84,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.location.city"
@@ -92,7 +92,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
         <FormInput
           fieldTitle="basics.location.countryCode"
@@ -100,7 +100,7 @@ export function Basic({
           register={register}
           validationError={errors}
           setValue={setValue}
-          parentClassValue="w-[48%]"
+          parentClassValue="w-[49%]"
         />
       </SectionWrapper>
 
@@ -118,7 +118,7 @@ export function Basic({
             return (
               <div
                 className={cn(
-                  "w-[48%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
                 key={eachEntry.id}
               >
@@ -160,7 +160,7 @@ export function Basic({
                   </motion.div>
                   {fields.length > 1 && (
                     <motion.button
-                      className="hover:text-red-480 hover:opacity-100 opacity-50"
+                      className="hover:text-red-490 hover:opacity-100 opacity-50"
                       onClick={() => {
                         remove(index);
                       }}
@@ -190,6 +190,19 @@ export function Basic({
       </SectionWrapper>
     </div>
   );
+}
+
+// skills
+export function Skills({
+  register,
+  control,
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
+  // watch for change values in the form here and disable it accoringly
+  return (
+    <>Skill section is pending to work on </>
+  )
 }
 
 export function Work({
@@ -261,7 +274,7 @@ export function Work({
                   </motion.div>
                   {fields.length > 1 && (
                     <motion.button
-                      className="hover:text-red-480 hover:opacity-100 opacity-50"
+                      className="hover:text-red-490 hover:opacity-100 opacity-50"
                       onClick={() => {
                         remove(index);
                       }}
@@ -277,7 +290,7 @@ export function Work({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   <FormInput
                     fieldTitle={`work.${index}.url`}
@@ -285,7 +298,7 @@ export function Work({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   {/* // startDate: string; // isWorkingHere: boolean; // endDate:
                 string; // summary: string; // years: string; */}
@@ -295,7 +308,7 @@ export function Work({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   <>
                     {/* make this section programmitically editable either ways */}
@@ -305,7 +318,7 @@ export function Work({
                       register={register}
                       validationError={errors}
                       setValue={setValue}
-                      parentClassValue="w-[48%]"
+                      parentClassValue="w-[49%]"
                     />
                     <FormInput
                       fieldTitle={`work.${index}.isWorkingHere`}
@@ -313,7 +326,7 @@ export function Work({
                       register={register}
                       validationError={errors}
                       setValue={setValue}
-                      parentClassValue="w-[48%]"
+                      parentClassValue="w-[49%]"
                     />
                   </>
                   <FormInput
@@ -322,7 +335,7 @@ export function Work({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   <FormInput
                     fieldTitle={`work.${index}.summary`}
@@ -340,7 +353,6 @@ export function Work({
     </div>
   );
 }
-
 
 export function Projects({
   register,
@@ -411,7 +423,7 @@ export function Projects({
                   </motion.div>
                   {fields.length > 1 && (
                     <motion.button
-                      className="hover:text-red-480 hover:opacity-100 opacity-50"
+                      className="hover:text-red-490 hover:opacity-100 opacity-50"
                       onClick={() => {
                         remove(index);
                       }}
@@ -427,7 +439,7 @@ export function Projects({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   <FormInput
                     fieldTitle={`projects.${index}.languages`}
@@ -435,7 +447,7 @@ export function Projects({
                     register={register}
                     validationError={errors}
                     setValue={setValue}
-                    parentClassValue="w-[48%]"
+                    parentClassValue="w-[49%]"
                   />
                   <FormInput
                     fieldTitle={`projects.${index}.description`}
@@ -454,15 +466,252 @@ export function Projects({
   );
 }
 
-// type EducationT = {
-//   id: string;
-//   institution: string;
-//   url: string;
-//   studyType: string;
-//   area: string;
-//   startDate: string;
-//   isStudyingHere: boolean;
-//   endDate: string;
-//   score: string;
-// };
+export function Education({
+  register,
+  control,
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="education"
+        fieldArraySection={true}
+        control={control}
+        editableTitle={{
+          control: control,
+          register: register,
+          errors: errors,
+        }}
+      >
+        {({ fields, remove }) =>
+          fields.map((item, index) => {
+            const eachEntry = item as typeof item & ArrayKeysRecord<EducationT>;
 
+            return (
+              <div
+                className={cn(
+                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+                key={eachEntry.id}
+              >
+                <motion.div className="fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "absolute bold text-xl p-1",
+                        "hidden transition ease-in-out delay-500",
+                        "group-[:not(:hover)]:block",
+                        "group-[:has(.formInput:focus-visible)]:hidden"
+                      )}
+                    >
+                      <WatchedValue
+                        watchKey={`education.${index}.institution`}
+                        control={control}
+                      />
+                    </div>
+                    <FormInput
+                      fieldTitle={`education.${index}.institution`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      headerInput={{
+                        InputClassValue:
+                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                        LabelClassValue:
+                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        parentClassValue: "absolute",
+                      }}
+                    />
+                  </motion.div>
+                  {fields.length > 1 && (
+                    <motion.button
+                      className="hover:text-red-490 hover:opacity-100 opacity-50"
+                      onClick={() => {
+                        remove(index);
+                      }}
+                    >
+                      <Trash2 />
+                    </motion.button>
+                  )}
+                </motion.div>
+                <div className="fr flex-wrap gap-2">
+                  <FormInput
+                    fieldTitle={`education.${index}.url`}
+                    type="url"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`education.${index}.studyType`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`education.${index}.area`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`education.${index}.startDate`}
+                    type="date"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`education.${index}.endDate`}
+                    type="date"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`education.${index}.score`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                </div>
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}
+
+export function Awards({
+  register,
+  control,
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="awards"
+        fieldArraySection={true}
+        control={control}
+        editableTitle={{
+          control: control,
+          register: register,
+          errors: errors,
+        }}
+      >
+        {({ fields, remove }) =>
+          fields.map((item, index) => {
+            const eachEntry = item as typeof item & ArrayKeysRecord<awardsT>;
+
+            return (
+              <div
+                className={cn(
+                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+                key={eachEntry.id}
+              >
+                <motion.div className="fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "absolute bold text-xl p-1",
+                        "hidden transition ease-in-out delay-500",
+                        "group-[:not(:hover)]:block",
+                        "group-[:has(.formInput:focus-visible)]:hidden"
+                      )}
+                    >
+                      <WatchedValue
+                        watchKey={`awards.${index}.title`}
+                        control={control}
+                      />
+                    </div>
+                    <FormInput
+                      fieldTitle={`awards.${index}.title`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      headerInput={{
+                        InputClassValue:
+                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                        LabelClassValue:
+                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        parentClassValue: "absolute",
+                      }}
+                    />
+                  </motion.div>
+                  {fields.length > 1 && (
+                    <motion.button
+                      className="hover:text-red-490 hover:opacity-100 opacity-50"
+                      onClick={() => {
+                        remove(index);
+                      }}
+                    >
+                      <Trash2 />
+                    </motion.button>
+                  )}
+                </motion.div>
+                <div className="fr flex-wrap gap-2">
+                  <FormInput
+                    fieldTitle={`awards.${index}.date`}
+                    type="date"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`awards.${index}.awarder`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[49%]"
+                  />
+                  <FormInput
+                    fieldTitle={`awards.${index}.summary`}
+                    type="summary"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                  />
+                  <FormInput
+                    fieldTitle={`awards.${index}.url`}
+                    type="url"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                  />
+                </div>
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}

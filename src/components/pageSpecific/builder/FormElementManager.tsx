@@ -6,7 +6,7 @@ import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Basic, Projects, Work } from "./customFormFields/sections/FormSection";
+import { Awards, Basic, Education, Projects, Skills, Work } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({
   onSubmit,
@@ -70,8 +70,12 @@ export default function FormManager({
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
         <Basic {...formHandelerCall} />
+        <Skills {...formHandelerCall} />
         <Work {...formHandelerCall} />
         <Projects {...formHandelerCall} />
+        <Education {...formHandelerCall} />
+        <Awards {...formHandelerCall} />
+
 
         <Button
           className={cn(
