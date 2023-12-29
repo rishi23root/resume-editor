@@ -4,7 +4,7 @@ export type BasicsT = {
   name: string;
   label: string;
   phone: string;
-  image:string;
+  image: string;
   email: string;
   url: string;
   summary: string;
@@ -18,11 +18,11 @@ export type BasicsT = {
   profiles: profilesT[];
 };
 
-export type profilesT ={
-    network: string;
-    username: string;
-    url: string;
-  }
+export type profilesT = {
+  network: string;
+  username: string;
+  url: string;
+}
 export type WorkT = {
   id: string;
   name: string;
@@ -57,7 +57,7 @@ export type ProjectsT = {
 };
 
 // "skills": {
-export type SkillsCoreT ={
+export type SkillsCoreT = {
   keywords: string[];
   level: string;
   name: string;
@@ -68,8 +68,8 @@ export type SkillsSectionT = {
 }
 
 export type SkillsInterestsT = {
-    name: string;
-  }
+  name: string;
+}
 
 export type SkillsT = {
   core: SkillsCoreT[];
@@ -111,18 +111,18 @@ export type maskT = {
 
 
 // utils
-export type allArrayKeys = keyof profilesT| keyof SkillsT | keyof WorkT | keyof EducationT | keyof ProjectsT | keyof awardsT
+export type allArrayKeys = keyof profilesT | keyof SkillsT | keyof WorkT | keyof EducationT | keyof ProjectsT | keyof awardsT
 
 // Record<allArrayKeys, any>
-export type ArrayKeysRecord<T> = {[key in keyof T]: any}
+export type ArrayKeysRecord<T> = { [key in keyof T]: any }
 
 // export type Inputs = BasicT;
 export type Inputs = {
-  basics:BasicsT
-  skills:BasicsT
-  work:WorkT[]
-  education:EducationT[]
-  projects:ProjectsT[]
-  awards:awardsT[]
-  mask:maskT
+  basics: BasicsT
+  skills: SkillsT
+  work: WorkT[]
+  education: EducationT[]
+  projects: ProjectsT[]
+  awards: awardsT[]
+  mask: maskT
 };

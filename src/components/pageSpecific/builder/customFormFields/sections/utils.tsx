@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Inputs, maskT } from "@/types/builder";
+import { Inputs, SkillsT, maskT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import {
   FieldPath,
   UseFieldArrayReturn,
   UseFormRegister,
+  UseFormSetValue,
   useFieldArray,
   useWatch,
 } from "react-hook-form";
@@ -30,7 +31,7 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
     <motion.div
       animate={{ height: height || "auto" }}
       className="relative "
-      // className="relative overflow-hidden"
+    // className="relative overflow-hidden"
     >
       <AnimatePresence initial={false}>
         <motion.div
@@ -83,33 +84,42 @@ export function SectionWrapper({
   sectionKey,
   children,
   fieldArraySection,
+  setValue,
   control,
   editableTitle,
+  sectionClass,
+  sectionActionBtnClass
 }:
   | {
-      sectionKey: FieldPath<Inputs>;
-      children: React.ReactNode;
-      fieldArraySection?: false;
-      control?: undefined;
-      editableTitle?: {
-        register: UseFormRegister<Inputs>;
-        control: Control<Inputs, any>;
-        errors: FieldErrors<Inputs> | any;
-      };
-    }
-  | {
-      sectionKey: FieldPath<Inputs>;
-      children: (
-        fields: UseFieldArrayReturn<Inputs, any, "id">
-      ) => React.ReactNode;
-      fieldArraySection: true;
+    sectionKey: FieldPath<Inputs>;
+    children: React.ReactNode;
+    fieldArraySection?: false;
+    setValue?: UseFormSetValue<Inputs>;
+    control?: undefined;
+    sectionClass?: string;
+    sectionActionBtnClass?: string;
+    editableTitle?: {
+      register: UseFormRegister<Inputs>;
       control: Control<Inputs, any>;
-      editableTitle?: {
-        register: UseFormRegister<Inputs>;
-        control: Control<Inputs, any>;
-        errors: FieldErrors<Inputs> | any;
-      };
-    }) {
+      errors: FieldErrors<Inputs> | any;
+    };
+  }
+  | {
+    sectionKey: FieldPath<Inputs>;
+    children: (
+      fields: UseFieldArrayReturn<Inputs, any, "id">
+    ) => React.ReactNode;
+    setValue: UseFormSetValue<Inputs>;
+    fieldArraySection: true;
+    control: Control<Inputs, any>;
+    sectionClass?: string;
+    sectionActionBtnClass?: string;
+    editableTitle?: {
+      register: UseFormRegister<Inputs>;
+      control: Control<Inputs, any>;
+      errors: FieldErrors<Inputs> | any;
+    };
+  }) {
   const [visible, setVisible] = useState(true);
 
   const TitleSection = ({ children }: { children?: React.ReactNode }) => {
@@ -147,16 +157,28 @@ export function SectionWrapper({
                 )}
               >
                 <WatchedValue
-                  watchKey={`mask.${sectionKey as keyof maskT}`}
+                  watchKey={
+                    sectionKey.split('.').length == 2 ?
+                      // sectionKey.startsWith('skills') ?
+                      `skills.mask.${sectionKey.split('.').pop() as (keyof SkillsT['mask'])}`
+                      :
+                      `mask.${sectionKey as keyof maskT}`
+                  }
                   // watchKey={`work.${index}.network`}
                   control={editableTitle.control}
                 />
               </div>
               <FormInput
-                fieldTitle={`mask.${sectionKey as keyof maskT}`}
+                fieldTitle={
+                  sectionKey.split('.').length == 2 ?
+                    // sectionKey.startsWith('skills') ?
+                    `skills.mask.${sectionKey.split('.').pop() as (keyof SkillsT['mask'])}`
+                    :
+                    `mask.${sectionKey as keyof maskT}`}
                 type="text"
                 register={editableTitle.register}
                 validationError={editableTitle.errors}
+                setValue={setValue as UseFormSetValue<Inputs>}
                 headerInput={{
                   InputClassValue:
                     "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
@@ -170,7 +192,7 @@ export function SectionWrapper({
         ) : (
           <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
-        <div className="fr fce gap-2">
+        <div className={cn("fr fce gap-2", sectionActionBtnClass)}>
           {children ? children : null}
           <motion.button
             variants={variantsActionButton}
@@ -217,7 +239,7 @@ export function SectionWrapper({
     // return a callback with the fields array render children here
     return (
       <MotionConfig transition={{ duration }}>
-        <motion.div className="w-full fc glass gap-2 ">
+        <motion.div className={cn("w-full fc  gap-2", sectionClass != undefined ? sectionClass : "glass")}>
           <TitleSection>
             <motion.button
               variants={variantsActionButton}
@@ -270,4 +292,14 @@ export function WatchedValue({
   });
 
   return <>{value}</>;
+}
+
+
+// export type SkillsSectionT = {
+// name: string;
+// level: number;
+// function to handel this datatype with conversion to its form key all together
+
+export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">)=>{
+  return null
 }

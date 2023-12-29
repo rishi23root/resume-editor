@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ArrayKeysRecord, EducationT, Inputs, ProjectsT, WorkT, awardsT, profilesT } from "@/types/builder";
+import { ArrayKeysRecord, EducationT, Inputs, ProjectsT, SkillsSectionT, SkillsT, WorkT, awardsT, profilesT } from "@/types/builder";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import {
@@ -7,6 +7,7 @@ import {
 } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
+import { Separator } from "@/components/ui/separator";
 
 export function Basic({
   register,
@@ -16,7 +17,9 @@ export function Basic({
 }: UseFormReturn<Inputs, any, undefined>) {
   return (
     <div className="w-full fc  gap-2">
-      <SectionWrapper sectionKey="basics">
+      <SectionWrapper
+        setValue={setValue}
+        sectionKey="basics">
         {/* <div className="w-full text-2xl bold mb-3">Basic</div> */}
         <FormInput
           fieldTitle="basics.name"
@@ -77,7 +80,9 @@ export function Basic({
       </SectionWrapper>
 
       {/* location tab */}
-      <SectionWrapper sectionKey="basics.location">
+      <SectionWrapper
+        setValue={setValue}
+        sectionKey="basics.location">
         <FormInput
           fieldTitle="basics.location.address"
           type="text"
@@ -106,6 +111,8 @@ export function Basic({
 
       {/* profile tab */}
       <SectionWrapper
+        setValue={setValue}
+
         sectionKey="basics.profiles"
         fieldArraySection={true}
         control={control}
@@ -193,15 +200,301 @@ export function Basic({
 }
 
 // skills
+// error # update
+// error del element form any list will cause form submit have to prevent it somehow 
+
 export function Skills({
   register,
   control,
   formState: { errors },
   setValue,
 }: UseFormReturn<Inputs, any, undefined>) {
-  // watch for change values in the form here and disable it accoringly
+  // work on the fact chose keys 
+
   return (
-    <>Skill section is pending to work on </>
+    <div className="w-full fc  gap-2">
+      {/* for core no subsections */}
+      <SectionWrapper
+        setValue={setValue}
+        sectionKey="skills">
+        {/* updates 
+          1. without title and glass base sections
+          2. update in formelement for mask
+        */}
+        <SectionWrapper
+          setValue={setValue}
+          sectionKey="skills.core"
+          fieldArraySection={true}
+          control={control}
+          editableTitle={undefined}
+          sectionClass=""
+        // sectionActionBtnClass="hidden"
+
+        >
+          {({ fields, remove }) =>
+            fields.map((item, index) => {
+              const eachEntry = item as typeof item & ArrayKeysRecord<SkillsSectionT>;
+
+              return (
+                <div
+                  className={cn(
+                    "w-[49%] fr flex-wrap gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  )}
+                  key={eachEntry.id}
+                >
+                  <motion.div className="fr gap-2">
+                    <motion.div
+                      className={cn(
+                        "flex-1 group relative h-10",
+                        "transition ease-in-out delay-300"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "absolute bold text-xl p-1",
+                          "hidden transition ease-in-out delay-500",
+                          "group-[:not(:hover)]:block",
+                          "group-[:has(.formInput:focus-visible)]:hidden"
+                        )}
+                      >
+                        <WatchedValue
+                          watchKey={`skills.core.${index}.name`}
+                          control={control}
+                        />
+                      </div>
+                      <FormInput
+                        fieldTitle={`skills.core.${index}.name`}
+                        type="text"
+                        register={register}
+                        validationError={errors}
+                        setValue={setValue}
+                        headerInput={{
+                          InputClassValue:
+                            "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                          LabelClassValue:
+                            "hidden focus-visible:block transition ease-in-out delay-300",
+                          parentClassValue: "absolute",
+                        }}
+                      />
+                    </motion.div>
+                    {fields.length > 1 && (
+                      <motion.button
+                        className="hover:text-red-490 hover:opacity-100 opacity-50"
+                        onClick={() => {
+                          remove(index);
+                        }}
+                      >
+                        <Trash2 />
+                      </motion.button>
+                    )}
+                  </motion.div>
+                  <div className="fr flex-wrap gap-2">
+                    <FormInput
+                      fieldTitle={`skills.databases.${index}.level`}
+                      type="number"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-full"
+                    />
+                  </div>
+                </div>
+              );
+            })
+          }
+        </SectionWrapper>
+
+        <Separator className="my-4" />
+
+        <SectionWrapper
+          setValue={setValue}
+          sectionKey="skills.interests"
+          fieldArraySection={true}
+          control={control}
+          editableTitle={{
+            control: control,
+            register: register,
+            errors: errors,
+          }}
+          sectionClass=""
+          sectionActionBtnClass="hidden"
+        >
+          {({ fields, remove }) =>
+            fields.map((item, index) => {
+              const eachEntry = item as typeof item & ArrayKeysRecord<SkillsSectionT>;
+
+              return (
+                <div
+                  className={cn(
+                    "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  )}
+                  key={eachEntry.id}
+                >
+                  <motion.div className="fr gap-2">
+                    <motion.div
+                      className={cn(
+                        "flex-1 group relative h-10",
+                        "transition ease-in-out delay-300"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "absolute bold text-xl p-1",
+                          "hidden transition ease-in-out delay-500",
+                          "group-[:not(:hover)]:block",
+                          "group-[:has(.formInput:focus-visible)]:hidden"
+                        )}
+                      >
+                        <WatchedValue
+                          watchKey={`skills.interests.${index}.name`}
+                          control={control}
+                        />
+                      </div>
+                      <FormInput
+                        fieldTitle={`skills.interests.${index}.name`}
+                        type="text"
+                        register={register}
+                        validationError={errors}
+                        setValue={setValue}
+                        headerInput={{
+                          InputClassValue:
+                            "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                          LabelClassValue:
+                            "hidden focus-visible:block transition ease-in-out delay-300",
+                          parentClassValue: "absolute",
+                        }}
+                      />
+                    </motion.div>
+                    {fields.length > 1 && (
+                      <motion.button
+                        className="hover:text-red-490 hover:opacity-100 opacity-50"
+                        onClick={() => {
+                          remove(index);
+                        }}
+                      >
+                        <Trash2 />
+                      </motion.button>
+                    )}
+                  </motion.div>
+                  <div className="fr flex-wrap gap-2">
+                    <FormInput
+                      fieldTitle={`skills.interests.${index}.name`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-[49%]"
+                    />
+                  </div>
+                </div>
+              );
+            })
+          }
+        </SectionWrapper>
+
+        <Separator className="my-4" />
+
+        <SectionWrapper
+          setValue={setValue}
+
+          sectionKey="skills.databases"
+          fieldArraySection={true}
+          control={control}
+
+          editableTitle={{
+            control: control,
+            register: register,
+            errors: errors,
+          }}
+          sectionClass=""
+          sectionActionBtnClass="hidden"
+        >
+          {({ fields, remove }) =>
+            fields.map((item, index) => {
+              const eachEntry = item as typeof item & ArrayKeysRecord<SkillsSectionT>;
+
+              return (
+                <div
+                  className={cn(
+                    "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  )}
+                  key={eachEntry.id}
+                >
+                  <motion.div className="fr gap-2">
+                    <motion.div
+                      className={cn(
+                        "flex-1 group relative h-10",
+                        "transition ease-in-out delay-300"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "absolute bold text-xl p-1",
+                          "hidden transition ease-in-out delay-500",
+                          "group-[:not(:hover)]:block",
+                          "group-[:has(.formInput:focus-visible)]:hidden"
+                        )}
+                      >
+                        <WatchedValue
+                          watchKey={`skills.databases.${index}.name`}
+                          control={control}
+                        />
+                      </div>
+                      <FormInput
+                        fieldTitle={`skills.databases.${index}.name`}
+                        type="text"
+                        register={register}
+                        validationError={errors}
+                        setValue={setValue}
+                        headerInput={{
+                          InputClassValue:
+                            "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                          LabelClassValue:
+                            "hidden focus-visible:block transition ease-in-out delay-300",
+                          parentClassValue: "absolute",
+                        }}
+                      />
+                    </motion.div>
+                    {fields.length > 1 && (
+                      <motion.button
+                        className="hover:text-red-490 hover:opacity-100 opacity-50"
+                        onClick={() => {
+                          remove(index);
+                        }}
+                      >
+                        <Trash2 />
+                      </motion.button>
+                    )}
+                  </motion.div>
+                  <div className="fr flex-wrap gap-2">
+                    <FormInput
+                      fieldTitle={`skills.databases.${index}.name`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-[49%]"
+                    />
+                    <FormInput
+                      fieldTitle={`skills.databases.${index}.level`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-[49%]"
+                    />
+                  </div>
+                </div>
+              );
+            })
+          }
+        </SectionWrapper>
+
+        <Separator className="my-4" />
+
+      </SectionWrapper>
+    </div>
+
   )
 }
 
@@ -215,6 +508,8 @@ export function Work({
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
+        setValue={setValue}
+
         sectionKey="work"
         fieldArraySection={true}
         control={control}
@@ -364,6 +659,8 @@ export function Projects({
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
+        setValue={setValue}
+
         sectionKey="projects"
         fieldArraySection={true}
         control={control}
@@ -443,7 +740,7 @@ export function Projects({
                   />
                   <FormInput
                     fieldTitle={`projects.${index}.languages`}
-                    type="url"
+                    type="text"
                     register={register}
                     validationError={errors}
                     setValue={setValue}
@@ -475,6 +772,8 @@ export function Education({
   return (
     <div className="w-full fc gap-2">
       <SectionWrapper
+        setValue={setValue}
+
         sectionKey="education"
         fieldArraySection={true}
         control={control}
@@ -609,6 +908,8 @@ export function Awards({
   return (
     <div className="w-full fc gap-2">
       <SectionWrapper
+        setValue={setValue}
+
         sectionKey="awards"
         fieldArraySection={true}
         control={control}
