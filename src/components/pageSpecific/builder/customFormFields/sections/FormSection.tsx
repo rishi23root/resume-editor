@@ -1,13 +1,9 @@
 import { cn } from "@/lib/utils";
-import { ArrayKeysRecord, Inputs, WorkT, profilesT } from "@/types/builder";
+import { ArrayKeysRecord, Inputs, ProjectsT, WorkT, profilesT } from "@/types/builder";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import {
-  Control,
-  FieldErrors,
-  UseFormRegister,
-  UseFormReturn,
-  UseFormSetValue,
+  UseFormReturn
 } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
@@ -195,12 +191,14 @@ export function Basic({
     </div>
   );
 }
+
 export function Work({
   register,
   control,
   formState: { errors },
   setValue,
 }: UseFormReturn<Inputs, any, undefined>) {
+  // watch for change values in the form here and disable it accoringly
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
@@ -217,20 +215,10 @@ export function Work({
           fields.map((item, index) => {
             // update the type of item profile typex
             const eachEntry = item as typeof item & ArrayKeysRecord<WorkT>;
-            // id: string;
-            // name: string;
-            // position: string;
-            // url: string;
-            // startDate: string;
-            // isWorkingHere: boolean;
-            // endDate: string;
-            // summary: string;
-            // years: string;
-
             return (
               <div
                 className={cn(
-                  "w-[48%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
                 key={eachEntry.id}
               >
@@ -282,60 +270,68 @@ export function Work({
                     </motion.button>
                   )}
                 </motion.div>
-                <FormInput
-                  fieldTitle={`work.${index}.position`}
-                  type="text"
-                  register={register}
-                  validationError={errors}
-                  setValue={setValue}
-                />
-                <FormInput
-                  fieldTitle={`work.${index}.url`}
-                  type="url"
-                  register={register}
-                  validationError={errors}
-                  setValue={setValue}
-                />
-                {/* // startDate: string; // isWorkingHere: boolean; // endDate:
-                string; // summary: string; // years: string; */}
-                <FormInput
-                  fieldTitle={`work.${index}.startDate`}
-                  type="date"
-                  register={register}
-                  validationError={errors}
-                  setValue={setValue}
-                />
-                <>
-                  {/* make this section programmitically editable either ways */}
+                <div className="fr flex-wrap gap-2" >
                   <FormInput
-                    fieldTitle={`work.${index}.endDate`}
+                    fieldTitle={`work.${index}.position`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[48%]"
+                  />
+                  <FormInput
+                    fieldTitle={`work.${index}.url`}
+                    type="url"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[48%]"
+                  />
+                  {/* // startDate: string; // isWorkingHere: boolean; // endDate:
+                string; // summary: string; // years: string; */}
+                  <FormInput
+                    fieldTitle={`work.${index}.startDate`}
                     type="date"
                     register={register}
                     validationError={errors}
                     setValue={setValue}
+                    parentClassValue="w-[48%]"
+                  />
+                  <>
+                    {/* make this section programmitically editable either ways */}
+                    <FormInput
+                      fieldTitle={`work.${index}.endDate`}
+                      type="date"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-[48%]"
+                    />
+                    <FormInput
+                      fieldTitle={`work.${index}.isWorkingHere`}
+                      type="checkbox"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      parentClassValue="w-[48%]"
+                    />
+                  </>
+                  <FormInput
+                    fieldTitle={`work.${index}.years`}
+                    type="text"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[48%]"
                   />
                   <FormInput
-                    fieldTitle={`work.${index}.isWorkingHere`}
-                    type="checkbox"
+                    fieldTitle={`work.${index}.summary`}
+                    type="summary"
                     register={register}
                     validationError={errors}
                     setValue={setValue}
                   />
-                </>
-                <FormInput
-                  fieldTitle={`work.${index}.summary`}
-                  type="summary"
-                  register={register}
-                  validationError={errors}
-                  setValue={setValue}
-                />
-                <FormInput
-                  fieldTitle={`work.${index}.years`}
-                  type="text"
-                  register={register}
-                  validationError={errors}
-                  setValue={setValue}
-                />
+                </div>
               </div>
             );
           })
@@ -344,3 +340,129 @@ export function Work({
     </div>
   );
 }
+
+
+export function Projects({
+  register,
+  control,
+  formState: { errors },
+  setValue,
+}: UseFormReturn<Inputs, any, undefined>) {
+  // watch for change values in the form here and disable it accoringly
+  return (
+    <div className="w-full fc  gap-2">
+      <SectionWrapper
+        sectionKey="projects"
+        fieldArraySection={true}
+        control={control}
+        editableTitle={{
+          control: control,
+          register: register,
+          errors: errors,
+        }}
+      >
+        {({ fields, remove }) =>
+          fields.map((item, index) => {
+            // update the type of item profile typex
+            const eachEntry = item as typeof item & ArrayKeysRecord<ProjectsT>;
+            return (
+              <div
+                className={cn(
+                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+                key={eachEntry.id}
+              >
+                <motion.div className="fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "absolute bold text-xl p-1",
+                        " hidden transition ease-in-out delay-500",
+                        "group-[:not(:hover)]:block",
+                        // if group have a input element in focus then hide this
+                        "group-[:has(.formInput:focus-visible)]:hidden"
+                      )}
+                    >
+                      <WatchedValue
+                        watchKey={`projects.${index}.name`}
+                        // watchKey={`work.${index}.network`}
+                        control={control}
+                      />
+                    </div>
+                    <FormInput
+                      fieldTitle={`projects.${index}.name`}
+                      type="text"
+                      register={register}
+                      validationError={errors}
+                      setValue={setValue}
+                      headerInput={{
+                        InputClassValue:
+                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                        LabelClassValue:
+                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        parentClassValue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  {fields.length > 1 && (
+                    <motion.button
+                      className="hover:text-red-480 hover:opacity-100 opacity-50"
+                      onClick={() => {
+                        remove(index);
+                      }}
+                    >
+                      <Trash2 />
+                    </motion.button>
+                  )}
+                </motion.div>
+                <div className="fr flex-wrap gap-2" >
+                  <FormInput
+                    fieldTitle={`projects.${index}.url`}
+                    type="url"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[48%]"
+                  />
+                  <FormInput
+                    fieldTitle={`projects.${index}.languages`}
+                    type="url"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                    parentClassValue="w-[48%]"
+                  />
+                  <FormInput
+                    fieldTitle={`projects.${index}.description`}
+                    type="summary"
+                    register={register}
+                    validationError={errors}
+                    setValue={setValue}
+                  />
+                </div>
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}
+
+// type EducationT = {
+//   id: string;
+//   institution: string;
+//   url: string;
+//   studyType: string;
+//   area: string;
+//   startDate: string;
+//   isStudyingHere: boolean;
+//   endDate: string;
+//   score: string;
+// };
+

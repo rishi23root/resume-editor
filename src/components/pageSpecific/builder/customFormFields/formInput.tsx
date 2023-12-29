@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
 import { motion } from "framer-motion";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CloudCog } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   FieldErrors,
@@ -54,7 +54,7 @@ export function FormInput({
     className,
   }: {
     id: any;
-    type: InputProps["type"];
+    type: InputProps["type"] | any;
     register: UseFormRegister<Inputs>;
     className: string;
   }) => {
@@ -62,7 +62,7 @@ export function FormInput({
     // text // longtext // number // email // tel // url // date // checkbox // radio // image file
     // loop through each type and return the correct input
 
-    if (type in ["text", "email", "number"]) {
+    if (["text", "email", "number", 'url'].includes(type)) {
       return (
         <Input
           type={type}
@@ -77,28 +77,20 @@ export function FormInput({
         <Textarea
           placeholder="Type your message here."
           id={id}
+          rows={6}
           {...register(fieldTitle)}
           className={className}
         />
       );
     } else if (type === "date") {
-      // date
-
       return (
-        <div>
-          <input type="hidden" {...register(fieldTitle)} />
-          <DatePickerDemo
-            id={id}
-            register={register}
-            fieldTitle={fieldTitle}
-            className={className}
-            setValue={setValue as UseFormSetValue<Inputs>}
-            dateValue={"2/09/2002"}
-            updated={(date) => {
-              // update it in the json form
-            }}
-          />
-        </div>
+        <DatePicker
+          id={id}
+          register={register}
+          fieldTitle={fieldTitle}
+          className={className}
+          setValue={setValue as UseFormSetValue<Inputs>}
+        />
       );
     } else if (type === "image") {
       // compress the image
@@ -125,27 +117,18 @@ export function FormInput({
           <Checkbox
             id={id}
             onChange={onChange}
-            className={cn(className, " w-[1em]")}
+            className={cn(className, " w-[1em] py-2")}
           />
         </>
       );
-    } else if (type === "url") {
-      return (
-        <Input
-          type={type}
-          {...register(fieldTitle)}
-          className={className}
-          id={id}
-        />
-      );
     }
-    console.log(type);
+    // console.log(type);
   };
 
   return (
     <motion.div
       className={cn(
-        "w-full fc ",
+        "w-full fc",
         headerInput?.parentClassValue ? headerInput.parentClassValue : "",
         parentClassValue
       )}
@@ -153,7 +136,7 @@ export function FormInput({
       <div
         className={cn(
           type == "checkbox"
-            ? "fr justify-end items-center  align-baseline px-2 gap-2 flex-row-reverse h-10 capitalize"
+            ? "fr justify-end items-center  align-baseline px-2 gap-2 flex-row-reverse h-10 capitalize h-full "
             : ""
         )}
       >
@@ -191,11 +174,6 @@ export function FormInput({
     </motion.div>
   );
 }
-
-// must have data
-// default value (spread props)
-// register object data (spread props)
-// error state, custom error message
 
 const ImageUpload = ({
   id,
@@ -239,7 +217,7 @@ const ImageUpload = ({
     return () => {
       // cleanup
       if (fileRef.current) {
-        fileRef.current.removeEventListener("change", () => {});
+        fileRef.current.removeEventListener("change", () => { });
       }
     };
   });
@@ -276,81 +254,78 @@ const ImageUpload = ({
   );
 };
 
-const DatePickerDemo = ({
+const DatePicker = ({
   id,
   className,
   fieldTitle,
   register,
   setValue,
-  dateValue,
-  updated,
 }: {
   id: any;
   fieldTitle: FieldPath<Inputs>;
   register: UseFormRegister<Inputs>;
   className: string;
   setValue: UseFormSetValue<Inputs>;
-  dateValue: string;
-  updated: (date: string) => void;
 }) => {
-  const fileRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = useState<Date>();
-  // watch this element for any updates
-  // setValue(fieldTitle, "image");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (fileRef.current) {
-      fileRef.current.addEventListener("change", (e) => {
-        // read file and convert it to base64
-        const target = e.target as HTMLInputElement;
-        const file = target.files?.[0];
+    // console.log("new Date:", date)
+    if (date) {
+      setIsOpen(false)
+      // convert this date to some readable date for json formater
+      setValue(
+        fieldTitle,
+        format(date, "LLL yyyy")
+      );
+      // console.log(
+      //   "formated updated :",
+      //   format(date, "LLL yyyy")
+      // )
+    } else {
+      // in the first send a date if not alreay there
+      // dateValue as string right now 
+      // use date fns to update the format if possible else dont update it
+      const defaultValue = (document.getElementById(id)?.getAttribute('value'))
+      // console.log("defaul date : ", defaultValue);
 
-        if (file) {
-          // Read file and convert it to base64
-          const reader = new FileReader();
-
-          reader.onload = (event) => {
-            const base64String = event.target?.result as string;
-            // Use the base64String as needed
-            console.log(base64String);
-            setValue(fieldTitle, base64String);
-          };
-
-          reader.readAsDataURL(file);
-        }
-      });
-    }
-    return () => {
-      // cleanup
-      if (fileRef.current) {
-        fileRef.current.removeEventListener("change", () => {});
+      const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
+      if (defaultValue && monthYearRegex.test(defaultValue)) {
+        // console.log("Valid date format");
+        setDate(new Date(defaultValue))
       }
-    };
-  });
+    }
+  }, [date])
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-[240px] justify-start text-left font-normal",
-            className,
-            !date && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
+    <>
+      <input type="hidden" id={id} {...register(fieldTitle)} />
+      <Popover open={isOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant={"outline"}
+            className={cn(
+              "w-[240px] justify-start text-left font-normal",
+              className,
+              !date && "text-muted-foreground"
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, "LLL yyyy") : <span>Pick a date</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </>
+
   );
 };

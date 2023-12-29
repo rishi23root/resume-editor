@@ -6,7 +6,7 @@ import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
 import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Basic, Work } from "./customFormFields/sections/FormSection";
+import { Basic, Projects, Work } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({
   onSubmit,
@@ -71,13 +71,8 @@ export default function FormManager({
       >
         <Basic {...formHandelerCall} />
         <Work {...formHandelerCall} />
-        {/* <Work
-          register={register}
-          control={control}
-          error={errors}
-          setValue={setValue}
-          // setValue={setValue}
-        /> */}
+        <Projects {...formHandelerCall} />
+
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
