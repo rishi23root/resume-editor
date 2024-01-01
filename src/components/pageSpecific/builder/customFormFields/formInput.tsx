@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input, InputProps } from "@/components/ui/input";
 import {
@@ -10,33 +10,25 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
+import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { CalendarIcon, CloudCog } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import {
-  FieldErrors,
-  FieldPath,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
-import { Calendar } from "@/components/ui/calendar";
+import { FieldPath, useFormContext } from "react-hook-form";
 
 export function FormInput({
+  id,
+
   type,
   fieldTitle,
-  validationError,
-  register,
-  setValue,
   headerInput,
   InputClassValue,
   LabelClassValue,
   parentClassValue,
 }: {
+  id?: string;
   type: InputProps["type"];
   fieldTitle: FieldPath<Inputs>;
-  validationError: FieldErrors<Inputs> | any;
-  register: UseFormRegister<Inputs>;
-  setValue: UseFormSetValue<Inputs>;
   headerInput?: {
     InputClassValue: string;
     LabelClassValue: string;
@@ -46,84 +38,10 @@ export function FormInput({
   LabelClassValue?: string;
   InputClassValue?: string;
 }) {
-  // updates for the input
-  // check for types of input then use that specific input
-  const TypeCheckedInput = ({
-    id,
-    type,
-    className,
-  }: {
-    id: any;
-    type: InputProps["type"] | any;
-    register: UseFormRegister<Inputs>;
-    className: string;
-  }) => {
-    // all possible input types
-    // text // longtext // number // email // tel // url // date // checkbox // radio // image file
-    // loop through each type and return the correct input
-
-    if (["text", "email", "number", 'url'].includes(type)) {
-      return (
-        <Input
-          type={type}
-          {...register(fieldTitle)}
-          className={className}
-          id={id}
-        />
-      );
-    } else if (type === "summary") {
-      // type = { type };
-      return (
-        <Textarea
-          placeholder="Type your message here."
-          id={id}
-          rows={6}
-          {...register(fieldTitle)}
-          className={className}
-        />
-      );
-    } else if (type === "date") {
-      return (
-        <DatePicker
-          id={id}
-          register={register}
-          fieldTitle={fieldTitle}
-          className={className}
-          setValue={setValue as UseFormSetValue<Inputs>}
-        />
-      );
-    } else if (type === "image") {
-      // compress the image
-      // take image and convert it to base64
-      // return the base64 image as string
-      return (
-        <ImageUpload
-          id={id}
-          register={register}
-          fieldTitle={fieldTitle}
-          className={className}
-          setValue={setValue as UseFormSetValue<Inputs>}
-        />
-      );
-    } else if (type === "checkbox") {
-      // check if the checkbox boolean  !! what about the label
-      const onChange = (e: FormEvent) => {
-        // setValue(fieldTitle, e.target.checked);
-        console.log(e.target);
-      };
-      return (
-        <>
-          <input type="hidden" {...register(fieldTitle)} />
-          <Checkbox
-            id={id}
-            onChange={onChange}
-            className={cn(className, " w-[1em] py-2")}
-          />
-        </>
-      );
-    }
-    // console.log(type);
-  };
+  // validationError;
+  const {
+    formState: { errors: validationError },
+  } = useFormContext<Inputs>();
 
   return (
     <motion.div
@@ -152,9 +70,9 @@ export function FormInput({
           &nbsp;{fieldTitle.split(".").pop()}
         </motion.label>
         <TypeCheckedInput
-          id={fieldTitle}
+          id={id ? id : fieldTitle}
+          fieldTitle={fieldTitle}
           type={type}
-          register={register}
           className={cn(
             "formInput w-full rounded-lg bg-background/30 text-slate-100",
             "focus-visible:ring-1 focus-visible:ring-slate-600 focus-visible:ring-offset-1 focus-visible:bg-background/50",
@@ -175,19 +93,96 @@ export function FormInput({
   );
 }
 
+const TypeCheckedInput = ({
+  id,
+  type,
+  fieldTitle,
+  className,
+}: {
+  id: any;
+  type: InputProps["type"] | any;
+  fieldTitle: FieldPath<Inputs>;
+  className?: string;
+}) => {
+  // all possible input types
+  // text // longtext // number // email // tel // url // date // checkbox // radio // image file
+
+  const { register } = useFormContext<Inputs>();
+
+  if (["text", "email", "number", "url"].includes(type)) {
+    return (
+      <Input
+        key={id}
+        type={type}
+        {...register(fieldTitle)}
+        className={className}
+        id={id}
+      />
+    );
+  } else if (type === "summary") {
+    // type = { type };
+    return (
+      <Textarea
+        placeholder="Type your summary here."
+        id={id}
+        key={id}
+        rows={6}
+        {...register(fieldTitle)}
+        className={className}
+      />
+    );
+  } else if (type === "date") {
+    return (
+      <DatePicker
+        id={id}
+        key={id}
+        fieldTitle={fieldTitle}
+        className={className}
+      />
+    );
+  } else if (type === "image") {
+    // compress the image
+    // take image and convert it to base64
+    // return the base64 image as string
+    return (
+      <ImageUpload
+        id={id}
+        key={id}
+        fieldTitle={fieldTitle}
+        className={className}
+      />
+    );
+  } else if (type === "checkbox") {
+    // check if the checkbox boolean  !! what about the label
+    const onChange = (e: FormEvent) => {
+      // setValue(fieldTitle, e.target.checked);
+      console.log(e.target);
+    };
+    return (
+      <>
+        <input key={id} type="hidden" {...register(fieldTitle)} />
+        <Checkbox
+          id={id}
+          key={id}
+          onChange={onChange}
+          className={cn(className, " w-[1em] py-2")}
+        />
+      </>
+    );
+  }
+  // console.log(type);
+};
+
 const ImageUpload = ({
   id,
   className,
   fieldTitle,
-  register,
-  setValue,
 }: {
   id: any;
   fieldTitle: FieldPath<Inputs>;
-  register: UseFormRegister<Inputs>;
-  className: string;
-  setValue: UseFormSetValue<Inputs>;
+  className?: string;
 }) => {
+  const { register, setValue } = useFormContext<Inputs>();
   const fileRef = useRef<HTMLInputElement>(null);
   // watch this element for any updates
   // setValue(fieldTitle, "image");
@@ -217,7 +212,7 @@ const ImageUpload = ({
     return () => {
       // cleanup
       if (fileRef.current) {
-        fileRef.current.removeEventListener("change", () => { });
+        fileRef.current.removeEventListener("change", () => {});
       }
     };
   });
@@ -258,45 +253,39 @@ const DatePicker = ({
   id,
   className,
   fieldTitle,
-  register,
-  setValue,
 }: {
   id: any;
   fieldTitle: FieldPath<Inputs>;
-  register: UseFormRegister<Inputs>;
-  className: string;
-  setValue: UseFormSetValue<Inputs>;
+  className?: string;
 }) => {
   const [date, setDate] = useState<Date>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { register, setValue } = useFormContext<Inputs>();
 
   useEffect(() => {
     // console.log("new Date:", date)
     if (date) {
-      setIsOpen(false)
+      setIsOpen(false);
       // convert this date to some readable date for json formater
-      setValue(
-        fieldTitle,
-        format(date, "LLL yyyy")
-      );
+      setValue(fieldTitle, format(date, "LLL yyyy"));
       // console.log(
       //   "formated updated :",
       //   format(date, "LLL yyyy")
       // )
     } else {
       // in the first send a date if not alreay there
-      // dateValue as string right now 
+      // dateValue as string right now
       // use date fns to update the format if possible else dont update it
-      const defaultValue = (document.getElementById(id)?.getAttribute('value'))
+      const defaultValue = document.getElementById(id)?.getAttribute("value");
       // console.log("defaul date : ", defaultValue);
 
       const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
       if (defaultValue && monthYearRegex.test(defaultValue)) {
         // console.log("Valid date format");
-        setDate(new Date(defaultValue))
+        setDate(new Date(defaultValue));
       }
     }
-  }, [date])
+  }, [date]);
 
   return (
     <>
@@ -326,6 +315,5 @@ const DatePicker = ({
         </PopoverContent>
       </Popover>
     </>
-
   );
 };

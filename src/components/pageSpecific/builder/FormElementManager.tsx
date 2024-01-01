@@ -5,17 +5,17 @@ import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Awards, Basic, Education, Projects, Skills, Work } from "./customFormFields/sections/FormSection";
+import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
+import {
+  Basic,
+  // Awards,
+  // Education,
+  // Projects,
+  // Skills,
+  // Work,
+} from "./customFormFields/sections/FormSection";
 
-export default function FormManager({
-  onSubmit,
-  ...formHandelerCall
-}: UseFormReturn<Inputs, any, undefined> & {
-  onSubmit: SubmitHandler<Inputs>;
-}) {
-  const { handleSubmit } = formHandelerCall;
-
+export default function FormManager({ onSubmit }: { onSubmit: any }) {
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -66,16 +66,15 @@ export default function FormManager({
     >
       <motion.form
         ref={ref}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
-        <Basic {...formHandelerCall} />
-        <Skills {...formHandelerCall} />
-        <Work {...formHandelerCall} />
-        <Projects {...formHandelerCall} />
-        <Education {...formHandelerCall} />
-        <Awards {...formHandelerCall} />
-
+        <Basic />
+        {/* <Skills  />
+        <Work  />
+        <Projects  />
+        <Education  />
+        <Awards  /> */}
 
         <Button
           className={cn(
@@ -84,7 +83,10 @@ export default function FormManager({
             "hover:shadow-md hover:shadow-zinc-500"
           )}
         >
-          <input type="submit" className="text-primary text-xl font-bold" />
+          <input
+            type="submit"
+            className="text-primary text-xl font-bold"
+          />
         </Button>
       </motion.form>
     </div>

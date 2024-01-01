@@ -1,11 +1,14 @@
 "use client";
 import PDFviewer from "@/components/elements/PDFviewer";
 import { Inputs } from "@/types/builder";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
+import { DevTool } from "@hookform/devtools";
+
 import { searchParamType } from "@/types/utils";
 import { trpc } from "@/serverTRPC/client";
 import { Suspense, useEffect, useState } from "react";
+import RenderCompleted from "@/hooks/RenderCompleted";
 
 export default function BuilderClient({
   searchParams,
@@ -14,6 +17,7 @@ export default function BuilderClient({
   searchParams: searchParamType;
   defaultData: Inputs;
 }) {
+  const isrendered = RenderCompleted();
   // console.log(defaultData.mask);
 
   const formHandeler = useForm<Inputs>({
@@ -25,9 +29,16 @@ export default function BuilderClient({
     // make a request for the pdf image and update the pdf image
   };
 
+  if (!isrendered) {
+    return null;
+  }
+
   return (
     <Suspense>
-      <FormManager {...formHandeler} onSubmit={onSubmit} />
+      <FormProvider {...formHandeler}>
+        <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
+        <DevTool control={formHandeler.control} /> {/* set up the dev tool */}
+      </FormProvider>
       <PDFviewer />
     </Suspense>
   );

@@ -2,15 +2,12 @@ import { cn } from "@/lib/utils";
 import { Inputs, SkillsT, maskT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
-  Control,
-  FieldErrors,
   FieldPath,
   UseFieldArrayReturn,
-  UseFormRegister,
-  UseFormSetValue,
   useFieldArray,
+  useFormContext,
   useWatch,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
@@ -31,7 +28,7 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
     <motion.div
       animate={{ height: height || "auto" }}
       className="relative "
-    // className="relative overflow-hidden"
+      // className="relative overflow-hidden"
     >
       <AnimatePresence initial={false}>
         <motion.div
@@ -82,44 +79,29 @@ const ignoreCircularReferences = () => {
 
 export function SectionWrapper({
   sectionKey,
-  children,
-  fieldArraySection,
-  setValue,
-  control,
   editableTitle,
   sectionClass,
-  sectionActionBtnClass
-}:
+  sectionActionBtnClass,
+  children,
+  fieldArraySection,
+}: {
+  sectionKey: FieldPath<Inputs>;
+  sectionClass?: string;
+  sectionActionBtnClass?: string;
+  editableTitle?: boolean;
+} & (
   | {
-    sectionKey: FieldPath<Inputs>;
-    children: React.ReactNode;
-    fieldArraySection?: false;
-    setValue?: UseFormSetValue<Inputs>;
-    control?: undefined;
-    sectionClass?: string;
-    sectionActionBtnClass?: string;
-    editableTitle?: {
-      register: UseFormRegister<Inputs>;
-      control: Control<Inputs, any>;
-      errors: FieldErrors<Inputs> | any;
-    };
-  }
+      fieldArraySection?: false;
+      children: React.ReactNode;
+    }
   | {
-    sectionKey: FieldPath<Inputs>;
-    children: (
-      fields: UseFieldArrayReturn<Inputs, any, "id">
-    ) => React.ReactNode;
-    setValue: UseFormSetValue<Inputs>;
-    fieldArraySection: true;
-    control: Control<Inputs, any>;
-    sectionClass?: string;
-    sectionActionBtnClass?: string;
-    editableTitle?: {
-      register: UseFormRegister<Inputs>;
-      control: Control<Inputs, any>;
-      errors: FieldErrors<Inputs> | any;
-    };
-  }) {
+      fieldArraySection?: true;
+      children: (
+        fields: UseFieldArrayReturn<Inputs, any, "id">
+      ) => React.ReactNode;
+    }
+)) {
+  const { control } = useFormContext();
   const [visible, setVisible] = useState(true);
 
   const TitleSection = ({ children }: { children?: React.ReactNode }) => {
@@ -131,11 +113,6 @@ export function SectionWrapper({
           editableTitle ? "cursor-text" : "cursor-not-allowed",
           visible ? "" : "cursor-pointer"
         )}
-        onClick={() => {
-          if (!visible) {
-            setVisible(!visible);
-          }
-        }}
       >
         {editableTitle ? (
           <>
@@ -158,27 +135,26 @@ export function SectionWrapper({
               >
                 <WatchedValue
                   watchKey={
-                    sectionKey.split('.').length == 2 ?
-                      // sectionKey.startsWith('skills') ?
-                      `skills.mask.${sectionKey.split('.').pop() as (keyof SkillsT['mask'])}`
-                      :
-                      `mask.${sectionKey as keyof maskT}`
+                    sectionKey.split(".").length == 2
+                      ? // sectionKey.startsWith('skills') ?
+                        `skills.mask.${
+                          sectionKey.split(".").pop() as keyof SkillsT["mask"]
+                        }`
+                      : `mask.${sectionKey as keyof maskT}`
                   }
                   // watchKey={`work.${index}.network`}
-                  control={editableTitle.control}
                 />
               </div>
               <FormInput
                 fieldTitle={
-                  sectionKey.split('.').length == 2 ?
-                    // sectionKey.startsWith('skills') ?
-                    `skills.mask.${sectionKey.split('.').pop() as (keyof SkillsT['mask'])}`
-                    :
-                    `mask.${sectionKey as keyof maskT}`}
+                  sectionKey.split(".").length == 2
+                    ? // sectionKey.startsWith('skills') ?
+                      `skills.mask.${
+                        sectionKey.split(".").pop() as keyof SkillsT["mask"]
+                      }`
+                    : `mask.${sectionKey as keyof maskT}`
+                }
                 type="text"
-                register={editableTitle.register}
-                validationError={editableTitle.errors}
-                setValue={setValue as UseFormSetValue<Inputs>}
                 headerInput={{
                   InputClassValue:
                     "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
@@ -192,17 +168,16 @@ export function SectionWrapper({
         ) : (
           <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
+
         <div className={cn("fr fce gap-2", sectionActionBtnClass)}>
-          {children ? children : null}
+          {fieldArraySection ? children : null}
           <motion.button
             variants={variantsActionButton}
             initial="initial"
             animate="animate"
             whileHover="whileHover"
             className="px-2"
-            onClick={() => {
-              setVisible(!visible);
-            }}
+            onClick={() => setVisible(!visible)}
           >
             {visible ? <EyeOff /> : <Eye />}
           </motion.button>
@@ -211,35 +186,21 @@ export function SectionWrapper({
     );
   };
 
-  if (!fieldArraySection) {
-    return (
-      <MotionConfig transition={{ duration }}>
-        <motion.div className="fc glass gap-2 ">
-          <TitleSection />
-          <ResizablePanel>
-            <motion.div
-              className={cn(
-                "flex flex-wrap gap-2 justify-start",
-                visible ? "flex" : "hidden"
-              )}
-            >
-              {children}
-            </motion.div>
-          </ResizablePanel>
-        </motion.div>
-      </MotionConfig>
-    );
-  } else {
+  if (fieldArraySection) {
     const fieldArray = useFieldArray({
       name: sectionKey as any,
       control: control,
     });
-    const fieldArrayObject = fieldArray;
-    const { fields, append } = fieldArrayObject;
-    // return a callback with the fields array render children here
+    const { fields, append } = fieldArray;
+
     return (
       <MotionConfig transition={{ duration }}>
-        <motion.div className={cn("w-full fc  gap-2", sectionClass != undefined ? sectionClass : "glass")}>
+        <motion.div
+          className={cn(
+            "w-full fc  gap-2",
+            sectionClass != undefined ? sectionClass : "glass"
+          )}
+        >
           <TitleSection>
             <motion.button
               variants={variantsActionButton}
@@ -247,16 +208,15 @@ export function SectionWrapper({
               animate="animate"
               whileHover="whileHover"
               className="px-2"
-              onClick={() => {
+              onClick={() =>
                 append(
                   Object.fromEntries(
                     Object.entries({ ...fields[0] })
                       .map((arr) => [arr[0], ""])
                       .filter(([key, val]) => key !== "id")
                   )
-                );
-                setVisible(true);
-              }}
+                )
+              }
             >
               <Plus />
             </motion.button>
@@ -268,7 +228,25 @@ export function SectionWrapper({
                 visible ? "flex" : "hidden"
               )}
             >
-              {children(fieldArrayObject)}
+              {children(fieldArray as any)}
+            </motion.div>
+          </ResizablePanel>
+        </motion.div>
+      </MotionConfig>
+    );
+  } else {
+    return (
+      <MotionConfig transition={{ duration }}>
+        <motion.div className="fc glass gap-2 ">
+          <TitleSection />
+          <ResizablePanel>
+            <motion.div
+              className={cn(
+                "flex flex-wrap gap-2 justify-start",
+                visible ? "flex" : "hidden"
+              )}
+            >
+              {children as any}
             </motion.div>
           </ResizablePanel>
         </motion.div>
@@ -277,14 +255,9 @@ export function SectionWrapper({
   }
 }
 
-export function WatchedValue({
-  watchKey,
-  control,
-}: {
-  watchKey: FieldPath<Inputs>;
-  control: Control<Inputs>;
-}) {
+export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
   // watch for this element to update
+  const { control } = useFormContext();
   const value = useWatch({
     control,
     name: watchKey,
@@ -294,12 +267,11 @@ export function WatchedValue({
   return <>{value}</>;
 }
 
-
 // export type SkillsSectionT = {
 // name: string;
 // level: number;
 // function to handel this datatype with conversion to its form key all together
 
-export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">)=>{
-  return null
-}
+export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">) => {
+  return null;
+};
