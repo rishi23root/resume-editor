@@ -111,11 +111,10 @@ const TypeCheckedInput = ({
   if (["text", "email", "number", "url"].includes(type)) {
     return (
       <Input
-        key={id}
         type={type}
         {...register(fieldTitle)}
         className={className}
-        id={id}
+        // id={id}
       />
     );
   } else if (type === "summary") {
@@ -124,7 +123,6 @@ const TypeCheckedInput = ({
       <Textarea
         placeholder="Type your summary here."
         id={id}
-        key={id}
         rows={6}
         {...register(fieldTitle)}
         className={className}
@@ -147,10 +145,9 @@ const TypeCheckedInput = ({
     };
     return (
       <>
-        <input key={id} type="hidden" {...register(fieldTitle)} />
+        <input type="hidden" {...register(fieldTitle)} />
         <Checkbox
           id={id}
-          key={id}
           onChange={onChange}
           className={cn(className, " w-[1em] py-2")}
         />
@@ -231,7 +228,7 @@ const ImageUpload = ({
           }
         }}
       />
-      <input key={id} type="hidden" {...register(fieldTitle)} />
+      <input type="hidden" {...register(fieldTitle)} />
     </div>
   );
 };
@@ -276,7 +273,7 @@ const DatePicker = ({
 
   return (
     <>
-      <input type="hidden" id={id} key={id} {...register(fieldTitle)} />
+      <input type="hidden" id={id} {...register(fieldTitle)} />
       <Popover open={isOpen}>
         <PopoverTrigger asChild>
           <Button

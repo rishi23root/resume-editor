@@ -146,12 +146,12 @@ function BasicProfile() {
               <FormInput
                 id={field.id}
                 type="url"
-                fieldTitle={`basics.profiles.${index}.url` as any}
+                fieldTitle={`basics.profiles.${index}.url`}
               />
               <FormInput
                 id={field.id}
                 type="text"
-                fieldTitle={`basics.profiles.${index}.username` as any}
+                fieldTitle={`basics.profiles.${index}.username`}
               />
             </div>
           );
