@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
 import {
   Basic,
+  Education,
   // Awards,
   // Education,
   // Projects,
@@ -70,10 +71,10 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
         <Basic />
+        <Education />
         {/* <Skills  />
         <Work  />
         <Projects  />
-        <Education  />
         <Awards  /> */}
 
         <Button
@@ -83,10 +84,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
             "hover:shadow-md hover:shadow-zinc-500"
           )}
         >
-          <input
-            type="submit"
-            className="text-primary text-xl font-bold"
-          />
+          <input type="submit" className="text-primary text-xl font-bold" />
         </Button>
       </motion.form>
     </div>

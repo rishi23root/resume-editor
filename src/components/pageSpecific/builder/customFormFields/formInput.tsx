@@ -13,149 +13,148 @@ import { Inputs } from "@/types/builder";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { FieldPath, useFormContext } from "react-hook-form";
 
-export function FormInput({
-  id,
-  type,
-  fieldTitle,
-  headerInput,
-  InputClassValue,
-  LabelClassValue,
-  parentClassValue,
-}: {
-  id: string;
-  type: InputProps["type"];
-  fieldTitle: FieldPath<Inputs>;
-  headerInput?: {
-    InputClassValue: string;
-    LabelClassValue: string;
-    parentClassValue: string;
-  };
-  parentClassValue?: string;
-  LabelClassValue?: string;
-  InputClassValue?: string;
-}) {
-  // validationError;
-  const {
-    formState: { errors: validationError },
-  } = useFormContext<Inputs>();
-
+export const FormInput = React.forwardRef<
+  HTMLInputElement,
+  InputProps & {
+    headerinput?: {
+      InputClassValue: string;
+      LabelClassValue: string;
+      parentclassvalue: string;
+    };
+    parentclassvalue?: string;
+    LabelClassValue?: string;
+    InputClassValue?: string;
+  }
+>(({ ...props }, ref) => {
+  const id = useId();
   return (
     <motion.div
       className={cn(
         "w-full fc",
-        headerInput?.parentClassValue ? headerInput.parentClassValue : "",
-        parentClassValue
+        props.headerinput?.parentclassvalue
+          ? props.headerinput.parentclassvalue
+          : "",
+        props.parentclassvalue
       )}
     >
       <div
         className={cn(
-          type == "checkbox"
-            ? "fr justify-end items-center  align-baseline px-2 gap-2 flex-row-reverse h-10 capitalize "
+          props.type == "checkbox"
+            ? "fr justify-end items-center align-baseline px-2 gap-2 flex-row-reverse h-10  capitalize border border-green-400"
             : ""
         )}
       >
-        <motion.label
+        <label
           className={cn(
             "capitalize bold text-gray-200/80 cursor-pointer",
             "transition ease-in-out delay-50",
-            headerInput?.LabelClassValue ? headerInput.LabelClassValue : "",
-            LabelClassValue
+            props.headerinput?.LabelClassValue
+              ? props.headerinput.LabelClassValue
+              : "",
+            props.LabelClassValue
           )}
-          htmlFor={fieldTitle}
+          htmlFor={id}
         >
-          &nbsp;{fieldTitle.split(".").pop()}
-        </motion.label>
+          &nbsp;{props.name?.split(".").pop()}
+        </label>
         <TypeCheckedInput
           id={id}
-          fieldTitle={fieldTitle}
-          type={type}
+          ref={ref}
+          {...props}
           className={cn(
             "formInput w-full rounded-lg bg-background/30 text-slate-100",
             "focus-visible:ring-1 focus-visible:ring-slate-600 focus-visible:ring-offset-1 focus-visible:bg-background/50",
             "transition ease-in-out delay-50", //animate
-            headerInput?.InputClassValue ? headerInput.InputClassValue : "",
-            InputClassValue
+            props.headerinput?.InputClassValue
+              ? props.headerinput.InputClassValue
+              : "",
+            props.InputClassValue
           )}
         />
       </div>
-
       {/* error state */}
-      {Object(validationError)[fieldTitle] && (
-        <div className="text-red-600">
-          {Object(validationError)[fieldTitle]}
-        </div>
-      )}
+      {/* {Object(validationError)[fieldTitle] && (
+          <div className="text-red-600">
+            {Object(validationError)[fieldTitle]}
+          </div>
+        )} */}
     </motion.div>
   );
-}
+});
 
-const TypeCheckedInput = ({
-  id,
-  type,
-  fieldTitle,
-  className,
-}: {
-  id: any;
-  type: InputProps["type"] | any;
-  fieldTitle: FieldPath<Inputs>;
-  className?: string;
-}) => {
-  // all possible input types
-  // text // longtext // number // email // tel // url // date // checkbox // radio // image file
-
-  const { register } = useFormContext<Inputs>();
-
-  if (["text", "email", "number", "url"].includes(type)) {
-    return (
-      <Input
-        type={type}
-        {...register(fieldTitle)}
-        className={className}
-        // id={id}
-      />
-    );
-  } else if (type === "summary") {
-    // type = { type };
-    return (
-      <Textarea
-        placeholder="Type your summary here."
-        id={id}
-        rows={6}
-        {...register(fieldTitle)}
-        className={className}
-      />
-    );
-  } else if (type === "date") {
-    return <DatePicker id={id} fieldTitle={fieldTitle} className={className} />;
-  } else if (type === "image") {
-    // compress the image
-    // take image and convert it to base64
-    // return the base64 image as string
-    return (
-      <ImageUpload id={id} fieldTitle={fieldTitle} className={className} />
-    );
-  } else if (type === "checkbox") {
-    // check if the checkbox boolean  !! what about the label
-    const onChange = (e: FormEvent) => {
-      // setValue(fieldTitle, e.target.checked);
-      console.log(e.target);
-    };
-    return (
-      <>
-        <input type="hidden" {...register(fieldTitle)} />
-        <Checkbox
-          id={id}
-          onChange={onChange}
-          className={cn(className, " w-[1em] py-2")}
-        />
-      </>
-    );
+export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ type, ...props }, ref) => {
+    const { setValue } = useFormContext<Inputs>();
+    if (
+      type === undefined ||
+      ["text", "email", "number", "url"].includes(type)
+    ) {
+      return <Input type={type} ref={ref} {...props} />;
+    } else if (type === "summary") {
+      const onChange = (e: FormEvent) => {
+        setValue(props.name as any, (e.target as HTMLTextAreaElement).value);
+        // console.log((e.target as HTMLTextAreaElement).value);
+      };
+      const { id, ...rest } = props;
+      return (
+        <>
+          <Textarea
+            rows={6}
+            onChange={onChange}
+            className={props.className}
+            id={id}
+          />
+          <input type="hidden" ref={ref} {...rest} />
+        </>
+      );
+    } else if (type === "date") {
+      const { id, ...rest } = props;
+      return (
+        <>
+          <input type="hidden" ref={ref} {...rest} />
+          <DatePicker
+            id={id}
+            className={rest.className}
+            fieldTitle={rest.name as any}
+          />
+        </>
+      );
+    } else if (type === "image") {
+      // compress the image
+      // take image and convert it to base64
+      // return the base64 image as string
+      const { id, ...rest } = props;
+      return (
+        <>
+          <input type="hidden" ref={ref} {...rest} />
+          <ImageUpload
+            id={id}
+            className={rest.className}
+            fieldTitle={rest.name as any}
+          />
+        </>
+        // <ImageUpload id={id} fieldTitle={fieldTitle} className={className} />
+      );
+    } else if (type === "checkbox") {
+      const { id, ...rest } = props;
+      return (
+        <>
+          <input type="hidden" ref={ref} {...rest} />
+          <Checkbox
+            id={id}
+            onCheckedChange={(e) => {
+              setValue(props.name as any, e);
+            }}
+            className={cn(rest.className, " w-[1em] h-[1em]")}
+          />
+        </>
+      );
+    }
   }
-  // console.log(type);
-};
+);
 
 const ImageUpload = ({
   id,
@@ -185,7 +184,7 @@ const ImageUpload = ({
           reader.onload = (event) => {
             const base64String = event.target?.result as string;
             // Use the base64String as needed
-            console.log(base64String);
+            // console.log(base64String);
             setValue(fieldTitle, base64String);
           };
 
@@ -239,12 +238,13 @@ const DatePicker = ({
   fieldTitle,
 }: {
   id: any;
-  fieldTitle: FieldPath<Inputs>;
   className?: string;
+  fieldTitle: FieldPath<Inputs>;
 }) => {
   const [date, setDate] = useState<Date>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { register, setValue } = useFormContext<Inputs>();
+  const { setValue } = useFormContext<Inputs>();
+  const calId = useId();
 
   useEffect(() => {
     // console.log("new Date:", date)
@@ -260,7 +260,15 @@ const DatePicker = ({
       // in the first send a date if not alreay there
       // dateValue as string right now
       // use date fns to update the format if possible else dont update it
-      const defaultValue = document.getElementById(id)?.getAttribute("value");
+      // if (inputRef.current) {
+      // }
+
+      // inputRef?.current?.setAttribute("value", format(date, "LLL yyyy"));
+      // .current?.setAttribute("value", format(date, "LLL yyyy"));
+
+      const defaultValue = document
+        .getElementById(calId)
+        ?.getAttribute("value");
       // console.log("defaul date : ", defaultValue);
 
       const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
@@ -272,32 +280,30 @@ const DatePicker = ({
   }, [date]);
 
   return (
-    <>
-      <input type="hidden" id={id} {...register(fieldTitle)} />
-      <Popover open={isOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-[240px] justify-start text-left font-normal",
-              className,
-              !date && "text-muted-foreground"
-            )}
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "LLL yyyy") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-    </>
+    <Popover open={isOpen}>
+      <PopoverTrigger asChild id={id}>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[240px] justify-start text-left font-normal",
+            className,
+            !date && "text-muted-foreground"
+          )}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "LLL yyyy") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          id={calId}
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 };

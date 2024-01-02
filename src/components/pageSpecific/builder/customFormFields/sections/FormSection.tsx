@@ -4,160 +4,234 @@ import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
-import { ArrayKeysRecord, profilesT } from "@/types/builder";
 
 export function Basic() {
+  const { register } = useFormContext();
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper sectionKey="basics">
         {/* <div className="w-full text-2xl bold mb-3">Basic</div> */}
         <FormInput
-          id="basics.name"
-          fieldTitle="basics.name"
+          {...register("basics.name")}
           type="text"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.label"
-          fieldTitle="basics.label"
+          {...register("basics.label")}
           type="text"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.image"
-          fieldTitle="basics.image"
+          {...register("basics.image")}
           type="image"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.email"
-          fieldTitle="basics.email"
+          {...register("basics.email")}
           type="email"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.phone"
-          fieldTitle="basics.phone"
+          {...register("basics.phone")}
           type="number"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.url"
-          fieldTitle="basics.url"
+          {...register("basics.url")}
           type="url"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.summary"
-          fieldTitle="basics.summary"
+          {...register("basics.summary")}
           type="summary"
-          parentClassValue="w-full"
+          parentclassvalue="w-full"
         />
       </SectionWrapper>
-
       {/* location tab */}
       <SectionWrapper sectionKey="basics.location">
         <FormInput
-          id="basics.location.address"
-          fieldTitle="basics.location.address"
+          {...register("basics.location.address")}
           type="text"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.location.city"
-          fieldTitle="basics.location.city"
+          {...register("basics.location.city")}
           type="text"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
         <FormInput
-          id="basics.location.countryCode"
-          fieldTitle="basics.location.countryCode"
+          {...register("basics.location.countryCode")}
           type="text"
-          parentClassValue="w-[49%]"
+          parentclassvalue="w-[49%]"
         />
       </SectionWrapper>
 
-      <BasicProfile />
+      <SectionWrapper sectionKey="basics.profiles" fieldArraySection={true}>
+        {({ fields, remove }) =>
+          fields.map((field, index) => {
+            // field = field as typeof field & ArrayKeysRecord<profilesT>;
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "absolute bold text-xl p-1",
+                        " hidden transition ease-in-out delay-500",
+                        "group-[:not(:hover)]:block",
+                        // if group have a input element in focus then hide this
+                        "group-[:has(.formInput:focus-visible)]:hidden"
+                      )}
+                    >
+                      <WatchedValue
+                        key={field.id}
+                        watchKey={`basics.profiles.${index}.network`}
+                      />
+                    </div>
+                    <FormInput
+                      type="text"
+                      {...register(`basics.profiles.${index}.network`)}
+                      headerinput={{
+                        InputClassValue:
+                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                        LabelClassValue:
+                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        parentclassvalue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
+                </motion.div>
+
+                <FormInput
+                  type="url"
+                  {...register(`basics.profiles.${index}.url`)}
+                />
+                <FormInput
+                  type="text"
+                  {...register(`basics.profiles.${index}.username`)}
+                />
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
     </div>
   );
 }
 
-function BasicProfile() {
-  const { control, getValues, setValue, unregister } = useFormContext();
-
+export function Education() {
+  const { register } = useFormContext();
   return (
-    <SectionWrapper sectionKey="basics.profiles" fieldArraySection={true}>
-      {({ fields, remove }) =>
-        fields.map((field, index) => {
-          // field = field as typeof field & ArrayKeysRecord<profilesT>;
-          return (
-            <div
-              key={field.id}
-              className={cn(
-                "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-              )}
-            >
-              <motion.div className="fr gap-2">
-                <motion.div
-                  className={cn(
-                    "flex-1 group relative h-10",
-                    "transition ease-in-out delay-300" //animate
-                  )}
-                >
-                  <div
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="education"
+        fieldArraySection={true}
+        editableTitle={true}
+      >
+        {({ fields, remove }) =>
+          fields.map((field, index) => {
+            // field = field as typeof field & ArrayKeysRecord<profilesT>;
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="fr gap-2">
+                  <motion.div
                     className={cn(
-                      "absolute bold text-xl p-1",
-                      " hidden transition ease-in-out delay-500",
-                      "group-[:not(:hover)]:block",
-                      // if group have a input element in focus then hide this
-                      "group-[:has(.formInput:focus-visible)]:hidden"
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
                     )}
                   >
-                    <WatchedValue
-                      key={field.id}
-                      watchKey={`basics.profiles.${index}.network`}
+                    <div
+                      className={cn(
+                        "absolute bold text-xl p-1",
+                        " hidden transition ease-in-out delay-500",
+                        "group-[:not(:hover)]:block",
+                        // if group have a input element in focus then hide this
+                        "group-[:has(.formInput:focus-visible)]:hidden"
+                      )}
+                    >
+                      <WatchedValue
+                        key={field.id}
+                        watchKey={`education.${index}.institution`}
+                      />
+                    </div>
+                    <FormInput
+                      type="text"
+                      {...register(`education.${index}.institution`)}
+                      headerinput={{
+                        InputClassValue:
+                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                        LabelClassValue:
+                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        parentclassvalue: "absolute ",
+                      }}
                     />
-                  </div>
-                  <FormInput
-                    fieldTitle={`basics.profiles.${index}.network`}
-                    type="text"
-                    id={field.id}
-                    headerInput={{
-                      InputClassValue:
-                        "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-                      LabelClassValue:
-                        "hidden focus-visible:block transition ease-in-out delay-300",
-                      parentClassValue: "absolute ",
-                    }}
-                  />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
                 </motion.div>
-                <button
-                  type="button"
-                  className={cn(
-                    "hover:text-red-490 hover:opacity-100 opacity-50",
-                    fields.length > 1 ? "" : "hidden"
-                  )}
-                  onClick={() => remove(index)}
-                >
-                  <Trash2 />
-                </button>
-              </motion.div>
 
-              <FormInput
-                id={field.id}
-                type="url"
-                fieldTitle={`basics.profiles.${index}.url`}
-              />
-              <FormInput
-                id={field.id}
-                type="text"
-                fieldTitle={`basics.profiles.${index}.username`}
-              />
-            </div>
-          );
-        })
-      }
-    </SectionWrapper>
+                <FormInput type="url" {...register(`education.${index}.url`)} />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.studyType`)}
+                />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.area`)}
+                />
+                {/* <FormInput */}
+
+                <FormInput
+                  type="date"
+                  {...register(`education.${index}.startDate`)}
+                />
+                <FormInput
+                  type="date"
+                  {...register(`education.${index}.endDate`)}
+                />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.score`)}
+                />
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
   );
 }
 
@@ -235,12 +309,12 @@ function BasicProfile() {
 //                         type="text"
 //                         //
 //
-//                         headerInput={{
+//                         headerinput={{
 //                           InputClassValue:
 //                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentClassValue: "absolute",
+//                           parentclassvalue: "absolute",
 //                         }}
 //                       />
 //                     </motion.div>
@@ -261,7 +335,7 @@ function BasicProfile() {
 //                       type="number"
 //                       //
 //
-//                       parentClassValue="w-full"
+//                       parentclassvalue="w-full"
 //                     />
 //                   </div>
 //                 </div>
@@ -322,12 +396,12 @@ function BasicProfile() {
 //                         type="text"
 //                         //
 //
-//                         headerInput={{
+//                         headerinput={{
 //                           InputClassValue:
 //                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentClassValue: "absolute",
+//                           parentclassvalue: "absolute",
 //                         }}
 //                       />
 //                     </motion.div>
@@ -348,7 +422,7 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       parentClassValue="w-[49%]"
+//                       parentclassvalue="w-[49%]"
 //                     />
 //                   </div>
 //                 </div>
@@ -409,12 +483,12 @@ function BasicProfile() {
 //                         type="text"
 //                         //
 //
-//                         headerInput={{
+//                         headerinput={{
 //                           InputClassValue:
 //                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentClassValue: "absolute",
+//                           parentclassvalue: "absolute",
 //                         }}
 //                       />
 //                     </motion.div>
@@ -435,14 +509,14 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       parentClassValue="w-[49%]"
+//                       parentclassvalue="w-[49%]"
 //                     />
 //                     <FormInput
 //                       fieldTitle={`skills.databases.${index}.level`}
 //                       type="text"
 //                       //
 //
-//                       parentClassValue="w-[49%]"
+//                       parentclassvalue="w-[49%]"
 //                     />
 //                   </div>
 //                 </div>
@@ -515,12 +589,12 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       headerInput={{
+//                       headerinput={{
 //                         InputClassValue:
 //                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                         LabelClassValue:
 //                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentClassValue: "absolute ",
+//                         parentclassvalue: "absolute ",
 //                       }}
 //                     />
 //                   </motion.div>
@@ -541,14 +615,14 @@ function BasicProfile() {
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`work.${index}.url`}
 //                     type="url"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   {/* // startDate: string; // isWorkingHere: boolean; // endDate:
 //                 string; // summary: string; // years: string; */}
@@ -557,7 +631,7 @@ function BasicProfile() {
 //                     type="date"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <>
 //                     {/* make this section programmitically editable either ways */}
@@ -566,14 +640,14 @@ function BasicProfile() {
 //                       type="date"
 //                       //
 //
-//                       parentClassValue="w-[49%]"
+//                       parentclassvalue="w-[49%]"
 //                     />
 //                     <FormInput
 //                       fieldTitle={`work.${index}.isWorkingHere`}
 //                       type="checkbox"
 //                       //
 //
-//                       parentClassValue="w-[49%]"
+//                       parentclassvalue="w-[49%]"
 //                     />
 //                   </>
 //                   <FormInput
@@ -581,7 +655,7 @@ function BasicProfile() {
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`work.${index}.summary`}
@@ -657,12 +731,12 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       headerInput={{
+//                       headerinput={{
 //                         InputClassValue:
 //                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                         LabelClassValue:
 //                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentClassValue: "absolute ",
+//                         parentclassvalue: "absolute ",
 //                       }}
 //                     />
 //                   </motion.div>
@@ -683,14 +757,14 @@ function BasicProfile() {
 //                     type="url"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`projects.${index}.languages`}
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`projects.${index}.description`}
@@ -763,12 +837,12 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       headerInput={{
+//                       headerinput={{
 //                         InputClassValue:
 //                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                         LabelClassValue:
 //                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentClassValue: "absolute",
+//                         parentclassvalue: "absolute",
 //                       }}
 //                     />
 //                   </motion.div>
@@ -789,42 +863,42 @@ function BasicProfile() {
 //                     type="url"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`education.${index}.studyType`}
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`education.${index}.area`}
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`education.${index}.startDate`}
 //                     type="date"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`education.${index}.endDate`}
 //                     type="date"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`education.${index}.score`}
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                 </div>
 //               </div>
@@ -891,12 +965,12 @@ function BasicProfile() {
 //                       type="text"
 //                       //
 //
-//                       headerInput={{
+//                       headerinput={{
 //                         InputClassValue:
 //                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
 //                         LabelClassValue:
 //                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentClassValue: "absolute",
+//                         parentclassvalue: "absolute",
 //                       }}
 //                     />
 //                   </motion.div>
@@ -917,14 +991,14 @@ function BasicProfile() {
 //                     type="date"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`awards.${index}.awarder`}
 //                     type="text"
 //                     //
 //
-//                     parentClassValue="w-[49%]"
+//                     parentclassvalue="w-[49%]"
 //                   />
 //                   <FormInput
 //                     fieldTitle={`awards.${index}.summary`}

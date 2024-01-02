@@ -102,6 +102,7 @@ export function SectionWrapper({
     }
 )) {
   const [visible, setVisible] = useState(true);
+  const { register } = useFormContext<Inputs>();
 
   const TitleSection = ({
     id,
@@ -147,26 +148,24 @@ export function SectionWrapper({
                         }`
                       : `mask.${sectionKey as keyof maskT}`
                   }
-                  // watchKey={`work.${index}.network`}
                 />
               </div>
               <FormInput
-                id={id}
-                fieldTitle={
+                {...register(
                   sectionKey.split(".").length == 2
                     ? // sectionKey.startsWith('skills') ?
                       `skills.mask.${
                         sectionKey.split(".").pop() as keyof SkillsT["mask"]
                       }`
                     : `mask.${sectionKey as keyof maskT}`
-                }
+                )}
                 type="text"
-                headerInput={{
+                headerinput={{
                   InputClassValue:
                     "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
                   LabelClassValue:
                     "hidden focus-visible:block transition ease-in-out delay-300",
-                  parentClassValue: "absolute ",
+                  parentclassvalue: "absolute ",
                 }}
               />
             </motion.div>
