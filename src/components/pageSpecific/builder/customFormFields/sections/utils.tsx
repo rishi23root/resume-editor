@@ -11,7 +11,8 @@ import {
   useWatch,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
-import { FormInput } from "../formInput";
+import { FormInput, TypeCheckedInput } from "../formInput";
+import { Input, InputProps } from "@/components/ui/input";
 
 const duration = 0.25;
 
@@ -102,15 +103,24 @@ export function SectionWrapper({
     }
 )) {
   const [visible, setVisible] = useState(true);
-  const { register } = useFormContext<Inputs>();
+  const { register, watch } = useFormContext<Inputs>();
 
   const TitleSection = ({
-    id,
     children,
   }: {
     id: string;
     children?: React.ReactNode;
   }) => {
+    const focusKey =
+      sectionKey.startsWith("skills") && sectionKey.split(".").length == 2
+        ? `skills.mask.${sectionKey.split(".").pop() as keyof SkillsT["mask"]}`
+        : `mask.${sectionKey as keyof maskT}`;
+
+    const watchValue = watch(focusKey as any);
+    if (editableTitle) {
+      console.log(focusKey);
+    }
+
     return (
       <div
         className={cn(
@@ -121,55 +131,7 @@ export function SectionWrapper({
         )}
       >
         {editableTitle ? (
-          <>
-            <motion.div
-              className={cn(
-                "flex-1 group relative h-10",
-                "transition ease-in-out delay-300" //animate
-              )}
-            >
-              <div
-                className={cn(
-                  "absolute bold p-1 uppercase",
-                  "transition ease-in-out delay-300",
-                  "w-full text-2xl bold fr justify-between align-middle",
-                  " hidden transition ease-in-out delay-500",
-                  "group-[:not(:hover)]:block",
-                  // if group have a input element in focus then hide this
-                  "group-[:has(.formInput:focus-visible)]:hidden"
-                )}
-              >
-                <WatchedValue
-                  watchKey={
-                    sectionKey.split(".").length == 2
-                      ? // sectionKey.startsWith('skills') ?
-                        `skills.mask.${
-                          sectionKey.split(".").pop() as keyof SkillsT["mask"]
-                        }`
-                      : `mask.${sectionKey as keyof maskT}`
-                  }
-                />
-              </div>
-              <FormInput
-                {...register(
-                  sectionKey.split(".").length == 2
-                    ? // sectionKey.startsWith('skills') ?
-                      `skills.mask.${
-                        sectionKey.split(".").pop() as keyof SkillsT["mask"]
-                      }`
-                    : `mask.${sectionKey as keyof maskT}`
-                )}
-                type="text"
-                headerinput={{
-                  InputClassValue:
-                    "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-                  LabelClassValue:
-                    "hidden focus-visible:block transition ease-in-out delay-300",
-                  parentclassvalue: "absolute ",
-                }}
-              />
-            </motion.div>
-          </>
+          <WatchedInterchangableMask {...register(focusKey as any)} />
         ) : (
           <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
@@ -198,15 +160,6 @@ export function SectionWrapper({
       shouldUnregister: true,
     });
     const { fields, append } = fieldArray;
-    const { setValue } = useFormContext<Inputs>();
-
-    useEffect(() => {
-      console.log("fields: ", fields);
-      // setValue(sectionKey, fields as any, {
-      //   shouldValidate: true,
-      //   shouldDirty: true,
-      // });
-    }, [fields]);
 
     return (
       <MotionConfig transition={{ duration }}>
@@ -275,6 +228,47 @@ export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
   const value = watch(watchKey);
   return <>{value}</>;
 }
+
+export const WatchedInterchangableMask = React.forwardRef<
+  HTMLInputElement,
+  InputProps
+>(({ ...props }, ref) => {
+  const { getValues } = useFormContext<Inputs>();
+  return (
+    <motion.div
+      className={cn(
+        "flex-1 group relative h-10",
+        "transition ease-in-out delay-300" //animate,
+        // "border border-green-400"
+      )}
+    >
+      {/* <div
+        className={cn(
+          "absolute bold text-xl p-1",
+          " hidden transition ease-in-out delay-500",
+          "group-[:not(:hover)]:block",
+          // if group have a input element in focus then hide this
+          "group-[:has(.formInput:focus-visible)]:hidden"
+        )}
+      >
+        testing key:
+      </div> */}
+      {/* {focusKey} {watchValue} */}
+      {/* <WatchedValue watchKey={focusKey as any} /> */}
+      <FormInput
+        ref={ref}
+        {...props}
+        headerinput={{
+          InputClassValue:
+            "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+          LabelClassValue:
+            "hidden focus-visible:block transition ease-in-out delay-300",
+          parentclassvalue: "absolute z-10",
+        }}
+      />
+    </motion.div>
+  );
+});
 
 // export type SkillsSectionT = {
 // name: string;
