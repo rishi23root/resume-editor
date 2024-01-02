@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Inputs, SkillsT, maskT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
@@ -12,7 +12,9 @@ import {
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
 import { FormInput, TypeCheckedInput } from "../formInput";
-import { Input, InputProps } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
+import RenderCompleted from "@/hooks/RenderCompleted";
+import { JsonType } from "@/types/utils";
 
 const duration = 0.25;
 
@@ -80,16 +82,18 @@ const ignoreCircularReferences = () => {
 
 export function SectionWrapper({
   sectionKey,
+  children,
   editableTitle,
+  editableInputItself,
+  fieldArraySection,
   sectionClass,
   sectionActionBtnClass,
-  children,
-  fieldArraySection,
 }: {
   sectionKey: FieldPath<Inputs>;
   sectionClass?: string;
   sectionActionBtnClass?: string;
   editableTitle?: boolean;
+  editableInputItself?: React.ReactNode;
 } & (
   | {
       fieldArraySection?: false;
@@ -111,16 +115,7 @@ export function SectionWrapper({
     id: string;
     children?: React.ReactNode;
   }) => {
-    const focusKey =
-      sectionKey.startsWith("skills") && sectionKey.split(".").length == 2
-        ? `skills.mask.${sectionKey.split(".").pop() as keyof SkillsT["mask"]}`
-        : `mask.${sectionKey as keyof maskT}`;
-
-    const watchValue = watch(focusKey as any);
-    if (editableTitle) {
-      console.log(focusKey);
-    }
-
+    console.log("rendered title section");
     return (
       <div
         className={cn(
@@ -131,7 +126,40 @@ export function SectionWrapper({
         )}
       >
         {editableTitle ? (
-          <WatchedInterchangableMask {...register(focusKey as any)} />
+          <>
+            <motion.div
+              className={cn(
+                "flex-1 group relative h-10",
+                "transition ease-in-out delay-300 flex-1" //animate,
+                // "border border-green-400"
+              )}
+            >
+              {/* <div
+                className={cn(
+                  "absolute bold text-xl p-1",
+                  " hidden transition ease-in-out delay-500",
+                  "group-[:has(.formInput:focus-visible)]:hidden",
+                  "group-[:not(:hover)]:block"
+                  // if group have a input element in focus then hide this
+                )}
+              >
+                <WatchedValue watchKey={focusKey as any} />
+              </div> */}
+              {/* {watchValue} */}
+              {editableInputItself}
+              {/* <FormInput
+                type="text"
+                {...register(focusKey as any)}
+                headerinput={{
+                  InputClassValue: "",
+                  // "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                  LabelClassValue:
+                    "hidden focus-visible:block transition ease-in-out delay-300",
+                  parentclassvalue: "z-10 border border-green-400 h-10 w-full",
+                }}
+              /> */}
+            </motion.div>
+          </>
         ) : (
           <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
@@ -225,50 +253,53 @@ export function SectionWrapper({
 
 export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
   const { watch } = useFormContext<Inputs>();
-  const value = watch(watchKey);
-  return <>{value}</>;
+  const watchValue = watch(watchKey as any);
+  const id = useId();
+  // console.log("rendered", watchKey, watchValue);
+
+  // const [data, setValue] = useState("");
+
+  // useEffect(() => {
+  //   const subscription = watch((value, { name, type }) => {
+  //     // setValue()
+  //     // console.log(value, name, type);
+  //     const tes = flattenJson(value)[watchKey as any];
+  //     console.log("val",tes);
+  //     setValue(tes);
+
+  //     // console.log(value[watchKey as any]);
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
+  return <span key={id}>{watchValue}</span>;
 }
 
-export const WatchedInterchangableMask = React.forwardRef<
-  HTMLInputElement,
-  InputProps
->(({ ...props }, ref) => {
-  const { getValues } = useFormContext<Inputs>();
-  return (
-    <motion.div
-      className={cn(
-        "flex-1 group relative h-10",
-        "transition ease-in-out delay-300" //animate,
-        // "border border-green-400"
-      )}
-    >
-      {/* <div
-        className={cn(
-          "absolute bold text-xl p-1",
-          " hidden transition ease-in-out delay-500",
-          "group-[:not(:hover)]:block",
-          // if group have a input element in focus then hide this
-          "group-[:has(.formInput:focus-visible)]:hidden"
-        )}
-      >
-        testing key:
-      </div> */}
-      {/* {focusKey} {watchValue} */}
-      {/* <WatchedValue watchKey={focusKey as any} /> */}
-      <FormInput
-        ref={ref}
-        {...props}
-        headerinput={{
-          InputClassValue:
-            "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-          LabelClassValue:
-            "hidden focus-visible:block transition ease-in-out delay-300",
-          parentclassvalue: "absolute z-10",
-        }}
-      />
-    </motion.div>
-  );
-});
+function flattenJson(json: JsonType, parentKey = "") {
+  let result: JsonType = {};
+
+  for (const key in json) {
+    const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+    if (typeof json[key] === "object" && !Array.isArray(json[key])) {
+      // Recursively flatten nested objects
+      result = { ...result, ...flattenJson(json[key], newKey) };
+    } else if (Array.isArray(json[key])) {
+      // Flatten arrays by appending index to keys
+      json[key].forEach((item: JsonType, index: any) => {
+        const arrayKey = `${newKey}.${index}`;
+        if (typeof item === "object") {
+          result = { ...result, ...flattenJson(item, arrayKey) };
+        } else {
+          result[arrayKey] = item;
+        }
+      });
+    } else {
+      result[newKey] = json[key];
+    }
+  }
+
+  return result;
+}
 
 // export type SkillsSectionT = {
 // name: string;

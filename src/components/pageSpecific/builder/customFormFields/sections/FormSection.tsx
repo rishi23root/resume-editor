@@ -147,6 +147,20 @@ export function Education() {
         sectionKey="education"
         fieldArraySection={true}
         editableTitle={true}
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`mask.education`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              LabelClassValue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
       >
         {({ fields, remove }) =>
           fields.map((field, index) => {
