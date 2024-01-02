@@ -18,7 +18,6 @@ import { FieldPath, useFormContext } from "react-hook-form";
 
 export function FormInput({
   id,
-
   type,
   fieldTitle,
   headerInput,
@@ -26,7 +25,7 @@ export function FormInput({
   LabelClassValue,
   parentClassValue,
 }: {
-  id?: string;
+  id: string;
   type: InputProps["type"];
   fieldTitle: FieldPath<Inputs>;
   headerInput?: {
@@ -54,7 +53,7 @@ export function FormInput({
       <div
         className={cn(
           type == "checkbox"
-            ? "fr justify-end items-center  align-baseline px-2 gap-2 flex-row-reverse h-10 capitalize h-full "
+            ? "fr justify-end items-center  align-baseline px-2 gap-2 flex-row-reverse h-10 capitalize "
             : ""
         )}
       >
@@ -70,7 +69,7 @@ export function FormInput({
           &nbsp;{fieldTitle.split(".").pop()}
         </motion.label>
         <TypeCheckedInput
-          id={id ? id : fieldTitle}
+          id={id}
           fieldTitle={fieldTitle}
           type={type}
           className={cn(
@@ -132,25 +131,13 @@ const TypeCheckedInput = ({
       />
     );
   } else if (type === "date") {
-    return (
-      <DatePicker
-        id={id}
-        key={id}
-        fieldTitle={fieldTitle}
-        className={className}
-      />
-    );
+    return <DatePicker id={id} fieldTitle={fieldTitle} className={className} />;
   } else if (type === "image") {
     // compress the image
     // take image and convert it to base64
     // return the base64 image as string
     return (
-      <ImageUpload
-        id={id}
-        key={id}
-        fieldTitle={fieldTitle}
-        className={className}
-      />
+      <ImageUpload id={id} fieldTitle={fieldTitle} className={className} />
     );
   } else if (type === "checkbox") {
     // check if the checkbox boolean  !! what about the label
@@ -244,7 +231,7 @@ const ImageUpload = ({
           }
         }}
       />
-      <input type="hidden" {...register(fieldTitle)} />
+      <input key={id} type="hidden" {...register(fieldTitle)} />
     </div>
   );
 };
@@ -289,7 +276,7 @@ const DatePicker = ({
 
   return (
     <>
-      <input type="hidden" id={id} {...register(fieldTitle)} />
+      <input type="hidden" id={id} key={id} {...register(fieldTitle)} />
       <Popover open={isOpen}>
         <PopoverTrigger asChild>
           <Button

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Inputs, SkillsT, maskT } from "@/types/builder";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
@@ -101,10 +101,15 @@ export function SectionWrapper({
       ) => React.ReactNode;
     }
 )) {
-  const { control } = useFormContext();
   const [visible, setVisible] = useState(true);
 
-  const TitleSection = ({ children }: { children?: React.ReactNode }) => {
+  const TitleSection = ({
+    id,
+    children,
+  }: {
+    id: string;
+    children?: React.ReactNode;
+  }) => {
     return (
       <div
         className={cn(
@@ -146,6 +151,7 @@ export function SectionWrapper({
                 />
               </div>
               <FormInput
+                id={id}
                 fieldTitle={
                   sectionKey.split(".").length == 2
                     ? // sectionKey.startsWith('skills') ?
@@ -189,9 +195,19 @@ export function SectionWrapper({
   if (fieldArraySection) {
     const fieldArray = useFieldArray({
       name: sectionKey as any,
-      control: control,
+      keyName: "id",
+      shouldUnregister: true,
     });
     const { fields, append } = fieldArray;
+    const { setValue } = useFormContext<Inputs>();
+
+    useEffect(() => {
+      console.log("fields: ", fields);
+      // setValue(sectionKey, fields as any, {
+      //   shouldValidate: true,
+      //   shouldDirty: true,
+      // });
+    }, [fields]);
 
     return (
       <MotionConfig transition={{ duration }}>
@@ -201,7 +217,7 @@ export function SectionWrapper({
             sectionClass != undefined ? sectionClass : "glass"
           )}
         >
-          <TitleSection>
+          <TitleSection id={sectionKey}>
             <motion.button
               variants={variantsActionButton}
               initial="initial"
@@ -228,7 +244,7 @@ export function SectionWrapper({
                 visible ? "flex" : "hidden"
               )}
             >
-              {children(fieldArray as any)}
+              {children({ ...fieldArray } as any)}
             </motion.div>
           </ResizablePanel>
         </motion.div>
@@ -238,7 +254,7 @@ export function SectionWrapper({
     return (
       <MotionConfig transition={{ duration }}>
         <motion.div className="fc glass gap-2 ">
-          <TitleSection />
+          <TitleSection id={sectionKey} />
           <ResizablePanel>
             <motion.div
               className={cn(
@@ -256,14 +272,8 @@ export function SectionWrapper({
 }
 
 export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
-  // watch for this element to update
-  const { control } = useFormContext();
-  const value = useWatch({
-    control,
-    name: watchKey,
-    // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
-  });
-
+  const { watch } = useFormContext<Inputs>();
+  const value = watch(watchKey);
   return <>{value}</>;
 }
 
@@ -271,7 +281,6 @@ export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
 // name: string;
 // level: number;
 // function to handel this datatype with conversion to its form key all together
-
 export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">) => {
   return null;
 };

@@ -1,10 +1,10 @@
-import { ArrayKeysRecord, profilesT } from "@/types/builder";
-import { useFormContext } from "react-hook-form";
-import { FormInput } from "../formInput";
-import { SectionWrapper, WatchedValue } from "./utils";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { FormInput } from "../formInput";
+import { SectionWrapper, WatchedValue } from "./utils";
+import { ArrayKeysRecord, profilesT } from "@/types/builder";
 
 export function Basic() {
   return (
@@ -12,36 +12,43 @@ export function Basic() {
       <SectionWrapper sectionKey="basics">
         {/* <div className="w-full text-2xl bold mb-3">Basic</div> */}
         <FormInput
+          id="basics.name"
           fieldTitle="basics.name"
           type="text"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.label"
           fieldTitle="basics.label"
           type="text"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.image"
           fieldTitle="basics.image"
           type="image"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.email"
           fieldTitle="basics.email"
           type="email"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.phone"
           fieldTitle="basics.phone"
           type="number"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.url"
           fieldTitle="basics.url"
           type="url"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.summary"
           fieldTitle="basics.summary"
           type="summary"
           parentClassValue="w-full"
@@ -51,16 +58,19 @@ export function Basic() {
       {/* location tab */}
       <SectionWrapper sectionKey="basics.location">
         <FormInput
+          id="basics.location.address"
           fieldTitle="basics.location.address"
           type="text"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.location.city"
           fieldTitle="basics.location.city"
           type="text"
           parentClassValue="w-[49%]"
         />
         <FormInput
+          id="basics.location.countryCode"
           fieldTitle="basics.location.countryCode"
           type="text"
           parentClassValue="w-[49%]"
@@ -73,331 +83,16 @@ export function Basic() {
 }
 
 function BasicProfile() {
-  const { control } = useFormContext();
-  // const [visible, setVisible] = useState(true);
-
-  // const fieldArray = useFieldArray({
-  //   name: "basics.profiles",
-  //   control: control,
-  // });
-  // const { fields, append } = fieldArray;
-  // return (
-  //   <>
-  //     <SectionWrapper sectionKey="basics.profiles">
-  //       <div
-  //         className={cn(
-  //           "w-full text-2xl bold fr justify-between align-middle",
-  //           visible ? "mb-3" : "mb-0",
-  //           // editableTitle ? "cursor-text" : "cursor-not-allowed",
-  //           visible ? "" : "cursor-pointer"
-  //         )}
-  //         onClick={() => {
-  //           if (!visible) {
-  //             setVisible(!visible);
-  //           }
-  //         }}
-  //       >
-  //         <span>{"basics.profiles".split(".").pop()?.toUpperCase()}</span>
-  //         <div className={cn("fr fce gap-2")}>
-  //           <motion.button
-  //             initial="initial"
-  //             animate="animate"
-  //             whileHover="whileHover"
-  //             className="px-2"
-  //             onClick={() => {
-  //               // append({
-  //               // Object.fromEntries(
-  //               //   Object.entries({ ...fields[0] }).map((arr) => [arr[0], ""])
-  //               //   // .filter(([key, val]) => key !== "id")
-  //               // );
-  //               // append(
-  //               //   Object.fromEntries(
-  //               //     Object.entries({ ...fields[0] }).map((arr) => [arr[0], ""])
-  //               //     // .filter(([key, val]) => key !== "id")
-  //               //   )
-  //               // );
-  //               // setVisible(true);
-  //             }}
-  //           >
-  //             <Plus />
-  //           </motion.button>
-  //         </div>
-  //       </div>
-  //       {fields.map((item, index) => {
-  //         return (
-  //           <div
-  //             key={index + item.id}
-  //             className={cn(
-  //               "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-  //             )}
-  //           >
-  //             {/* <motion.div className="fr gap-2">
-  //               <motion.div
-  //                 className={cn(
-  //                   "flex-1 group relative h-10",
-  //                   "transition ease-in-out delay-300" //animate
-  //                 )}
-  //               >
-  //                 <div
-  //                   className={cn(
-  //                     "absolute bold text-xl p-1",
-  //                     " hidden transition ease-in-out delay-500",
-  //                     "group-[:not(:hover)]:block",
-  //                     // if group have a input element in focus then hide this
-  //                     "group-[:has(.formInput:focus-visible)]:hidden"
-  //                   )}
-  //                 >
-  //                   <WatchedValue
-  //                     watchKey={`basics.profiles.${index}.network`}
-  //                   />
-  //                 </div>
-  //                 <FormInput
-  //                   fieldTitle={`basics.profiles.${index}.network`}
-  //                   type="text"
-  //                   headerInput={{
-  //                     InputClassValue:
-  //                       "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-  //                     LabelClassValue:
-  //                       "hidden focus-visible:block transition ease-in-out delay-300",
-  //                     parentClassValue: "absolute ",
-  //                   }}
-  //                 />
-  //               </motion.div>
-  //               {fields.length > 1 && (
-  //                 <motion.button
-  //                   className="hover:text-red-490 hover:opacity-100 opacity-50"
-  //                   onClick={() => {
-  //                     fieldArray.remove(index);
-  //                   }}
-  //                 >
-  //                   <Trash2 />
-  //                 </motion.button>
-  //               )}
-  //             </motion.div> */}
-  //             {/* <FormInput
-  //               fieldTitle={`basics.profiles.${index}.username`}
-  //               type="text"
-  //             /> */}
-  //             {/* <FormInput
-  //               fieldTitle={`basics.profiles.${index}.url`}
-  //               type="url"
-  //             /> */}
-  //           </div>
-  //         );
-  //       })}
-  //     </SectionWrapper>
-  //     ;
-  //     {/* <SectionWrapper key={"basics.profiles"} sectionKey="basics.profiles">
-  //       <motion.div
-  //         className={cn(
-  //           "flex-1 group relative h-10",
-  //           "transition ease-in-out delay-300" //animate
-  //         )}
-  //       >
-  //         <div
-  //           className={cn(
-  //             "absolute bold p-1 uppercase",
-  //             "transition ease-in-out delay-300",
-  //             "w-full text-2xl bold fr justify-between align-middle",
-  //             " hidden transition ease-in-out delay-500",
-  //             "group-[:not(:hover)]:block",
-  //             // if group have a input element in focus then hide this
-  //             "group-[:has(.formInput:focus-visible)]:hidden"
-  //           )}
-  //         >
-  //           <WatchedValue
-  //             watchKey={
-  //               sectionKey.split(".").length == 2
-  //                 ? // sectionKey.startsWith('skills') ?
-  //                   `skills.mask.${
-  //                     sectionKey.split(".").pop() as keyof SkillsT["mask"]
-  //                   }`
-  //                 : `mask.${sectionKey as keyof maskT}`
-  //             }
-  //             // watchKey={`work.${index}.network`}
-  //           />
-  //         </div>
-  //         <FormInput
-  //           fieldTitle={
-  //             sectionKey.split(".").length == 2
-  //               ? // sectionKey.startsWith('skills') ?
-  //                 `skills.mask.${
-  //                   sectionKey.split(".").pop() as keyof SkillsT["mask"]
-  //                 }`
-  //               : `mask.${sectionKey as keyof maskT}`
-  //           }
-  //           type="text"
-  //           headerInput={{
-  //             InputClassValue:
-  //               "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-  //             LabelClassValue:
-  //               "hidden focus-visible:block transition ease-in-out delay-300",
-  //             parentClassValue: "absolute ",
-  //           }}
-  //         />
-  //       </motion.div>
-  //       <>
-  //         {fiel({ fields, remove }) => {
-  //           console.log(fields);
-  //           return fields.map((item, index) => {
-  //             // update the type of item profile typex
-  //             const eachEntry = item as typeof item &
-  //               ArrayKeysRecord<profilesT>;
-
-  //             return (
-  //               <div
-  //                 key={item.id}
-  //                 className={cn(
-  //                   "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-  //                 )}
-  //               >
-  //                 <motion.div className="fr gap-2">
-  //                   <motion.div
-  //                     className={cn(
-  //                       "flex-1 group relative h-10",
-  //                       "transition ease-in-out delay-300" //animate
-  //                     )}
-  //                   >
-  //                     <div
-  //                       className={cn(
-  //                         "absolute bold text-xl p-1",
-  //                         " hidden transition ease-in-out delay-500",
-  //                         "group-[:not(:hover)]:block",
-  //                         // if group have a input element in focus then hide this
-  //                         "group-[:has(.formInput:focus-visible)]:hidden"
-  //                       )}
-  //                     >
-  //                       <WatchedValue
-  //                         watchKey={`basics.profiles.${index}.network`}
-  //                       />
-  //                     </div>
-  //                     <FormInput
-  //                       fieldTitle={`basics.profiles.${index}.network`}
-  //                       type="text"
-  //                       headerInput={{
-  //                         InputClassValue:
-  //                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-  //                         LabelClassValue:
-  //                           "hidden focus-visible:block transition ease-in-out delay-300",
-  //                         parentClassValue: "absolute ",
-  //                       }}
-  //                     />
-  //                   </motion.div>
-  //                   {fields.length > 1 && (
-  //                     <motion.button
-  //                       className="hover:text-red-490 hover:opacity-100 opacity-50"
-  //                       onClick={() => {
-  //                         remove(index);
-  //                       }}
-  //                     >
-  //                       <Trash2 />
-  //                     </motion.button>
-  //                   )}
-  //                 </motion.div>
-  //                 <FormInput
-  //                   fieldTitle={`basics.profiles.${index}.username`}
-  //                   type="text"
-  //                 />
-  //                 <FormInput
-  //                   fieldTitle={`basics.profiles.${index}.url`}
-  //                   type="url"
-  //                 />
-  //               </div>
-  //             );
-  //           });
-  //         }}
-  //       </>
-  //     </SectionWrapper> */}
-  //     {/* <SectionWrapper
-  //       key={"basics.profiles"}
-  //       sectionKey="basics.profiles"
-  //       fieldArraySection={true}
-  //     >
-  //       {({ fields, remove }) => {
-  //         console.log(fields);
-  //         return fields.map((item, index) => {
-  //           // update the type of item profile typex
-  //           const eachEntry = item as typeof item & ArrayKeysRecord<profilesT>;
-
-  //           return (
-  //             <div
-  //               key={item.id}
-  //               className={cn(
-  //                 "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-  //               )}
-  //             >
-  //               <motion.div className="fr gap-2">
-  //                 <motion.div
-  //                   className={cn(
-  //                     "flex-1 group relative h-10",
-  //                     "transition ease-in-out delay-300" //animate
-  //                   )}
-  //                 >
-  //                   <div
-  //                     className={cn(
-  //                       "absolute bold text-xl p-1",
-  //                       " hidden transition ease-in-out delay-500",
-  //                       "group-[:not(:hover)]:block",
-  //                       // if group have a input element in focus then hide this
-  //                       "group-[:has(.formInput:focus-visible)]:hidden"
-  //                     )}
-  //                   >
-  //                     <WatchedValue
-  //                       watchKey={`basics.profiles.${index}.network`}
-  //                     />
-  //                   </div>
-  //                   <FormInput
-  //                     fieldTitle={`basics.profiles.${index}.network`}
-  //                     type="text"
-  //                     headerInput={{
-  //                       InputClassValue:
-  //                         "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-  //                       LabelClassValue:
-  //                         "hidden focus-visible:block transition ease-in-out delay-300",
-  //                       parentClassValue: "absolute ",
-  //                     }}
-  //                   />
-  //                 </motion.div>
-  //                 {fields.length > 1 && (
-  //                   <motion.button
-  //                     className="hover:text-red-490 hover:opacity-100 opacity-50"
-  //                     onClick={() => {
-  //                       remove(index);
-  //                     }}
-  //                   >
-  //                     <Trash2 />
-  //                   </motion.button>
-  //                 )}
-  //               </motion.div>
-  //               <FormInput
-  //                 fieldTitle={`basics.profiles.${index}.username`}
-  //                 type="text"
-  //               />
-  //               <FormInput
-  //                 fieldTitle={`basics.profiles.${index}.url`}
-  //                 type="url"
-  //               />
-  //             </div>
-  //           );
-  //         });
-  //       }}
-  //     </SectionWrapper> */}
-  //   </>
-  // );
-
-  // const { fields, append, remove } = useFieldArray({
-  //   name: "basics.profiles",
-  //   control,
-  // });
+  const { control, getValues, setValue, unregister } = useFormContext();
 
   return (
     <SectionWrapper sectionKey="basics.profiles" fieldArraySection={true}>
       {({ fields, remove }) =>
         fields.map((field, index) => {
-          field = field as typeof field & ArrayKeysRecord<profilesT>;
+          // field = field as typeof field & ArrayKeysRecord<profilesT>;
           return (
             <div
-              key={field.id + index}
+              key={field.id}
               className={cn(
                 "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
               )}
@@ -419,6 +114,7 @@ function BasicProfile() {
                     )}
                   >
                     <WatchedValue
+                      key={field.id}
                       watchKey={`basics.profiles.${index}.network`}
                     />
                   </div>
@@ -435,8 +131,7 @@ function BasicProfile() {
                     }}
                   />
                 </motion.div>
-                <motion.button
-                  id={index.toString()}
+                <button
                   type="button"
                   className={cn(
                     "hover:text-red-490 hover:opacity-100 opacity-50",
@@ -445,7 +140,7 @@ function BasicProfile() {
                   onClick={() => remove(index)}
                 >
                   <Trash2 />
-                </motion.button>
+                </button>
               </motion.div>
 
               <FormInput
@@ -467,6 +162,9 @@ function BasicProfile() {
 }
 
 // skills
+
+// skills section will be majorly dependent on the controller component of react-hook-form
+
 // error # update
 // error del element form any list will cause form submit have to prevent it somehow
 // core ->
