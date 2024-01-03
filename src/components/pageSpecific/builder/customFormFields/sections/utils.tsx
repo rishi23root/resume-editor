@@ -3,12 +3,12 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
   useFieldArray,
-  useFormContext
+  useFormContext,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
 
@@ -222,10 +222,12 @@ export function SectionWrapper({
   }
 }
 
-export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
+export function useWatchedValue(watchKey: FieldPath<Inputs>) {
   const { watch } = useFormContext<Inputs>();
   const watchValue = watch(watchKey as any);
-  const id = useId();
+  // useEffect(() => {
+  //   console.log("updated", watchKey, watchValue);
+  // }, [watchValue]);
   // console.log("rendered", watchKey, watchValue);
 
   // const [data, setValue] = useState("");
@@ -242,7 +244,7 @@ export function WatchedValue({ watchKey }: { watchKey: FieldPath<Inputs> }) {
   //   });
   //   return () => subscription.unsubscribe();
   // }, [watch]);
-  return <span key={id}>{watchValue}</span>;
+  return watchValue;
 }
 
 function flattenJson(json: JsonType, parentKey = "") {

@@ -14,7 +14,12 @@ import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
 import React, { FormEvent, useEffect, useId, useRef, useState } from "react";
-import { FieldPath, useFormContext } from "react-hook-form";
+import {
+  FieldErrors,
+  FieldPath,
+  IsFlatObject,
+  useFormContext,
+} from "react-hook-form";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -30,6 +35,10 @@ export const FormInput = React.forwardRef<
   }
 >(({ ...props }, ref) => {
   const id = useId();
+  const {
+    formState: { errors },
+  } = useFormContext<Inputs>();
+  const fieldName = props.name as FieldPath<Inputs>;
   return (
     <motion.div
       className={cn(
@@ -80,11 +89,11 @@ export const FormInput = React.forwardRef<
         />
       </div>
       {/* error state */}
-      {/* {Object(validationError)[fieldTitle] && (
-          <div className="text-red-600">
-            {Object(validationError)[fieldTitle]}
-          </div>
-        )} */}
+      {/* {errors[fieldName ] && (
+        <div className="text-red-600">
+          {errors[fieldName ]["message"]}
+        </div>
+      )} */}
     </motion.div>
   );
 });
@@ -176,6 +185,7 @@ const ImageUpload = ({
   const { register, setValue, getValues } = useFormContext<Inputs>();
   const fileRef = useRef<HTMLInputElement>(null);
   const [defaultImage, setDefaultImage] = useState<string | undefined>();
+  const picID = useId();
 
   useEffect(() => {
     if (fileRef.current) {
@@ -216,6 +226,7 @@ const ImageUpload = ({
   return (
     <div className="relative">
       <Input
+        id={picID}
         type={"text"}
         value={"profile.pic"}
         onClick={() => {

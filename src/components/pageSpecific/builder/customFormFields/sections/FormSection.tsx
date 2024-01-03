@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
-import { SectionWrapper, WatchedValue } from "./utils";
-import { useEffect } from "react";
+import { SectionWrapper, useWatchedValue } from "./utils";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -85,28 +84,15 @@ export function Basic() {
                       "transition ease-in-out delay-300" //animate
                     )}
                   >
-                    <div
-                      className={cn(
-                        "absolute bold text-xl p-1",
-                        " hidden transition ease-in-out delay-500",
-                        "group-[:not(:hover)]:block",
-                        // if group have a input element in focus then hide this
-                        "group-[:has(.formInput:focus-visible)]:hidden"
-                      )}
-                    >
-                      <WatchedValue
-                        key={field.id}
-                        watchKey={`basics.profiles.${index}.network`}
-                      />
-                    </div>
                     <FormInput
                       type="text"
                       {...register(`basics.profiles.${index}.network`)}
                       headerinput={{
-                        InputClassValue:
-                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-                        LabelClassValue:
-                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -153,6 +139,7 @@ export function Education() {
   // # todo
 
   // need to update the code to create conditional
+  // or can use class to make similar effect
   // work section is already generated in the new file
 
   return (
@@ -192,28 +179,15 @@ export function Education() {
                       "transition ease-in-out delay-300" //animate
                     )}
                   >
-                    <div
-                      className={cn(
-                        "absolute bold text-xl p-1",
-                        " hidden transition ease-in-out delay-500",
-                        "group-[:not(:hover)]:block",
-                        // if group have a input element in focus then hide this
-                        "group-[:has(.formInput:focus-visible)]:hidden"
-                      )}
-                    >
-                      <WatchedValue
-                        key={field.id}
-                        watchKey={`education.${index}.institution`}
-                      />
-                    </div>
                     <FormInput
                       type="text"
                       {...register(`education.${index}.institution`)}
                       headerinput={{
-                        InputClassValue:
-                          "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-                        LabelClassValue:
-                          "hidden focus-visible:block transition ease-in-out delay-300",
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -256,7 +230,12 @@ export function Education() {
                   {...register(`education.${index}.startDate`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
+                  parentclassvalue={cn(
+                    "w-[49%] "
+                    // useWatchedValue(
+                    //   `education.${index}.isStudyingHere` as any
+                    // ) && "hidden"   // it is just not working for this code here
+                  )}
                   type="date"
                   {...register(`education.${index}.endDate`)}
                 />
