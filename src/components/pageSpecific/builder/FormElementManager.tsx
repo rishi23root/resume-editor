@@ -2,18 +2,11 @@
 // "yes, it is inportant to have this file !"
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Inputs } from "@/types/builder";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
-import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
 import {
   Basic,
-  Education,
-  // Awards,
-  // Education,
-  // Projects,
-  // Skills,
-  // Work,
+  Education
 } from "./customFormFields/sections/FormSection";
 
 export default function FormManager({ onSubmit }: { onSubmit: any }) {
@@ -72,8 +65,8 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
       >
         <Basic />
         <Education />
+        {/* <Work /> */}
         {/* <Skills  />
-        <Work  />
         <Projects  />
         <Awards  /> */}
 

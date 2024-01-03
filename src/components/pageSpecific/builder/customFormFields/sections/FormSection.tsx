@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper, WatchedValue } from "./utils";
+import { useEffect } from "react";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -140,7 +141,11 @@ export function Basic() {
 }
 
 export function Education() {
-  const { register } = useFormContext();
+  const { register, getValues, watch } = useFormContext();
+  useEffect(() => {
+    const data = getValues(`education.${1}.isStudyingHere`);
+    console.log(data);
+  }, [getValues]);
   return (
     <div className="w-full fc gap-2">
       <SectionWrapper
@@ -153,7 +158,7 @@ export function Education() {
             {...register(`mask.education`)}
             headerinput={{
               InputClassValue: cn(
-                "group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+                "group-[:hover]:block focus-visible:block transition p-0 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
               LabelClassValue: "hidden",
@@ -165,14 +170,15 @@ export function Education() {
         {({ fields, remove }) =>
           fields.map((field, index) => {
             // field = field as typeof field & ArrayKeysRecord<profilesT>;
+            // const watchedVal = watch(`education.${index}.isStudyingHere`);
             return (
               <div
                 key={field.id}
                 className={cn(
-                  "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-full fr flex-wrap gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
-                <motion.div className="fr gap-2">
+                <motion.div className="w-full fr gap-2">
                   <motion.div
                     className={cn(
                       "flex-1 group relative h-10",
@@ -217,26 +223,39 @@ export function Education() {
                   </button>
                 </motion.div>
 
-                <FormInput type="url" {...register(`education.${index}.url`)} />
                 <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="url"
+                  {...register(`education.${index}.url`)}
+                />
+                <FormInput
+                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.studyType`)}
                 />
                 <FormInput
+                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.area`)}
                 />
-                {/* <FormInput */}
-
                 <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="checkbox"
+                  {...register(`education.${index}.isStudyingHere`)}
+                />
+                <FormInput
+                  parentclassvalue="w-[49%]"
                   type="date"
                   {...register(`education.${index}.startDate`)}
                 />
                 <FormInput
+                  parentclassvalue="w-[49%]"
                   type="date"
                   {...register(`education.${index}.endDate`)}
+                  // disabled={watchedVal}
                 />
                 <FormInput
+                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.score`)}
                 />

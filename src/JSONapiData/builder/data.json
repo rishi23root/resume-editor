@@ -1,12 +1,12 @@
 {
   "basics": {
-    "name": "",
+    "name": "rishi",
     "label": "",
     "image": "",
     "email": "",
     "phone": "",
     "url": "",
-    "summary": "",
+    "summary": "tesing if this works",
     "location": {
       "address": "",
       "postalCode": "",
@@ -18,6 +18,11 @@
       {
         "network": "linkedin",
         "username": "",
+        "url": ""
+      },
+      {
+        "network": "github",
+        "username": "rishi23root",
         "url": ""
       }
     ]
@@ -183,7 +188,7 @@
       "studyType": "B.Tech",
       "area": "Computer Science",
       "startDate": "2010",
-      "isStudyingHere": false,
+      "isStudyingHere": true,
       "endDate": "2014",
       "score": "8.3 CGPA"
     }

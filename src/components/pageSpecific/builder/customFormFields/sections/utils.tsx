@@ -1,20 +1,16 @@
 import { cn } from "@/lib/utils";
-import { Inputs, SkillsT, maskT } from "@/types/builder";
+import { Inputs } from "@/types/builder";
+import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useEffect, useId, useState } from "react";
+import React, { useId, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
   useFieldArray,
-  useFormContext,
-  useWatch,
+  useFormContext
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
-import { FormInput, TypeCheckedInput } from "../formInput";
-import { Input } from "@/components/ui/input";
-import RenderCompleted from "@/hooks/RenderCompleted";
-import { JsonType } from "@/types/utils";
 
 const duration = 0.25;
 
@@ -107,7 +103,6 @@ export function SectionWrapper({
     }
 )) {
   const [visible, setVisible] = useState(true);
-  const { register, watch } = useFormContext<Inputs>();
 
   const TitleSection = ({
     children,
@@ -115,7 +110,6 @@ export function SectionWrapper({
     id: string;
     children?: React.ReactNode;
   }) => {
-    console.log("rendered title section");
     return (
       <div
         className={cn(
@@ -134,30 +128,7 @@ export function SectionWrapper({
                 // "border border-green-400"
               )}
             >
-              {/* <div
-                className={cn(
-                  "absolute bold text-xl p-1",
-                  " hidden transition ease-in-out delay-500",
-                  "group-[:has(.formInput:focus-visible)]:hidden",
-                  "group-[:not(:hover)]:block"
-                  // if group have a input element in focus then hide this
-                )}
-              >
-                <WatchedValue watchKey={focusKey as any} />
-              </div> */}
-              {/* {watchValue} */}
               {editableInputItself}
-              {/* <FormInput
-                type="text"
-                {...register(focusKey as any)}
-                headerinput={{
-                  InputClassValue: "",
-                  // "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-                  LabelClassValue:
-                    "hidden focus-visible:block transition ease-in-out delay-300",
-                  parentclassvalue: "z-10 border border-green-400 h-10 w-full",
-                }}
-              /> */}
             </motion.div>
           </>
         ) : (

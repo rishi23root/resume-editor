@@ -43,8 +43,11 @@ export const FormInput = React.forwardRef<
       <div
         className={cn(
           props.type == "checkbox"
-            ? "fr justify-end items-center align-baseline px-2 gap-2 flex-row-reverse h-10  capitalize border border-green-400"
-            : ""
+            ? "fr justify-end items-center align-baseline px-2 gap-2 flex-row-reverse  h-10 mt-auto capitalize"
+            : "",
+          props.type == "checkbox" &&
+            props.disabled &&
+            "opacity-50 cursor-not-allowed"
         )}
       >
         <label
@@ -54,7 +57,8 @@ export const FormInput = React.forwardRef<
             props.headerinput?.LabelClassValue
               ? props.headerinput.LabelClassValue
               : "",
-            props.LabelClassValue
+            props.LabelClassValue,
+            props.type == "checkbox" && props.disabled && "cursor-not-allowed"
           )}
           htmlFor={id}
         >
@@ -87,7 +91,7 @@ export const FormInput = React.forwardRef<
 
 export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ type, ...props }, ref) => {
-    const { setValue } = useFormContext<Inputs>();
+    const { setValue, getValues } = useFormContext<Inputs>();
     if (
       type === undefined ||
       ["text", "email", "number", "url"].includes(type)
@@ -106,6 +110,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
             onChange={onChange}
             className={props.className}
             id={id}
+            disabled={props.disabled}
           />
           <input type="hidden" ref={ref} {...rest} />
         </>
@@ -119,13 +124,11 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
             id={id}
             className={rest.className}
             fieldTitle={rest.name as any}
+            disabled={props.disabled}
           />
         </>
       );
     } else if (type === "image") {
-      // compress the image
-      // take image and convert it to base64
-      // return the base64 image as string
       const { id, ...rest } = props;
       return (
         <>
@@ -134,21 +137,24 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
             id={id}
             className={rest.className}
             fieldTitle={rest.name as any}
+            disabled={props.disabled}
           />
         </>
-        // <ImageUpload id={id} fieldTitle={fieldTitle} className={className} />
       );
     } else if (type === "checkbox") {
       const { id, ...rest } = props;
+      const value = getValues(rest.name as any);
       return (
         <>
           <input type="hidden" ref={ref} {...rest} />
           <Checkbox
             id={id}
+            defaultChecked={value as boolean}
             onCheckedChange={(e) => {
               setValue(props.name as any, e);
             }}
             className={cn(rest.className, " w-[1em] h-[1em]")}
+            disabled={props.disabled}
           />
         </>
       );
@@ -160,15 +166,16 @@ const ImageUpload = ({
   id,
   className,
   fieldTitle,
+  disabled,
 }: {
   id: any;
   fieldTitle: FieldPath<Inputs>;
   className?: string;
+  disabled?: boolean;
 }) => {
-  const { register, setValue } = useFormContext<Inputs>();
+  const { register, setValue, getValues } = useFormContext<Inputs>();
   const fileRef = useRef<HTMLInputElement>(null);
-  // watch this element for any updates
-  // setValue(fieldTitle, "image");
+  const [defaultImage, setDefaultImage] = useState<string | undefined>();
 
   useEffect(() => {
     if (fileRef.current) {
@@ -192,6 +199,12 @@ const ImageUpload = ({
         }
       });
     }
+
+    const value = getValues(fieldTitle as any);
+    if (value) {
+      setDefaultImage(value);
+    }
+
     return () => {
       // cleanup
       if (fileRef.current) {
@@ -201,14 +214,29 @@ const ImageUpload = ({
   });
 
   return (
-    <div>
+    <div className="relative">
+      <Input
+        type={"text"}
+        value={"profile.pic"}
+        onClick={() => {
+          setValue(fieldTitle, "");
+          setDefaultImage(undefined);
+        }}
+        onChange={(e) => {
+          setValue(fieldTitle, "");
+          setDefaultImage(undefined);
+        }}
+        className={cn("absolute", className, !defaultImage && "hidden")}
+      />
       <input
         ref={fileRef}
         type="file"
         id={id}
         className={cn(
           "flex h-10 w-full rounded-md border file:mr-2 border-input bg-background px-2 py-2 text-sm ring-offset-background file:border-0 file:bg-gray-300 file:text-sm file:font-medium file:rounded-md  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-1  disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          "absolute",
+          className,
+          defaultImage && "hidden"
         )}
         onChange={(e) => {
           // read file and convert it to base64
@@ -226,6 +254,7 @@ const ImageUpload = ({
             };
           }
         }}
+        disabled={disabled}
       />
       <input type="hidden" {...register(fieldTitle)} />
     </div>
@@ -236,14 +265,16 @@ const DatePicker = ({
   id,
   className,
   fieldTitle,
+  disabled,
 }: {
   id: any;
   className?: string;
   fieldTitle: FieldPath<Inputs>;
+  disabled?: boolean;
 }) => {
   const [date, setDate] = useState<Date>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { setValue } = useFormContext<Inputs>();
+  const { setValue, getValues } = useFormContext<Inputs>();
   const calId = useId();
 
   useEffect(() => {
@@ -266,11 +297,11 @@ const DatePicker = ({
       // inputRef?.current?.setAttribute("value", format(date, "LLL yyyy"));
       // .current?.setAttribute("value", format(date, "LLL yyyy"));
 
-      const defaultValue = document
-        .getElementById(calId)
-        ?.getAttribute("value");
-      // console.log("defaul date : ", defaultValue);
-
+      let defaultValue = getValues(fieldTitle as any);
+      if (!defaultValue) {
+        defaultValue = document.getElementById(calId)?.getAttribute("value");
+      }
+      // console.log("defaultValue:", defaultValue);
       const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
       if (defaultValue && monthYearRegex.test(defaultValue)) {
         // console.log("Valid date format");
@@ -281,7 +312,7 @@ const DatePicker = ({
 
   return (
     <Popover open={isOpen}>
-      <PopoverTrigger asChild id={id}>
+      <PopoverTrigger asChild id={id} disabled={disabled}>
         <Button
           variant={"outline"}
           className={cn(
