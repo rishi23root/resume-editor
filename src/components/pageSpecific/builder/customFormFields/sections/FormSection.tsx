@@ -89,7 +89,7 @@ export function Basic() {
                       {...register(`basics.profiles.${index}.network`)}
                       headerinput={{
                         InputClassValue: cn(
-                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
                         LabelClassValue: "hidden",
@@ -126,17 +126,108 @@ export function Basic() {
   );
 }
 
-//  type WorkT = {
-//   id: string;
-//   name: string;
-//   position: string;
-//   url: string;
-//   startDate: string;
-//   isWorkingHere: boolean;
-//   endDate: string;
-//   summary: string;
-//   years: string;
-// };
+export function Education() {
+  const { register, watch } = useFormContext();
+
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="education"
+        fieldArraySection={true}
+        editableTitle={true}
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`mask.education`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              LabelClassValue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        {({ fields, remove }) =>
+          fields.map((field, index) => {
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="w-full fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <FormInput
+                      type="text"
+                      {...register(`education.${index}.institution`)}
+                      headerinput={{
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                          "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
+                        parentclassvalue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
+                </motion.div>
+
+                <FormInput type="url" {...register(`education.${index}.url`)} />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.studyType`)}
+                />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.area`)}
+                />
+                <FormInput
+                  type="checkbox"
+                  {...register(`education.${index}.isStudyingHere`)}
+                />
+                <FormInput
+                  type="date"
+                  {...register(`education.${index}.startDate`)}
+                />
+                <FormInput
+                  type="date"
+                  {...register(`education.${index}.endDate`, {
+                    disabled:
+                      watch(`education.${index}.isStudyingHere` as any) ===
+                      true,
+                  })}
+                />
+                <FormInput
+                  type="text"
+                  {...register(`education.${index}.score`)}
+                />
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}
 
 export function Work() {
   const { register, watch } = useFormContext();
@@ -152,7 +243,7 @@ export function Work() {
             {...register(`mask.work`)}
             headerinput={{
               InputClassValue: cn(
-                "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
               LabelClassValue: "hidden",
@@ -182,7 +273,7 @@ export function Work() {
                       {...register(`basics.profiles.${index}.network`)}
                       headerinput={{
                         InputClassValue: cn(
-                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
                         LabelClassValue: "hidden",
@@ -240,22 +331,21 @@ export function Work() {
   );
 }
 
-export function Education() {
-  const { register, watch } = useFormContext();
-
+export function Projects() {
+  const { register } = useFormContext();
   return (
-    <div className="w-full fc gap-2">
+    <div className="w-full fc  gap-2">
       <SectionWrapper
-        sectionKey="education"
+        sectionKey="projects"
         fieldArraySection={true}
         editableTitle={true}
         editableInputItself={
           <FormInput
             type="text"
-            {...register(`mask.education`)}
+            {...register(`mask.projects`)}
             headerinput={{
               InputClassValue: cn(
-                "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
               LabelClassValue: "hidden",
@@ -282,10 +372,10 @@ export function Education() {
                   >
                     <FormInput
                       type="text"
-                      {...register(`education.${index}.institution`)}
+                      {...register(`projects.${index}.name`)}
                       headerinput={{
                         InputClassValue: cn(
-                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
                         LabelClassValue: "hidden",
@@ -304,36 +394,97 @@ export function Education() {
                     <Trash2 />
                   </button>
                 </motion.div>
+                <FormInput type="url" {...register(`projects.${index}.url`)} />
+                <FormInput
+                  type="text"
+                  {...register(`projects.${index}.languages`)}
+                />
+                <FormInput
+                  type="summary"
+                  {...register(`projects.${index}.description`)}
+                />
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}
 
-                <FormInput type="url" {...register(`education.${index}.url`)} />
+export function Awards() {
+  const { register } = useFormContext();
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="awards"
+        fieldArraySection={true}
+        editableTitle={true}
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`mask.awards`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              LabelClassValue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        {({ fields, remove }) =>
+          fields.map((field, index) => {
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="w-full fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <FormInput
+                      type="text"
+                      {...register(`awards.${index}.title`)}
+                      headerinput={{
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                          "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
+                        parentclassvalue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
+                </motion.div>
+                <FormInput type="date" {...register(`awards.${index}.date`)} />
                 <FormInput
                   type="text"
-                  {...register(`education.${index}.studyType`)}
+                  {...register(`awards.${index}.awarder`)}
                 />
                 <FormInput
-                  type="text"
-                  {...register(`education.${index}.area`)}
+                  type="summary"
+                  {...register(`awards.${index}.summary`)}
                 />
-                <FormInput
-                  type="checkbox"
-                  {...register(`education.${index}.isStudyingHere`)}
-                />
-                <FormInput
-                  type="date"
-                  {...register(`education.${index}.startDate`)}
-                />
-                <FormInput
-                  type="date"
-                  {...register(`education.${index}.endDate`, {
-                    disabled:
-                      watch(`education.${index}.isStudyingHere` as any) ===
-                      true,
-                  })}
-                />
-                <FormInput
-                  type="text"
-                  {...register(`education.${index}.score`)}
-                />
+                <FormInput type="url" {...register(`awards.${index}.url`)} />
               </div>
             );
           })
@@ -419,7 +570,7 @@ export function Education() {
 //
 //                         headerinput={{
 //                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
 //                           parentclassvalue: "absolute",
@@ -506,7 +657,7 @@ export function Education() {
 //
 //                         headerinput={{
 //                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
 //                           parentclassvalue: "absolute",
@@ -592,7 +743,7 @@ export function Education() {
 //
 //                         headerinput={{
 //                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
+//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
 //                           LabelClassValue:
 //                             "hidden focus-visible:block transition ease-in-out delay-300",
 //                           parentclassvalue: "absolute",
@@ -631,497 +782,6 @@ export function Education() {
 //         </SectionWrapper>
 
 //         <Separator className="my-4" />
-//       </SectionWrapper>
-//     </div>
-//   );
-// }
-
-// export function Work({
-//   register,
-//   control,
-//   formState: { errors },
-//   setValue,
-// }: UseFormReturn<Inputs, any, undefined>) {
-//   // watch for change values in the form here and disable it accoringly
-//   return (
-//     <div className="w-full fc  gap-2">
-//       <SectionWrapper
-//
-//         sectionKey="work"
-//         fieldArraySection={true}
-//         control={control}
-//         editableTitle={{
-//           control: control,
-//           register: register,
-//           errors: errors,
-//         }}
-//       >
-//         {({ fields, remove }) =>
-//           fields.map((item, index) => {
-//             // update the type of item profile typex
-//             const eachEntry = item as typeof item & ArrayKeysRecord<WorkT>;
-//             return (
-//               <div
-//                 className={cn(
-//                   "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                 )}
-//                 key={eachEntry.id}
-//               >
-//                 <motion.div className="fr gap-2">
-//                   <motion.div
-//                     className={cn(
-//                       "flex-1 group relative h-10",
-//                       "transition ease-in-out delay-300" //animate
-//                     )}
-//                   >
-//                     <div
-//                       className={cn(
-//                         "absolute bold text-xl p-1",
-//                         " hidden transition ease-in-out delay-500",
-//                         "group-[:not(:hover)]:block",
-//                         // if group have a input element in focus then hide this
-//                         "group-[:has(.formInput:focus-visible)]:hidden"
-//                       )}
-//                     >
-//                       <WatchedValue
-//                         watchKey={`work.${index}.name`}
-//                         // watchKey={`work.${index}.network`}
-//                         control={control}
-//                       />
-//                     </div>
-//                     <FormInput
-//                       fieldTitle={`work.${index}.name`}
-//                       type="text"
-//                       //
-//
-//                       headerinput={{
-//                         InputClassValue:
-//                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-//                         LabelClassValue:
-//                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentclassvalue: "absolute ",
-//                       }}
-//                     />
-//                   </motion.div>
-//                   {fields.length > 1 && (
-//                     <motion.button
-//                       className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                       onClick={() => {
-//                         remove(index);
-//                       }}
-//                     >
-//                       <Trash2 />
-//                     </motion.button>
-//                   )}
-//                 </motion.div>
-//                 <div className="fr flex-wrap gap-2">
-//                   <FormInput
-//                     fieldTitle={`work.${index}.position`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`work.${index}.url`}
-//                     type="url"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   {/* // startDate: string; // isWorkingHere: boolean; // endDate:
-//                 string; // summary: string; // years: string; */}
-//                   <FormInput
-//                     fieldTitle={`work.${index}.startDate`}
-//                     type="date"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <>
-//                     {/* make this section programmitically editable either ways */}
-//                     <FormInput
-//                       fieldTitle={`work.${index}.endDate`}
-//                       type="date"
-//                       //
-//
-//                       parentclassvalue="w-[49%]"
-//                     />
-//                     <FormInput
-//                       fieldTitle={`work.${index}.isWorkingHere`}
-//                       type="checkbox"
-//                       //
-//
-//                       parentclassvalue="w-[49%]"
-//                     />
-//                   </>
-//                   <FormInput
-//                     fieldTitle={`work.${index}.years`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`work.${index}.summary`}
-//                     type="summary"
-//                     //
-//
-//                   />
-//                 </div>
-//               </div>
-//             );
-//           })
-//         }
-//       </SectionWrapper>
-//     </div>
-//   );
-// }
-
-// export function Projects({
-//   register,
-//   control,
-//   formState: { errors },
-//   setValue,
-// }: UseFormReturn<Inputs, any, undefined>) {
-//   // watch for change values in the form here and disable it accoringly
-//   return (
-//     <div className="w-full fc  gap-2">
-//       <SectionWrapper
-//
-//         sectionKey="projects"
-//         fieldArraySection={true}
-//         control={control}
-//         editableTitle={{
-//           control: control,
-//           register: register,
-//           errors: errors,
-//         }}
-//       >
-//         {({ fields, remove }) =>
-//           fields.map((item, index) => {
-//             // update the type of item profile typex
-//             const eachEntry = item as typeof item & ArrayKeysRecord<ProjectsT>;
-//             return (
-//               <div
-//                 className={cn(
-//                   "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                 )}
-//                 key={eachEntry.id}
-//               >
-//                 <motion.div className="fr gap-2">
-//                   <motion.div
-//                     className={cn(
-//                       "flex-1 group relative h-10",
-//                       "transition ease-in-out delay-300" //animate
-//                     )}
-//                   >
-//                     <div
-//                       className={cn(
-//                         "absolute bold text-xl p-1",
-//                         " hidden transition ease-in-out delay-500",
-//                         "group-[:not(:hover)]:block",
-//                         // if group have a input element in focus then hide this
-//                         "group-[:has(.formInput:focus-visible)]:hidden"
-//                       )}
-//                     >
-//                       <WatchedValue
-//                         watchKey={`projects.${index}.name`}
-//                         // watchKey={`work.${index}.network`}
-//                         control={control}
-//                       />
-//                     </div>
-//                     <FormInput
-//                       fieldTitle={`projects.${index}.name`}
-//                       type="text"
-//                       //
-//
-//                       headerinput={{
-//                         InputClassValue:
-//                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-//                         LabelClassValue:
-//                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentclassvalue: "absolute ",
-//                       }}
-//                     />
-//                   </motion.div>
-//                   {fields.length > 1 && (
-//                     <motion.button
-//                       className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                       onClick={() => {
-//                         remove(index);
-//                       }}
-//                     >
-//                       <Trash2 />
-//                     </motion.button>
-//                   )}
-//                 </motion.div>
-//                 <div className="fr flex-wrap gap-2">
-//                   <FormInput
-//                     fieldTitle={`projects.${index}.url`}
-//                     type="url"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`projects.${index}.languages`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`projects.${index}.description`}
-//                     type="summary"
-//                     //
-//
-//                   />
-//                 </div>
-//               </div>
-//             );
-//           })
-//         }
-//       </SectionWrapper>
-//     </div>
-//   );
-// }
-
-// export function Education({
-//   register,
-//   control,
-//   formState: { errors },
-//   setValue,
-// }: UseFormReturn<Inputs, any, undefined>) {
-//   return (
-//     <div className="w-full fc gap-2">
-//       <SectionWrapper
-//
-//         sectionKey="education"
-//         fieldArraySection={true}
-//         control={control}
-//         editableTitle={{
-//           control: control,
-//           register: register,
-//           errors: errors,
-//         }}
-//       >
-//         {({ fields, remove }) =>
-//           fields.map((item, index) => {
-//             const eachEntry = item as typeof item & ArrayKeysRecord<EducationT>;
-
-//             return (
-//               <div
-//                 className={cn(
-//                   "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                 )}
-//                 key={eachEntry.id}
-//               >
-//                 <motion.div className="fr gap-2">
-//                   <motion.div
-//                     className={cn(
-//                       "flex-1 group relative h-10",
-//                       "transition ease-in-out delay-300"
-//                     )}
-//                   >
-//                     <div
-//                       className={cn(
-//                         "absolute bold text-xl p-1",
-//                         "hidden transition ease-in-out delay-500",
-//                         "group-[:not(:hover)]:block",
-//                         "group-[:has(.formInput:focus-visible)]:hidden"
-//                       )}
-//                     >
-//                       <WatchedValue
-//                         watchKey={`education.${index}.institution`}
-//                         control={control}
-//                       />
-//                     </div>
-//                     <FormInput
-//                       fieldTitle={`education.${index}.institution`}
-//                       type="text"
-//                       //
-//
-//                       headerinput={{
-//                         InputClassValue:
-//                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-//                         LabelClassValue:
-//                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentclassvalue: "absolute",
-//                       }}
-//                     />
-//                   </motion.div>
-//                   {fields.length > 1 && (
-//                     <motion.button
-//                       className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                       onClick={() => {
-//                         remove(index);
-//                       }}
-//                     >
-//                       <Trash2 />
-//                     </motion.button>
-//                   )}
-//                 </motion.div>
-//                 <div className="fr flex-wrap gap-2">
-//                   <FormInput
-//                     fieldTitle={`education.${index}.url`}
-//                     type="url"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`education.${index}.studyType`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`education.${index}.area`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`education.${index}.startDate`}
-//                     type="date"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`education.${index}.endDate`}
-//                     type="date"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`education.${index}.score`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                 </div>
-//               </div>
-//             );
-//           })
-//         }
-//       </SectionWrapper>
-//     </div>
-//   );
-// }
-
-// export function Awards({
-//   register,
-//   control,
-//   formState: { errors },
-//   setValue,
-// }: UseFormReturn<Inputs, any, undefined>) {
-//   return (
-//     <div className="w-full fc gap-2">
-//       <SectionWrapper
-//
-//         sectionKey="awards"
-//         fieldArraySection={true}
-//         control={control}
-//         editableTitle={{
-//           control: control,
-//           register: register,
-//           errors: errors,
-//         }}
-//       >
-//         {({ fields, remove }) =>
-//           fields.map((item, index) => {
-//             const eachEntry = item as typeof item & ArrayKeysRecord<awardsT>;
-
-//             return (
-//               <div
-//                 className={cn(
-//                   "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                 )}
-//                 key={eachEntry.id}
-//               >
-//                 <motion.div className="fr gap-2">
-//                   <motion.div
-//                     className={cn(
-//                       "flex-1 group relative h-10",
-//                       "transition ease-in-out delay-300"
-//                     )}
-//                   >
-//                     <div
-//                       className={cn(
-//                         "absolute bold text-xl p-1",
-//                         "hidden transition ease-in-out delay-500",
-//                         "group-[:not(:hover)]:block",
-//                         "group-[:has(.formInput:focus-visible)]:hidden"
-//                       )}
-//                     >
-//                       <WatchedValue
-//                         watchKey={`awards.${index}.title`}
-//                         control={control}
-//                       />
-//                     </div>
-//                     <FormInput
-//                       fieldTitle={`awards.${index}.title`}
-//                       type="text"
-//                       //
-//
-//                       headerinput={{
-//                         InputClassValue:
-//                           "hidden group-[:hover]:block focus-visible:block transition p-0 px-1 text-lg",
-//                         LabelClassValue:
-//                           "hidden focus-visible:block transition ease-in-out delay-300",
-//                         parentclassvalue: "absolute",
-//                       }}
-//                     />
-//                   </motion.div>
-//                   {fields.length > 1 && (
-//                     <motion.button
-//                       className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                       onClick={() => {
-//                         remove(index);
-//                       }}
-//                     >
-//                       <Trash2 />
-//                     </motion.button>
-//                   )}
-//                 </motion.div>
-//                 <div className="fr flex-wrap gap-2">
-//                   <FormInput
-//                     fieldTitle={`awards.${index}.date`}
-//                     type="date"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`awards.${index}.awarder`}
-//                     type="text"
-//                     //
-//
-//                     parentclassvalue="w-[49%]"
-//                   />
-//                   <FormInput
-//                     fieldTitle={`awards.${index}.summary`}
-//                     type="summary"
-//                     //
-//
-//                   />
-//                   <FormInput
-//                     fieldTitle={`awards.${index}.url`}
-//                     type="url"
-//                     //
-//
-//                   />
-//                 </div>
-//               </div>
-//             );
-//           })
-//         }
 //       </SectionWrapper>
 //     </div>
 //   );

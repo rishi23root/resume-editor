@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useRef } from "react";
-import { Basic, Education, Work } from "./customFormFields/sections/FormSection";
+import {
+  Awards,
+  Basic,
+  Education,
+  Projects,
+  Work,
+} from "./customFormFields/sections/FormSection";
 
 export default function FormManager({ onSubmit }: { onSubmit: any }) {
   const ref = useRef<HTMLFormElement>(null);
@@ -63,9 +69,10 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         <Basic />
         <Education />
         <Work />
+        <Projects />
+        <Awards />
         {/* <Skills  />
-        <Projects  />
-        <Awards  /> */}
+         */}
 
         <Button
           className={cn(
