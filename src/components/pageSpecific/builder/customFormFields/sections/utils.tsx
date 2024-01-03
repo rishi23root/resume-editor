@@ -120,17 +120,9 @@ export function SectionWrapper({
         )}
       >
         {editableTitle ? (
-          <>
-            <motion.div
-              className={cn(
-                "flex-1 group relative h-10",
-                "transition ease-in-out delay-300 flex-1" //animate,
-                // "border border-green-400"
-              )}
-            >
-              {editableInputItself}
-            </motion.div>
-          </>
+          <div className="flex-1 group relative h-10">
+            {editableInputItself}
+          </div>
         ) : (
           <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
@@ -159,6 +151,12 @@ export function SectionWrapper({
       shouldUnregister: false,
     });
     const { fields, append } = fieldArray;
+
+    // const isRendered = RenderCompleted();
+
+    // if (!isRendered) {
+    //   return null;
+    // }
 
     return (
       <MotionConfig transition={{ duration }}>

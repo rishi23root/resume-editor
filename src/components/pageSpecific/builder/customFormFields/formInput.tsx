@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,10 +16,8 @@ import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
 import React, { FormEvent, useEffect, useId, useRef, useState } from "react";
 import {
-  FieldErrors,
   FieldPath,
-  IsFlatObject,
-  useFormContext,
+  useFormContext
 } from "react-hook-form";
 
 export const FormInput = React.forwardRef<
@@ -39,6 +38,7 @@ export const FormInput = React.forwardRef<
     formState: { errors },
   } = useFormContext<Inputs>();
   const fieldName = props.name as FieldPath<Inputs>;
+
   return (
     <motion.div
       className={cn(
@@ -115,7 +115,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <>
           <Textarea
-            value={rest.value as string}  
+            value={getValues(props.name as any) as string}
             rows={6}
             onChange={onChange}
             className={props.className}
