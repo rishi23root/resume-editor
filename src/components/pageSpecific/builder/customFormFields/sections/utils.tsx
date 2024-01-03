@@ -177,7 +177,10 @@ export function SectionWrapper({
                 append(
                   Object.fromEntries(
                     Object.entries({ ...fields[0] })
-                      .map((arr) => [arr[0], ""])
+                      .map((arr) => [
+                        arr[0],
+                        typeof arr[1] === "boolean" ? false : "",
+                      ])
                       .filter(([key, val]) => key !== "id")
                   )
                 )

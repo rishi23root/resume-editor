@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
-import { SectionWrapper, useWatchedValue } from "./utils";
+import { SectionWrapper } from "./utils";
+import { useEffect, useState } from "react";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -128,6 +129,18 @@ export function Basic() {
 
 export function Education() {
   const { register, watch } = useFormContext();
+  const [isStudyingHere, setIsStudyingHere] = useState<boolean[]>([]);
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name?.startsWith("education")) {
+        // console.log(value["education"].map((item: any) => item.isStudyingHere));
+        setIsStudyingHere(
+          value["education"].map((item: any) => !!item.isStudyingHere)
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <div className="w-full fc gap-2">
@@ -211,11 +224,17 @@ export function Education() {
                 <FormInput
                   type="date"
                   {...register(`education.${index}.endDate`, {
+                    disabled: isStudyingHere[index],
+                  })}
+                />
+                {/* <FormInput
+                  type="date"
+                  {...register(`education.${index}.endDate`, {
                     disabled:
                       watch(`education.${index}.isStudyingHere` as any) ===
                       true,
                   })}
-                />
+                /> */}
                 <FormInput
                   type="text"
                   {...register(`education.${index}.score`)}
@@ -231,6 +250,18 @@ export function Education() {
 
 export function Work() {
   const { register, watch } = useFormContext();
+  const [isWorkingHereList, setIsWorkingHereList] = useState<boolean[]>([]);
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name?.startsWith("work")) {
+        console.log(value["work"].map((item: any) => item.isWorkingHere));
+        setIsWorkingHereList(
+          value["work"].map((item: any) => !!item.isWorkingHere)
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
@@ -311,11 +342,18 @@ export function Work() {
 
                 <FormInput
                   type="date"
+                  {...(register(`work.${index}.endDate`),
+                  {
+                    disabled: isWorkingHereList[index],
+                  })}
+                />
+                {/* <FormInput
+                  type="date"
                   {...register(`work.${index}.endDate`, {
                     disabled:
                       watch(`work.${index}.isWorkingHere` as any) === true,
                   })}
-                />
+                /> */}
 
                 <FormInput
                   parentclassvalue="w-full"
@@ -495,6 +533,9 @@ export function Awards() {
 }
 
 // skills
+export function Skills() {
+  // render each section
+}
 
 // skills section will be majorly dependent on the controller component of react-hook-form
 
