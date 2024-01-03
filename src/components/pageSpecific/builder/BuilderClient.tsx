@@ -1,14 +1,13 @@
 "use client";
 import PDFviewer from "@/components/elements/PDFviewer";
 import { Inputs } from "@/types/builder";
+import { DevTool } from "@hookform/devtools";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
-import { DevTool } from "@hookform/devtools";
 
-import { searchParamType } from "@/types/utils";
-import { trpc } from "@/serverTRPC/client";
-import { Suspense, useEffect, useState } from "react";
 import RenderCompleted from "@/hooks/RenderCompleted";
+import { searchParamType } from "@/types/utils";
+import { Suspense } from "react";
 
 export default function BuilderClient({
   searchParams,
@@ -22,6 +21,7 @@ export default function BuilderClient({
 
   const formHandeler = useForm<Inputs>({
     defaultValues: defaultData,
+    shouldUnregister: false,
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);

@@ -3,7 +3,7 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useEffect, useId, useState } from "react";
+import React, { useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
@@ -156,7 +156,7 @@ export function SectionWrapper({
     const fieldArray = useFieldArray({
       name: sectionKey as any,
       keyName: "id",
-      shouldUnregister: true,
+      shouldUnregister: false,
     });
     const { fields, append } = fieldArray;
 

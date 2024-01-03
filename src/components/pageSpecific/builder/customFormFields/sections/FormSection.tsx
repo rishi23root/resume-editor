@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
-import { SectionWrapper } from "./utils";
+import { SectionWrapper, useWatchedValue } from "./utils";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -139,7 +139,7 @@ export function Basic() {
 // };
 
 export function Work() {
-  const { register } = useFormContext();
+  const { register, watch } = useFormContext();
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
@@ -203,36 +203,27 @@ export function Work() {
                 </motion.div>
 
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`work.${index}.position`)}
                 />
 
+                <FormInput type="url" {...register(`work.${index}.url`)} />
+                <FormInput type="text" {...register(`work.${index}.years`)} />
                 <FormInput
-                  parentclassvalue="w-[49%]"
-                  type="url"
-                  {...register(`work.${index}.url`)}
-                />
-                <FormInput
-                  parentclassvalue="w-[49%]"
-                  type="text"
-                  {...register(`work.${index}.years`)}
-                />
-                <FormInput
-                  parentclassvalue="w-[49%]"
                   type="checkbox"
                   {...register(`work.${index}.isWorkingHere`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="date"
                   {...register(`work.${index}.startDate`)}
                 />
 
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="date"
-                  {...register(`work.${index}.endDate`)}
+                  {...register(`work.${index}.endDate`, {
+                    disabled:
+                      watch(`work.${index}.isWorkingHere` as any) === true,
+                  })}
                 />
 
                 <FormInput
@@ -250,7 +241,7 @@ export function Work() {
 }
 
 export function Education() {
-  const { register } = useFormContext();
+  const { register, watch } = useFormContext();
 
   return (
     <div className="w-full fc gap-2">
@@ -314,40 +305,30 @@ export function Education() {
                   </button>
                 </motion.div>
 
+                <FormInput type="url" {...register(`education.${index}.url`)} />
                 <FormInput
-                  parentclassvalue="w-[49%]"
-                  type="url"
-                  {...register(`education.${index}.url`)}
-                />
-                <FormInput
-                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.studyType`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.area`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="checkbox"
                   {...register(`education.${index}.isStudyingHere`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="date"
                   {...register(`education.${index}.startDate`)}
                 />
                 <FormInput
-                  parentclassvalue={cn(
-                    "w-[49%] "
-                    // useWatchedValue(
-                    //   `education.${index}.isStudyingHere` as any
-                    // ) && "hidden"   // it is just not working for this code here
-                  )}
                   type="date"
-                  {...register(`education.${index}.endDate`)}
+                  {...register(`education.${index}.endDate`, {
+                    disabled:
+                      watch(`education.${index}.isStudyingHere` as any) ===
+                      true,
+                  })}
                 />
                 <FormInput
                   type="text"
@@ -549,7 +530,6 @@ export function Education() {
 //                       type="text"
 //                       //
 //
-//                       parentclassvalue="w-[49%]"
 //                     />
 //                   </div>
 //                 </div>
@@ -636,14 +616,12 @@ export function Education() {
 //                       type="text"
 //                       //
 //
-//                       parentclassvalue="w-[49%]"
 //                     />
 //                     <FormInput
 //                       fieldTitle={`skills.databases.${index}.level`}
 //                       type="text"
 //                       //
 //
-//                       parentclassvalue="w-[49%]"
 //                     />
 //                   </div>
 //                 </div>

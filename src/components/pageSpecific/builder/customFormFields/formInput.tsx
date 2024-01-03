@@ -115,6 +115,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <>
           <Textarea
+            value={rest.value as string}  
             rows={6}
             onChange={onChange}
             className={props.className}
