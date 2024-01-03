@@ -141,11 +141,20 @@ export function Basic() {
 }
 
 export function Education() {
-  const { register, getValues, watch } = useFormContext();
-  useEffect(() => {
-    const data = getValues(`education.${1}.isStudyingHere`);
-    console.log(data);
-  }, [getValues]);
+  const { register, unregister, getValues, watch } = useFormContext();
+  // useEffect(() => {
+  //   const data = watch(`education`);
+  //   data.map((item: { isStudyingHere: any }, index: any) => {
+  //     console.log(item.isStudyingHere, index);
+  //     unregister(`education.${index}.endDate`);
+  //   });
+  // }, [watch]);
+
+  // # todo
+
+  // need to update the code to create conditional
+  // work section is already generated in the new file
+
   return (
     <div className="w-full fc gap-2">
       <SectionWrapper
@@ -169,8 +178,6 @@ export function Education() {
       >
         {({ fields, remove }) =>
           fields.map((field, index) => {
-            // field = field as typeof field & ArrayKeysRecord<profilesT>;
-            // const watchedVal = watch(`education.${index}.isStudyingHere`);
             return (
               <div
                 key={field.id}
@@ -252,7 +259,6 @@ export function Education() {
                   parentclassvalue="w-[49%]"
                   type="date"
                   {...register(`education.${index}.endDate`)}
-                  // disabled={watchedVal}
                 />
                 <FormInput
                   parentclassvalue="w-[49%]"
