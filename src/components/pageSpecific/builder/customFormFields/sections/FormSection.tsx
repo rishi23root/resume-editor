@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
-import { SectionWrapper, useWatchedValue } from "./utils";
+import { SectionWrapper } from "./utils";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -126,21 +126,131 @@ export function Basic() {
   );
 }
 
+//  type WorkT = {
+//   id: string;
+//   name: string;
+//   position: string;
+//   url: string;
+//   startDate: string;
+//   isWorkingHere: boolean;
+//   endDate: string;
+//   summary: string;
+//   years: string;
+// };
+
+export function Work() {
+  const { register } = useFormContext();
+  return (
+    <div className="w-full fc  gap-2">
+      <SectionWrapper
+        sectionKey="work"
+        fieldArraySection={true}
+        editableTitle={true}
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`mask.work`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              LabelClassValue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        {({ fields, remove }) =>
+          fields.map((field, index) => {
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="w-full fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <FormInput
+                      type="text"
+                      {...register(`basics.profiles.${index}.network`)}
+                      headerinput={{
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition p-0 text-lg",
+                          "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
+                        parentclassvalue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
+                </motion.div>
+
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="text"
+                  {...register(`work.${index}.position`)}
+                />
+
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="url"
+                  {...register(`work.${index}.url`)}
+                />
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="text"
+                  {...register(`work.${index}.years`)}
+                />
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="checkbox"
+                  {...register(`work.${index}.isWorkingHere`)}
+                />
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="date"
+                  {...register(`work.${index}.startDate`)}
+                />
+
+                <FormInput
+                  parentclassvalue="w-[49%]"
+                  type="date"
+                  {...register(`work.${index}.endDate`)}
+                />
+
+                <FormInput
+                  parentclassvalue="w-full"
+                  type="summary"
+                  {...register(`work.${index}.summary`)}
+                />
+              </div>
+            );
+          })
+        }
+      </SectionWrapper>
+    </div>
+  );
+}
+
 export function Education() {
-  const { register, unregister, getValues, watch } = useFormContext();
-  // useEffect(() => {
-  //   const data = watch(`education`);
-  //   data.map((item: { isStudyingHere: any }, index: any) => {
-  //     console.log(item.isStudyingHere, index);
-  //     unregister(`education.${index}.endDate`);
-  //   });
-  // }, [watch]);
-
-  // # todo
-
-  // need to update the code to create conditional
-  // or can use class to make similar effect
-  // work section is already generated in the new file
+  const { register } = useFormContext();
 
   return (
     <div className="w-full fc gap-2">
@@ -169,7 +279,7 @@ export function Education() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-full fr flex-wrap gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">
@@ -240,7 +350,6 @@ export function Education() {
                   {...register(`education.${index}.endDate`)}
                 />
                 <FormInput
-                  parentclassvalue="w-[49%]"
                   type="text"
                   {...register(`education.${index}.score`)}
                 />
