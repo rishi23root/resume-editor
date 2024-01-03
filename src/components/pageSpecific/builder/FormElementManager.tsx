@@ -9,6 +9,7 @@ import {
   Basic,
   Education,
   Projects,
+  Skills,
   Work,
 } from "./customFormFields/sections/FormSection";
 
@@ -71,8 +72,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         <Work />
         <Projects />
         <Awards />
-        {/* <Skills  />
-         */}
+        <Skills />
 
         <Button
           className={cn(

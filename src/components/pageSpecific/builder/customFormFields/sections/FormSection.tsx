@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper } from "./utils";
-import { useEffect, useState } from "react";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -163,8 +163,8 @@ export function Education() {
           />
         }
       >
-        {({ fields, remove }) =>
-          fields.map((field, index) => {
+        {({ fields, remove }) => {
+          return fields.map((field, index) => {
             return (
               <div
                 key={field.id}
@@ -241,8 +241,8 @@ export function Education() {
                 />
               </div>
             );
-          })
-        }
+          });
+        }}
       </SectionWrapper>
     </div>
   );
@@ -252,9 +252,9 @@ export function Work() {
   const { register, watch } = useFormContext();
   const [isWorkingHereList, setIsWorkingHereList] = useState<boolean[]>([]);
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((value, { name }) => {
       if (name?.startsWith("work")) {
-        console.log(value["work"].map((item: any) => item.isWorkingHere));
+        // console.log(value["work"].map((item: any) => item.isWorkingHere));
         setIsWorkingHereList(
           value["work"].map((item: any) => !!item.isWorkingHere)
         );
@@ -535,6 +535,85 @@ export function Awards() {
 // skills
 export function Skills() {
   // render each section
+  const { register } = useFormContext();
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills"
+        editableTitle={true}
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`mask.skills`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              LabelClassValue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <>testing something out any issues ??</>
+        {/* {({ fields, remove }) =>
+          fields.map((field, index) => {
+            return (
+              <div
+                key={field.id}
+                className={cn(
+                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                )}
+              >
+                <motion.div className="w-full fr gap-2">
+                  <motion.div
+                    className={cn(
+                      "flex-1 group relative h-10",
+                      "transition ease-in-out delay-300" //animate
+                    )}
+                  >
+                    <FormInput
+                      type="text"
+                      {...register(`awards.${index}.title`)}
+                      headerinput={{
+                        InputClassValue: cn(
+                          "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                          "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+                        ),
+                        LabelClassValue: "hidden",
+                        parentclassvalue: "absolute ",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    type="button"
+                    className={cn(
+                      "hover:text-red-490 hover:opacity-100 opacity-50",
+                      fields.length > 1 ? "" : "hidden"
+                    )}
+                    onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </button>
+                </motion.div>
+                <FormInput type="date" {...register(`awards.${index}.date`)} />
+                <FormInput
+                  type="text"
+                  {...register(`awards.${index}.awarder`)}
+                />
+                <FormInput
+                  type="summary"
+                  {...register(`awards.${index}.summary`)}
+                />
+                <FormInput type="url" {...register(`awards.${index}.url`)} />
+              </div>
+            );
+          })
+        } */}
+      </SectionWrapper>
+    </div>
+  );
 }
 
 // skills section will be majorly dependent on the controller component of react-hook-form

@@ -3,6 +3,7 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
+import test from "node:test";
 import React, { useState } from "react";
 import {
   FieldPath,
@@ -282,3 +283,10 @@ function flattenJson(json: JsonType, parentKey = "") {
 export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">) => {
   return null;
 };
+
+// good options are top ones are preferred
+// 1. tagify (only tag picker)
+// 2. tiptap (tag picker , editor)
+// 3. mantine (tag picker , editor)
+
+// test in sandbox;
