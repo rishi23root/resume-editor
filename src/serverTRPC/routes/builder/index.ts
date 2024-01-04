@@ -8,7 +8,7 @@ export const builderRouter = router({
   getDefault: procedure.query(() => {
         // load the json file and remove all elements
         const data = defaultTemplate as Inputs
-        data.work[0].name = "Your Name"
+        // data.work[0].name = "Your Name"
         return data ;
     }),
 });

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper } from "./utils";
 
@@ -128,19 +128,7 @@ export function Basic() {
 }
 
 export function Education() {
-  const { register, watch } = useFormContext();
-  const [isStudyingHere, setIsStudyingHere] = useState<boolean[]>([]);
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      if (name?.startsWith("education")) {
-        // console.log(value["education"].map((item: any) => item.isStudyingHere));
-        setIsStudyingHere(
-          value["education"].map((item: any) => !!item.isStudyingHere)
-        );
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  const { register } = useFormContext();
 
   return (
     <div className="w-full fc gap-2">
@@ -165,6 +153,7 @@ export function Education() {
       >
         {({ fields, remove }) => {
           return fields.map((field, index) => {
+            //  ArrayKeysRecord<EducationT>;
             return (
               <div
                 key={field.id}
@@ -213,19 +202,31 @@ export function Education() {
                   type="text"
                   {...register(`education.${index}.area`)}
                 />
-                <FormInput
-                  type="checkbox"
-                  {...register(`education.${index}.isStudyingHere`)}
-                />
-                <FormInput
-                  type="date"
-                  {...register(`education.${index}.startDate`)}
-                />
-                <FormInput
-                  type="date"
-                  {...register(`education.${index}.endDate`, {
-                    disabled: isStudyingHere[index],
-                  })}
+
+                <Controller
+                  name={`education.${index}.isStudyingHere`}
+                  render={({ field: { onChange, onBlur, value, ref } }) => (
+                    <>
+                      <FormInput
+                        ref={ref}
+                        type="checkbox"
+                        name={`education.${index}.isStudyingHere`}
+                        onChange={onChange} // send value to hook form
+                        onBlur={onBlur} // notify when input is touched/blur
+                        value={value}
+                      />
+                      <FormInput
+                        type="date"
+                        {...register(`education.${index}.startDate`)}
+                      />
+                      <FormInput
+                        type="date"
+                        {...register(`education.${index}.endDate`, {
+                          disabled: value,
+                        })}
+                      />
+                    </>
+                  )}
                 />
                 {/* <FormInput
                   type="date"
@@ -249,19 +250,8 @@ export function Education() {
 }
 
 export function Work() {
-  const { register, watch } = useFormContext();
-  const [isWorkingHereList, setIsWorkingHereList] = useState<boolean[]>([]);
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name?.startsWith("work")) {
-        // console.log(value["work"].map((item: any) => item.isWorkingHere));
-        setIsWorkingHereList(
-          value["work"].map((item: any) => !!item.isWorkingHere)
-        );
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  const { register } = useFormContext();
+
   return (
     <div className="w-full fc  gap-2">
       <SectionWrapper
@@ -301,7 +291,7 @@ export function Work() {
                   >
                     <FormInput
                       type="text"
-                      {...register(`basics.profiles.${index}.network`)}
+                      {...register(`work.${index}.name`)}
                       headerinput={{
                         InputClassValue: cn(
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
@@ -331,22 +321,34 @@ export function Work() {
 
                 <FormInput type="url" {...register(`work.${index}.url`)} />
                 <FormInput type="text" {...register(`work.${index}.years`)} />
-                <FormInput
-                  type="checkbox"
-                  {...register(`work.${index}.isWorkingHere`)}
-                />
-                <FormInput
-                  type="date"
-                  {...register(`work.${index}.startDate`)}
+
+                <Controller
+                  name={`work.${index}.isWorkingHere`}
+                  render={({ field: { onChange, onBlur, value, ref } }) => (
+                    <>
+                      <FormInput
+                        ref={ref}
+                        type="checkbox"
+                        name={`work.${index}.isWorkingHere`}
+                        onChange={onChange} // send value to hook form
+                        onBlur={onBlur} // notify when input is touched/blur
+                        value={value}
+                      />
+                      <FormInput
+                        type="date"
+                        {...register(`work.${index}.startDate`)}
+                      />
+
+                      <FormInput
+                        type="date"
+                        {...register(`work.${index}.endDate`, {
+                          disabled: value,
+                        })}
+                      />
+                    </>
+                  )}
                 />
 
-                <FormInput
-                  type="date"
-                  {...(register(`work.${index}.endDate`),
-                  {
-                    disabled: isWorkingHereList[index],
-                  })}
-                />
                 {/* <FormInput
                   type="date"
                   {...register(`work.${index}.endDate`, {

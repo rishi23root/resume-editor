@@ -15,10 +15,7 @@ import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
 import React, { FormEvent, useEffect, useId, useRef, useState } from "react";
-import {
-  FieldPath,
-  useFormContext
-} from "react-hook-form";
+import { FieldPath, useFormContext } from "react-hook-form";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -126,15 +123,15 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
         </>
       );
     } else if (type === "date") {
-      const { id, ...rest } = props;
+      const { id, disabled, ...rest } = props;
       return (
         <>
-          <input type="hidden" ref={ref} {...rest} />
+          <input type="hidden" ref={ref} {...rest} disabled={false} />
           <DatePicker
             id={id}
             className={rest.className}
             fieldTitle={rest.name as any}
-            disabled={props.disabled}
+            disabled={disabled}
           />
         </>
       );
@@ -321,6 +318,10 @@ const DatePicker = ({
       }
     }
   }, [date]);
+
+  useEffect(() => {
+    setValue(fieldTitle, date ? format(date, "LLL yyyy") : "");
+  }, [disabled]);
 
   return (
     <Popover open={isOpen}>
