@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
 import React, { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { FieldPath, useFormContext } from "react-hook-form";
+import ListEditor from "./textEditor";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -104,19 +105,14 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
     ) {
       return <Input type={type} ref={ref} {...props} />;
     } else if (type === "summary") {
-      const onChange = (e: FormEvent) => {
-        setValue(props.name as any, (e.target as HTMLTextAreaElement).value);
-        // console.log((e.target as HTMLTextAreaElement).value);
-      };
       const { id, ...rest } = props;
       return (
         <>
-          <Textarea
-            value={getValues(props.name as any) as string}
-            rows={6}
-            onChange={onChange}
-            className={props.className}
+          <ListEditor
             id={id}
+            value={getValues(props.name as any) as string}
+            name={props.name}
+            className={props.className}
             disabled={props.disabled}
           />
           <input type="hidden" ref={ref} {...rest} />

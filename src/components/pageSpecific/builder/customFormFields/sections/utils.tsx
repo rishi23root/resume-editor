@@ -3,7 +3,6 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import test from "node:test";
 import React, { useState } from "react";
 import {
   FieldPath,
@@ -249,7 +248,7 @@ export function useWatchedValue(watchKey: FieldPath<Inputs>) {
   return watchValue;
 }
 
-function flattenJson(json: JsonType, parentKey = "") {
+export function flattenJson(json: JsonType, parentKey = "") {
   let result: JsonType = {};
 
   for (const key in json) {
