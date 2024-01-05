@@ -23,7 +23,13 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
         if (ulElement) {
           setContent(ulElement);
         } else {
-          setContent(value as string);
+          console.log("no ul element found");
+
+          const liElement = parsedValue.querySelector("li")?.innerHTML;
+          console.log(liElement);
+
+          !liElement && setContent("<li>" + value + "</li>");
+          liElement && setContent(value as string);
         }
       }
     }, [value]);
@@ -35,18 +41,20 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
     };
 
     return (
-      <div ref={ref} className="h-48 overflow-y-auto">
+      <div
+        ref={ref}
+        className={cn(
+          "fc h-48 overflow-y-auto w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+      >
         <ContentEditable
           disabled={props.disabled}
           innerRef={editorRef}
           html={content} // Set the HTML content
           onChange={handleChange} // Handle content changes
           tagName="ul" // Allow only ul HTML element
-          className={cn(
-            "flex flex-col min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-            "list-disc list-inside h-fit",
-            className
-          )}
+          className={cn("list-disc h-full mx-2")}
           // {...props}
         />
       </div>
