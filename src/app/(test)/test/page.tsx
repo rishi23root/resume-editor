@@ -7,6 +7,7 @@ export default async function testPage(props: PageProps) {
   return (
     <div>
       <BuilderClient searchParams={props.searchParams} defaultData={data} />
+      {/* testy */}
     </div>
   );
 }
