@@ -231,7 +231,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
         "databases",
         "tools",
       ].includes(fieldNameKey as string);
-      console.log(fieldNameKey, "with level", uselevelstring);
+      // console.log(fieldNameKey, "with level", uselevelstring);
       return (
         <>
           <input type="hidden" ref={ref} {...rest} />
