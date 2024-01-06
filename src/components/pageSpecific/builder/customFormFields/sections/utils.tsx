@@ -238,7 +238,12 @@ export function SectionWrapper({
   } else {
     return (
       <MotionConfig transition={{ duration }}>
-        <motion.div className="fc glass gap-2 ">
+        <motion.div
+          className={cn(
+            "w-full fc  gap-2",
+            sectionClass != undefined ? sectionClass : "glass"
+          )}
+        >
           <TitleSection id={sectionKey} />
           <ResizablePanel>
             <motion.div

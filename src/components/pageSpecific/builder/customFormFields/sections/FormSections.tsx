@@ -95,7 +95,7 @@ export function Basic() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -147,7 +147,7 @@ export function Education() {
                 "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
-              LabelClassValue: "hidden",
+              labelclassvalue: "hidden",
               parentclassvalue: "absolute ",
             }}
           />
@@ -178,7 +178,7 @@ export function Education() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -269,7 +269,7 @@ export function Work() {
                 "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
-              LabelClassValue: "hidden",
+              labelclassvalue: "hidden",
               parentclassvalue: "absolute ",
             }}
           />
@@ -299,7 +299,7 @@ export function Work() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -390,7 +390,7 @@ export function Projects() {
                 "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
-              LabelClassValue: "hidden",
+              labelclassvalue: "hidden",
               parentclassvalue: "absolute ",
             }}
           />
@@ -420,7 +420,7 @@ export function Projects() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -471,7 +471,7 @@ export function Awards() {
                 "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
-              LabelClassValue: "hidden",
+              labelclassvalue: "hidden",
               parentclassvalue: "absolute ",
             }}
           />
@@ -501,7 +501,7 @@ export function Awards() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -554,7 +554,7 @@ export function Skills() {
                 "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                 "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
               ),
-              LabelClassValue: "hidden",
+              labelclassvalue: "hidden",
               parentclassvalue: "absolute ",
             }}
           />
@@ -564,6 +564,24 @@ export function Skills() {
         <Separator />
 
         <Interests />
+        <Separator />
+
+        <Languages />
+        <Separator />
+
+        <Frameworks />
+        <Separator />
+
+        <Technologies />
+        <Separator />
+
+        <Libraries />
+        <Separator />
+
+        <Databases />
+        <Separator />
+
+        <Tools />
         <Separator />
       </SectionWrapper>
     </div>
@@ -583,7 +601,7 @@ function Core() {
         {({ fields, remove }) =>
           fields.map((field, index) => {
             function updatedFromCustomFunc(data: any) {
-              console.log(data);
+              // console.log(data);
               setValue(`skills.core.${index}.keywords`, data);
             }
             return (
@@ -608,7 +626,7 @@ function Core() {
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
                           "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
                         ),
-                        LabelClassValue: "hidden",
+                        labelclassvalue: "hidden",
                         parentclassvalue: "absolute ",
                       }}
                     />
@@ -645,32 +663,290 @@ function Core() {
 }
 
 function Interests() {
-  const { register } = useFormContext();
-
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    console.log(data);
+    setValue(`skills.interests`, data);
+  }
   return (
-    <div className="w-full flex flex-col gap-2">
-      <motion.div
-        className={cn(
-          "flex w-full group relative h-10 text-xl",
-          "transition ease-in-out delay-300" //animate
-        )}
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.interests"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.interests`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
       >
         <FormInput
-          type="text"
-          {...register(`skills.mask.interests`)}
-          headerinput={{
-            InputClassValue: cn(
-              "group-[:hover]:block focus-visible:block transition px-1 text-lg",
-              "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
-            ),
-            LabelClassValue: "hidden",
-            parentclassvalue: "absolute ",
-          }}
+          type="tags"
+          {...register(`skills.interests`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
         />
-      </motion.div>
-      <div className="border border-green-200/40">
-        input elements for tags here
-      </div>
+      </SectionWrapper>
+    </div>
+  );
+}
+
+// languages
+function Languages() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.languages`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.languages"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.languages`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.languages`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
+    </div>
+  );
+}
+
+// frameworks
+function Frameworks() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.frameworks`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.frameworks"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.frameworks`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.frameworks`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
+    </div>
+  );
+}
+
+// technologies
+function Technologies() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.technologies`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.technologies"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.technologies`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.technologies`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
+    </div>
+  );
+}
+// libraries
+function Libraries() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.libraries`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.libraries"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.libraries`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.libraries`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
+    </div>
+  );
+}
+// databases
+function Databases() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.databases`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.databases"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.databases`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.databases`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
+    </div>
+  );
+}
+// tools
+function Tools() {
+  const { register, setValue } = useFormContext();
+  function updatedFromCustomFunc(data: any) {
+    // console.log(data);
+    setValue(`skills.tools`, data);
+  }
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.tools"
+        fieldArraySection={false}
+        editableTitle={true}
+        sectionClass=""
+        sectionActionBtnClass="hidden"
+        editableInputItself={
+          <FormInput
+            type="text"
+            {...register(`skills.mask.tools`)}
+            headerinput={{
+              InputClassValue: cn(
+                "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+                "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+              ),
+              labelclassvalue: "hidden",
+              parentclassvalue: "absolute ",
+            }}
+          />
+        }
+      >
+        <></>
+        <FormInput
+          type="tags"
+          {...register(`skills.tools`)}
+          onChange={updatedFromCustomFunc}
+          labelclassvalue="hidden"
+        />
+      </SectionWrapper>
     </div>
   );
 }

@@ -30,7 +30,7 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
           });
           setContent(liElementInnerHtml);
         } else {
-          console.log("no ul element found, means only text is present or li");
+          // console.log("no ul element found, means only text is present or li");
           // if no ul element found, means only text is present
           const AllLiElement = parsedValue.querySelectorAll("li");
           let liElementInnerHtml = "";

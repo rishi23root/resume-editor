@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { Inputs } from "@/types/builder";
+import { Inputs, SkillsSectionT } from "@/types/builder";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
@@ -23,11 +23,11 @@ export const FormInput = React.forwardRef<
   InputProps & {
     headerinput?: {
       InputClassValue: string;
-      LabelClassValue: string;
+      labelclassvalue: string;
       parentclassvalue: string;
     };
     parentclassvalue?: string;
-    LabelClassValue?: string;
+    labelclassvalue?: string;
     InputClassValue?: string;
   }
 >(({ ...props }, ref) => {
@@ -61,10 +61,10 @@ export const FormInput = React.forwardRef<
           className={cn(
             "capitalize bold text-gray-200/80 cursor-pointer",
             "transition ease-in-out delay-50",
-            props.headerinput?.LabelClassValue
-              ? props.headerinput.LabelClassValue
+            props.headerinput?.labelclassvalue
+              ? props.headerinput.labelclassvalue
               : "",
-            props.LabelClassValue,
+            props.labelclassvalue,
             props.type == "checkbox" && props.disabled && "cursor-not-allowed"
           )}
           htmlFor={id}
@@ -164,13 +164,15 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
     } else if (type === "tags") {
       const { id, onChange, ...rest } = props;
       const value = getValues(rest.name as any);
+      // console.log(rest.name,value);
+
       const fieldNameKey = props.name?.split(".").pop();
 
       const onChangeHandler = (tags: any) => {
         // update the data according to the format
-        // console.log("tags:", tags);
+        // console.log("fieldNameKey:", fieldNameKey);
+        // console.log(123);
         if (
-          (fieldNameKey as string) in
           [
             "languages",
             "frameworks",
@@ -178,7 +180,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
             "libraries",
             "databases",
             "tools",
-          ]
+          ].includes(fieldNameKey as string)
         ) {
           // get all names with level
           const SkillsSectionTData = tags.map((item: any) => {
@@ -190,6 +192,8 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
           const SkillsSectionTData = tags.map((item: any) => {
             return { name: item.name };
           });
+          // console.log(87912);
+
           onChange && onChange(SkillsSectionTData);
         }
         // (fieldNameKey === "keywords") this or anything else
@@ -201,23 +205,33 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       };
       // update to data of any format to requited format
       // last option fieldname basis if else
-
+      let defvalue: SkillsSectionT[] = [];
       // value posible is array of dict or string
-      const defvalue = value?.map((item: any) => {
-        // if there is item with key level then use it else use level 1
-        if (item.level) {
-          return { name: item.name, level: item.level };
-        } else if (item.name) {
-          return { name: item.name, level: 1 };
+      if (value.length > 0) {
+        if (typeof value[0] === "string") {
+          defvalue = value
+            .filter((item: any) => item.trim().length > 0)
+            .map((item: any) => ({ name: item, level: 1 }));
         } else {
-          return { name: item, level: 1 };
+          defvalue = value
+            .filter((item: any) => item.name && item.name.trim().length > 0)
+            .map((item: any) => ({ name: item.name, level: item.level || 1 }));
         }
-      });
+      } else {
+        defvalue = [];
+      }
 
       // console.log(defvalue);
       // if value array have items with key level then uselevelstring is true
-      const uselevelstring = value?.some((item: any) => item.level);
-      // console.log(uselevelstring);
+      const uselevelstring = [
+        "languages",
+        "frameworks",
+        "technologies",
+        "libraries",
+        "databases",
+        "tools",
+      ].includes(fieldNameKey as string);
+      console.log(fieldNameKey, "with level", uselevelstring);
       return (
         <>
           <input type="hidden" ref={ref} {...rest} />

@@ -116,6 +116,8 @@ export type allArrayKeys = keyof profilesT | keyof SkillsT | keyof WorkT | keyof
 // Record<allArrayKeys, any>
 export type ArrayKeysRecord<T> = { [key in keyof T]: any }
 
+
+
 // export type Inputs = BasicT;
 export type Inputs = {
   basics: BasicsT
@@ -126,3 +128,5 @@ export type Inputs = {
   awards: awardsT[]
   mask: maskT
 };
+
+

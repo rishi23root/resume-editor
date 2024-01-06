@@ -1,10 +1,10 @@
 "use client";
 import { InputProps } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Inputs } from "@/types/builder";
+import { Inputs, SkillsSectionT } from "@/types/builder";
 import { motion } from "framer-motion";
 import { Delete } from "lucide-react";
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { FieldPath } from "react-hook-form";
 
 //
@@ -22,12 +22,7 @@ export const TagPicker = React.forwardRef<
 >(({ className, defvalue, uselevelstring, onChange }, ref) => {
   // take value as sting and convert it to array of string
   const [inputValue, setInputValue] = useState<string>("");
-  const [tags, setTags] = useState<
-    {
-      name: string;
-      level: number;
-    }[]
-  >(defvalue || []);
+  const [tags, setTags] = useState<SkillsSectionT[]>(defvalue || []);
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === " " || event.key === ",") {
@@ -71,6 +66,8 @@ export const TagPicker = React.forwardRef<
     if (onChange) onChange(updatedTags as any);
   };
 
+  const id = useId();
+
   return (
     <motion.div
       ref={ref}
@@ -83,7 +80,7 @@ export const TagPicker = React.forwardRef<
         return (
           <motion.span
             layout
-            key={tag.name}
+            key={tag.name + id}
             className={cn(
               "border border-gray-400/60 bg-transparent rounded-xl px-2 py-1 flex items-center gap-1 text-white group cursor-pointer text-lg relative group ",
               uselevelstring && tag.level === 1 && "bg-blue-600/20",
