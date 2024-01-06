@@ -2,9 +2,11 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper } from "./utils";
+import { Separator } from "@/components/ui/separator";
+import { TagPicker } from "../tagPicker";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -558,9 +560,32 @@ export function Skills() {
           />
         }
       >
-        <>testing something out any issues ??</>
-        {/* {({ fields, remove }) =>
+        <Core />
+        <Separator />
+
+        <Interests />
+        <Separator />
+      </SectionWrapper>
+    </div>
+  );
+}
+
+function Core() {
+  const { register, setValue } = useFormContext();
+  return (
+    <div className="w-full fc gap-2">
+      <SectionWrapper
+        sectionKey="skills.core"
+        fieldArraySection={true}
+        editableTitle={false}
+        sectionClass=""
+      >
+        {({ fields, remove }) =>
           fields.map((field, index) => {
+            function updatedFromCustomFunc(data: any) {
+              console.log(data);
+              setValue(`skills.core.${index}.keywords`, data);
+            }
             return (
               <div
                 key={field.id}
@@ -577,7 +602,7 @@ export function Skills() {
                   >
                     <FormInput
                       type="text"
-                      {...register(`awards.${index}.title`)}
+                      {...register(`skills.core.${index}.name`)}
                       headerinput={{
                         InputClassValue: cn(
                           "group-[:hover]:block focus-visible:block transition px-1 text-lg",
@@ -599,312 +624,53 @@ export function Skills() {
                     <Trash2 />
                   </button>
                 </motion.div>
-                <FormInput type="date" {...register(`awards.${index}.date`)} />
                 <FormInput
-                  type="text"
-                  {...register(`awards.${index}.awarder`)}
+                  type="number"
+                  min={1}
+                  max={3}
+                  {...register(`skills.core.${index}.level`)}
                 />
                 <FormInput
-                  type="summary"
-                  {...register(`awards.${index}.summary`)}
+                  type="tags"
+                  {...register(`skills.core.${index}.keywords`)}
+                  onChange={updatedFromCustomFunc}
                 />
-                <FormInput type="url" {...register(`awards.${index}.url`)} />
               </div>
             );
           })
-        } */}
+        }
       </SectionWrapper>
     </div>
   );
 }
 
-// skills section will be majorly dependent on the controller component of react-hook-form
+function Interests() {
+  const { register } = useFormContext();
 
-// error # update
-// error del element form any list will cause form submit have to prevent it somehow
-// core ->
-// keywords": [],
-// "level": "",
-// "name": ""
-// work on tag input
-
-// export function Skills({
-//   register,
-//   control,
-//   formState: { errors },
-//   setValue,
-// }: UseFormReturn<Inputs, any, undefined>) {
-//   // work on the fact chose keys
-
-//   return (
-//     <div className="w-full fc  gap-2">
-//       {/* for core no subsections */}
-//       <SectionWrapper sectionKey="skills">
-//         {/* updates
-//           1. without title and glass base sections
-//           2. update in formelement for mask
-//         */}
-//         <SectionWrapper
-//
-//           sectionKey="skills.core"
-//           fieldArraySection={true}
-//           control={control}
-//           editableTitle={undefined}
-//           sectionClass=""
-//           // sectionActionBtnClass="hidden"
-//         >
-//           {({ fields, remove }) =>
-//             fields.map((item, index) => {
-//               const eachEntry = item as typeof item &
-//                 ArrayKeysRecord<SkillsSectionT>;
-
-//               return (
-//                 <div
-//                   className={cn(
-//                     "w-[49%] fr flex-wrap gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                   )}
-//                   key={eachEntry.id}
-//                 >
-//                   <motion.div className="fr gap-2">
-//                     <motion.div
-//                       className={cn(
-//                         "flex-1 group relative h-10",
-//                         "transition ease-in-out delay-300"
-//                       )}
-//                     >
-//                       <div
-//                         className={cn(
-//                           "absolute bold text-xl p-1",
-//                           "hidden transition ease-in-out delay-500",
-//                           "group-[:not(:hover)]:block",
-//                           "group-[:has(.formInput:focus-visible)]:hidden"
-//                         )}
-//                       >
-//                         <WatchedValue
-//                           watchKey={`skills.core.${index}.name`}
-//                           control={control}
-//                         />
-//                       </div>
-//                       <FormInput
-//                         fieldTitle={`skills.core.${index}.name`}
-//                         type="text"
-//                         //
-//
-//                         headerinput={{
-//                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
-//                           LabelClassValue:
-//                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentclassvalue: "absolute",
-//                         }}
-//                       />
-//                     </motion.div>
-//                     {fields.length > 1 && (
-//                       <motion.button
-//                         className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                         onClick={() => {
-//                           remove(index);
-//                         }}
-//                       >
-//                         <Trash2 />
-//                       </motion.button>
-//                     )}
-//                   </motion.div>
-//                   <div className="fr flex-wrap gap-2">
-//                     <FormInput
-//                       fieldTitle={`skills.databases.${index}.level`}
-//                       type="number"
-//                       //
-//
-//                       parentclassvalue="w-full"
-//                     />
-//                   </div>
-//                 </div>
-//               );
-//             })
-//           }
-//         </SectionWrapper>
-
-//         <Separator className="my-4" />
-
-//         <SectionWrapper
-//
-//           sectionKey="skills.interests"
-//           fieldArraySection={true}
-//           control={control}
-//           editableTitle={{
-//             control: control,
-//             register: register,
-//             errors: errors,
-//           }}
-//           sectionClass=""
-//           sectionActionBtnClass="hidden"
-//         >
-//           {({ fields, remove }) =>
-//             fields.map((item, index) => {
-//               const eachEntry = item as typeof item &
-//                 ArrayKeysRecord<SkillsSectionT>;
-
-//               return (
-//                 <div
-//                   className={cn(
-//                     "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                   )}
-//                   key={eachEntry.id}
-//                 >
-//                   <motion.div className="fr gap-2">
-//                     <motion.div
-//                       className={cn(
-//                         "flex-1 group relative h-10",
-//                         "transition ease-in-out delay-300"
-//                       )}
-//                     >
-//                       <div
-//                         className={cn(
-//                           "absolute bold text-xl p-1",
-//                           "hidden transition ease-in-out delay-500",
-//                           "group-[:not(:hover)]:block",
-//                           "group-[:has(.formInput:focus-visible)]:hidden"
-//                         )}
-//                       >
-//                         <WatchedValue
-//                           watchKey={`skills.interests.${index}.name`}
-//                           control={control}
-//                         />
-//                       </div>
-//                       <FormInput
-//                         fieldTitle={`skills.interests.${index}.name`}
-//                         type="text"
-//                         //
-//
-//                         headerinput={{
-//                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
-//                           LabelClassValue:
-//                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentclassvalue: "absolute",
-//                         }}
-//                       />
-//                     </motion.div>
-//                     {fields.length > 1 && (
-//                       <motion.button
-//                         className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                         onClick={() => {
-//                           remove(index);
-//                         }}
-//                       >
-//                         <Trash2 />
-//                       </motion.button>
-//                     )}
-//                   </motion.div>
-//                   <div className="fr flex-wrap gap-2">
-//                     <FormInput
-//                       fieldTitle={`skills.interests.${index}.name`}
-//                       type="text"
-//                       //
-//
-//                     />
-//                   </div>
-//                 </div>
-//               );
-//             })
-//           }
-//         </SectionWrapper>
-
-//         <Separator className="my-4" />
-
-//         <SectionWrapper
-//
-//           sectionKey="skills.databases"
-//           fieldArraySection={true}
-//           control={control}
-//           editableTitle={{
-//             control: control,
-//             register: register,
-//             errors: errors,
-//           }}
-//           sectionClass=""
-//           sectionActionBtnClass="hidden"
-//         >
-//           {({ fields, remove }) =>
-//             fields.map((item, index) => {
-//               const eachEntry = item as typeof item &
-//                 ArrayKeysRecord<SkillsSectionT>;
-
-//               return (
-//                 <div
-//                   className={cn(
-//                     "w-full fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
-//                   )}
-//                   key={eachEntry.id}
-//                 >
-//                   <motion.div className="fr gap-2">
-//                     <motion.div
-//                       className={cn(
-//                         "flex-1 group relative h-10",
-//                         "transition ease-in-out delay-300"
-//                       )}
-//                     >
-//                       <div
-//                         className={cn(
-//                           "absolute bold text-xl p-1",
-//                           "hidden transition ease-in-out delay-500",
-//                           "group-[:not(:hover)]:block",
-//                           "group-[:has(.formInput:focus-visible)]:hidden"
-//                         )}
-//                       >
-//                         <WatchedValue
-//                           watchKey={`skills.databases.${index}.name`}
-//                           control={control}
-//                         />
-//                       </div>
-//                       <FormInput
-//                         fieldTitle={`skills.databases.${index}.name`}
-//                         type="text"
-//                         //
-//
-//                         headerinput={{
-//                           InputClassValue:
-//                             "hidden group-[:hover]:block focus-visible:block transition px-1 px-1 text-lg",
-//                           LabelClassValue:
-//                             "hidden focus-visible:block transition ease-in-out delay-300",
-//                           parentclassvalue: "absolute",
-//                         }}
-//                       />
-//                     </motion.div>
-//                     {fields.length > 1 && (
-//                       <motion.button
-//                         className="hover:text-red-490 hover:opacity-100 opacity-50"
-//                         onClick={() => {
-//                           remove(index);
-//                         }}
-//                       >
-//                         <Trash2 />
-//                       </motion.button>
-//                     )}
-//                   </motion.div>
-//                   <div className="fr flex-wrap gap-2">
-//                     <FormInput
-//                       fieldTitle={`skills.databases.${index}.name`}
-//                       type="text"
-//                       //
-//
-//                     />
-//                     <FormInput
-//                       fieldTitle={`skills.databases.${index}.level`}
-//                       type="text"
-//                       //
-//
-//                     />
-//                   </div>
-//                 </div>
-//               );
-//             })
-//           }
-//         </SectionWrapper>
-
-//         <Separator className="my-4" />
-//       </SectionWrapper>
-//     </div>
-//   );
-// }
+  return (
+    <div className="w-full flex flex-col gap-2">
+      <motion.div
+        className={cn(
+          "flex w-full group relative h-10 text-xl",
+          "transition ease-in-out delay-300" //animate
+        )}
+      >
+        <FormInput
+          type="text"
+          {...register(`skills.mask.interests`)}
+          headerinput={{
+            InputClassValue: cn(
+              "group-[:hover]:block focus-visible:block transition px-1 text-lg",
+              "group-[:not(:hover)]:uppercase group-[:not(:hover)]:text-[1em] group-[:not(:hover)]:bg-transparent group-[:not(:hover)]:ring-0 group-[:not(:hover)]:ring-offset-0 group-[:not(:hover)]:border-transparent"
+            ),
+            LabelClassValue: "hidden",
+            parentclassvalue: "absolute ",
+          }}
+        />
+      </motion.div>
+      <div className="border border-green-200/40">
+        input elements for tags here
+      </div>
+    </div>
+  );
+}

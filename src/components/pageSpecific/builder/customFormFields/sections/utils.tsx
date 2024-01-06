@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
@@ -74,6 +75,47 @@ const ignoreCircularReferences = () => {
     }
     return value;
   };
+};
+
+const makeEmptyObject = (obj: any): any => {
+  const data = Object.fromEntries(
+    Object.entries({ ...obj })
+      .map((arr) => {
+        // console.log(typeof arr[1],Array.isArray(arr[1]),arr[1])
+
+        if (Array.isArray(arr[1])) {
+          // take first element and make it empty
+          // check for type
+          if (typeof arr[1][0] === "object") {
+            return [arr[0], [makeEmptyObject(arr[1][0])]];
+          }
+          // may need to update these in future
+          else if (typeof arr[1][0] === "number") {
+            return [arr[0], []];
+          } else if (typeof arr[1][0] === "boolean") {
+            return [arr[0], []];
+          } else if (typeof arr[1][0] === "string") {
+            return [arr[0], []];
+          }
+          // leaving the posibility of nested array
+          // } else if (typeof arr[1][0] === "") {
+          //   return [arr[0], []];
+          return [arr[0], [makeEmptyObject(arr[1][0])]];
+        } else if (typeof arr[1] === "object") {
+          return [arr[0], makeEmptyObject(arr[1])];
+        } else if (typeof arr[1] === "number") {
+          return [arr[0], 0];
+        } else if (typeof arr[1] === "boolean") {
+          return [arr[0], false];
+        } else {
+          // if (typeof arr[1] === "string") {
+          return [arr[0], ""];
+        }
+        // return [arr[0], typeof arr[1] === "boolean" ? false : ""];
+      })
+      .filter(([key, val]) => key !== "id")
+  );
+  return data;
 };
 
 export function SectionWrapper({
@@ -173,18 +215,9 @@ export function SectionWrapper({
               animate="animate"
               whileHover="whileHover"
               className="px-2"
-              onClick={() =>
-                append(
-                  Object.fromEntries(
-                    Object.entries({ ...fields[0] })
-                      .map((arr) => [
-                        arr[0],
-                        typeof arr[1] === "boolean" ? false : "",
-                      ])
-                      .filter(([key, val]) => key !== "id")
-                  )
-                )
-              }
+              onClick={() => {
+                append(makeEmptyObject(fields[0]) as any);
+              }}
             >
               <Plus />
             </motion.button>
@@ -274,18 +307,3 @@ export function flattenJson(json: JsonType, parentKey = "") {
 
   return result;
 }
-
-// export type SkillsSectionT = {
-// name: string;
-// level: number;
-// function to handel this datatype with conversion to its form key all together
-export const TagPicker = (fields: UseFieldArrayReturn<Inputs, any, "id">) => {
-  return null;
-};
-
-// good options are top ones are preferred
-// 1. tagify (only tag picker)
-// 2. tiptap (tag picker , editor)
-// 3. mantine (tag picker , editor)
-
-// test in sandbox;

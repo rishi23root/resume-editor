@@ -58,9 +58,9 @@ export type ProjectsT = {
 
 // "skills": {
 export type SkillsCoreT = {
-  keywords: string[];
-  level: string;
   name: string;
+  level: string;
+  keywords: string[];
 }
 export type SkillsSectionT = {
   name: string;

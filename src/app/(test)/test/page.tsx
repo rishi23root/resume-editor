@@ -1,4 +1,5 @@
 import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
+import { TagPicker } from "@/components/pageSpecific/builder/customFormFields/tagPicker";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
 
@@ -7,7 +8,7 @@ export default async function testPage(props: PageProps) {
   return (
     <div>
       <BuilderClient searchParams={props.searchParams} defaultData={data} />
-      {/* testy */}
+      {/* <TagPicker value={"this"} /> */}
     </div>
   );
 }

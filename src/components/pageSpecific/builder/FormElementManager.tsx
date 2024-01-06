@@ -11,7 +11,7 @@ import {
   Projects,
   Skills,
   Work,
-} from "./customFormFields/sections/FormSection";
+} from "./customFormFields/sections/FormSections";
 
 export default function FormManager({ onSubmit }: { onSubmit: any }) {
   const ref = useRef<HTMLFormElement>(null);
@@ -68,11 +68,11 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
       >
         <Basic />
+        <Skills />
         <Education />
         <Work />
         <Projects />
         <Awards />
-        <Skills />
 
         <Button
           className={cn(

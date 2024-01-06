@@ -16,6 +16,7 @@ import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { FieldPath, useFormContext } from "react-hook-form";
 import ListEditor from "./textEditor";
+import { TagPicker } from "./tagPicker";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -160,6 +161,78 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
           />
         </>
       );
+    } else if (type === "tags") {
+      const { id, onChange, ...rest } = props;
+      const value = getValues(rest.name as any);
+      const fieldNameKey = props.name?.split(".").pop();
+
+      const onChangeHandler = (tags: any) => {
+        // update the data according to the format
+        // console.log("tags:", tags);
+        if (
+          (fieldNameKey as string) in
+          [
+            "languages",
+            "frameworks",
+            "technologies",
+            "libraries",
+            "databases",
+            "tools",
+          ]
+        ) {
+          // get all names with level
+          const SkillsSectionTData = tags.map((item: any) => {
+            return { name: item.name, level: item.level };
+          });
+
+          onChange && onChange(SkillsSectionTData);
+        } else if (fieldNameKey === "interests") {
+          const SkillsSectionTData = tags.map((item: any) => {
+            return { name: item.name };
+          });
+          onChange && onChange(SkillsSectionTData);
+        }
+        // (fieldNameKey === "keywords") this or anything else
+        else {
+          // get all names as string
+          const keywords = tags.map((item: any) => item.name);
+          onChange && onChange(keywords);
+        }
+      };
+      // update to data of any format to requited format
+      // last option fieldname basis if else
+
+      // value posible is array of dict or string
+      const defvalue = value?.map((item: any) => {
+        // if there is item with key level then use it else use level 1
+        if (item.level) {
+          return { name: item.name, level: item.level };
+        } else if (item.name) {
+          return { name: item.name, level: 1 };
+        } else {
+          return { name: item, level: 1 };
+        }
+      });
+
+      // console.log(defvalue);
+      // if value array have items with key level then uselevelstring is true
+      const uselevelstring = value?.some((item: any) => item.level);
+      // console.log(uselevelstring);
+      return (
+        <>
+          <input type="hidden" ref={ref} {...rest} />
+          <TagPicker
+            id={id}
+            className={rest.className}
+            fieldTitle={rest.name as any}
+            onChange={onChangeHandler}
+            defvalue={defvalue}
+            uselevelstring={uselevelstring as boolean}
+          />
+        </>
+      );
+    } else {
+      return <Input type={type} ref={ref} {...props} />;
     }
   }
 );
