@@ -16,13 +16,18 @@ import {
 export default function FormManager({ onSubmit }: { onSubmit: any }) {
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
+
+  const shadowColor = "rgba(0, 0, 0, 0.3)";
+
   const { scrollYProgress } = useScroll({
     container: ref,
     offset: ["start start", "end end"],
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (scrollYProgress.get() == 0) {
+    // console.log("scroll latest: ", latest);
+
+    if (latest == 0) {
       // console.log("top");
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
@@ -30,9 +35,9 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
       );
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
-    } else if (scrollYProgress.get() == 1) {
+    } else if (latest > 0.99) {
       // console.log("bottom");
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
@@ -40,16 +45,16 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
       );
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
     } else {
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
     }
   });
@@ -66,11 +71,12 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         ref={ref}
         onSubmit={onSubmit}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
+        noValidate
       >
         <Basic />
         <Skills />
-        <Education />
         <Work />
+        <Education />
         <Projects />
         <Awards />
 

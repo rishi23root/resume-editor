@@ -95,15 +95,16 @@
 
   .glass {
     backdrop-filter: blur(3em);
-    background: linear-gradient(45deg,
-        rgba(255, 255, 255, 0.1),
-        transparent,
-        transparent,
-        rgba(255, 255, 255, 0.05),
-        transparent);
+    background: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1),
+      transparent,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
     @apply shadow border border-white/10 border-opacity-90 inset-0 p-5 rounded-xl
-    /* bg-gradient-to-tr from-white/10 via-transparent to-white/10  */
-    ;
+    /* bg-gradient-to-tr from-white/10 via-transparent to-white/10  */;
   }
 
   .face {
@@ -133,16 +134,25 @@
   .formOverLay::after {
     content: "";
     @apply absolute inset-0 z-10 top-0 left-0 w-full h-full pointer-events-none;
-    backdrop-filter: blur(3px);
-    -webkit-mask: linear-gradient(var(--topBlurColor, transparent) 0%,
-        transparent 10%,
-        transparent 90%,
-        var(--bottomBlurColor, transparent) 95%);
+    /* backdrop-filter: blur(1px); */
+    /* backdrop-filter: blur(10px); */
     /* -webkit-mask: linear-gradient(
-      rgba(255, 255, 255, 1) 0%,
-      transparent 10%,
-      transparent 90%,
-      rgba(255, 255, 255, 1) 95%
+      var(--topBlurColor, transparent) 0%,
+      transparent 5%,
+      transparent 95%,
+      var(--bottomBlurColor, transparent) 100%
+    ); */
+    background: linear-gradient(
+      var(--topBlurColor, transparent) 0%,
+      transparent 5%,
+      transparent 95%,
+      var(--bottomBlurColor, transparent) 100%
+    );
+    /* background: linear-gradient(
+      rgb(0, 0, 0) 0%,
+      transparent 5%,
+      transparent 95%,
+      rgb(0, 0, 0) 100%
     ); */
   }
 
@@ -160,7 +170,6 @@
     @apply bg-background text-foreground;
   }
 }
-
 
 *,
 ::after,

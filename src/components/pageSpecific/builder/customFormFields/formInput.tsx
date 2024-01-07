@@ -15,8 +15,9 @@ import { motion } from "framer-motion";
 import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { FieldPath, useFormContext } from "react-hook-form";
-import ListEditor from "./textEditor";
+import { getValueFromNestedObject } from "./sections/utils";
 import { TagPicker } from "./tagPicker";
+import ListEditor from "./textEditor";
 
 export const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -36,6 +37,7 @@ export const FormInput = React.forwardRef<
     formState: { errors },
   } = useFormContext<Inputs>();
   const fieldName = props.name as FieldPath<Inputs>;
+  const fieldNameError = getValueFromNestedObject(errors, fieldName);
 
   return (
     <motion.div
@@ -82,16 +84,17 @@ export const FormInput = React.forwardRef<
             props.headerinput?.InputClassValue
               ? props.headerinput.InputClassValue
               : "",
-            props.InputClassValue
+            props.InputClassValue,
+            fieldNameError && "h-8"
           )}
         />
       </div>
       {/* error state */}
-      {/* {errors[fieldName ] && (
-        <div className="text-red-600">
-          {errors[fieldName ]["message"]}
+      {fieldNameError && (
+        <div className="text-red-800/80 pt-1 text-[12px] leading-3 h-3">
+          {fieldNameError["message"]}
         </div>
-      )} */}
+      )}
     </motion.div>
   );
 });

@@ -59,7 +59,7 @@ export type ProjectsT = {
 // "skills": {
 export type SkillsCoreT = {
   name: string;
-  level: string;
+  level: number;
   keywords: string[];
 }
 export type SkillsSectionT = {

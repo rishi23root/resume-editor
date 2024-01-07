@@ -1,10 +1,10 @@
 // pathname: api/trpc/jobDis/{functionNameHere}
-import { procedure, router } from "@/serverTRPC/trpc";
-import { z } from "zod";
-import * as fs from "node:fs";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
-import { keyValue } from "@/types/utils";
+import { procedure, router } from "@/serverTRPC/trpc";
 import { jobDescriptionDataType } from "@/types/jobDescription";
+import { keyValue } from "@/types/utils";
+import * as fs from "node:fs";
+import { z } from "zod";
 // import {1,2,3,4} from '@/JSONapiData/exampleTemplates' assert {type: 'json'};
 
 export const jobDescriptionRouter = router({
@@ -117,8 +117,20 @@ export const jobDescriptionRouter = router({
 
       return {} as jobDescriptionDataType;
     }),
+  getNameById: procedure.input(
+    z.object({
+      jobId: z.number(),
+    })
+  ).query(async (opts) => {
+    if (!JobDiscriptionData) {
+      return "" as string;
+    }
+    const jobId = opts.input.jobId;
+    if (JobDiscriptionData.hasOwnProperty(jobId)) {
+      const data = JobDiscriptionData[jobId] as jobDescriptionDataType;
+      // console.log(data.title);
+      return data.title;
+    }
+    return "" as string;
+  }),
 });
-
-// z.object({
-//     jobId: z.number(),
-// }).nullish(),
