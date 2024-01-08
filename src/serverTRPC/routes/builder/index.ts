@@ -18,6 +18,7 @@ export const builderRouter = router({
 
     let mask = data.mask;
     let skillMask = data.skills.mask;
+
     // remove all data from the data object
     data = makeEmptyObject(data);
     data = { ...data, mask, skills: { ...data.skills, mask: skillMask } };

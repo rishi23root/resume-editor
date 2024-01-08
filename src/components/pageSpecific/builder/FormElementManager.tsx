@@ -84,10 +84,18 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
             "transition ease-in-out delay-150", //animate
-            "hover:shadow-md hover:shadow-zinc-500"
+            "hover:shadow-md hover:shadow-zinc-500",
+            "fc fcc justify-center items-center"
           )}
         >
-          <input type="submit" className="text-primary text-xl font-bold" />
+          <input
+            type="submit"
+            className={cn(
+              "cursor-pointer text-primary text-xl font-bold",
+              "w-full h-full",
+              "flex-1 p-auto"
+            )}
+          />
         </Button>
       </motion.form>
     </div>

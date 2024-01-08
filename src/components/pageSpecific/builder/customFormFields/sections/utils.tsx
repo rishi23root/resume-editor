@@ -4,7 +4,7 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
@@ -23,6 +23,7 @@ const variantsActionButton: Variants = {
 
 function ResizablePanel({ children }: { children: React.ReactNode }) {
   let [ref, { height }] = useMeasure();
+  const id = useId();
 
   return (
     <motion.div
@@ -32,7 +33,8 @@ function ResizablePanel({ children }: { children: React.ReactNode }) {
     >
       <AnimatePresence initial={false}>
         <motion.div
-          key={JSON.stringify(children, ignoreCircularReferences())}
+          key={id}
+          // key={JSON.stringify(children, ignoreCircularReferences())}
           initial={{
             opacity: 0,
             y: -10,
@@ -280,4 +282,52 @@ export function getValueFromNestedObject(data: JsonType, keyString: string) {
   } catch (error) {
     return undefined;
   }
+}
+export function compareJsonObjects(obj1: any, obj2: any): boolean {
+  // Quick check for the same object
+  if (obj1 === obj2) return true;
+
+  // Check for null or type mismatch
+  if (
+    typeof obj1 !== "object" ||
+    typeof obj2 !== "object" ||
+    obj1 === null ||
+    obj2 === null
+  )
+    return false;
+
+  // Get the keys of the objects
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  // Check if the number of keys is the same
+  if (keys1.length !== keys2.length) return false;
+
+  // Iterate through keys and values
+  for (const key of keys1) {
+    // Check if the key exists in obj2
+    if (!keys2.includes(key)) return false;
+
+    // Recursively check nested objects
+    if (typeof obj1[key] === "object" && !Array.isArray(obj1[key])) {
+      if (!compareJsonObjects(obj1[key], obj2[key])) return false;
+    } else if (Array.isArray(obj1[key])) {
+      // Check if arrays are the same
+      if (!Array.isArray(obj2[key]) || obj1[key].length !== obj2[key].length)
+        return false;
+
+      // Check each element in the array
+      for (let i = 0; i < obj1[key].length; i++) {
+        if (!compareJsonObjects(obj1[key][i], obj2[key][i])) return false;
+      }
+    } else {
+      // console.log(obj1[key], obj2[key], key);
+
+      // Check if values are the same
+      if (obj1[key] !== obj2[key]) return false;
+    }
+  }
+
+  // If all checks pass, the objects are equal
+  return true;
 }

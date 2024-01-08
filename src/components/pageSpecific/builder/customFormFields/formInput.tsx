@@ -210,7 +210,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       // last option fieldname basis if else
       let defvalue: SkillsSectionT[] = [];
       // value posible is array of dict or string
-      if (value.length > 0) {
+      if (value && value.length > 0) {
         if (typeof value[0] === "string") {
           defvalue = value
             .filter((item: any) => item.trim().length > 0)

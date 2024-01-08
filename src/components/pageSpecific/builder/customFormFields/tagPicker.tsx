@@ -19,7 +19,7 @@ export const TagPicker = React.forwardRef<
     uselevelstring: boolean;
     fieldTitle: FieldPath<Inputs>;
   }
->(({ className, defvalue, uselevelstring, onChange }, ref) => {
+>(({ id, className, defvalue, uselevelstring, onChange }, ref) => {
   // take value as sting and convert it to array of string
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<SkillsSectionT[]>(defvalue || []);
@@ -66,7 +66,7 @@ export const TagPicker = React.forwardRef<
     if (onChange) onChange(updatedTags as any);
   };
 
-  const id = useId();
+  // const id = useId();
 
   return (
     <motion.div
@@ -112,6 +112,7 @@ export const TagPicker = React.forwardRef<
         );
       })}
       <input
+        id={id}
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}

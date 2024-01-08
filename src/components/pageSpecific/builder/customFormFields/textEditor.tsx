@@ -7,7 +7,7 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { useFormContext } from "react-hook-form";
 
 const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
-  ({ className, value, onChange, ...props }, ref) => {
+  ({ id, className, value, onChange, ...props }, ref) => {
     const [content, setContent] = useState<string>((value || "") as string);
     const { setValue } = useFormContext<Inputs>();
     const editorRef = useRef(null);
@@ -62,6 +62,7 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
           className
         )}
       >
+        <input type="text" id={id} className="hidden" />
         <ContentEditable
           disabled={props.disabled}
           innerRef={editorRef}
