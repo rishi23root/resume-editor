@@ -8,7 +8,7 @@
 
 import { trpc } from "@/serverTRPC/client";
 
-function PDFviewer() {
+function PDFviewer({ enriched }: { enriched: boolean }) {
   // const { data } = trpc.hello2.useQuery({ text: "tesing the world" });
 
   // const { data : data2 } = trpc.jobDescription.useQuery({

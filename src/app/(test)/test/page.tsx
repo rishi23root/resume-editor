@@ -1,14 +1,14 @@
-import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
-import { TagPicker } from "@/components/pageSpecific/builder/customFormFields/tagPicker";
-import { serverAPI } from "@/serverTRPC/serverAPI";
-import { PageProps } from "@/types/utils";
+import { ZoomerImage } from "@/components/custom/ImageMagnify";
 
-export default async function testPage(props: PageProps) {
-  const data = await serverAPI.builder.getDefault();
+export default function test() {
   return (
-    <div>
-      <BuilderClient searchParams={props.searchParams} defaultData={data} />
-      {/* <TagPicker value={"this"} /> */}
+    <div className="flex border p-2 m-auto w-1/3 h-[50em]">
+      <ZoomerImage
+        src={"/exampleR/twoColumn.jpg"}
+        alt="testing image"
+        width={500}
+        height={500}
+      />
     </div>
   );
 }

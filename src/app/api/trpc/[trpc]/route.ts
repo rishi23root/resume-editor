@@ -11,6 +11,7 @@ const handler = (req: Request) =>{
         router: appRouter,
         createContext: () => ({
             // add clerk auth context here
+
         })
     });
 }

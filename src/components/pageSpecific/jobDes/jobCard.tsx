@@ -141,13 +141,15 @@ const Card = ({
                   <span className="w-[40%] hidden lg:flex fcc">
                     <span className="flex align-middle w-full h-full">
                       {templateData.image && (
-                        <ZoomerImage
-                          src={templateData.image[templateName]}
-                          alt={templateData.title}
-                          width={500}
-                          height={500}
-                          className="h-auto w-auto"
-                        />
+                        <div role="span">
+                          <ZoomerImage
+                            src={templateData.image[templateName]}
+                            alt={templateData.title}
+                            width={500}
+                            height={500}
+                            className="h-auto w-auto"
+                          />
+                        </div>
                       )}
                     </span>
                   </span>

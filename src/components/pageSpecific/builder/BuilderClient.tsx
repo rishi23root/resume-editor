@@ -27,7 +27,7 @@ export default function BuilderClient({
     shouldUnregister: false,
     resolver: zodResolver(schema),
   });
-  
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     // update the data in the db
     console.log(data);
@@ -42,7 +42,12 @@ export default function BuilderClient({
         <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
         <DevTool control={formHandeler.control} /> {/* set up the dev tool */}
       </FormProvider>
-      <PDFviewer />
+      <Suspense>
+        <PDFviewer
+          // if payment is not basic
+          enriched={parseInt(searchParams.payId as string) == 2}
+        />
+      </Suspense>
     </Suspense>
   );
 }
