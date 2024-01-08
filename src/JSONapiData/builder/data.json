@@ -1,12 +1,12 @@
 {
   "basics": {
-    "name": "",
+    "name": "rishi",
     "label": "",
     "image": "",
     "email": "",
     "phone": "",
     "url": "",
-    "summary": "",
+    "summary": "tesing if this works",
     "location": {
       "address": "",
       "postalCode": "",
@@ -19,104 +19,97 @@
         "network": "linkedin",
         "username": "",
         "url": ""
+      },
+      {
+        "network": "github",
+        "username": "rishi23root",
+        "url": ""
       }
     ]
   },
   "skills": {
     "core": [
       {
-        "keywords": ["HTML", "CSS", "JavaScript"],
-        "level": "Master",
-        "name": "Web Development"
+        "keywords": ["photoshop", "illustrator", "indesign"],
+        "level": 2,
+        "name": "wildlife"
       }
     ],
     "interests": [
       {
-        "name": "Wildlife"
+        "name": ""
       }
     ],
     "languages": [
       {
-        "name": "JavaScript",
-        "level": 90
-      },
-      {
-        "name": "HTML5",
-        "level": 80
-      },
-      {
-        "name": "CSS",
-        "level": 80
+        "name": "",
+        "level": 1
       }
     ],
     "frameworks": [
       {
-        "name": "React",
-        "level": 70
-      },
-      {
-        "name": "Angular",
-        "level": 70
+        "name": "",
+        "level": 0
       }
     ],
     "technologies": [
       {
-        "name": "Algorithms",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Progressive Web Apps",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "SQL",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Data Structures",
-        "level": 3
+        "name": "",
+        "level": 0
       }
     ],
     "libraries": [
       {
-        "name": "jQuery",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Redux",
-        "level": 3
+        "name": "",
+        "level": 0
       }
     ],
     "databases": [
       {
-        "name": "Firebase",
-        "level": 3
+        "name": "",
+        "level": 0
       }
     ],
     "tools": [
       {
-        "name": "Git",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "VS Code",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Jira",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Webpack",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Eclipse",
-        "level": 3
+        "name": "",
+        "level": 0
       },
       {
-        "name": "Bitbucket",
-        "level": 3
+        "name": "",
+        "level": 0
       }
     ],
     "mask": {
@@ -183,7 +176,7 @@
       "studyType": "B.Tech",
       "area": "Computer Science",
       "startDate": "2010",
-      "isStudyingHere": false,
+      "isStudyingHere": true,
       "endDate": "2014",
       "score": "8.3 CGPA"
     }

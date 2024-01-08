@@ -1,16 +1,21 @@
-// get linkedin data 
+import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
+import { jobDescriptionDataType } from "@/types/jobDescription";
+import { currentUser } from "@clerk/nextjs";
 
-// import { auth } from "@clerk/nextjs"
-// import { Clerk } from "@clerk/nextjs/server"
-
-// async function getLinkedinData() {
-//     try {
-//     const { userId } = auth()
-
-//     // this returns an array of OauthAccessToken objects I'm just getting the first one
-//     const [OauthAccessToken] = await Clerk.users.getUserOauthAccessToken(
-//       userId || '',
-//       'oauth_google'
-//     )
-//     }
-// }
+// function to get the user's email address and name from clerk 
+export async function getUserData(jobId?: number) {
+    const user = await currentUser();
+    const returnDict = { name: "", email: "", label: "" }
+    if (user) {
+        returnDict.name = user.firstName as string + " " + user.lastName as string
+        let primaryAddress = user.emailAddresses.find((email) => email.id === user.primaryEmailAddressId)?.emailAddress
+        returnDict.email = primaryAddress ? primaryAddress as string : ""
+    }
+    if (jobId) {
+        if (JobDiscriptionData && JobDiscriptionData.hasOwnProperty(jobId)) {
+            const data = JobDiscriptionData[jobId] as jobDescriptionDataType;
+            returnDict.label = data.title;
+        }
+    }
+    return returnDict
+}

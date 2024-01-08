@@ -57,20 +57,23 @@ export function LogoElementWithLink() {
 // notification components
 export function NotificationElement() {
   const notification = useNotification();
-  const [open, setopen] = useState(false);
+  // const [open, setopen] = useState(false);
   return (
     <div className="relative w-[40px] h-[40px] pointer hover:border border-gray-600 rounded md:block hidden">
-      <DropdownMenu open={open} onOpenChange={setopen}>
-        <DropdownMenuTrigger>
+      <DropdownMenu
+        open={false}
+        // onOpenChange={setopen}
+      >
+        <DropdownMenuTrigger className="">
           <div>
             <Image
               src={"/svgs/notification.svg"}
               width={40}
               height={40}
-              className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+              className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 opacity-50 cursor-not-allowed"
               alt="notification to update"
             />
-            {notification.length > 0 && (
+            {/* {notification.length > 0 && (
               <Image
                 src={"/svgs/newNotification.svg"}
                 width={40}
@@ -78,7 +81,7 @@ export function NotificationElement() {
                 className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                 alt="notification to update"
               />
-            )}
+            )} */}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[20em] translate-y-7 -translate-x-12 bg-[#12141D] rounded-2xl shadow-xl shadow-[#f0f0f005] gap-2 flex flex-col p-2 border border-white border-opacity-10">
@@ -86,7 +89,10 @@ export function NotificationElement() {
             Notifications
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <NotificationRenderer notification={notification} setopen={setopen} />
+          <NotificationRenderer
+            notification={notification}
+            // setopen={setopen}
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -157,12 +163,9 @@ export function NavLinksDashboard() {
   return (
     <>
       <Link
-        href={urlWithOnlyTheseParams(
-          "/Templates",
-          {
-            templateName: "singleColumn",
-          }
-        )}
+        href={urlWithOnlyTheseParams("/Templates", {
+          templateName: "singleColumn",
+        })}
         className="text-violet-50"
       >
         Templates

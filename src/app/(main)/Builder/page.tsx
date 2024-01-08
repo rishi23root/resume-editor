@@ -1,4 +1,5 @@
 import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
+import { makeEmptyObject } from "@/lib/utils";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
 import {
@@ -19,7 +20,10 @@ export default async function builderPage(props: PageProps) {
 
   // api requst on server
   // get temaplate from trpc api for default values
-  const data = await serverAPI.builder.getDefault();
+  var data = await serverAPI.builder.getDefault({
+    jobId: parseInt(props.searchParams.jobId as string),
+  });
+
   return (
     <main className="flex-1 fr gap-4 max-h-[75vh]">
       <BuilderClient searchParams={props.searchParams} defaultData={data} />

@@ -4,6 +4,7 @@ const nextConfig = {
         serverActions: true,
     },
     reactStrictMode: true,
+    compress: true,
     swcMinify: true,
     compiler: {
         styledComponents: true,
