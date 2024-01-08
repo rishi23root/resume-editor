@@ -9,8 +9,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { searchParamType } from "@/types/utils";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { schema } from "./schema";
+import debounce from "lodash.debounce";
+import { compareJsonObjects } from "./customFormFields/sections/utils";
 
 export default function BuilderClient({
   searchParams,
@@ -20,22 +22,7 @@ export default function BuilderClient({
   defaultData: Inputs;
 }) {
   const isrendered = RenderCompleted();
-  var ToSubmit = false;
-  // to work on
-  // - fix form submit error
-  // 0. implement the redundancy for on submit function
-  // 1. save the updated data in the db
-  // 2. make a request to the pdf image and update the pdf image
-
-  // make update every 3 seconds it is possible to update the form
-  useEffect(() => {
-    // console.log("tosubmt set to ", !toSubmit);
-    // console.log(toSubmit);
-    const timer = setInterval(() => {
-      ToSubmit = true;
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+  const [pdfState, setPdfState] = useState<string>("");
 
   // add validation to the form and error messages to the inputs
   const formHandeler = useForm<Inputs>({
@@ -46,21 +33,49 @@ export default function BuilderClient({
 
   // watch for any changes in the form
   useEffect(() => {
-    const subscription = formHandeler.watch((value, { name, type }) => {
-      onSubmit(value as any);
-    });
-    return () => subscription.unsubscribe();
+    var subscription: any;
+    const timeout = setTimeout(() => {
+      // listening to new changes
+      console.log("change listener");
+      subscription = formHandeler.watch((value, { name, type }) => {
+        // console.log(name, type);
+        onSubmit(value as any);
+      });
+    }, 3000);
+    return () => {
+      clearTimeout(timeout);
+      subscription?.unsubscribe();
+    };
   }, [formHandeler.watch]);
+
+  // handle form submit
+  const submitAction = useCallback(
+    debounce(async (data: Inputs) => {
+      // all the main work with form data and server here
+
+      // validate the dict using zod
+      // update the data in the db
+      // make a request for the pdf image and update the pdf image
+
+      // to work on
+      // - fix form submit error
+      // 0. implement the redundancy for on submit function
+      // 1. save the updated data in the db
+      // 2. make a request to the pdf image and update the pdf image
+
+      console.log(data);
+      setPdfState("success...");
+      setTimeout(() => setPdfState(""), 1000);
+    }, 5000),
+    []
+  );
 
   const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
     data: any
   ) => {
-    console.log("change detected");
-    console.log("change:", ToSubmit);
-    if (!ToSubmit) return;
-    // update the data in the db
-    // console.log(data);
-    // make a request for the pdf image and update the pdf image
+    console.log("objct submitted");
+    setPdfState("updating..");
+    submitAction(data);
   };
 
   if (!isrendered) return null;
@@ -72,8 +87,8 @@ export default function BuilderClient({
       </FormProvider>
       <Suspense>
         <PDFviewer
-          // if payment is not basic
           enriched={parseInt(searchParams.payId as string) == 2}
+          state={pdfState}
         />
       </Suspense>
     </Suspense>

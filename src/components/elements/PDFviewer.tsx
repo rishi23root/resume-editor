@@ -8,7 +8,7 @@
 
 import { trpc } from "@/serverTRPC/client";
 
-function PDFviewer({ enriched }: { enriched: boolean }) {
+function PDFviewer({ enriched, state }: { enriched: boolean; state: string }) {
   // const { data } = trpc.hello2.useQuery({ text: "tesing the world" });
 
   // const { data : data2 } = trpc.jobDescription.useQuery({
@@ -20,6 +20,8 @@ function PDFviewer({ enriched }: { enriched: boolean }) {
 
   return (
     <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2">
+      {state}
+
       {/* {data?.greeting} */}
     </div>
   );
