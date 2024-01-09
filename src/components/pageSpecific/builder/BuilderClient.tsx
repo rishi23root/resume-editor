@@ -9,20 +9,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { searchParamType } from "@/types/utils";
+import debounce from "lodash.debounce";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { schema } from "./schema";
-import debounce from "lodash.debounce";
-import { compareJsonObjects } from "./customFormFields/sections/utils";
 
 export default function BuilderClient({
   searchParams,
   defaultData,
+  enrichPdf,
 }: {
   searchParams: searchParamType;
   defaultData: Inputs;
+  enrichPdf: boolean;
 }) {
   const isrendered = RenderCompleted();
-  const [pdfState, setPdfState] = useState<string>("");
+  const [pdfState, setPdfState] = useState<"idle" | "success" | "updating">(
+    "idle"
+  );
 
   // add validation to the form and error messages to the inputs
   const formHandeler = useForm<Inputs>({
@@ -53,19 +56,20 @@ export default function BuilderClient({
     debounce(async (data: Inputs) => {
       // all the main work with form data and server here
 
+      console.log(data);
       // validate the dict using zod
       // update the data in the db
       // make a request for the pdf image and update the pdf image
 
       // to work on
-      // - fix form submit error
-      // 0. implement the redundancy for on submit function
       // 1. save the updated data in the db
       // 2. make a request to the pdf image and update the pdf image
 
-      console.log(data);
-      setPdfState("success...");
-      setTimeout(() => setPdfState(""), 1000);
+      // id data updated succesfully
+
+      // usesignal to update pfd query
+      setPdfState("success");
+      setTimeout(() => setPdfState("idle"), 1000);
     }, 5000),
     []
   );
@@ -74,7 +78,7 @@ export default function BuilderClient({
     data: any
   ) => {
     console.log("objct submitted");
-    setPdfState("updating..");
+    setPdfState("updating");
     submitAction(data);
   };
 
@@ -86,10 +90,7 @@ export default function BuilderClient({
         <DevTool control={formHandeler.control} /> {/* set up the dev tool */}
       </FormProvider>
       <Suspense>
-        <PDFviewer
-          enriched={parseInt(searchParams.payId as string) == 2}
-          state={pdfState}
-        />
+        <PDFviewer enriched={enrichPdf} state={pdfState} />
       </Suspense>
     </Suspense>
   );

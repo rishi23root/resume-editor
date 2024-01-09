@@ -1,5 +1,6 @@
 // pathname: api/trpc/pdf/{functionNameHere}
 import { defaultTemplate } from "@/JSONapiData/builder";
+import { prisma } from "@/lib/prisma";
 import { makeEmptyObject } from "@/lib/utils";
 // import { serverAPI } from "@/serverTRPC/serverAPI";
 import { procedure, router } from "@/serverTRPC/trpc";
@@ -31,6 +32,53 @@ export const builderRouter = router({
 
     return data;
   }),
+  // function to update or get the data form a specific resume id
+  getDataByResumeId: procedure.input(
+    z.object({
+      id: z.string(),
+      userId: z.string(),
+    })
+  ).query(async (opts) => {
+    // check if this id is valid
+    const resumeData = await prisma.resumeData.findUnique({
+      where: {
+        id: opts.input.id,
+        userId: opts.input.userId,
+      },
+      select: {
+        data: true,
+      }
+    })
+    if (resumeData) {
+      // console.log('resume data found');
+
+      return JSON.parse(resumeData.data) as Inputs
+    }
+    throw new Error("resume data not found");
+  }),
+  // updateDataByResumeId: procedure.input(
+  //   z.object({
+  //     id: z.string(),
+  //     userId: z.string(),
+  //   })
+  // ).query(async (opts) => {
+  //   // check if this id is valid
+  //   const resumeData = await prisma.resumeData.findUnique({
+  //     where: {
+  //       id: opts.input.id,
+  //       userId: opts.input.userId,
+  //     },
+  //     select: {}
+  //   })
+  //   if (resumeData) {
+  //     // console.log('resume data found');
+  //     return { status: 'success' }
+  //     // return JSON.parse(resumeData.data) as Inputs
+  //   } else{
+  //     return { status: 'success' }
+  //   }
+  //   throw new Error("resume data not found");
+  // })
 });
 
 

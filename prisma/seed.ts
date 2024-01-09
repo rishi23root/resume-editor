@@ -37,73 +37,73 @@ const prisma = new PrismaClient({
 // 	});
 
 // async function main() {
-	// Connect the client
-	// await prisma.$connect();
-	// const newUser = await prisma.user.create(
-	// 	{
-	// 		data: {
-    //             name: "John2",
-	// 			email: "test@prisma.com",
-	// 			defaultLabel: "software dev"
-	// 		},
-	// 	}
-	// )
-	// // // create new resume object for user 
-	// const resume = await prisma.resumeData.create(
-    //     {
-    //         data: {
-	// 			status: "created",
-	// 			basic: { 
-	// 				name: "test",
-	// 				email: "test@prisma.com",
-	// 				label: "software",
-	// 				phone: "123",
-	// 				url: "www.prisma.com",
-	// 				location: {
-	// 					city: "New York"
-	// 				},
-	// 				profiles: [
-	// 					{
-	// 						network: "facebook",
-	// 						username: "tesing",
-	// 						url: "www.prisma.com",
-    //                     }
-	// 				]
-					
-	// 			},
-	// 			user:{
-	// 				connect: {
-    //                     id: newUser.id
-    //                 }
-	// 			}
-    //         },
-    //     }
-    // )
+// Connect the client
+// await prisma.$connect();
+// const newUser = await prisma.user.create(
+// 	{
+// 		data: {
+//             name: "John2",
+// 			email: "test@prisma.com",
+// 			defaultLabel: "software dev"
+// 		},
+// 	}
+// )
+// // // create new resume object for user 
+// const resume = await prisma.resumeData.create(
+//     {
+//         data: {
+// 			status: "created",
+// 			basic: { 
+// 				name: "test",
+// 				email: "test@prisma.com",
+// 				label: "software",
+// 				phone: "123",
+// 				url: "www.prisma.com",
+// 				location: {
+// 					city: "New York"
+// 				},
+// 				profiles: [
+// 					{
+// 						network: "facebook",
+// 						username: "tesing",
+// 						url: "www.prisma.com",
+//                     }
+// 				]
 
-	// get user with the resumes included in response
-	// const users = await prisma.user.findMany({
-	// 	include:{
-	// 		resumes: true
-	// 	}
-	// })
-	// console.log(users[0].resumes);
-	
+// 			},
+// 			user:{
+// 				connect: {
+//                     id: newUser.id
+//                 }
+// 			}
+//         },
+//     }
+// )
 
-	// console.log(test);
-	// const test1 = await prisma.user.create({
-	// 	data: {
-	// 		name: "admin",
-	// 		email: "admin@admin.com",
-	// 		password: "admin",
-	// 		UrlTable: {
-	// 			create: {
-	// 				url: "https://www.google.com",
-	// 				slug: "gogle",
-	// 			},
-	// 		},
-	// 	},
-	// });
-	// console.log(test1);
+// get user with the resumes included in response
+// const users = await prisma.user.findMany({
+// 	include:{
+// 		resumes: true
+// 	}
+// })
+// console.log(users[0].resumes);
+
+
+// console.log(test);
+// const test1 = await prisma.user.create({
+// 	data: {
+// 		name: "admin",
+// 		email: "admin@admin.com",
+// 		password: "admin",
+// 		UrlTable: {
+// 			create: {
+// 				url: "https://www.google.com",
+// 				slug: "gogle",
+// 			},
+// 		},
+// 	},
+// });
+// console.log(test1);
 // }
 
 // main()

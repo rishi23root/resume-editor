@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { checkIfFromLinkedin } from "@/utils/linkedinUtil";
 import useParamParser, { encodeJSONToBase64, jsonToSearchParameters } from "./paramHandeler";
 import { PageProps } from '../types/utils';
+import { serverAPI } from "@/serverTRPC/serverAPI";
 
 
 
@@ -13,17 +14,17 @@ import { PageProps } from '../types/utils';
 export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     // effective only for new login accounts
     const user = await currentUser();
-    
+
     if (!user) return {}
-    
+
     var redirectPage = ""
     // if user does not have private metadata that means user is new to platform 
     if (!Object.keys(user?.privateMetadata as object).length && user?.id) {
         // 1. create user in database 
-        try{
+        try {
             const newUser = await prisma.user.create({
                 data: {
-                    name: (user.firstName ? user.firstName: "Blank_Name" ) +  (user?.lastName? " " + user.lastName:""),
+                    name: (user.firstName ? user.firstName : "Blank_Name") + (user?.lastName ? " " + user.lastName : ""),
                     clerkId: user.id
                 },
                 select: {
@@ -34,51 +35,53 @@ export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
             // 2. update user metadata for the application 
             // for more info see https://clerk.com/docs/users/metadata
             // console.log("setting up user metadata: ",user?.id, newUser);
-            await clerkClient.users.updateUserMetadata(user?.id as string,{
+            await clerkClient.users.updateUserMetadata(user?.id as string, {
                 "privateMetadata": {
                     'userDBid': newUser.id,
-                    'name': (user.firstName ? user.firstName: "Blank_Name" ) +  (user?.lastName? " " + user.lastName:"") 
-                }}
-            )        
+                    'name': (user.firstName ? user.firstName : "Blank_Name") + (user?.lastName ? " " + user.lastName : "")
+                }
+            }
+            )
             // 3 redict user to the first time login sequence 
-            redirectPage = '/New?'  + await jsonToSearchParameters({
+            redirectPage = '/New?' + await jsonToSearchParameters({
                 _s: encodeJSONToBase64({
-                mode: "newLogin",
+                    mode: "newLogin",
                 }),
-            }); 
-        } catch (e){
+            });
+        } catch (e) {
             console.error(e);
             return {}
         }
-    } 
+    }
     // else{
     //     console.debug("User is already exiting with private Metadata :",Object.keys(user?.privateMetadata as object));
     // }
-    
+
     // check if user have is from linkedin account add boolean in metadata
     if (!user?.privateMetadata?.linkedin) {
         // console.log("linkedin account not found ");
-        
+
         const linkedinUser = await checkIfFromLinkedin(user);
-        if (linkedinUser){
-            try{
+        if (linkedinUser) {
+            try {
                 // update the metadata
-                await clerkClient.users.updateUserMetadata(user?.id as string,{
+                await clerkClient.users.updateUserMetadata(user?.id as string, {
                     "privateMetadata": {
                         'linkedin': linkedinUser ? true : false
-                    }}
+                    }
+                }
                 )
                 // update the database
                 await prisma.user.update({
                     data: {
-                        isLinkedLogin : linkedinUser ? true : false
+                        isLinkedLogin: linkedinUser ? true : false
                     },
                     where: {
                         clerkId: user.id
                     }
                 })
-                redirectPage = '/New/parsePDF' 
-            } catch (e){
+                redirectPage = '/New/parsePDF'
+            } catch (e) {
                 console.error(e);
                 return {}
             }
@@ -86,24 +89,24 @@ export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     }
 
     redirectPage && redirect(redirectPage)
-    
+
     return user?.privateMetadata as PrivateMetadata
 }
 
 
 
 // builderPage params validator
-export async function builderPageParamsRedirectHandeler({searchParams}: PageProps){
+// check for all search params and redirect to the right page if not found
+export async function builderPageParamsRedirectHandeler({ searchParams }: PageProps) {
     // copy the search params to avoid mutation
-    const SearchParams = {...searchParams}
+    const SearchParams = { ...searchParams }
     // extract the readable data from the search params
-    const { privateData } = await useParamParser("",SearchParams);
+    const { privateData } = await useParamParser("", SearchParams);
 
     // if (private data or _s session string) is not found or empty object then redirect to the dashboard
-    if (!Object.keys(privateData).length || !SearchParams._s) 
-    {
+    if (!Object.keys(privateData).length || !SearchParams._s) {
         SearchParams.error = "error decoding data, have to restart building :( ";
-        return redirect("/Dashboard?"+ await jsonToSearchParameters(SearchParams) );
+        return redirect("/Dashboard?" + await jsonToSearchParameters(SearchParams));
     }
 
     // add param to activate mean mode where only those path with no 
@@ -115,27 +118,189 @@ export async function builderPageParamsRedirectHandeler({searchParams}: PageProp
     if (!SearchParams.jobId) {
         privateData.procegure = 1;
         SearchParams._s = encodeJSONToBase64(privateData);
-        return redirect("/JobDescriptions?" + await jsonToSearchParameters(SearchParams) );
+        return redirect("/JobDescriptions?" + await jsonToSearchParameters(SearchParams));
     }
     // templateName is not found then redirect to the Template page
     if (!SearchParams.templateName) {
         privateData.procegure = 2;
         SearchParams._s = encodeJSONToBase64(privateData);
-        return redirect("/Templates?" + await jsonToSearchParameters(SearchParams) );
+        return redirect("/Templates?" + await jsonToSearchParameters(SearchParams));
     }
     // payId is not found then redirect to the Payment page
     if (!SearchParams.payId) {
         // update the session data with right procegure info
         privateData.procegure = 3;
         SearchParams._s = encodeJSONToBase64(privateData);
-        return redirect("/Payment?" + await jsonToSearchParameters(SearchParams) );
-    }   
+        return redirect("/Payment?" + await jsonToSearchParameters(SearchParams));
+    }
 
-    return 
+    return
 }
 
 // validate the params for the builder page like payment id and jsondataId
-export async function builderPageParamsValidator({searchParams}: PageProps){
-    return true
+// now user have all the required search params work on secured params and work on it 
+export async function builderPageParamsValidator({ searchParams }: PageProps) {
+    const { stringifiedData, privateData } = await useParamParser(
+        "/Builder",
+        searchParams
+    );
+
+    const SearchParams = { ...searchParams }
+
+    // --------------------------------------------------------------------------
+
+
+    // get user to reference the database with its id
+    // user clerk private metadata to get user id
+    const user = await currentUser();
+    const userDBid = user?.privateMetadata.userDBid;
+
+    // if user is not found then redirect to the dashboard and logout
+    if (!userDBid) {
+        return redirect("/Dashboard?" + await jsonToSearchParameters({
+            error: "Error with your account, del your account and try again :( ",
+        }));
+    }
+
+    console.log("Extract userid from clerk private metadata: ", userDBid);
+
+    // check if request have json data id or not
+    console.log('Check if request have json data id or not');
+
+    if (privateData.jsonDataId) {
+        console.log('Passed, json data id exist in request, varifiying the id');
+
+        // check if the json data id is valid or not and its user id is same as the current user 
+        const jsonData = await prisma.resumeData.findUnique({
+            where: {
+                id: privateData.jsonDataId,
+            },
+            select: {
+                id: true,
+                payId: true,
+                paymentStatus: true,
+                paymentId: true,
+            }
+        })
+        if (jsonData) {
+            console.log('passed json data id check, varified datajson id');
+            return jsonData;
+        } else {
+            // if not valid then redirect to the dashboard
+            return redirect("/Dashboard?" + await jsonToSearchParameters({
+                error: "error decoding data, have to restart building :( ",
+            }));
+        }
+    } else {
+        console.log('failed, json data id not found in request, looking for recent unpaid resume for the user');
+
+        // look for recent unpaid generated resume for the user 
+        const recentRequstForResume = await prisma.resumeData.findFirst({
+            where: {
+                userId: userDBid as string,
+                paymentStatus: "pending"
+            },
+            select: {
+                id: true,
+                payId: true,
+                data: true,
+                paymentStatus: true,
+                paymentId: true,
+            }
+        })
+
+        if (recentRequstForResume) {
+            console.log('passed found unpaid resume', recentRequstForResume.id);
+            // parseInt(SearchParams.payId as string)
+            // console.log(recentRequstForResume.payId, parseInt(SearchParams.payId as string), SearchParams.payId);
+
+            var defaultData = await serverAPI.builder.getDefault({
+                jobId: parseInt(SearchParams.jobId as string),
+            });
+            console.log("testing for data similarity: ", JSON.stringify(defaultData) === recentRequstForResume.data);
+
+            if (recentRequstForResume.payId !== parseInt(SearchParams.payId as string)) {
+                // update the database with current pay id
+                console.log('updating the pay id in the database');
+                const updatedResume = await prisma.resumeData.update({
+                    where: {
+                        id: recentRequstForResume.id
+                    },
+                    data: {
+                        payId: parseInt(SearchParams.payId as string)
+                    },
+                    select: {
+                        id: true,
+                        payId: true,
+                        paymentStatus: true,
+                        paymentId: true,
+                    }
+                })
+                return updatedResume;
+                // return redirect("/Builder?" + await jsonToSearchParameters({
+                // }));
+            }
+            SearchParams._s = encodeJSONToBase64({
+                ...privateData as object,
+                jsonDataId: recentRequstForResume.id
+            });
+            return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
+            // return recentRequstForResume;
+            // return redirect("/Dashboard?" + await jsonToSearchParameters({
+            //     error: "error decoding data, have to restart building :( ",
+            // }));
+        }
+        else {
+            console.log('fail in finding unpaid resume, creating a new one');
+            // console.log("default data for new resume:", {
+            //     payId: parseInt(SearchParams.payId as string),
+            // });
+
+            var defaultData = await serverAPI.builder.getDefault({
+                jobId: parseInt(SearchParams.jobId as string),
+            });
+            // console.log(JSON.stringify(defaultData));
+            const newResume = await prisma.resumeData.create({
+                data: {
+                    data: JSON.stringify(defaultData),
+                    payId: parseInt(SearchParams.payId as string),
+                    paymentId: "",
+                    user: {
+                        connect: {
+                            id: userDBid as string
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    payId: true,
+                    paymentStatus: true,
+                    paymentId: true,
+                }
+            })
+            // console.log(newResume);
+            // return newResume;
+            // SearchParams.payId = newResume.payId.toString(); ;
+            SearchParams._s = encodeJSONToBase64({
+                ...privateData as object,
+                jsonDataId: newResume.id
+            });
+            return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
+        }
+
+        // get payment id and varify if this is a valid payment id or not
+        // if valid then return the jsonData id 
+        // else return the error and redirect to the dashboard
+
+        // const jsonData = await prisma.resumeData.create({
+        //     data: {
+        //         payId : searchParams.payId as string,
+
+        //     }
+        // })
+
+        // SearchParams._s = encodeJSONToBase64(privateData);
+        // return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
+    }
 }
 

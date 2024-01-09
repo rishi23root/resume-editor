@@ -32,12 +32,12 @@ model User {
 
 // resume data table
 model ResumeData {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  status String
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  payId         String
-  paymentStatus String
   data          String
+  payId         Int
+  paymentId     String
+  paymentStatus String @default("pending")
 
   // resume.json fields
   // basic     Basics
@@ -53,32 +53,6 @@ model ResumeData {
   user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // basic
 type Basics {

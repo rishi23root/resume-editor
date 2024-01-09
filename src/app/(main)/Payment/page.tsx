@@ -17,13 +17,15 @@ export default async function paymentPage(props: PageProps) {
   console.log("from payment: ", stringifiedData, privateData);
 
   // after payment redirect link
-  const afterPaymentRedirection = await jsonToSearchParameters({
-    ...props.searchParams,
-    _s: encodeJSONToBase64({
-      ...(privateData ? (privateData as JsonType) : {}),
-      procegure: 4,
-    }),
-  });
+  const afterPaymentRedirection = async (payId: number) =>
+    await jsonToSearchParameters({
+      ...props.searchParams,
+      payId,
+      _s: encodeJSONToBase64({
+        ...(privateData ? (privateData as JsonType) : {}),
+        procegure: 4,
+      }),
+    });
 
   const data = await usePriceJson(true);
 
@@ -32,19 +34,23 @@ export default async function paymentPage(props: PageProps) {
     <main className="flex-1 md:fr fc gap-4 justify-center ">
       <PaymentCard
         data={data[0]}
-        onSuceessRedirectUrl={"/Builder?" + afterPaymentRedirection}
+        onSuceessRedirectUrl={async (payId: number) =>
+          "/Builder?" + (await afterPaymentRedirection(payId))
+        }
       />
       <PaymentCard
         data={data[1]}
         buttonStyle="bg-gradient-to-r from-blue-600 to-fuchsia-500 border-stone-500 "
-        onSuceessRedirectUrl={"/Builder?" + afterPaymentRedirection}
+        onSuceessRedirectUrl={async (payId: number) =>
+          "/Builder?" + (await afterPaymentRedirection(payId))
+        }
       />
       {/* <PaymentCard data={data[2]} /> */}
     </main>
   );
 }
 
-function PaymentCard({
+async function PaymentCard({
   data,
   className,
   buttonStyle,
@@ -65,7 +71,8 @@ function PaymentCard({
   // console.log(await serverAPI.price.byId({ payId: data.id}));
   // update the redirect url the payment provider will redirect to the payment page with the payid and procegure
 
-  const linkToNextStep = onSuceessRedirectUrl + "&payId=" + data.id;
+  const linkToNextStep = await onSuceessRedirectUrl(data.id);
+  //  + "&payId=" + data.id;
 
   return (
     <div className="flex-1">

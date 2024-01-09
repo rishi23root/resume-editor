@@ -24,6 +24,6 @@ export const priceRouter = router({
     if (!price) {
       throw new Error("price not found");
     }
-    return price.link;
+  return price.link;
   })
 });

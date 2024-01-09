@@ -7,6 +7,7 @@ import {
   builderPageParamsValidator,
 } from "@/utils/pageLoad";
 import useParamParser from "@/utils/paramHandeler";
+import { currentUser } from "@clerk/nextjs";
 
 export default async function builderPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
@@ -16,17 +17,29 @@ export default async function builderPage(props: PageProps) {
   console.log("from builder: ", stringifiedData, privateData);
 
   await builderPageParamsRedirectHandeler(props);
-  await builderPageParamsValidator(props);
+  const results = await builderPageParamsValidator(props);
+  console.log("varified json id: ", results);
 
+  // now we got varified json data id use that id to get the data from db of that id only
   // api requst on server
   // get temaplate from trpc api for default values
-  var data = await serverAPI.builder.getDefault({
-    jobId: parseInt(props.searchParams.jobId as string),
+  // var defaultData = await serverAPI.builder.getDefault({
+  //   jobId: parseInt(props.searchParams.jobId as string),
+  // });
+  const user = await currentUser();
+  const userDBid = user?.privateMetadata.userDBid;
+  var defaultData = await serverAPI.builder.getDataByResumeId({
+    id: results.id,
+    userId: userDBid as string,
   });
 
   return (
     <main className="flex-1 fr gap-4 max-h-[75vh]">
-      <BuilderClient searchParams={props.searchParams} defaultData={data} />
+      <BuilderClient
+        searchParams={props.searchParams}
+        defaultData={defaultData}
+        enrichPdf={parseInt(props.searchParams.payId as string) == 2}
+      />
     </main>
   );
 }

@@ -18,11 +18,25 @@ function PDFviewer({ enriched, state }: { enriched: boolean; state: string }) {
   // console.log("this is the way: ");
   // console.log("this is the way: ",data2);
 
+  // api request to get the pdf by id and update it on event
+  // api request to get the pdf ats score
+
+  // setup model view here on click and mobile display
+
   return (
     <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2">
-      {state}
+      <div className="fr justify-between items-center w-full relative">
+        <div className="opacity-80">
+          {state !== "idle" ? state + "..." : ""}
+        </div>
+        <div className="text-xl absolute -translate-x-1/2 left-[50%]">
+          Resume
+        </div>
+        <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
+      </div>
 
-      {/* {data?.greeting} */}
+      {/* images and model for images */}
+      <div className="flex-1  border border-greem-600">this is the waiy</div>
     </div>
   );
 }
