@@ -178,6 +178,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             select: {
                 id: true,
                 payId: true,
+                jobId: true,
                 paymentStatus: true,
                 paymentId: true,
             }
@@ -203,7 +204,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             select: {
                 id: true,
                 payId: true,
-                data: true,
+                jobId: true,
                 paymentStatus: true,
                 paymentId: true,
             }
@@ -211,44 +212,44 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
 
         if (recentRequstForResume) {
             console.log('passed found unpaid resume', recentRequstForResume.id);
-            // parseInt(SearchParams.payId as string)
             // console.log(recentRequstForResume.payId, parseInt(SearchParams.payId as string), SearchParams.payId);
+            // console.log("testing for data similarity: ", parseInt(SearchParams.jobId as string) === recentRequstForResume.jobId);
 
-            var defaultData = await serverAPI.builder.getDefault({
-                jobId: parseInt(SearchParams.jobId as string),
-            });
-            console.log("testing for data similarity: ", JSON.stringify(defaultData) === recentRequstForResume.data);
-
-            if (recentRequstForResume.payId !== parseInt(SearchParams.payId as string)) {
+            if (recentRequstForResume.payId !== parseInt(SearchParams.payId as string) || parseInt(SearchParams.jobId as string) !== recentRequstForResume.jobId) {
+                var defaultData = await serverAPI.builder.getDefault({
+                    jobId: parseInt(SearchParams.jobId as string),
+                });
                 // update the database with current pay id
-                console.log('updating the pay id in the database');
+                console.log('updating the pay id and data for reqeuested jobid in the database');
                 const updatedResume = await prisma.resumeData.update({
                     where: {
                         id: recentRequstForResume.id
                     },
                     data: {
-                        payId: parseInt(SearchParams.payId as string)
+                        payId: parseInt(SearchParams.payId as string),
+                        jobId: parseInt(SearchParams.jobId as string),
+                        data: JSON.stringify(defaultData),
                     },
                     select: {
                         id: true,
                         payId: true,
+                        jobId: true,
                         paymentStatus: true,
                         paymentId: true,
                     }
                 })
-                return updatedResume;
-                // return redirect("/Builder?" + await jsonToSearchParameters({
-                // }));
+                // return updatedResume;
+                SearchParams._s = encodeJSONToBase64({
+                    ...privateData as object,
+                    jsonDataId: updatedResume.id
+                });
+                return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
             }
             SearchParams._s = encodeJSONToBase64({
                 ...privateData as object,
                 jsonDataId: recentRequstForResume.id
             });
             return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
-            // return recentRequstForResume;
-            // return redirect("/Dashboard?" + await jsonToSearchParameters({
-            //     error: "error decoding data, have to restart building :( ",
-            // }));
         }
         else {
             console.log('fail in finding unpaid resume, creating a new one');
@@ -264,6 +265,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 data: {
                     data: JSON.stringify(defaultData),
                     payId: parseInt(SearchParams.payId as string),
+                    jobId: parseInt(SearchParams.jobId as string),
                     paymentId: "",
                     user: {
                         connect: {
@@ -274,6 +276,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 select: {
                     id: true,
                     payId: true,
+                    jobId: true,
                     paymentStatus: true,
                     paymentId: true,
                 }

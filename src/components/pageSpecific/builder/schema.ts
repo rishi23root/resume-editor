@@ -37,7 +37,7 @@ const Work = z.array(
     url: z.string(),
     startDate: z.string(),
     isWorkingHere: z.boolean(),
-    endDate: z.string(),
+    endDate: z.union([z.string(), z.null()]),
     summary: z.string(),
     years: z.string(),
   })
@@ -52,7 +52,7 @@ const Education = z.array(
     area: z.string(),
     startDate: z.string(),
     isStudyingHere: z.boolean(),
-    endDate: z.string(),
+    endDate: z.union([z.string(), z.null()]),
     score: z.string(),
   })
 );
@@ -148,7 +148,7 @@ const mask = z.object({
 });
 
 // export const schema = z.object({
-export const schema:ZodType<Inputs> = z.object({
+export const schema: ZodType<Inputs> = z.object({
   basics: Basics,
   skills: skills,
   work: Work,

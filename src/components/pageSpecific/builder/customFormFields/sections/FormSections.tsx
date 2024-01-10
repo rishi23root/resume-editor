@@ -217,10 +217,12 @@ export function Education() {
                         onBlur={onBlur} // notify when input is touched/blur
                         value={value}
                       />
+
                       <FormInput
                         type="date"
                         {...register(`education.${index}.startDate`)}
                       />
+
                       <FormInput
                         type="date"
                         {...register(`education.${index}.endDate`, {
@@ -230,14 +232,6 @@ export function Education() {
                     </>
                   )}
                 />
-                {/* <FormInput
-                  type="date"
-                  {...register(`education.${index}.endDate`, {
-                    disabled:
-                      watch(`education.${index}.isStudyingHere` as any) ===
-                      true,
-                  })}
-                /> */}
                 <FormInput
                   type="text"
                   {...register(`education.${index}.score`)}
@@ -336,6 +330,7 @@ export function Work() {
                         onBlur={onBlur} // notify when input is touched/blur
                         value={value}
                       />
+
                       <FormInput
                         type="date"
                         {...register(`work.${index}.startDate`)}

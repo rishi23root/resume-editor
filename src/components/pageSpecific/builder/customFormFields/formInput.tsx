@@ -125,7 +125,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       const { id, disabled, ...rest } = props;
       return (
         <>
-          <input type="hidden" ref={ref} {...rest} disabled={false} />
+          <input type="hidden" ref={ref} {...rest} />
           <DatePicker
             id={id}
             className={rest.className}
@@ -371,12 +371,19 @@ const DatePicker = ({
   const { setValue, getValues } = useFormContext<Inputs>();
   const calId = useId();
 
+  // update this date to the form if not keep the default value do not update that
+
   useEffect(() => {
     // console.log("new Date:", date)
     if (date) {
       setIsOpen(false);
       // convert this date to some readable date for json formater
-      setValue(fieldTitle, format(date, "LLL yyyy"));
+      setValue(
+        fieldTitle,
+        format(date, "LLL yyyy")
+          ? format(date, "LLL yyyy")
+          : getValues(fieldTitle)
+      );
       // console.log(
       //   "formated updated :",
       //   format(date, "LLL yyyy")
@@ -405,7 +412,10 @@ const DatePicker = ({
   }, [date]);
 
   useEffect(() => {
-    setValue(fieldTitle, date ? format(date, "LLL yyyy") : "");
+    setValue(
+      fieldTitle,
+      date ? format(date, "LLL yyyy") : getValues(fieldTitle)
+    );
   }, [disabled]);
 
   return (

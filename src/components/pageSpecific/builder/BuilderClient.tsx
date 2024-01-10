@@ -12,20 +12,55 @@ import { searchParamType } from "@/types/utils";
 import debounce from "lodash.debounce";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { schema } from "./schema";
+import { trpc } from "@/serverTRPC/client";
+import { currentUser } from "@clerk/nextjs";
+import { useQueryClient } from "@tanstack/react-query";
+import { Key } from "lucide-react";
 
 export default function BuilderClient({
+  userId,
   searchParams,
   defaultData,
-  enrichPdf,
+  activeResumeInstance,
 }: {
+  userId: string;
   searchParams: searchParamType;
   defaultData: Inputs;
-  enrichPdf: boolean;
+  activeResumeInstance: {
+    id: string;
+    payId: number;
+    jobId: number;
+    paymentId: string;
+    paymentStatus: string;
+  };
 }) {
   const isrendered = RenderCompleted();
-  const [pdfState, setPdfState] = useState<"idle" | "success" | "updating">(
-    "idle"
-  );
+  const [pdfState, setPdfState] = useState<
+    "idle" | "success" | "updating" | "error"
+  >("idle");
+
+  const queryClient = useQueryClient();
+
+  const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "builder.generatePDF",
+        {
+          id: activeResumeInstance.id,
+          templateName: searchParams.templateName as string,
+        },
+      ]);
+      setPdfState("success");
+      setTimeout(() => setPdfState("idle"), 1000);
+    },
+    onError: () => {
+      setPdfState("error");
+      setTimeout(() => setPdfState("idle"), 1000);
+    },
+    onMutate: (data) => {
+      setPdfState("updating");
+    },
+  });
 
   // add validation to the form and error messages to the inputs
   const formHandeler = useForm<Inputs>({
@@ -39,38 +74,56 @@ export default function BuilderClient({
     var subscription: any;
     const timeout = setTimeout(() => {
       // listening to new changes
-      console.log("change listener");
+      console.log("change listener activated ");
       subscription = formHandeler.watch((value, { name, type }) => {
         // console.log(name, type);
         onSubmit(value as any);
       });
-    }, 3000);
+    }, 5000);
     return () => {
       clearTimeout(timeout);
       subscription?.unsubscribe();
     };
   }, [formHandeler.watch]);
 
-  // handle form submit
+  // handle form submit with debounce of 1 seconds
   const submitAction = useCallback(
-    debounce(async (data: Inputs) => {
+    debounce(async (dataObject: Inputs) => {
       // all the main work with form data and server here
+      // updating the data for backend
 
-      console.log(data);
+      const dataForServer = {
+        ...dataObject,
+        work: dataObject.work.map((work) => {
+          return {
+            ...work,
+            endDate: work.isWorkingHere ? null : work.endDate,
+          };
+        }),
+        education: dataObject.education.map((education) => {
+          return {
+            ...education,
+            endDate: education.isStudyingHere ? null : education.endDate,
+          };
+        }),
+      };
+
       // validate the dict using zod
+      // try {
+      //   await schema.parseAsync(dataObject); 
+      // } catch (error) {
+      //   console.log(error);
+      //   // return;
+      // }
+
+
       // update the data in the db
-      // make a request for the pdf image and update the pdf image
-
-      // to work on
-      // 1. save the updated data in the db
-      // 2. make a request to the pdf image and update the pdf image
-
-      // id data updated succesfully
-
-      // usesignal to update pfd query
-      setPdfState("success");
-      setTimeout(() => setPdfState("idle"), 1000);
-    }, 5000),
+      const updatedReturn = updateDatabase.mutate({
+        id: activeResumeInstance.id,
+        userId: userId,
+        data: JSON.stringify(dataForServer),
+      });
+    }, 1000),
     []
   );
 
@@ -87,10 +140,15 @@ export default function BuilderClient({
     <Suspense>
       <FormProvider {...formHandeler}>
         <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
-        <DevTool control={formHandeler.control} /> {/* set up the dev tool */}
+        <DevTool control={formHandeler.control} />
       </FormProvider>
       <Suspense>
-        <PDFviewer enriched={enrichPdf} state={pdfState} />
+        <PDFviewer
+          templateName={searchParams.templateName as string}
+          enriched={activeResumeInstance.payId == 2}
+          state={pdfState}
+          resumeId={activeResumeInstance.id}
+        />
       </Suspense>
     </Suspense>
   );

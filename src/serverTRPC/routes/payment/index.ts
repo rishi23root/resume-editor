@@ -15,15 +15,15 @@ export const priceRouter = router({
   // get payment portal id from payId
   byId: procedure
     .input(z.object({
-        payId: z.number(),
-      }))
-  .query((opts) => {
-    // console.log('request for job title by id');
-    const payId = opts.input.payId;
-    const price = priceData.find((price) => price.id === payId);
-    if (!price) {
-      throw new Error("price not found");
-    }
-  return price.link;
-  })
+      payId: z.number(),
+    }))
+    .query((opts) => {
+      // console.log('request for job title by id');
+      const payId = opts.input.payId;
+      const price = priceData.find((price) => price.id === payId);
+      if (!price) {
+        throw new Error("price not found");
+      }
+      return price.link;
+    })
 });

@@ -17,34 +17,26 @@ export default async function builderPage(props: PageProps) {
   console.log("from builder: ", stringifiedData, privateData);
 
   await builderPageParamsRedirectHandeler(props);
-  const results = await builderPageParamsValidator(props);
-  console.log("varified json id: ", results);
+  const activeResumeInstance = await builderPageParamsValidator(props);
+  // console.log("varified json id: ", activeResumeInstance);
 
-  // now we got varified json data id use that id to get the data from db of that id only
-  // api requst on server
-  // get temaplate from trpc api for default values
-  // var defaultData = await serverAPI.builder.getDefault({
-  //   jobId: parseInt(props.searchParams.jobId as string),
-  // });
   const user = await currentUser();
   const userDBid = user?.privateMetadata.userDBid;
+
+  // now we got varified json data id use that id to get the data from db of that id only
   var defaultData = await serverAPI.builder.getDataByResumeId({
-    id: results.id,
+    id: activeResumeInstance.id,
     userId: userDBid as string,
   });
 
   return (
     <main className="flex-1 fr gap-4 max-h-[75vh]">
       <BuilderClient
+        userId={userDBid as string}
         searchParams={props.searchParams}
         defaultData={defaultData}
-        enrichPdf={parseInt(props.searchParams.payId as string) == 2}
+        activeResumeInstance={activeResumeInstance}
       />
     </main>
   );
 }
-
-// for this page to work
-// we need to have a data object   in the url inside _s (to the safe side, and it will be easy to work with in future) to extract the data from db
-// if able to be extracted then we can build the page else redirect to error page
-// that will be provided from the payment page on the success on the payment

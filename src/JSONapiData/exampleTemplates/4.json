@@ -57,7 +57,7 @@
     "core": [
       {
         "keywords": ["HTML", "CSS", "JavaScript"],
-        "level": "Master",
+        "level": 3,
         "name": "Web Development"
       }
     ],

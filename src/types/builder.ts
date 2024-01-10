@@ -30,7 +30,7 @@ export type WorkT = {
   url: string;
   startDate: string;
   isWorkingHere: boolean;
-  endDate: string;
+  endDate: string | null;
   summary: string;
   years: string;
 };
@@ -43,7 +43,7 @@ export type EducationT = {
   area: string;
   startDate: string;
   isStudyingHere: boolean;
-  endDate: string;
+  endDate: string | null;
   score: string;
 };
 
