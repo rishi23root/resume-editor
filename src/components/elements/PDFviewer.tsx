@@ -9,6 +9,9 @@
 import { trpc } from "@/serverTRPC/client";
 import { Loadingstate } from "../Fallbacks";
 import { ZoomerImage } from "../custom/ImageMagnify";
+import { useToast } from "../ui/use-toast";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 function PDFviewer({
   templateName,
@@ -21,23 +24,43 @@ function PDFviewer({
   templateName: string;
   resumeId: string;
 }) {
-  const { data, isLoading, isError, error } = trpc.builder.generatePDF.useQuery(
-    {
-      id: resumeId,
-      templateName: templateName,
-    },
-    {
-      queryKey: [
-        "builder.generatePDF",
-        { id: resumeId, templateName: templateName },
-      ],
-    }
-  );
+  const [dataArray, setDataArray] = useState<string[]>([]);
+  const { toast } = useToast();
+  const { data, isLoading, isError, error, status, isFetching, isRefetching } =
+    trpc.builder.generatePDF.useQuery(
+      {
+        id: resumeId,
+        templateName: templateName,
+      },
+      {
+        // queryKey: [
+        //   "builder.generatePDF",
+        //   { id: resumeId, templateName: templateName },
+        // ],
+        staleTime: 0,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchInterval: false,
+        refetchIntervalInBackground: false,
+        // update ui instantly on invalidateQueries
+      }
+    );
 
-  if (data?.error) {
-    console.log(data?.error);
-    // show error toast
-  }
+  // show error if any
+  useEffect(() => {
+    if (data?.error) {
+      console.log(data?.error);
+      toast({
+        variant: "destructive",
+        title: "Error while generating preview",
+        description: data.error,
+      });
+    } else {
+      setDataArray(data?.images || []);
+    }
+    console.log("updated");
+  }, [data]);
 
   // api request to get the pdf by id and update it on event
   // api request to get the pdf ats score
@@ -46,10 +69,9 @@ function PDFviewer({
 
   return (
     <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2 gap-2">
+      {/* isFetching : {`${isRefetching} ${status} `} */}
       <div className="fr justify-between items-center w-full relative">
-        <div className="opacity-80">
-          {state !== "idle" ? state + "..." : ""}
-        </div>
+        <div className="opacity-80">{state !== "idle" ? state : ""}</div>
         <div className="text-xl absolute -translate-x-1/2 left-[50%]">
           Resume
         </div>
@@ -62,23 +84,23 @@ function PDFviewer({
           </div>
         )}
         {isError && <div className="w-full fc fcc">{error.toString()}</div>}
-        <div className="w-[85%] relative">
-          {data?.images && data?.images.length > 0 && (
+        <motion.div layout className="w-[85%] relative">
+          {dataArray && dataArray.length > 0 && (
             <ZoomerImage
-              src={data?.images[0]}
+              src={dataArray[0]}
               alt={"autogenrated resume image"}
               width={200}
               height={200}
               className="h-full rounded-md shadow-xl"
             />
           )}
-          {data?.images && data?.images.length > 1 && (
+          {dataArray && dataArray.length > 1 && (
             <div className="rounded-md shadow-xl bg-red-50 z-10 h-full w-full absolute top-0 opacity-25 left-6 scale-95" />
           )}
-        </div>
+        </motion.div>
         <div className="border flex-1 bg-green-50"></div>
       </div>
-      <div className="flex-1 border border-greem-600 overflow-hidden"></div>
+      {/* <div className="flex-1 border border-greem-600 overflow-hidden"></div> */}
     </div>
   );
 }

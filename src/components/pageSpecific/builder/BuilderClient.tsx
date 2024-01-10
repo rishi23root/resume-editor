@@ -43,13 +43,16 @@ export default function BuilderClient({
 
   const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        "builder.generatePDF",
-        {
-          id: activeResumeInstance.id,
-          templateName: searchParams.templateName as string,
-        },
-      ]);
+      // console.log("first mutation success");
+      // queryClient.invalidateQueries(  "builder.generatePDF");
+      queryClient.invalidateQueries("builder.generatePDF" as any);
+      // queryClient.invalidateQueries([
+      //   "builder.generatePDF",
+      //   {
+      //     id: activeResumeInstance.id,
+      //     templateName: searchParams.templateName as string,
+      //   },
+      // ]);
       setPdfState("success");
       setTimeout(() => setPdfState("idle"), 1000);
     },
@@ -110,12 +113,11 @@ export default function BuilderClient({
 
       // validate the dict using zod
       // try {
-      //   await schema.parseAsync(dataObject); 
+      //   await schema.parseAsync(dataObject);
       // } catch (error) {
       //   console.log(error);
       //   // return;
       // }
-
 
       // update the data in the db
       const updatedReturn = updateDatabase.mutate({

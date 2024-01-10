@@ -11,6 +11,7 @@ import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
 
 export const builderRouter = router({
+
   getDefault: procedure.input(
     z.object({
       jobId: z.number(),
@@ -52,6 +53,7 @@ export const builderRouter = router({
 
     return data;
   }),
+
   // function get the data form a specific resume id
   getDataByResumeId: procedure.input(
     z.object({
@@ -78,6 +80,7 @@ export const builderRouter = router({
     }
     throw new Error("resume data not found");
   }),
+
   // function to update the data form a specific resume id
   updateDataByResumeId: procedure.input(
     z.object({
@@ -120,7 +123,6 @@ export const builderRouter = router({
     }
   }),
 
-
   // function to generate new pdf
   generatePDF: procedure.input(
     z.object({
@@ -128,7 +130,8 @@ export const builderRouter = router({
       templateName: z.string()
     })
   ).query(async (opts) => {
-    console.log('renerating new pdf');
+    // console.log('renerating new pdf');
+    // let start = performance.now();
 
     const resumeId = opts.input.id;
     const templateName = opts.input.templateName;
@@ -183,6 +186,8 @@ export const builderRouter = router({
           // console.log(4);
 
           const imageLink = await image.json();
+          // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
+
           return {
             images: imageLink as string[], error: ""
           }
