@@ -185,6 +185,31 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
         })
         if (jsonData) {
             console.log('passed json data id check, varified datajson id');
+            // if unpaid then update the job id and pay id
+            if (jsonData.paymentStatus === "pending") {
+                console.log('passed unpaid check, updating the pay id and job id');
+                // update the pay id and job id
+                const updatedResume = await prisma.resumeData.update({
+                    where: {
+                        id: jsonData.id
+                    },
+                    data: {
+                        payId: parseInt(SearchParams.payId as string),
+                        jobId: parseInt(SearchParams.jobId as string),
+                        template: SearchParams.templateName as string,
+
+                    },
+                    select: {
+                        id: true,
+                        payId: true,
+                        jobId: true,
+                        template: true,
+                        paymentStatus: true,
+                        paymentId: true,
+                    }
+                })
+                return updatedResume;
+            }
             return jsonData;
         } else {
             // if not valid then redirect to the dashboard
@@ -205,6 +230,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 id: true,
                 payId: true,
                 jobId: true,
+                template: true,
                 paymentStatus: true,
                 paymentId: true,
             }
@@ -228,12 +254,14 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                     data: {
                         payId: parseInt(SearchParams.payId as string),
                         jobId: parseInt(SearchParams.jobId as string),
+                        template: SearchParams.templateName as string,
                         data: JSON.stringify(defaultData),
                     },
                     select: {
                         id: true,
                         payId: true,
                         jobId: true,
+                        template: true,
                         paymentStatus: true,
                         paymentId: true,
                     }
@@ -266,6 +294,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                     data: JSON.stringify(defaultData),
                     payId: parseInt(SearchParams.payId as string),
                     jobId: parseInt(SearchParams.jobId as string),
+                    template: SearchParams.templateName as string,
                     paymentId: "",
                     user: {
                         connect: {
@@ -277,6 +306,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                     id: true,
                     payId: true,
                     jobId: true,
+                    template: true,
                     paymentStatus: true,
                     paymentId: true,
                 }
@@ -290,20 +320,6 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             });
             return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
         }
-
-        // get payment id and varify if this is a valid payment id or not
-        // if valid then return the jsonData id 
-        // else return the error and redirect to the dashboard
-
-        // const jsonData = await prisma.resumeData.create({
-        //     data: {
-        //         payId : searchParams.payId as string,
-
-        //     }
-        // })
-
-        // SearchParams._s = encodeJSONToBase64(privateData);
-        // return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
     }
 }
 

@@ -95,6 +95,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
               "w-full h-full",
               "flex-1 p-auto"
             )}
+            value={"Update Resume"}
           />
         </Button>
       </motion.form>

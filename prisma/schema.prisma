@@ -28,6 +28,7 @@ model ResumeData {
   data          String
   payId         Int
   jobId         Int
+  template      String
   paymentId     String
   paymentStatus String @default("pending")
 

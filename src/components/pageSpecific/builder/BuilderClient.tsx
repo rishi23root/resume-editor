@@ -8,14 +8,12 @@ import FormManager from "./FormElementManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import RenderCompleted from "@/hooks/RenderCompleted";
+import { trpc } from "@/serverTRPC/client";
 import { searchParamType } from "@/types/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { schema } from "./schema";
-import { trpc } from "@/serverTRPC/client";
-import { currentUser } from "@clerk/nextjs";
-import { useQueryClient } from "@tanstack/react-query";
-import { Key } from "lucide-react";
 
 export default function BuilderClient({
   userId,

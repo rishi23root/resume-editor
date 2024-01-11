@@ -4,18 +4,36 @@ import { z } from "zod";
 import { pdfFileSchema } from "./util";
 
 export const pdfRouter = router({
-  parse: procedure.input(
+    parse: procedure.input(
         z.object({
             pdf: pdfFileSchema
             // pdf: pdfFileSchema
         }),
-    ).query((opts) => {
+    ).query(async (opts) => {
         // take the file and and extract information from it
 
-        // make eh openai request here
-        // opts.input.pdf 
-        return {
-            tesing: "success",
-        };
+
+        // ############ to do
+        // complete the pdf.parse route
+
+        // make openai request here
+        try {
+            // opts.input.pdf 
+            // if error return error
+            console.log(opts.input.pdf);
+            return {
+                jsonData: { 'data': 'data' }
+            };
+        } catch (err) {
+            return {
+                error: "unable to parse pdf file, implement this route",
+                jsonData: { 'data': 'data' }
+            };
+        }
+
+
+        // return {
+        //     jsonData: 'data'
+        // }
     }),
 });

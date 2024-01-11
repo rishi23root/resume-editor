@@ -1,5 +1,5 @@
 import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
-import { makeEmptyObject } from "@/lib/utils";
+import { MakePaymentComponent } from "@/components/pageSpecific/payment/payment";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
 import {
@@ -30,7 +30,13 @@ export default async function builderPage(props: PageProps) {
   });
 
   return (
-    <main className="flex-1 fr gap-4 max-h-[75vh]">
+    <main className="flex-1 fr gap-4 max-h-[75vh] relative">
+      {/* if payment if not completed then complete the payment */}
+      {activeResumeInstance.paymentStatus == "pending" && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 w-[50%] border border-green-400 bg-white text-black p-4">
+          <MakePaymentComponent payId={activeResumeInstance.payId} />
+        </div>
+      )}
       <BuilderClient
         userId={userDBid as string}
         searchParams={props.searchParams}
