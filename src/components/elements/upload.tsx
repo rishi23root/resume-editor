@@ -78,7 +78,7 @@ const UploadResume = () => {
   };
 
   useEffect(() => {
-    console.log(file);
+    // console.log(file);
     if (file) {
       // console.log("file do exist", file);
       // make formData and append file to it // fix for direct file is not being passing into server function argument

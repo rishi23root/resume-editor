@@ -1,4 +1,4 @@
-'use server';
+'use server'
 
 import { schema } from "@/components/pageSpecific/builder/schema";
 import { prisma } from "@/lib/prisma";
@@ -6,30 +6,30 @@ import { serverAPI } from "@/serverTRPC/serverAPI";
 import { JsonType } from "@/types/utils";
 import { currentUser } from "@clerk/nextjs";
 
-// handle parsing and data extraction from linkedin pdf file
+// handle parsing and data extraction from linkedin pdf file    
 export async function uploadFile(formData: FormData) {
     // extract file from form data
     const file = formData.get("file") as any;
-
     // check file type it should be pdf or json file
     if (["application/pdf", "application/json"].includes(file.type)) {
         // parse pdf file or json file accordingly
+
         var jsonData: JsonType;
         if (file.type === "application/pdf") {
-            // parse pdf file
-            const data = await serverAPI.pdf.parse({ pdf: "file" });
+            // extract text from pdf file
+            const formData = new FormData();
+            formData.append("file", file);
+            const req = await fetch(process.env.BACKEND + "/extract_text", { method: "POST", body: formData })
+            const extractedText = await req.json();
 
-
-            // need to update this code to handle upload file and parse it
-
-
-
+            // convert extracted text to json data
+            const data = await serverAPI.pdf.parse({ pdfText: extractedText });
 
             if (data.error || !data.jsonData) {
                 return {
                     error: {
                         title: "Error with pdf file",
-                        des: "unable to process pdf file, :( try again with a valid pdf file."
+                        des: data.error
                     }
                 }
             } else {
@@ -50,12 +50,10 @@ export async function uploadFile(formData: FormData) {
                 }
             }
         }
-        // check if data is valid
 
+        // check if data is valid
         const user = await currentUser();
         const userDBid = user?.privateMetadata.userDBid;
-
-
         // create new db instance
         const newResume = await prisma.resumeData.create({
             data: {
@@ -78,9 +76,7 @@ export async function uploadFile(formData: FormData) {
                 paymentId: true,
             }
         })
-
         // console.log(newResume);
-
         return {
             data: {
                 jsonDataId: newResume.id,
