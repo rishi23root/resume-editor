@@ -25,6 +25,7 @@ function PDFviewer({
   resumeId: string;
 }) {
   const [dataArray, setDataArray] = useState<string[]>([]);
+  const [pdfFile, setPdfFile] = useState<File | null>();
   const { toast } = useToast();
   const { data, isLoading, isError, error, status, isFetching, isRefetching } =
     trpc.builder.generatePDF.useQuery(
@@ -58,6 +59,8 @@ function PDFviewer({
       });
     } else {
       setDataArray(data?.images || []);
+      // setPdfFile(data?.pdfFile || []);
+      // console.log("updated", data?.pdfFile);
     }
     console.log("updated");
   }, [data]);

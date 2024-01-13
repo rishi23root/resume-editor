@@ -59,3 +59,21 @@ export async function getTemplateDataWithImages() {
 //     });
 //   });
 // }
+
+
+export async function readBlobAsBase64(blob: Blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      const base64String = (reader.result as string).split(',')[1];
+      resolve(base64String);
+    };
+
+    reader.onerror = function (error) {
+      reject(error);
+    };
+
+    reader.readAsDataURL(blob);
+  });
+}

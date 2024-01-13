@@ -9,6 +9,7 @@ import { z } from "zod";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
+import { readBlobAsBase64 } from "@/utils/util";
 
 export const builderRouter = router({
 
@@ -148,11 +149,11 @@ export const builderRouter = router({
 
     if (!resumeData) {
       return {
-        images: [] as string[], error: "resume data not found must be wrong id, try again"
+        images: [] as string[],
+        error: "resume data not found must be wrong id, try again"
       }
     }
     // console.log("genrating pdf: ", Object.keys(JSON.parse(resumeData?.data as string).education[0]));
-
 
     try {
       const request = await fetch(process.env.BACKEND + "/create_resume", {
@@ -168,32 +169,52 @@ export const builderRouter = router({
 
       // console.log(request.status);
       if (request.status === 200) {
-        // console.log(2);
-
         // convert pdf to base64
         const pdfData = await request.blob();
         const formData = new FormData();
         formData.append("file", pdfData, "file.pdf");
 
+        console.log('pdf to text');
+        // const base64 = await readBlobAsBase64(pdfData)
+        // console.log(base64)
+
+
+
+        // convert the file to base64 string and save it into the database
+        const dat = await prisma.resumeData.update({
+          where: {
+            id: resumeId,
+          },
+          data: {
+            pdfItself: await pdfData.text(),
+          },
+          select: {
+            id: true,
+            pdfItself: true,
+          }
+        })
+
+        console.log(dat)
+
         const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
           method: "POST",
           body: formData,
         });
-        // console.log(3);
 
         // console.log(image.status);
         if (image.status === 200) {
           // console.log(4);
-
           const imageLink = await image.json();
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
           return {
-            images: imageLink as string[], error: ""
+            images: imageLink as string[],
+            error: ""
           }
         } else {
           return {
-            images: [] as string[], error: "unable to convert into images from pdf, server errror"
+            images: [] as string[],
+            error: "unable to convert into images from pdf, server errror"
           }
         }
       }
@@ -201,7 +222,9 @@ export const builderRouter = router({
       // console.log("tesing", JSON.parse(resumeData.data).education);
 
       return {
-        images: [] as string[], error: await request.text()
+        images: [] as string[],
+
+        error: await request.text()
       }
     }
     catch (err) {

@@ -138,10 +138,10 @@ export default function BuilderClient({
   if (!isrendered) return null;
   return (
     <Suspense>
-      <FormProvider {...formHandeler}>
+      {/* <FormProvider {...formHandeler}>
         <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
         <DevTool control={formHandeler.control} />
-      </FormProvider>
+      </FormProvider> */}
       <Suspense>
         <PDFviewer
           templateName={searchParams.templateName as string}
