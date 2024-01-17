@@ -12,6 +12,8 @@ import { ZoomerImage } from "../custom/ImageMagnify";
 import { useToast } from "../ui/use-toast";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 function PDFviewer({
   templateName,
@@ -71,7 +73,7 @@ function PDFviewer({
   // setup model view here on click and mobile display
 
   return (
-    <div className="items-center w-full md:w-[60%] fc glass md:h-full h-1/2 gap-2">
+    <motion.div layout className="fc glass gap-2 h-full w-1/2 group">
       {/* isFetching : {`${isRefetching} ${status} `} */}
       <div className="fr justify-between items-center w-full relative">
         <div className="opacity-80">{state !== "idle" ? state : ""}</div>
@@ -80,31 +82,41 @@ function PDFviewer({
         </div>
         <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
       </div>
-      <div className="flex align-middle border h-fit gap-2">
-        {isLoading && (
-          <div className="w-full fc fcc ">
-            <Loadingstate />
+      <div className="flex-1 justify-center fr gap-2">
+        <motion.div layout className="flex-1">
+          {/* flex justify-center */}
+          <div className="h-full border border-green-500 flex items-center justify-center  relative ">
+            {/* {isLoading && (
+              <div className="w-full fc fcc ">
+                <Loadingstate />
+              </div>
+            )}
+            {isError && <div className="w-full fc fcc">{error.toString()}</div>} */}
+            {dataArray && dataArray.length > 0 && (
+              // <ZoomerImage
+              // <AspectRatio ratio={1.5 / 1} className="border border-green-300 h-full flex justify-center">
+              <Image
+                src={dataArray[0]}
+                alt={"autogenrated resume image"}
+                width={400}
+                height={600}
+                className="rounded-md shadow-xl border aspect-[1/2] max-h-[10em] max-w-full object-cover border-green-300 "
+                // w-fit
+                // className="rounded-md shadow-xl border border-green-300 h-full w-full  object-contain "
+              />
+              // </AspectRatio>
+            )}
+            {/* {dataArray && dataArray.length > 0 && (
+              <div className="rounded-md shadow-xl bg-red-50 z-10 h-full w-full absolute top-0 opacity-25 left-6 scale-95" />
+            )} */}
           </div>
-        )}
-        {isError && <div className="w-full fc fcc">{error.toString()}</div>}
-        <motion.div layout className="w-[85%] relative">
-          {dataArray && dataArray.length > 0 && (
-            <ZoomerImage
-              src={dataArray[0]}
-              alt={"autogenrated resume image"}
-              width={200}
-              height={200}
-              className="h-full rounded-md shadow-xl"
-            />
-          )}
-          {dataArray && dataArray.length > 1 && (
-            <div className="rounded-md shadow-xl bg-red-50 z-10 h-full w-full absolute top-0 opacity-25 left-6 scale-95" />
-          )}
         </motion.div>
-        <div className="border flex-1 bg-green-50"></div>
+        <div className="border hidden group-hover:flex w-[10%] bg-green-50">
+          side pannel{" "}
+        </div>
       </div>
       {/* <div className="flex-1 border border-greem-600 overflow-hidden"></div> */}
-    </div>
+    </motion.div>
   );
 }
 

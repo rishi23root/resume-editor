@@ -174,27 +174,24 @@ export const builderRouter = router({
         const formData = new FormData();
         formData.append("file", pdfData, "file.pdf");
 
-        console.log('pdf to text');
-        // const base64 = await readBlobAsBase64(pdfData)
-        // console.log(base64)
+        // console.log('pdf to text');
+        // // const base64 = await readBlobAsBase64(pdfData)
+        // // console.log(base64)
 
-
-
-        // convert the file to base64 string and save it into the database
-        const dat = await prisma.resumeData.update({
-          where: {
-            id: resumeId,
-          },
-          data: {
-            pdfItself: await pdfData.text(),
-          },
-          select: {
-            id: true,
-            pdfItself: true,
-          }
-        })
-
-        console.log(dat)
+        // // convert the file to base64 string and save it into the database
+        // const dat = await prisma.resumeData.update({
+        //   where: {
+        //     id: resumeId,
+        //   },
+        //   data: {
+        //     pdfItself: await pdfData.text(),
+        //   },
+        //   select: {
+        //     id: true,
+        //     pdfItself: true,
+        //   }
+        // })
+        // console.log(dat)
 
         const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
           method: "POST",
