@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { AspectRatio } from "../ui/aspect-ratio";
+import { ArrowDownFromLine, RefreshCcw } from "lucide-react";
 
 function PDFviewer({
   templateName,
@@ -73,7 +74,7 @@ function PDFviewer({
   // setup model view here on click and mobile display
 
   return (
-    <motion.div layout className="fc glass gap-2 h-full w-1/2 group">
+    <motion.div layout className="fc glass gap-4 h-full w-full group">
       {/* isFetching : {`${isRefetching} ${status} `} */}
       <div className="fr justify-between items-center w-full relative">
         <div className="opacity-80">{state !== "idle" ? state : ""}</div>
@@ -82,41 +83,69 @@ function PDFviewer({
         </div>
         <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
       </div>
-      <div className="flex-1 justify-center fr gap-2">
-        <motion.div layout className="flex-1">
+      <motion.div layout className="flex-1 justify-center fr gap-2 ">
+        <motion.div
+          layout
+          className="flex-1  min-w-[50%] flex justify-center items-center flex-row"
+        >
           {/* flex justify-center */}
-          <div className="h-full border border-green-500 flex items-center justify-center  relative ">
-            {/* {isLoading && (
+          <div className="h-full flex items-center justify-center  relative ">
+            {isLoading && (
               <div className="w-full fc fcc ">
                 <Loadingstate />
               </div>
             )}
-            {isError && <div className="w-full fc fcc">{error.toString()}</div>} */}
+            {isError && <div className="w-full fc fcc">{error.toString()}</div>}
             {dataArray && dataArray.length > 0 && (
-              // <ZoomerImage
-              // <AspectRatio ratio={1.5 / 1} className="border border-green-300 h-full flex justify-center">
-              <Image
+              <ZoomerImage
                 src={dataArray[0]}
                 alt={"autogenrated resume image"}
                 width={400}
                 height={600}
-                className="rounded-md shadow-xl border aspect-[1/2] max-h-[10em] max-w-full object-cover border-green-300 "
-                // w-fit
-                // className="rounded-md shadow-xl border border-green-300 h-full w-full  object-contain "
+                className="rounded-md shadow-xl object-cover w-[30em] "
               />
-              // </AspectRatio>
             )}
-            {/* {dataArray && dataArray.length > 0 && (
-              <div className="rounded-md shadow-xl bg-red-50 z-10 h-full w-full absolute top-0 opacity-25 left-6 scale-95" />
-            )} */}
+            {dataArray && dataArray.length > 1 && (
+              <div className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl" />
+            )}
           </div>
         </motion.div>
-        <div className="border hidden group-hover:flex w-[10%] bg-green-50">
-          side pannel{" "}
-        </div>
-      </div>
-      {/* <div className="flex-1 border border-greem-600 overflow-hidden"></div> */}
+        <motion.div
+          layout
+          className="border hidden group-hover:flex w-[10%] glass flex-col justify-top gap-2 items-center"
+        >
+          <div className="w-full text-center mb-4">Actions</div>
+          <ActionBtn>
+            <ArrowDownFromLine />
+          </ActionBtn>
+          <ActionBtn>
+            <RefreshCcw />
+          </ActionBtn>
+          {/* action required
+          1. download
+          2. refresh
+          4. request new pdf file
+          3. request schema file
+          */}
+          <div className="w-full text-center mb-4 item-end">Actions</div>
+        </motion.div>
+      </motion.div>
     </motion.div>
+  );
+}
+
+function ActionBtn({
+  children,
+  onPress,
+}: {
+  children: React.ReactNode;
+  onPress?: () => void;
+}) {
+  return (
+    <div className="border p-4 shadow-md hover:bg-slate-500 rounded-md shadow-white/50">
+      
+      {children}
+    </div>
   );
 }
 
