@@ -229,6 +229,28 @@ export const builderRouter = router({
     }
   }),
 
+  // del a specific resume id
+  delByResumeId: procedure.input(
+    z.object({
+      id: z.string(),
+      userId: z.string(),
+    })
+  ).mutation(async (opts) => {
+    console.log('renerating new pdf');
+    // get data from the database because id is valid this will run only on server side so its safe
+    const resumeData = await prisma.resumeData.delete({
+      where: {
+        id: opts.input.id,
+        userId: opts.input.userId,
+      }
+    })
+    if (resumeData) {
+      // console.log('resume data found');
+      return resumeData
+    }
+    throw new Error("resume data not found");
+  }),
+
 });
 
 

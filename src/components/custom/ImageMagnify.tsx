@@ -1,7 +1,6 @@
 "use client";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
-import { motion } from "framer-motion";
 
 // take the child element of image and wrap it in a div with overflow hidden
 // take the parent element and add a mouseover event
@@ -15,12 +14,13 @@ export const ZoomerImage = (ImageProps: {
   width: number;
   height: number;
   className?: string;
+  zoomType?: "click" | "hover" | undefined;
 }) => {
   return (
     <InnerImageZoom
       className={ImageProps.className}
       src={ImageProps.src}
-      zoomType={"hover"}
+      zoomType={ImageProps.zoomType ? ImageProps.zoomType : "hover"}
     />
   );
 };

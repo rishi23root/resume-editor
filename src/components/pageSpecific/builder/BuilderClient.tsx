@@ -148,6 +148,7 @@ export default function BuilderClient({
           enriched={activeResumeInstance.payId == 2}
           state={pdfState}
           resumeId={activeResumeInstance.id}
+          userId={userId}
         />
       </Suspense>
     </Suspense>
