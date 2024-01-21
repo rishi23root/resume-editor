@@ -25,7 +25,7 @@ export default async function builderPage(props: PageProps) {
 
   // now we got varified json data id use that id to get the data from db of that id only
   var defaultData = await serverAPI.builder.getDataByResumeId({
-    id: activeResumeInstance.id,
+    resumeId: activeResumeInstance.id,
     userId: userDBid as string,
   });
 

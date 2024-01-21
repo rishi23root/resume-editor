@@ -51,6 +51,7 @@
     "eslint": "8.45.0",
     "eslint-config-next": "13.5.1",
     "eslint-config-prettier": "^8.8.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^10.13.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.276.0",
@@ -80,6 +81,7 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
+    "@types/file-saver": "^2.0.7",
     "@types/shortid": "^0.0.32",
     "prisma": "^5.3.1"
   }

@@ -9,7 +9,6 @@ import { z } from "zod";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
-import { readBlobAsBase64 } from "@/utils/util";
 
 export const builderRouter = router({
 
@@ -58,15 +57,15 @@ export const builderRouter = router({
   // function get the data form a specific resume id
   getDataByResumeId: procedure.input(
     z.object({
-      id: z.string(),
+      resumeId: z.string(),
       userId: z.string(),
     })
   ).query(async (opts) => {
     // get data from the database because id is valid this will run only on server side so its safe
     const resumeData = await prisma.resumeData.findUnique({
       where: {
-        id: opts.input.id,
-        userId: opts.input.userId,
+        id: opts.input.resumeId,
+        userId: opts.input.userId
       },
       select: {
         data: true,
@@ -83,10 +82,9 @@ export const builderRouter = router({
   }),
 
   // function to update the data form a specific resume id
-  updateDataByResumeId: procedure.input(
+  updateDataByResumeId: privateProcedure.input(
     z.object({
-      id: z.string(),
-      userId: z.string(),
+      resumeId: z.string(),
       data: z.string(),
     })
   ).mutation(async (opts) => {
@@ -94,8 +92,8 @@ export const builderRouter = router({
     // check validity and update
     const resumeData = await prisma.resumeData.findUnique({
       where: {
-        id: opts.input.id,
-        userId: opts.input.userId,
+        id: opts.input.resumeId,
+        userId: opts.ctx.dbId as string,
         // paymentStatus: 'paid',
       },
       select: {
@@ -109,7 +107,7 @@ export const builderRouter = router({
       // console.log('resume data found');
       const response = await prisma.resumeData.update({
         where: {
-          id: opts.input.id,
+          id: opts.input.resumeId,
         },
         data: {
           data: opts.input.data,
@@ -131,7 +129,7 @@ export const builderRouter = router({
       templateName: z.string()
     })
   ).query(async (opts) => {
-    // console.log('renerating new pdf');
+    console.log('renerating new pdf images');
     // let start = performance.now();
 
     const resumeId = opts.input.id;
@@ -174,25 +172,6 @@ export const builderRouter = router({
         const formData = new FormData();
         formData.append("file", pdfData, "file.pdf");
 
-        // console.log('pdf to text');
-        // // const base64 = await readBlobAsBase64(pdfData)
-        // // console.log(base64)
-
-        // // convert the file to base64 string and save it into the database
-        // const dat = await prisma.resumeData.update({
-        //   where: {
-        //     id: resumeId,
-        //   },
-        //   data: {
-        //     pdfItself: await pdfData.text(),
-        //   },
-        //   select: {
-        //     id: true,
-        //     pdfItself: true,
-        //   }
-        // })
-        // console.log(dat)
-
         const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
           method: "POST",
           body: formData,
@@ -203,6 +182,20 @@ export const builderRouter = router({
           // console.log(4);
           const imageLink = await image.json();
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
+
+          // convert the file to base64 string and save it into the database
+          prisma.resumeData.update({
+            where: {
+              id: resumeId,
+            },
+            data: {
+              pdfItself: imageLink[0],
+            },
+            select: {
+              id: true,
+            }
+          })
+          // console.log(dat)
 
           return {
             images: imageLink as string[],
@@ -232,21 +225,101 @@ export const builderRouter = router({
   // del a specific resume id
   delByResumeId: privateProcedure.input(
     z.object({
-      id: z.string(),
+      resumeId: z.string(),
       // userId: z.string(),
     })
   ).mutation(async (opts) => {
-    console.log('renerating new pdf');
+    console.log('delting resume Entry');
     // get data from the database because id is valid this will run only on server side so its safe
     const resumeData = await prisma.resumeData.delete({
       where: {
-        id: opts.input.id,
+        id: opts.input.resumeId,
         userId: opts.ctx.dbId as string,
       }
     })
     if (resumeData) {
       // console.log('resume data found');
       return resumeData
+    }
+    throw new Error("resume data not found");
+  }),
+
+  // get pdf file for a specific resume id
+  getPDFByResumeId: privateProcedure.input(
+    z.object({
+      resumeId: z.string(),
+      templateName: z.string()
+    })
+  ).mutation(async (opts) => {
+    console.log('renerating new pdf only');
+
+    const templateName = opts.input.templateName;
+    const resumeData = await prisma.resumeData.findUnique({
+      where: {
+        id: opts.input.resumeId,
+        userId: opts.ctx.dbId as string,
+      },
+      select: {
+        data: true,
+      }
+    })
+
+    if (!resumeData) {
+      throw new Error("resume data not found must be wrong id, try again");
+    }
+    // console.log("genrating pdf: ", Object.keys(JSON.parse(resumeData?.data as string).education[0]));
+
+    try {
+      const response = await fetch(process.env.BACKEND + "/create_resume", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: JSON.parse(resumeData.data),
+          template: templateName,
+        }),
+      });
+
+      // console.log(23)
+      // console.log(response.status);
+      if (response.status === 200) {
+        // console.log(24)
+        const buffer = Buffer.from(await response.arrayBuffer())
+        const basedata = buffer.toString('base64')
+        return basedata
+      }
+      else {
+        throw new Error(await response.text());
+      }
+    }
+    catch (err) {
+      throw new Error("server errror");
+    }
+  }),
+
+  // get pdf schema file for a specific resume id
+  getSchemaByResumeId: privateProcedure.input(
+    z.object({
+      resumeId: z.string(),
+    })
+  ).mutation(async (opts) => {
+    console.log('renerating new pdf schema only');
+    // get data from the database because id is valid this will run only on server side so its safe
+    const resumeData = await prisma.resumeData.findUnique({
+      where: {
+        id: opts.input.resumeId,
+        userId: opts.ctx.dbId as string
+      },
+      select: {
+        data: true,
+      }
+    })
+    if (resumeData) {
+      // console.log('resume data found');
+      return JSON.parse(resumeData.data, (key, value) => {
+        return value === 'undefined' ? null : value;
+      }) as Inputs
     }
     throw new Error("resume data not found");
   }),

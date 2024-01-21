@@ -58,7 +58,7 @@ export default function BuilderClient({
       setPdfState("error");
       setTimeout(() => setPdfState("idle"), 1000);
     },
-    onMutate: (data) => {
+    onMutate: () => {
       setPdfState("updating");
     },
   });
@@ -119,8 +119,7 @@ export default function BuilderClient({
 
       // update the data in the db
       const updatedReturn = updateDatabase.mutate({
-        id: activeResumeInstance.id,
-        userId: userId,
+        resumeId: activeResumeInstance.id,
         data: JSON.stringify(dataForServer),
       });
     }, 1000),
@@ -148,7 +147,6 @@ export default function BuilderClient({
           enriched={activeResumeInstance.payId == 2}
           state={pdfState}
           resumeId={activeResumeInstance.id}
-          userId={userId}
         />
       </Suspense>
     </Suspense>

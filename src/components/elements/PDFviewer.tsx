@@ -7,53 +7,35 @@
 "use client";
 
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import RenderCompleted from "@/hooks/RenderCompleted";
-import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowDownFromLine,
-  Download,
   FileJson2,
   FileText,
-  HardDriveDownload,
   RefreshCcw,
   Trash2,
 } from "lucide-react";
-import {
-  Dispatch,
-  SetStateAction,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { Loadingstate } from "../Fallbacks";
 import { useToast } from "../ui/use-toast";
 
 import { useRouter } from "next/navigation";
-import { ActionBtn } from "../pageSpecific/builder/uitls";
+import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
+import { saveAs } from "file-saver";
+import { format } from "date-fns";
 
 function PDFviewer({
   templateName,
   resumeId,
   enriched,
   state,
-  userId,
 }: {
   enriched: boolean;
   state: string;
   templateName: string;
   resumeId: string;
-  userId: string;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
@@ -103,6 +85,79 @@ function PDFviewer({
   });
 
   // download pdf mutation
+  const downloadPDF = trpc.builder.getPDFByResumeId.useMutation({
+    onSuccess: async (data) => {
+      // console.log("downloaded pdf: ", data);
+      // now  we got base64 encoded pdf file decode it and save it as pdf file
+      const blob = new Blob([Buffer.from(data, "base64")], {
+        type: "application/pdf",
+      });
+
+      saveAs(blob, `resume_${format(new Date(), "dd-MM-yyyy")}.pdf`);
+
+      toast({
+        variant: "default",
+        title: "PDF downloaded 👍 ",
+      });
+    },
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "unable to download pdf try again later",
+      });
+      console.log(err);
+    },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Requesting for PDF download :)",
+      });
+      setTimeout(() => {
+        toast({
+          variant: "default",
+          title: "PDF will download shortly ",
+          duration: 20000,
+        });
+      }, 500);
+    },
+  });
+
+  // download pdf schema
+  const downloadSchema = trpc.builder.getSchemaByResumeId.useMutation({
+    onSuccess: (data) => {
+      // console.log("downloaded schema: ", data.basics.name);
+      // save the data into a file with name username_resumeId.json and download it
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+
+      saveAs(
+        blob,
+        `${data.basics.name.replace(" ", ".")}_${format(
+          new Date(),
+          "dd-MM-yyyy"
+        )}.json`
+      );
+
+      toast({
+        variant: "default",
+        title: "Schema downloaded 👍 ",
+      });
+    },
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "Unable to download schema try again later",
+      });
+      console.log(err);
+    },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Requesting for schema download :)",
+      });
+    },
+  });
 
   // show error if any
   useEffect(() => {
@@ -121,20 +176,22 @@ function PDFviewer({
     console.log("updated");
   }, [data]);
 
-
-
   function DownloadPDFFromServer() {
+    console.log(resumeId);
+
     // downloadPDF();
+    downloadPDF.mutate({ resumeId, templateName });
   }
   function DownloadSchemaFromServer() {
-    // downloadSchema();
+    console.log(resumeId);
+    downloadSchema.mutate({ resumeId });
   }
   async function delResumeAndRedirect() {
     // delete the resume from the server
     // show notification of deleting
     // onsuccess redirect to the dashboard
     if (confirm("Deleting resume: " + resumeId)) {
-      deleteResume.mutate({ id: resumeId });
+      deleteResume.mutate({ resumeId });
     }
   }
 
@@ -185,7 +242,10 @@ function PDFviewer({
           <div className="w-full text-center mb-4 opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
             Actions
           </div>
-          <ActionBtn toolkitContent="download resume">
+          <ActionBtn
+            toolkitContent="download resume"
+            onPress={DownloadPDFFromServer}
+          >
             <ArrowDownFromLine className="scale-125" />
           </ActionBtn>
           <ActionBtn
@@ -197,7 +257,10 @@ function PDFviewer({
           >
             <RefreshCcw className="scale-125" />
           </ActionBtn>
-          <ActionBtn toolkitContent="download schema">
+          <ActionBtn
+            toolkitContent="download schema"
+            onPress={DownloadSchemaFromServer}
+          >
             <FileJson2 className="scale-125" />
           </ActionBtn>
           <ActionBtn
@@ -230,138 +293,6 @@ function PDFviewer({
         />
       )}
     </motion.div>
-  );
-}
-
-function ModelComponent({
-  resumeId,
-  isError,
-  error,
-  dataArray,
-  showModel,
-  setShowModel,
-}: {
-  resumeId: string;
-  isError: boolean;
-  error: any;
-  dataArray: string[];
-  showModel: boolean;
-  setShowModel: Dispatch<SetStateAction<boolean>>;
-}) {
-  // model code
-  const ref = useRef<HTMLDivElement>(null);
-  const pdfOverLayDivRef = useRef<HTMLDivElement>(null);
-
-  const shadowColor = "rgba(0, 0, 0, 0.5)";
-  const { scrollXProgress } = useScroll({ container: ref });
-
-  useMotionValueEvent(scrollXProgress, "change", (latest) => {
-    // console.log("pdf scroll latest: ", latest);
-
-    if (dataArray.length > 1) {
-      if (latest == 0) {
-        console.log("top");
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--topBlurColor",
-          "transparent"
-        );
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--bottomBlurColor",
-          shadowColor
-        );
-      } else if (latest > 0.99) {
-        console.log("bottom");
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--bottomBlurColor",
-          "transparent"
-        );
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--topBlurColor",
-          shadowColor
-        );
-      } else {
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--bottomBlurColor",
-          shadowColor
-        );
-        pdfOverLayDivRef.current?.style.setProperty(
-          "--topBlurColor",
-          shadowColor
-        );
-      }
-    }
-  });
-
-  return (
-    <Suspense>
-      {showModel && (
-        <Dialog open={showModel} onOpenChange={(_) => setShowModel(!showModel)}>
-          <DialogContent className="max-w-[90vw] md:max-w-[70vw] h-[80vh] shadow-2xl shadow-gray-900 overflow-hidden  ">
-            <DialogHeader>
-              <DialogTitle className="bold text-xl">
-                <span className="text-white capitalize">Resume</span>
-                &nbsp; / &nbsp;
-                <span className="text-gray-600">{resumeId}</span>
-              </DialogTitle>
-              <DialogDescription className="fr gap-8 p-4 h-full text-left">
-                <span className="flex-1 fc gap-4 h-full ">
-                  <span className="flex-1 fc gap-4 border">
-                    {/* ats score */}
-                    {/* ai generated inprovements */}
-                    <span className="fc gap-2">testing</span>
-                    <span className="fc gap-2">testing content</span>
-                  </span>
-                  <Button
-                    className={cn(
-                      "p-6 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center w-full ",
-                      "transition ease-in-out delay-150", //animate
-                      "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black"
-                    )}
-                    onClick={() => {
-                      alert("pdf download function executed");
-                    }}
-                  >
-                    Download PDF
-                    <HardDriveDownload />
-                  </Button>
-                </span>
-                <span className="w-[50%] hidden lg:fc fcc">
-                  <span className="w-full text-center text-lg capitalize">
-                    Resume
-                  </span>
-                  <div
-                    ref={pdfOverLayDivRef}
-                    className="pdfShowOverlay flex h-full max-w-full mx-2 items-center justify-center relative "
-                  >
-                    {isError && (
-                      <div className="w-full fc fcc">{error.toString()}</div>
-                    )}
-                    <motion.div
-                      ref={ref}
-                      className=" h-auto overflow-x-scroll flex flex-row gap-4 w-[full]"
-                    >
-                      {dataArray &&
-                        dataArray.length > 0 &&
-                        dataArray.map((el, index) => (
-                          <ZoomerImage
-                            src={el}
-                            key={index}
-                            alt={"autogenrated resume image"}
-                            width={400}
-                            height={600}
-                            zoomType="click"
-                            className="rounded-md shadow-xl object-cover w-[33em] min-w-[30em] border border-green-200 "
-                          />
-                        ))}
-                    </motion.div>
-                  </div>
-                </span>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-      )}
-    </Suspense>
   );
 }
 
