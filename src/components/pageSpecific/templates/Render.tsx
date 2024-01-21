@@ -40,7 +40,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
     return (
       <>
         {images.length > 0 && (
-          <div className="flex-1 fr gap-4 overflow-auto m-auto border border-green-100">
+          <div className="flex-1 fr gap-4 overflow-auto m-auto">
             <Suspense fallback={"loading image please wait"}>
               <Image
                 src={images ? images[0] : "null"}

@@ -62,7 +62,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
   return (
     <div
       className={cn(
-        "items-center w-full md:w-[60%] fc md:h-full gap-4 relative rounded-md",
+        "items-center min-w-[50%] fc md:h-full gap-4 relative rounded-md",
         "formOverLay"
       )}
       ref={formOverLayDivRef}

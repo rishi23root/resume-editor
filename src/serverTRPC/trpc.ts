@@ -2,7 +2,7 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import { Context } from './context';
 
 const t = initTRPC.context<Context>().create();
-
+// export const { createCallerFactory } = t;
 export const router = t.router;
 export const procedure = t.procedure;
 export const privateProcedure = procedure.use(async (opts) => {

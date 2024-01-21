@@ -137,16 +137,19 @@ export default function BuilderClient({
   if (!isrendered) return null;
   return (
     <Suspense>
-      {/* <FormProvider {...formHandeler}>
-        <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
-        <DevTool control={formHandeler.control} />
-      </FormProvider> */}
+      <Suspense>
+        <FormProvider {...formHandeler}>
+          <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
+          <DevTool control={formHandeler.control} />
+        </FormProvider>
+      </Suspense>
       <Suspense>
         <PDFviewer
           templateName={searchParams.templateName as string}
           enriched={activeResumeInstance.payId == 2}
-          state={pdfState}
           resumeId={activeResumeInstance.id}
+          state={pdfState}
+          setPdfState={setPdfState}
         />
       </Suspense>
     </Suspense>

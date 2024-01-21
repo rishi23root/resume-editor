@@ -53,7 +53,7 @@ export function ActionBtn({
         className={cn(
           "opacity-0 -translate-y-4",
           "group-hover/actionBtn:mb-2 group-hover/actionBtn:opacity-100 group-hover/actionBtn:translate-y-0",
-          "transition-translate duration-150 ease-in-out h-2 leading-1 capitalize text-center text-sm text-white/60"
+          "transition-all duration-150 ease-in-out h-2 leading-0 capitalize text-center text-sm text-white/60"
         )}
       >
         {toolkitContent}

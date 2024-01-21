@@ -25,25 +25,30 @@ import { useRouter } from "next/navigation";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
 import { saveAs } from "file-saver";
 import { format } from "date-fns";
+import { useQueryClient } from "@tanstack/react-query";
 
 function PDFviewer({
   templateName,
   resumeId,
   enriched,
   state,
+  setPdfState,
 }: {
   enriched: boolean;
-  state: string;
   templateName: string;
   resumeId: string;
+  state: string;
+  setPdfState: React.Dispatch<
+    React.SetStateAction<"idle" | "success" | "updating" | "error">
+  >;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
-  const [pdfFile, setPdfFile] = useState<File | null>();
   const ifRendered = RenderCompleted();
 
   const { toast } = useToast();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // generating pdf
   const { data, isLoading, isError, error } = trpc.builder.generatePDF.useQuery(
@@ -178,7 +183,6 @@ function PDFviewer({
 
   function DownloadPDFFromServer() {
     console.log(resumeId);
-
     // downloadPDF();
     downloadPDF.mutate({ resumeId, templateName });
   }
@@ -195,8 +199,10 @@ function PDFviewer({
     }
   }
 
+  // need to update ats score and get data for the model and refresh it when model opens
+
   return (
-    <motion.div layout className="fc glass gap-4 h-full w-full group">
+    <motion.div layout className="fc glass gap-4 h-full w-full group flex-1">
       {/* isFetching : {`${isRefetching} ${status} `} */}
       <div className="fr justify-between items-center w-full relative">
         <div className="opacity-80">{state !== "idle" ? state : ""}</div>
@@ -237,7 +243,7 @@ function PDFviewer({
         </motion.div>
         <motion.div
           layout
-          className="rounded-md transition-[width] duration-500 ease-in-out opacity-0  w-0 group-hover:opacity-100 group-hover:w-[10%]  p-2 flex flex-col justify-top gap-4"
+          className="rounded-md transition-[width] duration-500 ease-in-out opacity-0  w-0 group-hover:opacity-100 group-hover:w-[25%] p-2 flex flex-col justify-top gap-4"
         >
           <div className="w-full text-center mb-4 opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
             Actions
@@ -251,8 +257,11 @@ function PDFviewer({
           <ActionBtn
             toolkitContent="refresh editor"
             onPress={() => {
+              setPdfState("updating");
               // relaod the page
-              location.reload();
+              // location.reload();
+              queryClient.invalidateQueries("builder.generatePDF" as any);
+              setTimeout(() => setPdfState("idle"), 1000);
             }}
           >
             <RefreshCcw className="scale-125" />
