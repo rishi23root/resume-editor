@@ -1,7 +1,7 @@
 // pathname: api/trpc/pdf/{functionNameHere}
 import { defaultTemplate } from "@/JSONapiData/builder";
 import { prisma } from "@/lib/prisma";
-import { procedure, router } from "@/serverTRPC/trpc";
+import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
 import { getUserData } from "@/utils/dbUtils";
 import { z } from "zod";
@@ -230,10 +230,10 @@ export const builderRouter = router({
   }),
 
   // del a specific resume id
-  delByResumeId: procedure.input(
+  delByResumeId: privateProcedure.input(
     z.object({
       id: z.string(),
-      userId: z.string(),
+      // userId: z.string(),
     })
   ).mutation(async (opts) => {
     console.log('renerating new pdf');
@@ -241,7 +241,7 @@ export const builderRouter = router({
     const resumeData = await prisma.resumeData.delete({
       where: {
         id: opts.input.id,
-        userId: opts.input.userId,
+        userId: opts.ctx.dbId as string,
       }
     })
     if (resumeData) {

@@ -91,7 +91,7 @@ function PDFviewer({
         variant: "default",
         title: "Resume deleted",
       });
-      router.push("/Dashbard");
+      router.push("/Dashboard");
     },
     onError: (err) => {
       toast({
@@ -101,6 +101,8 @@ function PDFviewer({
       console.log(err);
     },
   });
+
+  // download pdf mutation
 
   // show error if any
   useEffect(() => {
@@ -119,6 +121,8 @@ function PDFviewer({
     console.log("updated");
   }, [data]);
 
+
+
   function DownloadPDFFromServer() {
     // downloadPDF();
   }
@@ -129,9 +133,8 @@ function PDFviewer({
     // delete the resume from the server
     // show notification of deleting
     // onsuccess redirect to the dashboard
-
     if (confirm("Deleting resume: " + resumeId)) {
-      deleteResume.mutate({ id: resumeId, userId });
+      deleteResume.mutate({ id: resumeId });
     }
   }
 
