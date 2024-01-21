@@ -199,14 +199,20 @@ function PDFviewer({
     }
   }
 
+  // update to get the ats score and other discription data for full and enrich view of the resume
   // need to update ats score and get data for the model and refresh it when model opens
 
   return (
     <motion.div layout className="fc glass gap-4 h-full w-full group flex-1">
       {/* isFetching : {`${isRefetching} ${status} `} */}
-      <div className="fr justify-between items-center w-full relative">
+      <div
+        className="fr justify-between items-center w-full relative cursor-pointer"
+        onClick={() => {
+          setShowModel(!showModel);
+        }}
+      >
         <div className="opacity-80">{state !== "idle" ? state : ""}</div>
-        <div className="text-xl absolute -translate-x-1/2 left-[50%]">
+        <div className="text-xl absolute -translate-x-1/2 left-[50%] top-0">
           Resume
         </div>
         <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
@@ -217,7 +223,7 @@ function PDFviewer({
       >
         <motion.div
           layout
-          className="flex-1  min-w-[50%] flex justify-center items-center flex-row"
+          className="flex-1 min-w-[50%] w-full flex justify-center items-center flex-row"
         >
           {/* flex justify-center */}
           <div className="h-full flex items-center justify-center  relative ">
@@ -243,9 +249,9 @@ function PDFviewer({
         </motion.div>
         <motion.div
           layout
-          className="rounded-md transition-[width] duration-500 ease-in-out opacity-0  w-0 group-hover:opacity-100 group-hover:w-[25%] p-2 flex flex-col justify-top gap-4"
+          className="rounded-md transition-[width] duration-500 ease-in-out opacity-0 w-0 group-hover:opacity-100 group-hover:w-[25%] flex flex-col justify-top gap-4 p-2 px-6"
         >
-          <div className="w-full text-center mb-4 opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
+          <div className="w-full text-left mb-4 opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
             Actions
           </div>
           <ActionBtn

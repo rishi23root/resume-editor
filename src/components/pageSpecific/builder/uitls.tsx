@@ -26,7 +26,7 @@ export function ActionBtn({
   return (
     <div
       onClick={onPress}
-      className="w-full flex flex-col gap-2  justify-center opacity-0 group-hover:opacity-100 duration-150 delay-500 group/actionBtn"
+      className="w-full flex flex-col gap-2  justify-center opacity-0 group-hover:opacity-100 duration-150 delay-500 group/actionBtn "
     >
       <motion.div
         layout
@@ -40,23 +40,33 @@ export function ActionBtn({
         }}
         className={cn(
           "p-6 shadow-sm rounded-md shadow-gray-500/50",
-          "bg-white/20 m-auto w-fit ",
+          "bg-white/20 mr-auto w-fit ",
           "duration-500 delay-100 ease-in shadow-lg hover:shadow-zinc-500 transition-all",
-          "hover:bg-gradient-to-b from-blue-600 to-fuchsia-500 text-white",
-          "cursor-pointer "
+          "hover:bg-blue-500/50 text-white",
+          "cursor-pointer relative"
         )}
       >
         {children}
-      </motion.div>
-      <motion.div
-        layout
-        className={cn(
-          "opacity-0 -translate-y-4",
-          "group-hover/actionBtn:mb-2 group-hover/actionBtn:opacity-100 group-hover/actionBtn:translate-y-0",
-          "transition-all duration-150 ease-in-out h-2 leading-0 capitalize text-center text-sm text-white/60"
-        )}
-      >
-        {toolkitContent}
+        <motion.div
+          layout
+          className={cn(
+            "absolute  left-[105%] top-0 h-full text-center ",
+            "flex justify-center items-center opacity-0",
+            "group-hover/actionBtn:opacity-100 ",
+            "transition-all duration-150 ease-in-out leading-0 capitalize text-center text-sm  text-wrap "
+          )}
+        >
+          <motion.div
+            layout
+            className={cn(
+              "w-[5ch] pl-1 text-left text-white/60",
+              "transform -translate-x-8 group-hover/actionBtn:translate-x-0",
+              "transition-transform duration-250 ease-in-out "
+            )}
+          >
+            {toolkitContent}
+          </motion.div>
+        </motion.div>
       </motion.div>
     </div>
   );
@@ -137,6 +147,8 @@ export function ModelComponent({
                   <span className="flex-1 fc gap-4 border">
                     {/* ats score */}
                     {/* ai generated inprovements */}
+                    {/* active sections from jobid  */}
+                    {/* active template and option to change it */}
                     <span className="fc gap-2">testing</span>
                     <span className="fc gap-2">testing content</span>
                   </span>
