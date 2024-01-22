@@ -12,6 +12,7 @@ import * as fs from "node:fs";
 
 export const builderRouter = router({
 
+  // get the default data for the builder first time and save it in DB
   getDefault: procedure.input(
     z.object({
       jobId: z.number(),

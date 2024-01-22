@@ -1,5 +1,6 @@
 "use client";
 
+import { Loadingstate } from "@/components/Fallbacks";
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +11,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/serverTRPC/client";
+import { searchParamType } from "@/types/utils";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { HardDriveDownload } from "lucide-react";
 import { Dispatch, SetStateAction, Suspense, useRef } from "react";
@@ -77,16 +80,26 @@ export function ModelComponent({
   isError,
   error,
   dataArray,
-  showModel,
-  setShowModel,
+  modelState,
+  searchParams,
 }: {
   resumeId: string;
   isError: boolean;
   error: any;
   dataArray: string[];
-  showModel: boolean;
-  setShowModel: Dispatch<SetStateAction<boolean>>;
+  modelState: [boolean, Dispatch<SetStateAction<boolean>>];
+  searchParams: searchParamType;
 }) {
+  // model state
+  const [showModel, setShowModel] = modelState;
+  // const {
+  //   data,
+  //   isLoading,
+  //   isError,
+  //   error,
+  //   mutate: regeneratePdfImage,
+  // } = generatedPDf;
+
   // model code
   const ref = useRef<HTMLDivElement>(null);
   const pdfOverLayDivRef = useRef<HTMLDivElement>(null);
@@ -131,6 +144,17 @@ export function ModelComponent({
     }
   });
 
+  // get data to show here
+  const { data, isLoading: isJobDisMaskLoading } = trpc.jobDis.byId.useQuery(
+    {
+      jobId: parseInt(searchParams.jobId as string),
+    },
+    {
+      // fetch only once and cache it
+      staleTime: Infinity,
+    }
+  );
+
   return (
     <Suspense>
       {showModel && (
@@ -144,14 +168,42 @@ export function ModelComponent({
               </DialogTitle>
               <DialogDescription className="fr gap-8 p-4 h-full text-left">
                 <span className="flex-1 fc gap-4 h-full ">
+                  {/* ats score */}
+                  <span className="fc gap-2">
+                    <span className="text-2xl bold capitalize text-white">
+                      Ats Score
+                    </span>
+                    <span className="text-white fc">8</span>
+                  </span>
+
+                  {/* ai generated inprovements */}
                   <span className="flex-1 fc gap-4 border">
-                    {/* ats score */}
-                    {/* ai generated inprovements */}
-                    {/* active sections from jobid  */}
-                    {/* active template and option to change it */}
                     <span className="fc gap-2">testing</span>
                     <span className="fc gap-2">testing content</span>
                   </span>
+
+                  {/* active sections from jobid  */}
+                  <span className="fc gap-2">
+                    <span className="text-2xl bold capitalize text-white">
+                      Sections in use
+                    </span>
+                    <span className="text-white fc">
+                      {isJobDisMaskLoading && <Loadingstate />}
+                      {!isJobDisMaskLoading &&
+                        data &&
+                        Object.values(data.mask)
+                          .filter((item) => item !== "basics")
+                          .map((item) => (
+                            <span key={item} className="text-lg">
+                              {/* => {item} */}
+                              =&gt; {item}
+                            </span>
+                          ))}
+                    </span>
+                  </span>
+
+                  {/* active template and option to change it */}
+
                   <Button
                     className={cn(
                       "p-6 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center w-full ",

@@ -28,6 +28,7 @@ import { format } from "date-fns";
 import { saveAs } from "file-saver";
 import { useRouter } from "next/navigation";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
+import { searchParamType } from "@/types/utils";
 
 function PDFviewer({
   templateName,
@@ -35,6 +36,7 @@ function PDFviewer({
   enriched,
   state,
   generatedPDf,
+  searchParams,
 }: {
   enriched: boolean;
   templateName: string;
@@ -42,14 +44,13 @@ function PDFviewer({
   state: string;
   // update it to make this element type safe return type of usemutation
   generatedPDf: any;
+  searchParams: searchParamType;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
   const ifRendered = RenderCompleted();
-
   const { toast } = useToast();
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const {
     data,
@@ -327,8 +328,8 @@ function PDFviewer({
           error={error}
           isError={isError}
           resumeId={resumeId}
-          showModel={showModel}
-          setShowModel={setShowModel}
+          modelState={[showModel, setShowModel]}
+          searchParams={searchParams}
         />
       )}
     </motion.div>

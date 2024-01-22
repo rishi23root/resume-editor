@@ -1,10 +1,12 @@
 // pathname: api/trpc/pdf/{functionNameHere}
 import { schema } from "@/components/pageSpecific/builder/schema";
 import { procedure, router } from "@/serverTRPC/trpc";
+import { Inputs } from "@/types/builder";
 import { z } from "zod";
 
-export const pdfRouter = router({
-    parse: procedure.input(
+export const openAIRouter = router({
+    // parse the pdf for and return the json data
+    pdfTextToJson: procedure.input(
         z.object({
             pdfText: z.any()
             // pdf: pdfFileSchema
@@ -18,13 +20,17 @@ export const pdfRouter = router({
             let data = text
             schema.parse(data);
             return {
-                jsonData: { 'data': data }
+                jsonData: data as Inputs,
+                error: ""
             };
         } catch (err) {
             return {
                 error: "unable to convert text into schema format :(",
-                jsonData: { 'data': 'data' }
+                jsonData: {} as Inputs
             };
         }
     }),
+
+    // take pdf text and give ats recomandations
+
 });

@@ -16,7 +16,6 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { schema } from "./schema";
 
 export default function BuilderClient({
-  userId,
   searchParams,
   defaultData,
   activeResumeInstance,
@@ -168,6 +167,7 @@ export default function BuilderClient({
           resumeId={activeResumeInstance.id}
           state={pdfState}
           generatedPDf={generatedPDf}
+          searchParams={searchParams}
         />
       </Suspense>
     </Suspense>

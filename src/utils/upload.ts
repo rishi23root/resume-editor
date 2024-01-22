@@ -23,7 +23,7 @@ export async function uploadFile(formData: FormData) {
             const extractedText = await req.json();
 
             // convert extracted text to json data
-            const data = await serverAPI.pdf.parse({ pdfText: extractedText });
+            const data = await serverAPI.openai.pdfTextToJson({ pdfText: extractedText });
 
             if (data.error || !data.jsonData) {
                 return {
