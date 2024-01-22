@@ -1,6 +1,6 @@
 "use client";
 import PDFviewer from "@/components/elements/PDFviewer";
-import { Inputs } from "@/types/builder";
+import { Inputs, pdfAndFromStatus } from "@/types/builder";
 import { DevTool } from "@hookform/devtools";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
@@ -30,38 +30,56 @@ export default function BuilderClient({
     jobId: number;
     paymentId: string;
     paymentStatus: string;
+    createdAt?: string;
   };
 }) {
+  const debounceTime = 1500;
   const isrendered = RenderCompleted();
-  const [pdfState, setPdfState] = useState<
-    "idle" | "success" | "updating" | "error"
-  >("idle");
-
-  const queryClient = useQueryClient();
+  const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
 
   const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
     onSuccess: () => {
+      setPdfState("Form updated");
       // console.log("first mutation success");
-      // queryClient.invalidateQueries(  "builder.generatePDF");
-      queryClient.invalidateQueries("builder.generatePDF" as any);
-      // queryClient.invalidateQueries([
-      //   "builder.generatePDF",
-      //   {
-      //     id: activeResumeInstance.id,
-      //     templateName: searchParams.templateName as string,
-      //   },
-      // ]);
-      setPdfState("success");
+      // queryClient.invalidateQueries("builder.generatePDF" as any);
+      regeneratePdfImage({
+        resumeId: activeResumeInstance.id,
+        templateName: searchParams.templateName as string,
+      });
+    },
+    onError: () => {
+      setPdfState("error with form");
+    },
+    onMutate: () => {
+      setPdfState("updating form");
+    },
+  });
+
+  // genetate the pdf mutation
+  const generatedPDf = trpc.builder.generatePDF.useMutation({
+    onSuccess: () => {
+      // console.log(data.images);
+      setPdfState("Image updated");
+      setTimeout(() => setPdfState("success"), 500);
       setTimeout(() => setPdfState("idle"), 1000);
     },
     onError: () => {
-      setPdfState("error");
-      setTimeout(() => setPdfState("idle"), 1000);
+      setPdfState("error with image");
     },
     onMutate: () => {
-      setPdfState("updating");
+      setPdfState("fetching image");
     },
   });
+
+  const { mutate: regeneratePdfImage } = generatedPDf;
+
+  // for first render of the pdf image rest is on request only
+  useEffect(() => {
+    regeneratePdfImage({
+      resumeId: activeResumeInstance.id,
+      templateName: searchParams.templateName as string,
+    });
+  }, []);
 
   // add validation to the form and error messages to the inputs
   const formHandeler = useForm<Inputs>({
@@ -122,7 +140,7 @@ export default function BuilderClient({
         resumeId: activeResumeInstance.id,
         data: JSON.stringify(dataForServer),
       });
-    }, 1000),
+    }, debounceTime),
     []
   );
 
@@ -130,26 +148,26 @@ export default function BuilderClient({
     data: any
   ) => {
     console.log("objct submitted");
-    setPdfState("updating");
+    setPdfState("updating form");
     submitAction(data);
   };
 
   if (!isrendered) return null;
   return (
     <Suspense>
-      <Suspense>
+      {/* <Suspense>
         <FormProvider {...formHandeler}>
           <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
           <DevTool control={formHandeler.control} />
         </FormProvider>
-      </Suspense>
+      </Suspense> */}
       <Suspense>
         <PDFviewer
           templateName={searchParams.templateName as string}
           enriched={activeResumeInstance.payId == 2}
           resumeId={activeResumeInstance.id}
           state={pdfState}
-          setPdfState={setPdfState}
+          generatedPDf={generatedPDf}
         />
       </Suspense>
     </Suspense>

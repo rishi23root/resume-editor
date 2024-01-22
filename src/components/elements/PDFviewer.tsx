@@ -6,10 +6,12 @@
 
 "use client";
 
+import { pdfAndFromStatus } from "@/types/builder";
+
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowDownFromLine,
   FileJson2,
@@ -21,26 +23,25 @@ import { useEffect, useState } from "react";
 import { Loadingstate } from "../Fallbacks";
 import { useToast } from "../ui/use-toast";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { saveAs } from "file-saver";
 import { useRouter } from "next/navigation";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
-import { saveAs } from "file-saver";
-import { format } from "date-fns";
-import { useQueryClient } from "@tanstack/react-query";
 
 function PDFviewer({
   templateName,
   resumeId,
   enriched,
   state,
-  setPdfState,
+  generatedPDf,
 }: {
   enriched: boolean;
   templateName: string;
   resumeId: string;
   state: string;
-  setPdfState: React.Dispatch<
-    React.SetStateAction<"idle" | "success" | "updating" | "error">
-  >;
+  // update it to make this element type safe return type of usemutation
+  generatedPDf: any;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
@@ -50,26 +51,13 @@ function PDFviewer({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // generating pdf
-  const { data, isLoading, isError, error } = trpc.builder.generatePDF.useQuery(
-    {
-      id: resumeId,
-      templateName: templateName,
-    },
-    {
-      // queryKey: [
-      //   "builder.generatePDF",
-      //   { id: resumeId, templateName: templateName },
-      // ],
-      staleTime: 0,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-      refetchIntervalInBackground: false,
-      // update ui instantly on invalidateQueries
-    }
-  );
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    mutate: regeneratePdfImage,
+  } = generatedPDf;
 
   // deleting pdf mutation
   const deleteResume = trpc.builder.delByResumeId.useMutation({
@@ -206,13 +194,15 @@ function PDFviewer({
     <motion.div layout className="fc glass gap-4 h-full w-full group flex-1">
       {/* isFetching : {`${isRefetching} ${status} `} */}
       <div
-        className="fr justify-between items-center w-full relative cursor-pointer"
+        className="fr justify-between items-center w-full h-4 relative cursor-pointer"
         onClick={() => {
           setShowModel(!showModel);
         }}
       >
-        <div className="opacity-80">{state !== "idle" ? state : ""}</div>
-        <div className="text-xl absolute -translate-x-1/2 left-[50%] top-0">
+        <div className="opacity-80 capitalize">
+          {state !== "idle" ? state : ""}
+        </div>
+        <div className="text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
           Resume
         </div>
         <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
@@ -221,31 +211,66 @@ function PDFviewer({
         layout
         className="flex-1 justify-center fr gap-2 overflow-hidden"
       >
-        <motion.div
-          layout
-          className="flex-1 min-w-[50%] w-full flex justify-center items-center flex-row"
-        >
+        <motion.div className="flex-1 min-w-[50%] w-full flex justify-center items-center flex-row">
           {/* flex justify-center */}
-          <div className="h-full flex items-center justify-center  relative ">
-            {isLoading && (
-              <div className="w-full fc fcc ">
-                <Loadingstate />
-              </div>
-            )}
-            {isError && <div className="w-full fc fcc">{error.toString()}</div>}
-            {dataArray && dataArray.length > 0 && (
-              <ZoomerImage
-                src={dataArray[0]}
-                alt={"autogenrated resume image"}
-                width={400}
-                height={600}
-                className="rounded-md shadow-xl object-cover w-[30em] "
-              />
-            )}
-            {dataArray && dataArray.length > 1 && (
-              <div className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl" />
-            )}
-          </div>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div className="h-full flex items-center justify-center  relative ">
+              {isLoading && (
+                <motion.div
+                  className="w-full fc fcc "
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Loadingstate />
+                </motion.div>
+              )}
+              {isError && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                  exit={{ opacity: 0 }}
+                  className="w-full fc fcc"
+                >
+                  {error.toString()}
+                </motion.div>
+              )}
+              {!isLoading && dataArray && dataArray.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: { duraton: 0.3 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.95,
+                    transition: { duraton: 0.3, delay: 2 },
+                  }}
+                >
+                  <ZoomerImage
+                    src={dataArray[0]}
+                    alt={"autogenrated resume image"}
+                    width={400}
+                    height={600}
+                    className="rounded-md shadow-xl object-cover w-[30em] "
+                  />
+                </motion.div>
+              )}
+              {!isLoading && dataArray && dataArray.length > 1 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 1,
+                    transition: { duraton: 0.3, delay: 0.2 },
+                  }}
+                  exit={{ opacity: 0, transition: { duraton: 0.3 } }}
+                  className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
         <motion.div
           layout
@@ -263,11 +288,10 @@ function PDFviewer({
           <ActionBtn
             toolkitContent="refresh editor"
             onPress={() => {
-              setPdfState("updating");
-              // relaod the page
-              // location.reload();
-              queryClient.invalidateQueries("builder.generatePDF" as any);
-              setTimeout(() => setPdfState("idle"), 1000);
+              regeneratePdfImage({
+                resumeId,
+                templateName,
+              });
             }}
           >
             <RefreshCcw className="scale-125" />

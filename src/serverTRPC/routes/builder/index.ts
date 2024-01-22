@@ -123,16 +123,16 @@ export const builderRouter = router({
   }),
 
   // function to generate new pdf
-  generatePDF: procedure.input(
+  generatePDF: privateProcedure.input(
     z.object({
-      id: z.string(),
+      resumeId: z.string(),
       templateName: z.string()
     })
-  ).query(async (opts) => {
+  ).mutation(async (opts) => {
     console.log('renerating new pdf images');
     // let start = performance.now();
 
-    const resumeId = opts.input.id;
+    const resumeId = opts.input.resumeId;
     const templateName = opts.input.templateName;
 
     // get data from the database because id is valid this will run only on server side so its safe
