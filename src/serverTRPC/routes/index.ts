@@ -3,8 +3,10 @@ import { jobDescriptionRouter } from "./jobDescription";
 import { openAIRouter } from "./openAI";
 import { priceRouter } from "./payment";
 import { builderRouter } from "./builder";
+import { templateRouter } from "./template";
 
 export const appRouter = router({
+    templates: templateRouter,
     jobDis: jobDescriptionRouter,
     price: priceRouter,
     builder: builderRouter,

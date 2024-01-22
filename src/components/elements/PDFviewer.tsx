@@ -6,7 +6,7 @@
 
 "use client";
 
-import { pdfAndFromStatus } from "@/types/builder";
+import { Inputs, pdfAndFromStatus } from "@/types/builder";
 
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
@@ -37,6 +37,7 @@ function PDFviewer({
   state,
   generatedPDf,
   searchParams,
+  resumeData,
 }: {
   enriched: boolean;
   templateName: string;
@@ -45,6 +46,7 @@ function PDFviewer({
   // update it to make this element type safe return type of usemutation
   generatedPDf: any;
   searchParams: searchParamType;
+  resumeData: Inputs | undefined;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
@@ -153,6 +155,20 @@ function PDFviewer({
     },
   });
 
+  // get ai base recommadations
+  var getAiRecomandations = trpc.openai.getAtsAndRecommandation.useMutation();
+  // const { data: aiData, isloading: isAiDataLoading } = getAiRecomandations;
+  const { data: aiData, isLoading: isAiDataLoading } = getAiRecomandations;
+
+  // for only firstLoad
+  useEffect(() => {
+    if (enriched) {
+      getAiRecomandations.mutate({
+        resumeId,
+      });
+    }
+  }, []);
+
   // show error if any
   useEffect(() => {
     if (data?.error) {
@@ -188,12 +204,11 @@ function PDFviewer({
     }
   }
 
-  // update to get the ats score and other discription data for full and enrich view of the resume
-  // need to update ats score and get data for the model and refresh it when model opens
-
   return (
-    <motion.div layout className="fc glass gap-4 h-full w-full group flex-1">
-      {/* isFetching : {`${isRefetching} ${status} `} */}
+    <motion.div
+      layout
+      className="fc glass gap-4 h-full w-full min-w-[45%] group flex-1"
+    >
       <div
         className="fr justify-between items-center w-full h-4 relative cursor-pointer"
         onClick={() => {
@@ -206,7 +221,11 @@ function PDFviewer({
         <div className="text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
           Resume
         </div>
-        <div className="opacity-80">{enriched ? "ATS Score: 8" : ""}</div>
+        <div className="opacity-80">
+          {enriched
+            ? "ATS Score: " + (isAiDataLoading ? "updating" : aiData?.atsScore)
+            : ""}
+        </div>
       </div>
       <motion.div
         layout
@@ -330,6 +349,10 @@ function PDFviewer({
           resumeId={resumeId}
           modelState={[showModel, setShowModel]}
           searchParams={searchParams}
+          resumeData={resumeData}
+          getAiRecomandations={getAiRecomandations}
+          enriched={enriched}
+          regeneratePdfImage={regeneratePdfImage}
         />
       )}
     </motion.div>

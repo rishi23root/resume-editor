@@ -35,6 +35,7 @@ export default function BuilderClient({
   const debounceTime = 1500;
   const isrendered = RenderCompleted();
   const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
+  const [resumeData, setResumeData] = useState<Inputs>(defaultData);
 
   const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
     onSuccess: () => {
@@ -148,18 +149,19 @@ export default function BuilderClient({
   ) => {
     console.log("objct submitted");
     setPdfState("updating form");
+    setResumeData(data);
     submitAction(data);
   };
 
   if (!isrendered) return null;
   return (
     <Suspense>
-      {/* <Suspense>
+      <Suspense>
         <FormProvider {...formHandeler}>
           <FormManager onSubmit={formHandeler.handleSubmit(onSubmit)} />
           <DevTool control={formHandeler.control} />
         </FormProvider>
-      </Suspense> */}
+      </Suspense>
       <Suspense>
         <PDFviewer
           templateName={searchParams.templateName as string}
@@ -168,6 +170,7 @@ export default function BuilderClient({
           state={pdfState}
           generatedPDf={generatedPDf}
           searchParams={searchParams}
+          resumeData={resumeData}
         />
       </Suspense>
     </Suspense>

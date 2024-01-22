@@ -10,12 +10,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
+import { Inputs } from "@/types/builder";
 import { searchParamType } from "@/types/utils";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { HardDriveDownload } from "lucide-react";
-import { Dispatch, SetStateAction, Suspense, useRef } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Dispatch,
+  SetStateAction,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export function ActionBtn({
   children,
@@ -82,6 +101,10 @@ export function ModelComponent({
   dataArray,
   modelState,
   searchParams,
+  resumeData,
+  getAiRecomandations,
+  enriched,
+  regeneratePdfImage,
 }: {
   resumeId: string;
   isError: boolean;
@@ -89,18 +112,48 @@ export function ModelComponent({
   dataArray: string[];
   modelState: [boolean, Dispatch<SetStateAction<boolean>>];
   searchParams: searchParamType;
+  resumeData: Inputs | undefined;
+  getAiRecomandations: any;
+  enriched: boolean;
+  regeneratePdfImage: any;
 }) {
+  const router = useRouter();
+  const { urlWithAddedParams } = useRedirectHandler();
+  const [refetching, setRefetching] = useState<
+    "refetching" | "error fetching, close and try again" | "idle"
+  >("idle");
+
   // model state
   const [showModel, setShowModel] = modelState;
-  // const {
-  //   data,
-  //   isLoading,
-  //   isError,
-  //   error,
-  //   mutate: regeneratePdfImage,
-  // } = generatedPDf;
 
-  // model code
+  const {
+    data: atsAndRecommendation,
+    isLoading: isRecommendationLoading,
+    mutate: refetch,
+  } = getAiRecomandations;
+
+  useEffect(() => {
+    if (showModel && enriched) {
+      setRefetching("refetching");
+      refetch(
+        {
+          resumeId,
+        },
+        {
+          onError: (error: any) => {
+            console.log(error);
+            setRefetching("error fetching, close and try again");
+          },
+          onSuccess: (data: any) => {
+            console.log(data);
+            setRefetching("idle");
+          },
+        }
+      );
+    }
+  }, [showModel]);
+
+  // model showcase code
   const ref = useRef<HTMLDivElement>(null);
   const pdfOverLayDivRef = useRef<HTMLDivElement>(null);
 
@@ -144,16 +197,25 @@ export function ModelComponent({
     }
   });
 
-  // get data to show here
-  const { data, isLoading: isJobDisMaskLoading } = trpc.jobDis.byId.useQuery(
-    {
-      jobId: parseInt(searchParams.jobId as string),
-    },
-    {
+  const { data: templates, isLoading: isTemplateLoading } =
+    trpc.templates.all.useQuery(undefined, {
       // fetch only once and cache it
       staleTime: Infinity,
-    }
-  );
+    });
+
+  function changeTemplate(newTemplateName: string) {
+    // update the current current url with this new template name
+    // router.push();
+    let newTemplateUrl = urlWithAddedParams("/Builder", {
+      templateName: newTemplateName,
+    });
+    router.push(newTemplateUrl);
+    // console.log(newTemplateUrl);
+    regeneratePdfImage({
+      resumeId,
+      templateName: newTemplateName,
+    });
+  }
 
   return (
     <Suspense>
@@ -168,18 +230,48 @@ export function ModelComponent({
               </DialogTitle>
               <DialogDescription className="fr gap-8 p-4 h-full text-left">
                 <span className="flex-1 fc gap-4 h-full ">
+                  {/* active template and option to change it */}
+                  <span className="fc gap-2">
+                    <span className="text-2xl bold capitalize text-white">
+                      Template :{" "}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <span className="opacity-60 underline underline-offset-4 cursor-pointer">
+                            {searchParams.templateName}
+                          </span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuLabel>Change Template</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuRadioGroup
+                            value={searchParams.templateName as string}
+                            onValueChange={changeTemplate}
+                          >
+                            {/* map all templates  */}
+                            {isTemplateLoading ? "Loading.." : ""}
+                            {!isTemplateLoading &&
+                              templates &&
+                              templates.map((val, index) => (
+                                <DropdownMenuRadioItem
+                                  value={val}
+                                  key={index}
+                                  className="capitalize"
+                                >
+                                  {val}
+                                </DropdownMenuRadioItem>
+                              ))}
+                          </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </span>
+                  </span>
+
                   {/* ats score */}
                   <span className="fc gap-2">
                     <span className="text-2xl bold capitalize text-white">
-                      Ats Score
+                      Ats Score:{" "}
+                      <span className="opacity-60 cursor-pointer">8</span>
                     </span>
-                    <span className="text-white fc">8</span>
-                  </span>
-
-                  {/* ai generated inprovements */}
-                  <span className="flex-1 fc gap-4 border">
-                    <span className="fc gap-2">testing</span>
-                    <span className="fc gap-2">testing content</span>
                   </span>
 
                   {/* active sections from jobid  */}
@@ -187,14 +279,13 @@ export function ModelComponent({
                     <span className="text-2xl bold capitalize text-white">
                       Sections in use
                     </span>
-                    <span className="text-white fc">
-                      {isJobDisMaskLoading && <Loadingstate />}
-                      {!isJobDisMaskLoading &&
-                        data &&
-                        Object.values(data.mask)
+                    <span className=" fc ">
+                      {!resumeData && <Loadingstate />}
+                      {resumeData &&
+                        Object.values(resumeData.mask)
                           .filter((item) => item !== "basics")
                           .map((item) => (
-                            <span key={item} className="text-lg">
+                            <span key={item} className="text-lg text-white/50">
                               {/* => {item} */}
                               =&gt; {item}
                             </span>
@@ -202,7 +293,17 @@ export function ModelComponent({
                     </span>
                   </span>
 
-                  {/* active template and option to change it */}
+                  {/* ai generated inprovements */}
+                  <span className="fc gap-2 ">
+                    <span className="text-2xl bold capitalize text-white">
+                      Possible Updates ◔̯ ◔
+                    </span>
+                    <span className="fc gap-2">
+                      {refetching !== "idle"
+                        ? refetching
+                        : atsAndRecommendation.recommandations}
+                    </span>
+                  </span>
 
                   <Button
                     className={cn(
