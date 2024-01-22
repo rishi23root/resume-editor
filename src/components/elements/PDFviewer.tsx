@@ -1,17 +1,12 @@
 // working under issue #35
-
-// this component have single task to show pdf file in the browser
-// using react-pdf library
-// take pdf file as props and show it in the browser or take id to request pdf file from server
-
 "use client";
 
-import { Inputs, pdfAndFromStatus } from "@/types/builder";
+import { Inputs } from "@/types/builder";
 
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDownFromLine,
   FileJson2,
@@ -23,12 +18,11 @@ import { useEffect, useState } from "react";
 import { Loadingstate } from "../Fallbacks";
 import { useToast } from "../ui/use-toast";
 
-import { useQueryClient } from "@tanstack/react-query";
+import { searchParamType } from "@/types/utils";
 import { format } from "date-fns";
 import { saveAs } from "file-saver";
 import { useRouter } from "next/navigation";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
-import { searchParamType } from "@/types/utils";
 
 function PDFviewer({
   templateName,
@@ -274,6 +268,7 @@ function PDFviewer({
                     alt={"autogenrated resume image"}
                     width={400}
                     height={600}
+                    zoomType="click"
                     className="rounded-md shadow-xl object-cover w-[30em] "
                   />
                 </motion.div>
@@ -353,6 +348,7 @@ function PDFviewer({
           getAiRecomandations={getAiRecomandations}
           enriched={enriched}
           regeneratePdfImage={regeneratePdfImage}
+          DownloadPDFFromServer={DownloadPDFFromServer}
         />
       )}
     </motion.div>

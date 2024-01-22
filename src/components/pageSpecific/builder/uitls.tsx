@@ -105,6 +105,7 @@ export function ModelComponent({
   getAiRecomandations,
   enriched,
   regeneratePdfImage,
+  DownloadPDFFromServer,
 }: {
   resumeId: string;
   isError: boolean;
@@ -116,6 +117,7 @@ export function ModelComponent({
   getAiRecomandations: any;
   enriched: boolean;
   regeneratePdfImage: any;
+  DownloadPDFFromServer: () => void;
 }) {
   const router = useRouter();
   const { urlWithAddedParams } = useRedirectHandler();
@@ -126,11 +128,7 @@ export function ModelComponent({
   // model state
   const [showModel, setShowModel] = modelState;
 
-  const {
-    data: atsAndRecommendation,
-    isLoading: isRecommendationLoading,
-    mutate: refetch,
-  } = getAiRecomandations;
+  const { data: atsAndRecommendation, mutate: refetch } = getAiRecomandations;
 
   useEffect(() => {
     if (showModel && enriched) {
@@ -304,15 +302,16 @@ export function ModelComponent({
                         : atsAndRecommendation.recommandations}
                     </span>
                   </span>
-
+                  <div className="h-full"></div>
                   <Button
                     className={cn(
-                      "p-6 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center w-full ",
-                      "transition ease-in-out delay-150", //animate
+                      "p-6 my-2 lg:text-2xl text-xl mt-auto capitalize bg-blue-500 rounded-md m-auto text-white text-center w-full ",
+                      "transition ease-in-out delay-150 ", //animate
                       "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black"
                     )}
                     onClick={() => {
-                      alert("pdf download function executed");
+                      DownloadPDFFromServer();
+                      // alert("pdf download function executed");
                     }}
                   >
                     Download PDF
@@ -343,7 +342,6 @@ export function ModelComponent({
                             alt={"autogenrated resume image"}
                             width={400}
                             height={600}
-                            zoomType="click"
                             className="rounded-md shadow-xl object-cover w-[33em] min-w-[30em] border border-green-200 "
                           />
                         ))}
