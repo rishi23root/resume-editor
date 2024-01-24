@@ -38,7 +38,6 @@ export default async function builderPage(props: PageProps) {
         </div>
       )} */}
       <BuilderClient
-        userId={userDBid as string}
         searchParams={props.searchParams}
         defaultData={defaultData}
         activeResumeInstance={activeResumeInstance}

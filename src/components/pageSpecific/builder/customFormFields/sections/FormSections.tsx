@@ -667,7 +667,6 @@ export function Work() {
   );
 }
 
-
 export function Education() {
   const { register } = useFormContext();
 
@@ -783,7 +782,6 @@ export function Education() {
     </div>
   );
 }
-
 
 export function Projects() {
   const { register } = useFormContext();
@@ -947,4 +945,3 @@ export function Awards() {
     </div>
   );
 }
-

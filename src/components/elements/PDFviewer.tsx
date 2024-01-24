@@ -1,8 +1,6 @@
 // working under issue #35
 "use client";
 
-import { Inputs } from "@/types/builder";
-
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
@@ -31,7 +29,6 @@ function PDFviewer({
   state,
   generatedPDf,
   searchParams,
-  resumeData,
 }: {
   enriched: boolean;
   templateName: string;
@@ -40,7 +37,6 @@ function PDFviewer({
   // update it to make this element type safe return type of usemutation
   generatedPDf: any;
   searchParams: searchParamType;
-  resumeData: Inputs | undefined;
 }) {
   const [showModel, setShowModel] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
@@ -344,7 +340,6 @@ function PDFviewer({
           resumeId={resumeId}
           modelState={[showModel, setShowModel]}
           searchParams={searchParams}
-          resumeData={resumeData}
           getAiRecomandations={getAiRecomandations}
           enriched={enriched}
           regeneratePdfImage={regeneratePdfImage}

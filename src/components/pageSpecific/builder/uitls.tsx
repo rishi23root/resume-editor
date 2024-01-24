@@ -35,6 +35,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useFormContext } from "react-hook-form";
 
 export function ActionBtn({
   children,
@@ -101,7 +102,6 @@ export function ModelComponent({
   dataArray,
   modelState,
   searchParams,
-  resumeData,
   getAiRecomandations,
   enriched,
   regeneratePdfImage,
@@ -113,7 +113,6 @@ export function ModelComponent({
   dataArray: string[];
   modelState: [boolean, Dispatch<SetStateAction<boolean>>];
   searchParams: searchParamType;
-  resumeData: Inputs | undefined;
   getAiRecomandations: any;
   enriched: boolean;
   regeneratePdfImage: any;
@@ -215,6 +214,8 @@ export function ModelComponent({
     });
   }
 
+  const { getValues } = useFormContext<Inputs>();
+
   return (
     <Suspense>
       {showModel && (
@@ -278,9 +279,8 @@ export function ModelComponent({
                       Sections in use
                     </span>
                     <span className=" fc ">
-                      {!resumeData && <Loadingstate />}
-                      {resumeData &&
-                        Object.values(resumeData.mask)
+                      {getValues("mask") &&
+                        Object.values(getValues("mask"))
                           .filter((item) => item !== "basics")
                           .map((item) => (
                             <span key={item} className="text-lg text-white/50">
