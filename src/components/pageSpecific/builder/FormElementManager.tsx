@@ -1,33 +1,35 @@
 "use client";
+// "yes, it is inportant to have this file !"
 import { Button } from "@/components/ui/button";
-import { Inputs } from "@/types/builder";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Suspense, useRef } from "react";
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
-import { Basic } from "./customFormFields/sections/FormSection";
 import { cn } from "@/lib/utils";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { memo, useRef } from "react";
+import {
+  Awards,
+  Basic,
+  Education,
+  Projects,
+  Skills,
+  Work,
+} from "./customFormFields/sections/FormSections";
 
-// console.log(watch("email")); // watch input value by passing the name of it
+const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
+  console.log("form manager rendered");
 
-export default function FormManager({
-  register,
-  handleSubmit,
-  watch,
-  control,
-  formState: { errors },
-  onSubmit,
-}: UseFormReturn<Inputs, any, undefined> & {
-  onSubmit: SubmitHandler<Inputs>;
-}) {
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
+
+  const shadowColor = "rgba(0, 0, 0, 0.3)";
+
   const { scrollYProgress } = useScroll({
     container: ref,
     offset: ["start start", "end end"],
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (scrollYProgress.get() == 0) {
+    // console.log("scroll latest: ", latest);
+
+    if (latest == 0) {
       // console.log("top");
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
@@ -35,9 +37,9 @@ export default function FormManager({
       );
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
-    } else if (scrollYProgress.get() == 1) {
+    } else if (latest > 0.99) {
       // console.log("bottom");
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
@@ -45,16 +47,16 @@ export default function FormManager({
       );
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
     } else {
       formOverLayDivRef.current?.style.setProperty(
         "--bottomBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
       formOverLayDivRef.current?.style.setProperty(
         "--topBlurColor",
-        "rgb(255, 255, 255)"
+        shadowColor
       );
     }
   });
@@ -62,32 +64,45 @@ export default function FormManager({
   return (
     <div
       className={cn(
-        "items-center w-full md:w-[40%] fc md:h-full gap-4 relative rounded-md",
+        "items-center min-w-[50%] fc md:h-full gap-4 relative rounded-md",
         "formOverLay"
       )}
       ref={formOverLayDivRef}
     >
       <motion.form
         ref={ref}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="w-full h-full fc gap-2 overflow-y-scroll pr-1"
+        noValidate
       >
-        <Basic register={register} control={control} error={errors} />
+        <Basic />
+        <Skills />
+        <Work />
+        <Education />
+        <Projects />
+        <Awards />
+
         <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
             "transition ease-in-out delay-150", //animate
-            "hover:shadow-md hover:shadow-zinc-500"
+            "hover:shadow-md hover:shadow-zinc-500",
+            "fc fcc justify-center items-center"
           )}
         >
-          <input type="submit" className="text-primary text-xl font-bold" />
+          <input
+            type="submit"
+            className={cn(
+              "cursor-pointer text-primary text-xl font-bold",
+              "w-full h-full",
+              "flex-1 p-auto"
+            )}
+            value={"Update Resume"}
+          />
         </Button>
       </motion.form>
     </div>
   );
-}
+});
 
-// must have data
-// default value (spread props)
-// register object data (spread props)
-// error state, custom error message
+export default FormManager;

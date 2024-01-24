@@ -11,38 +11,28 @@ model User {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   clerkId String @unique
 
-  name String
+  name          String
   isLinkedLogin Boolean?
 
-  defaultLabel String?
-
-  notifications Notification[]
-  resumes       ResumeData[]
+  // notifications Notification[]
+  resumes ResumeData[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-type Notification {
-  type      String
-  message   String
-  link      String?
-  createdAt DateTime @default(now())
-}
-
 // resume data table
 model ResumeData {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  status String
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  // resume.json fields
-  basic     Basics
-  skill     Skill
-  work      Work[]
-  education Education[]
-  projects  Project[]
-  awards    Award[]
+  data          String
+  payId         Int
+  jobId         Int
+  template      String
+  paymentId     String
+  paymentStatus String @default("pending")
 
+  pdfItself  String?
   creaatedAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -50,90 +40,9 @@ model ResumeData {
   userId String @db.ObjectId
 }
 
-// basic
-type Basics {
-  name     String
-  label    String
-  image    String?
-  email    String
-  phone    String
-  url      String
-  summary  String?
-  location Location
-  profiles Profile[]
-}
-
-type Location {
-  address     String?
-  postalCode  String?
-  city        String
-  countryCode String?
-  region      String?
-}
-
-type Profile {
-  network  String
-  username String
-  url      String
-}
-
-// skills
-type Skill {
-  languages    SkillFields[]
-  frameworks   SkillFields[]
-  technologies SkillFields[]
-  libraries    SkillFields[]
-  databases    SkillFields[]
-  tools        SkillFields[]
-}
-
-type SkillFields {
-  name  String
-  level Int
-}
-
-// work
-type Work {
-  id            String
-  name          String
-  position      String
-  url           String
-  startDate     String
-  isWorkingHere Boolean
-  endDate       String
-  highlights    String
-  summary       String
-  years         String
-}
-
-// education
-type Education {
-  id             String
-  institution    String
-  url            String
-  studyType      String
-  area           String
-  startDate      String
-  isStudyingHere Boolean
-  endDate        String
-  score          String
-}
-
-// project
-type Project {
-  id          String
-  name        String
-  url         String
-  languages   String
-  description String
-}
-
-// award
-type Award {
-  id      String
-  title   String
-  date    String
-  awarder String
-  summary String
-  url     String
-}
+// type Notification {
+//   type      String
+//   message   String
+//   link      String?
+//   createdAt DateTime @default(now())
+// }

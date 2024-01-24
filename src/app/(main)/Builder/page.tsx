@@ -1,4 +1,5 @@
 import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
+import { MakePaymentComponent } from "@/components/pageSpecific/payment/payment";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
 import {
@@ -6,6 +7,7 @@ import {
   builderPageParamsValidator,
 } from "@/utils/pageLoad";
 import useParamParser from "@/utils/paramHandeler";
+import { currentUser } from "@clerk/nextjs";
 
 export default async function builderPage(props: PageProps) {
   const { stringifiedData, privateData } = await useParamParser(
@@ -15,19 +17,31 @@ export default async function builderPage(props: PageProps) {
   console.log("from builder: ", stringifiedData, privateData);
 
   await builderPageParamsRedirectHandeler(props);
-  await builderPageParamsValidator(props);
+  const activeResumeInstance = await builderPageParamsValidator(props);
+  // console.log("varified json id: ", activeResumeInstance);
 
-  // api requst on server
-  // get temaplate from trpc api for default values
-  const data = await serverAPI.builder.getDefault();
+  const user = await currentUser();
+  const userDBid = user?.privateMetadata.userDBid;
+
+  // now we got varified json data id use that id to get the data from db of that id only
+  var defaultData = await serverAPI.builder.getDataByResumeId({
+    resumeId: activeResumeInstance.id,
+    userId: userDBid as string,
+  });
+
   return (
-    <main className="flex-1 fr gap-4 max-h-[75vh]">
-      <BuilderClient searchParams={props.searchParams} defaultData={data} />
+    <main className="flex-1 fr gap-4 max-h-[75vh] relative">
+      {/* if payment if not completed then complete the payment */}
+      {/* {activeResumeInstance.paymentStatus == "pending" && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 w-[50%] border border-green-400 bg-white text-black p-4">
+          <MakePaymentComponent payId={activeResumeInstance.payId} />
+        </div>
+      )} */}
+      <BuilderClient
+        searchParams={props.searchParams}
+        defaultData={defaultData}
+        activeResumeInstance={activeResumeInstance}
+      />
     </main>
   );
 }
-
-// for this page to work
-// we need to have a data object   in the url inside _s (to the safe side, and it will be easy to work with in future) to extract the data from db
-// if able to be extracted then we can build the page else redirect to error page
-// that will be provided from the payment page on the success on the payment

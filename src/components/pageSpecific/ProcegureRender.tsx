@@ -48,58 +48,58 @@ function ProcegureRender() {
     <>
       <AnimatePresence mode="wait">
         {
-        // privateSessionData !== null &&
-        data.procegure !== undefined &&
-        keepProcegureRender ? (
-          <motion.div
-            layout
-            initial={{ height: 0, opacity: 0 }}
-            animate={{
-              height: "auto",
-              opacity: 1,
-              transition: { duration: 0.2 },
-            }}
-            exit={{
-              height: 0,
-              opacity: 0,
-              transition: { duration: 0.5, delay: 2 },
-            }}
-            className="fc fcc md:glass min-h-12 md:p-2"
-          >
+          // privateSessionData !== null &&
+          data.procegure !== undefined && keepProcegureRender ? (
             <motion.div
               layout
-              className={cn(
-                "w-full md:w-[70%] fr fcb gap-4 transition-all duration-200 ease-in-out",
-                data.procegure === 4 && "justify-center" // if the procegure is 4 then center the procegure render
-              )}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: "auto",
+                opacity: 1,
+                transition: { duration: 0.2 },
+              }}
+              exit={{
+                height: 0,
+                opacity: 0,
+                transition: { duration: 0.5, delay: 2 },
+              }}
+              className="fc fcc md:glass min-h-12 md:p-2"
             >
-              <ProcegureElement
-                count={1}
-                discription={"Chose your Job type"}
-                currentProcegure={data.procegure}
-                keepProcegureRenderChildren={keepProcegureRenderChildren}
-              />
-              <ProcegureElement
-                count={2}
-                discription={"Select a Template"}
-                currentProcegure={data.procegure}
-                keepProcegureRenderChildren={keepProcegureRenderChildren}
-              />
-              <ProcegureElement
-                count={3}
-                discription={"Completer payment"}
-                currentProcegure={data.procegure}
-                keepProcegureRenderChildren={keepProcegureRenderChildren}
-              />
-              <ProcegureElement
-                count={4}
-                discription={"Build your Resume ;)"}
-                currentProcegure={data.procegure}
-                keepProcegureRenderChildren={keepProcegureRenderChildren}
-              />
+              <motion.div
+                layout
+                className={cn(
+                  "w-full md:w-[70%] fr fcb gap-4 transition-all duration-200 ease-in-out",
+                  data.procegure === 4 && "justify-center" // if the procegure is 4 then center the procegure render
+                )}
+              >
+                <ProcegureElement
+                  count={1}
+                  discription={"Chose your Job type"}
+                  currentProcegure={data.procegure}
+                  keepProcegureRenderChildren={keepProcegureRenderChildren}
+                />
+                <ProcegureElement
+                  count={2}
+                  discription={"Select a Template"}
+                  currentProcegure={data.procegure}
+                  keepProcegureRenderChildren={keepProcegureRenderChildren}
+                />
+                <ProcegureElement
+                  count={3}
+                  discription={"Choose payment"}
+                  currentProcegure={data.procegure}
+                  keepProcegureRenderChildren={keepProcegureRenderChildren}
+                />
+                <ProcegureElement
+                  count={4}
+                  discription={"Build your Resume ;)"}
+                  currentProcegure={data.procegure}
+                  keepProcegureRenderChildren={keepProcegureRenderChildren}
+                />
+              </motion.div>
             </motion.div>
-          </motion.div>
-        ) : null}
+          ) : null
+        }
       </AnimatePresence>
     </>
   );

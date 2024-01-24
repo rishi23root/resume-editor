@@ -14,7 +14,7 @@ const JobDiscriptionTemplateShowcase = async ({
   jobId: number;
   searchParam: searchParamType;
 }) => {
-  console.log("jobIdData component");
+  // console.log("jobIdData component");
 
   // console.log(jobId, typeof jobId); // 1 'number' but returning `1 'string'`
   const jobIdData = await serverAPI.jobDis.byId({

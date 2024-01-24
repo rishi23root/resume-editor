@@ -2,18 +2,6 @@
 
 import { templateWithImages } from "@/types/templates";
 
-
-// notificaiton 
-// execute 2 commands 
-// 1. get the notification 
-// 2. filter out the old notifiacaiont and delete it (in thread in bg)
-// 3. return the filtered out new notifications only
-
-
-// user data 
-
-
-
 export async function getTemplateDataWithImages() {
   const res = await fetch(`${process.env.BACKEND}/templates`);
   // The return value is *not* serialized
@@ -45,6 +33,3 @@ export async function getTemplateDataWithImages() {
 
   return templatesWithImages;
 }
-
-// export async function 
-// get notifications

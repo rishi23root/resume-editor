@@ -1,8 +1,6 @@
 "use client";
-
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import Image from "next/image";
+import InnerImageZoom from "react-inner-image-zoom";
+import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 
 // take the child element of image and wrap it in a div with overflow hidden
 // take the parent element and add a mouseover event
@@ -15,17 +13,14 @@ export const ZoomerImage = (ImageProps: {
   alt: string;
   width: number;
   height: number;
-  className: string;
+  className?: string;
+  zoomType?: "click" | "hover" | undefined;
 }) => {
   return (
-    <motion.span className="cursor-pointer rounded-md shadow-xl w-full h-full fcc relative overflow-hidden group ">
-      <Image
-        {...ImageProps}
-        className={cn(
-          ImageProps.className,
-          "transition-all duration-300 ease-in-out absolute group-hover:scale-125"
-        )}
-      />
-    </motion.span>
+    <InnerImageZoom
+      className={ImageProps.className}
+      src={ImageProps.src}
+      zoomType={ImageProps.zoomType ? ImageProps.zoomType : "hover"}
+    />
   );
 };
