@@ -14,7 +14,7 @@ import {
 } from "./customFormFields/sections/FormSections";
 
 const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
-  console.log("form manager rendered");
+  // console.log("form manager rendered");
 
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
@@ -64,7 +64,7 @@ const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
   return (
     <div
       className={cn(
-        "items-center min-w-[50%] fc md:h-full gap-4 relative rounded-md",
+        "items-center min-w-[50%] w-full fc md:h-full gap-4 relative rounded-md",
         "formOverLay"
       )}
       ref={formOverLayDivRef}

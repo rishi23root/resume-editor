@@ -152,6 +152,11 @@ function PDFviewer({
 
   // for only firstLoad
   useEffect(() => {
+    // generate pdf for the first time on load
+    regeneratePdfImage({
+      resumeId,
+      templateName: searchParams.templateName as string,
+    });
     if (enriched) {
       getAiRecomandations.mutate({
         resumeId,
@@ -173,7 +178,7 @@ function PDFviewer({
       // setPdfFile(data?.pdfFile || []);
       // console.log("updated", data?.pdfFile);
     }
-    console.log("updated");
+    // console.log("updated");
   }, [data]);
 
   function DownloadPDFFromServer() {

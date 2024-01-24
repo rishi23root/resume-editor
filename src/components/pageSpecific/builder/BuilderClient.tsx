@@ -1,15 +1,11 @@
 "use client";
 import PDFviewer from "@/components/elements/PDFviewer";
-import { Inputs, pdfAndFromStatus } from "@/types/builder";
-import { DevTool } from "@hookform/devtools";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import FormManager from "./FormElementManager";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
+import { Inputs, pdfAndFromStatus } from "@/types/builder";
 import { searchParamType } from "@/types/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import _ from "lodash";
 import debounce from "lodash.debounce";
 import {
   Suspense,
@@ -19,7 +15,35 @@ import {
   useMemo,
   useState,
 } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import FormManager from "./FormElementManager";
+import { compareJsonObjects } from "./customFormFields/sections/utils";
 import { schema } from "./schema";
+// import { DevTool } from "@hookform/devtools";
+
+// cahe the data and check for changes if change then continue
+const ActionWithMemoRized = (() => {
+  console.log("memorized called");
+
+  let cache: Inputs = {} as any;
+
+  return (data: Inputs) => {
+    // console.log("cache :", Object.keys(cache).length);
+    return new Promise((resolve, reject) => {
+      if (_.isEmpty(cache)) {
+        console.log("no cache");
+        cache = _.cloneDeep(data);
+        reject("cache initiated");
+      } else if (compareJsonObjects(data, cache)) {
+        reject("same");
+      } else {
+        console.log("updating object");
+        cache = _.cloneDeep(data);
+        resolve(data);
+      }
+    });
+  };
+})();
 
 const BuilderClient = memo(
   ({
@@ -38,7 +62,7 @@ const BuilderClient = memo(
       createdAt?: string;
     };
   }) => {
-    const debounceTime = 1500;
+    const debounceTime = 1000;
 
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
@@ -87,33 +111,6 @@ const BuilderClient = memo(
       // mode: "onSubmit",
     });
 
-    // for first render of the pdf image rest is on request only
-    useEffect(() => {
-      regeneratePdfImage({
-        resumeId: activeResumeInstance.id,
-        templateName: searchParams.templateName as string,
-      });
-      // look for changes in the form
-      // const timeout = setInterval(() => {
-      //   // listening to new changes
-      //   console.log("change listener activated ");
-      //   // formHandeler.watch((value, { name, type }) => {
-      //   //   // console.log(name, type);
-      //   //   onSubmit(value as any);
-      //   // });
-      //   const current = formHandeler.getValues();
-      //   // if current not equal to default then update the db
-      //   console.log(compareJsonObjects(current, defaultData));
-      //   // if (JSON.stringify(current) != JSON.stringify(defaultData)) {
-      //   //   console.log("form updated");
-      //   //   onSubmit(current);
-      //   // }
-      // }, 1000);
-      // return () => {
-      //   clearTimeout(timeout);
-      // };
-    }, []);
-
     // watch for any changes in the form
     useEffect(() => {
       let subscription: any;
@@ -131,44 +128,41 @@ const BuilderClient = memo(
       };
     }, [formHandeler.watch]);
 
+    // for first render only
+    useEffect(() => {
+      submitAction(defaultData);
+    }, []);
+
     // handle form submit with debounce of 1 seconds
     const submitAction = useCallback(
       debounce(async (dataObject: Inputs) => {
-        setPdfState("updating form");
-
-        // all the main work with form data and server here
-        // updating the data for backend
-
-        const dataForServer = {
-          ...dataObject,
-          work: dataObject.work.map((work) => {
-            return {
-              ...work,
-              endDate: work.isWorkingHere ? null : work.endDate,
-            };
-          }),
-          education: dataObject.education.map((education) => {
-            return {
-              ...education,
-              endDate: education.isStudyingHere ? null : education.endDate,
-            };
-          }),
+        console.log("object submitted, checking for actual changes");
+        const saveData = (
+          value: Inputs | unknown
+        ): void | PromiseLike<void> => {
+          console.log("update data");
+          setPdfState("updating form");
+          const dataForServer = {
+            ...dataObject,
+            work: dataObject.work.map((work) => {
+              return {
+                ...work,
+                endDate: work.isWorkingHere ? null : work.endDate,
+              };
+            }),
+            education: dataObject.education.map((education) => {
+              return {
+                ...education,
+                endDate: education.isStudyingHere ? null : education.endDate,
+              };
+            }),
+          };
+          updateDatabase.mutate({
+            resumeId: activeResumeInstance.id,
+            data: JSON.stringify(dataForServer),
+          });
         };
-        // setResumeData(dataObject);
-
-        // validate the dict using zod
-        // try {
-        //   await schema.parseAsync(dataObject);
-        // } catch (error) {
-        //   console.log(error);
-        //   // return;
-        // }
-
-        // update the data in the db
-        updateDatabase.mutate({
-          resumeId: activeResumeInstance.id,
-          data: JSON.stringify(dataForServer),
-        });
+        ActionWithMemoRized(dataObject).then(saveData).catch(console.log);
       }, debounceTime),
       []
     );
@@ -176,7 +170,7 @@ const BuilderClient = memo(
     const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
       data: any
     ) => {
-      console.log("objct submitted");
+      console.log("update requested");
       submitAction(data);
     };
 

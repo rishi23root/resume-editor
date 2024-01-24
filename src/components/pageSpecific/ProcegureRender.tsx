@@ -1,12 +1,12 @@
 "use client";
 
+import RenderCompleted from "@/hooks/RenderCompleted";
 import { cn } from "@/lib/utils";
 import { privateData } from "@/types/utils";
 import { decodeBase64ToJSON } from "@/utils/paramHandeler";
-import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
-import RenderCompleted from "@/hooks/RenderCompleted";
 
 function ProcegureRender() {
   const privateSessionData = useSearchParams().get("_s");
@@ -117,7 +117,10 @@ const ProcegureElement = ({
   keepProcegureRenderChildren: boolean;
 }) => {
   const [toRemore, setToRemove] = useState(false);
+  const router = useRouter();
   useEffect(() => {
+    console.log(count, currentProcegure);
+
     var timeout: NodeJS.Timeout;
     if (currentProcegure === 4) {
       timeout = setTimeout(() => {
@@ -157,11 +160,20 @@ const ProcegureElement = ({
                   },
                 }}
                 className={cn(
-                  "rounded-[1.3rem] p-2 w-12 h-12 fcc glass shadow-md hover:shadow-zinc-700 text-xl",
+                  "rounded-[1.3rem] p-2 w-12 h-12 fcc glass shadow-md hover:shadow-zinc-700 text-xl cursor-pointer",
                   count === currentProcegure
                     ? "bg-[#6255C2] shadow-zinc-700 hover:shadow-xl"
-                    : ""
+                    : count < currentProcegure
+                    ? " hover:shadow-zinc-500/50 shadown-xl"
+                    : "cursor-default"
                 )}
+                onClick={() => {
+                  if (count < currentProcegure) {
+                    console.log(count);
+                    router.back();
+                  }
+                }}
+                whileTap={{ scale: 1.05 }}
               >
                 {count}
               </motion.div>
