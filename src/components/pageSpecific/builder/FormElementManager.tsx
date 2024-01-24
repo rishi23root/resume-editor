@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import {
   Awards,
   Basic,
@@ -13,7 +13,9 @@ import {
   Work,
 } from "./customFormFields/sections/FormSections";
 
-export default function FormManager({ onSubmit }: { onSubmit: any }) {
+const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
+  console.log("form manager rendered");
+
   const ref = useRef<HTMLFormElement>(null);
   const formOverLayDivRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +64,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
   return (
     <div
       className={cn(
-        "items-center w-full md:w-[60%] fc md:h-full gap-4 relative rounded-md",
+        "items-center min-w-[50%] fc md:h-full gap-4 relative rounded-md",
         "formOverLay"
       )}
       ref={formOverLayDivRef}
@@ -101,4 +103,6 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
       </motion.form>
     </div>
   );
-}
+});
+
+export default FormManager;

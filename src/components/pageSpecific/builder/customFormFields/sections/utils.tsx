@@ -4,7 +4,7 @@ import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
 import { Eye, EyeOff, Plus } from "lucide-react";
-import React, { useId, useState } from "react";
+import React, { memo, useCallback, useId, useState } from "react";
 import {
   FieldPath,
   UseFieldArrayReturn,
@@ -79,7 +79,7 @@ const ignoreCircularReferences = () => {
   };
 };
 
-export function SectionWrapper({
+export const SectionWrapper = function SectionWrapper({
   sectionKey,
   children,
   editableTitle,
@@ -106,46 +106,58 @@ export function SectionWrapper({
     }
 )) {
   const [visible, setVisible] = useState(true);
+  // console.log("rendered paremt section wrapper for  title section", sectionKey);
 
-  const TitleSection = ({
-    children,
-  }: {
-    id: string;
-    children?: React.ReactNode;
-  }) => {
-    return (
-      <div
-        className={cn(
-          "w-full text-2xl bold fr justify-between align-middle",
-          visible ? "mb-3" : "mb-0",
-          editableTitle ? "cursor-text" : "cursor-not-allowed",
-          visible ? "" : "cursor-pointer"
-        )}
-      >
-        {editableTitle ? (
-          <div className="flex-1 group relative h-10">
+  const TitleSection = memo(
+    ({ id, children }: { id: string; children?: React.ReactNode }) => {
+      // console.log("rendered title section", sectionKey);
+
+      return (
+        <div
+          className={cn(
+            "w-full text-2xl bold fr justify-between align-middle",
+            visible ? "mb-3" : "mb-0",
+            editableTitle ? "cursor-text" : "cursor-not-allowed",
+            visible ? "" : "cursor-pointer"
+          )}
+        >
+          {/* {editableInputItself && (
+          <div
+            className={cn("flex-1 group relative h-10", !editableTitle && "hidden")}
+          >
             {editableInputItself}
           </div>
-        ) : (
-          <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
         )}
+        {!editableTitle && (
+          <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
+        )} */}
+          {editableTitle ? (
+            <div className="flex-1 group relative h-10">
+              {editableInputItself}
+            </div>
+          ) : (
+            <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
+          )}
 
-        <div className={cn("fr fce gap-2", sectionActionBtnClass)}>
-          {fieldArraySection ? children : null}
-          <motion.button
-            variants={variantsActionButton}
-            initial="initial"
-            animate="animate"
-            whileHover="whileHover"
-            className="px-2"
-            onClick={() => setVisible(!visible)}
-          >
-            {visible ? <EyeOff /> : <Eye />}
-          </motion.button>
+          <div className={cn("fr fce gap-2", sectionActionBtnClass)}>
+            {fieldArraySection ? children : null}
+            <motion.button
+              variants={variantsActionButton}
+              initial="initial"
+              animate="animate"
+              whileHover="whileHover"
+              className="px-2"
+              onClick={() => setVisible(!visible)}
+            >
+              {visible ? <EyeOff /> : <Eye />}
+            </motion.button>
+          </div>
         </div>
-      </div>
-    );
-  };
+      );
+    }
+  );
+
+  // const memoTitleSection = React.memo(TitleSection,);
 
   if (fieldArraySection) {
     const fieldArray = useFieldArray({
@@ -155,11 +167,10 @@ export function SectionWrapper({
     });
     const { fields, append } = fieldArray;
 
-    // const isRendered = RenderCompleted();
-
-    // if (!isRendered) {
-    //   return null;
-    // }
+    const emptyAppendCallback = useCallback(
+      () => append(makeEmptyObject(fields[0]) as any),
+      []
+    );
 
     return (
       <MotionConfig transition={{ duration }}>
@@ -176,9 +187,7 @@ export function SectionWrapper({
               animate="animate"
               whileHover="whileHover"
               className="px-2"
-              onClick={() => {
-                append(makeEmptyObject(fields[0]) as any);
-              }}
+              onClick={emptyAppendCallback}
             >
               <Plus />
             </motion.button>
@@ -220,7 +229,7 @@ export function SectionWrapper({
       </MotionConfig>
     );
   }
-}
+};
 
 export function useWatchedValue(watchKey: FieldPath<Inputs>) {
   const { watch } = useFormContext<Inputs>();

@@ -1,15 +1,13 @@
-import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
-import { serverAPI } from "@/serverTRPC/serverAPI";
+"use client";
 import { PageProps } from "@/types/utils";
+import { useEffect, useState } from "react";
 
-export default async function Test(props: PageProps) {
-  // var data = await serverAPI.builder.getDefault({
-  //   jobId: parseInt(props.searchParams.jobId as string),
-  // });
-
+// test for payment page here once then del it for good
+export default function Test(props: PageProps) {
   return (
-    <div className="flex border p-2 m-auto w-1/3 h-[50em]">
-      {/* <BuilderClient searchParams={props.searchParams} defaultData={data} /> */}
+    <div className="m-4 p-4">
+      pending testing for payments component
+      {/* <input type="tel" value={"+91 7618306833"} onChange={setValue}  /> */}
     </div>
   );
 }

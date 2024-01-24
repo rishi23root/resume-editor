@@ -179,8 +179,9 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 id: true,
                 payId: true,
                 jobId: true,
-                paymentStatus: true,
                 paymentId: true,
+                paymentStatus: true,
+                creaatedAt: true,
             }
         })
         if (jsonData) {
@@ -210,8 +211,18 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 })
                 return updatedResume;
             }
-            return jsonData;
+            else {
+                // (jsonData.paymentStatus === "paid")
+                console.log('passed paid check, user can start editing if time is left');
+                console.log(jsonData.creaatedAt)
+                // if paid then redirect to the dashboard
+                // return redirect("/Dashboard?" + await jsonToSearchParameters({
+                //     error: "You have already paid for this resume, you can download it from dashboard",
+                // }));
+                return jsonData;
+            }
         } else {
+            console.log('failed, datajson id, redirecting to dashboard');
             // if not valid then redirect to the dashboard
             return redirect("/Dashboard?" + await jsonToSearchParameters({
                 error: "error decoding data, have to restart building :( ",

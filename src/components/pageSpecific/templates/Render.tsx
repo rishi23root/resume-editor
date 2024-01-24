@@ -40,7 +40,7 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
     return (
       <>
         {images.length > 0 && (
-          <div className="flex-1 fr gap-4 overflow-auto m-auto border border-green-100">
+          <div className="flex-1 fr gap-4 overflow-auto m-auto">
             <Suspense fallback={"loading image please wait"}>
               <Image
                 src={images ? images[0] : "null"}
@@ -58,11 +58,13 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
             className={cn(
               "p-3 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center fcc",
               "transition ease-in-out delay-150", //animate
-              "hover:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
+              "hover:bg-white hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
               images.length == 1 ? "w-[50%]" : "w-[90%]"
             )}
           >
-            <Link href={toRedirectUrl}>use Template</Link>
+            <Link href={toRedirectUrl} className="w-full ">
+              use Template
+            </Link>
           </Button>
         )}
 

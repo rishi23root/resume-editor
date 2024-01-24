@@ -129,4 +129,12 @@ export type Inputs = {
   mask: maskT
 };
 
-
+export type pdfAndFromStatus =
+  | "idle"
+  | "success"
+  | "fetching image"
+  | "updating form"
+  | "error with image"
+  | "error with form"
+  | "Image updated"
+  | "Form updated";
