@@ -119,7 +119,7 @@ const ProcegureElement = ({
   const [toRemore, setToRemove] = useState(false);
   const router = useRouter();
   useEffect(() => {
-    console.log(count, currentProcegure);
+    // console.log(count, currentProcegure);
 
     var timeout: NodeJS.Timeout;
     if (currentProcegure === 4) {

@@ -30,7 +30,7 @@ export default async function builderPage(props: PageProps) {
   });
 
   return (
-    <main className="flex-1 fr gap-4 max-h-[75vh] relative">
+    <main className="flex-1">
       {/* if payment if not completed then complete the payment */}
       {/* {activeResumeInstance.paymentStatus == "pending" && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 w-[50%] border border-green-400 bg-white text-black p-4">

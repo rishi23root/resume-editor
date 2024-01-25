@@ -62,7 +62,7 @@ const BuilderClient = memo(
       createdAt?: string;
     };
   }) => {
-    const debounceTime = 1000;
+    const debounceTime = 800;
 
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
@@ -180,10 +180,14 @@ const BuilderClient = memo(
     );
 
     if (!isrendered) return null;
+
+    // /setup the form and pdf viewer size and model togel button
     return (
-      <Suspense>
+      <div className="h-full w-full xl:max-h-[75vh] flex gap-4 flex-col-reverse xl:flex-row">
         <FormProvider {...formHandeler}>
-          <FormManager onSubmit={FormManagerSubmitFnc} />
+          <div className="flex-1 max-h-[75vh] relative">
+            <FormManager onSubmit={FormManagerSubmitFnc} />
+          </div>
           {/* <DevTool control={formHandeler.control} /> */}
           <PDFviewer
             templateName={searchParams.templateName as string}
@@ -194,7 +198,7 @@ const BuilderClient = memo(
             searchParams={searchParams}
           />
         </FormProvider>
-      </Suspense>
+      </div>
     );
   }
 );
