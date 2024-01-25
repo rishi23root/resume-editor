@@ -7,10 +7,10 @@ import {
   useMotionTemplate,
   useMotionValue,
 } from "framer-motion";
-import React, { useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import { useEffect } from "react";
 
-export default function BubbleUnderlay({
+function BubbleUnderlay({
   className,
 }: {
   className?: string;
@@ -67,89 +67,92 @@ export default function BubbleUnderlay({
   );
 }
 
-function Bubble({
-  index,
-  color,
-  size,
-}: {
-  index: number;
-  color: string;
-  size: number;
-}) {
-  // get screen width and height
-  // put the bubble in a random position on the screen
-  let randomWidth = Math.random() * window.innerWidth;
-  let randomHeight = Math.random() * window.innerHeight;
-  const positionX = useMotionValue(randomWidth);
-  const positionY = useMotionValue(randomHeight);
-  // create a motion animation for each bubble randomly attracts towords the mouse is mouse in 300px radius
-  // console.log("rendering bubble");
+export default memo(BubbleUnderlay);
 
-  useEffect(() => {
-    var randomWidth = (Math.random() * 1.5 - 0.5) * window.innerWidth;
-    var randomHeight = (Math.random() * 1.5 - 0.5) * window.innerHeight;
-    // console.log(randomHeight, randomWidth);
-    positionX.set(randomWidth);
-    positionY.set(randomHeight);
-    const intervalIns = setInterval(() => {
-      var randomWidth = (Math.random() * 1.5 - 0.5) * window.innerWidth;
-      var randomHeight = (Math.random() * 1.5 - 0.5) * window.innerHeight;
-      // console.log(randomHeight, randomWidth);
-      positionX.set(randomWidth);
-      positionY.set(randomHeight);
-    }, 20000);
+const Bubble = memo(
+  ({ index, color, size }: { index: number; color: string; size: number }) => {
+    let newValInterval = 20000; // 20s
+    const positionX = useMotionValue(
+      (Math.random() * 1.5 - 0.5) * window.innerWidth
+    );
+    const positionY = useMotionValue(
+      (Math.random() * 1.5 - 0.5) * window.innerHeight
+    );
 
-    window.addEventListener("mousemove", (e) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-      const distanceX = mouseX - positionX.get();
-      const distanceY = mouseY - positionY.get();
-      const distance = Math.sqrt(
-        Math.pow(distanceX, 2) + Math.pow(distanceY, 2)
-      );
-      if (distance <= 150) {
-        positionX.set(mouseX);
-        positionY.set(mouseY);
-      }
-    });
-    return () => {
-      clearInterval(intervalIns);
-      window.removeEventListener("mousemove", () => {});
+    const updatePosition = () => {
+      positionX.set((Math.random() * 1.5 - 0.5) * window.innerWidth);
+      positionY.set((Math.random() * 1.5 - 0.5) * window.innerHeight);
+      // console.log(positionX.get(), positionY.get());
     };
-  });
 
-  return (
-    <motion.div
-      initial={{
-        scale: 1.2,
-      }}
-      animate={{
-        scale: 1,
-      }}
-      transition={{
-        duration: 3,
-        delay: 0.2,
-      }}
-    >
+    // this runs only one time
+    useEffect(() => {
+      updatePosition(); // Set initial position
+      const intervalIns = setInterval(updatePosition, newValInterval);
+      return () => {
+        clearInterval(intervalIns);
+      };
+    });
+
+    // for mouse event
+    // const handleMouseMove = (e: MouseEvent) => {
+    //   const mouseX = e.clientX;
+    //   const mouseY = e.clientY;
+    //   const distanceX = mouseX - positionX.get();
+    //   const distanceY = mouseY - positionY.get();
+    //   const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+    //   if (distance <= 150) {
+    //     newValInterval = 200;
+    //     console.log(index, positionX.get());
+
+    //     positionX.set(mouseX - distanceX / 2); // Adjust the position based on distance
+    //     positionY.set(mouseY - distanceY / 2); // Adjust the position based on distance
+    //     console.log(positionX.get());
+    //   } else {
+    //     newValInterval = 20000;
+    //   }
+    // };
+    // useEffect(() => {
+    //   window.addEventListener("mousemove", handleMouseMove);
+    //   return () => {
+    //     window.removeEventListener("mousemove", handleMouseMove);
+    //   };
+    // });
+
+    return (
       <motion.div
-        key={index}
-        className={clsx(
-          "absolute",
-          "bg-opacity-10 rounded-full blur-2xl",
-          color,
-          "-translate-x-1/2 -translate-y-1/2",
-          "ease-linear infinite",
-          `duration-&lsqb;21s&rsqb;`
-        )}
-        style={{
-          width: `${size / 4}rem`,
-          height: `${size / 4}rem`,
-          x: useMotionTemplate`${positionX}px`,
-          y: useMotionTemplate`${positionY}px`,
-          translateX: "-50%",
-          translateY: "-50%",
+        initial={{
+          scale: 1.2,
         }}
-      />
-    </motion.div>
-  );
-}
+        animate={{
+          scale: 1,
+        }}
+        transition={{
+          duration: 3,
+          delay: 0.2,
+        }}
+      >
+        <motion.div
+          key={index}
+          className={clsx(
+            "absolute",
+            "bg-opacity-10 rounded-full blur-2xl",
+            color,
+            "-translate-x-1/2 -translate-y-1/2",
+            "ease-linear infinite"
+          )}
+          style={{
+            width: `${size / 4}rem`,
+            height: `${size / 4}rem`,
+            x: useMotionTemplate`${positionX}px`,
+            y: useMotionTemplate`${positionY}px`,
+            translateX: "-50%",
+            translateY: "-50%",
+            transition: `all ${newValInterval / 1000}s `,
+          }}
+        />
+      </motion.div>
+    );
+  }
+);
