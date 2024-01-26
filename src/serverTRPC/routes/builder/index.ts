@@ -185,7 +185,8 @@ export const builderRouter = router({
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
           // convert the file to base64 string and save it into the database
-          prisma.resumeData.update({
+          console.log('updating db with new pdf image in pdfitself')
+          const updateReq = await prisma.resumeData.update({
             where: {
               id: resumeId,
             },
@@ -194,9 +195,10 @@ export const builderRouter = router({
             },
             select: {
               id: true,
+              // pdfItself: true,
             }
           })
-          // console.log(dat)
+          console.log("updated", updateReq)
 
           return {
             images: imageLink as string[],
@@ -324,6 +326,40 @@ export const builderRouter = router({
     }
     throw new Error("resume data not found");
   }),
+
+  // get user account info 
+  getAllResume: privateProcedure.input(
+    z.object({
+      userId: z.string(),
+    })
+  ).query(async (opts) => {
+    console.log('getting all resume for', opts.input.userId);
+
+    // get data from the database because id is valid this will run only on server side so its safe
+    const resumeData = await prisma.resumeData.findMany({
+      where: {
+        userId: opts.input.userId,
+      },
+      select: {
+        id: true,
+        pdfItself: true,
+        template: true,
+        payId: true,
+        jobId: true,
+        paymentStatus: true,
+        creaatedAt: true,
+      },
+      orderBy: {
+        creaatedAt: 'desc'
+      }
+    })
+    if (resumeData) {
+      // console.log(resumeData);
+      return resumeData
+    }
+    throw new Error("resume data not found");
+  }),
+
 
 });
 
