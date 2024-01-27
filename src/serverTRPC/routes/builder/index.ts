@@ -9,6 +9,7 @@ import { z } from "zod";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
+// import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
 export const builderRouter = router({
 

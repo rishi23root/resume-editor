@@ -1,11 +1,11 @@
 // pathname: api/trpc/jobDis/{functionNameHere}
+import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { procedure, router } from "@/serverTRPC/trpc";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import { keyValue } from "@/types/utils";
 import * as fs from "node:fs";
 import { z } from "zod";
-// import {1,2,3,4} from '@/JSONapiData/exampleTemplates' assert {type: 'json'};
 
 export const jobDescriptionRouter = router({
   all: procedure.query(() => {
@@ -41,13 +41,14 @@ export const jobDescriptionRouter = router({
         // const images = {} as keyValue<string>;
 
         // read the json from the exampleTemplates folder
-        var templateData = fs.readFileSync(
-          "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
-          "utf8"
-        );
+        var templateData = getTemplateByID(jobId.toString());
+        // var templateData = fs.readFileSync(
+        //   "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
+        //   "utf8"
+        // );
         console.log(templateData);
 
-        templateData = JSON.parse(templateData);
+        // templateData = JSON.parse(templateData);
 
         // console.log("current jobid",jobId);
 

@@ -11,12 +11,15 @@
 3. ? payment
 4. build/edit resume
 
-
 <!-- design principal -->
+
 1. all button should be same
 
 <!-- bg-gradient-to-r from-blue-600 to-fuchsia-500 -->
+
 4. build page
-    0 - 1. pdf not working
-    2. on add block should be open
-    3. set debounce to 1 sec    
+   0 - 1. pdf not working 
+   2. on add block should be open 
+
+backend link should be
+- https://api.buildyourresume.online
