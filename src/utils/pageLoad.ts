@@ -149,11 +149,11 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
 
     // --------------------------------------------------------------------------
 
-
     // get user to reference the database with its id
+
     // user clerk private metadata to get user id
     const user = await currentUser();
-    const userDBid = user?.privateMetadata.userDBid;
+    const userDBid = user?.privateMetadata?.userDBid;
 
     // if user is not found then redirect to the dashboard and logout
     if (!userDBid) {
@@ -162,11 +162,14 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
         }));
     }
 
-    console.log("Extract userid from clerk private metadata: ", userDBid);
+    // console.log("Extract userid from clerk private metadata: ", userDBid);
+
+    // flow-
+    // first check if the request have json data id, if not assign the recent unpaid user's resume for the user
+    // then check for the recent unpaid resume for the user
 
     // check if request have json data id or not
     console.log('Check if request have json data id or not');
-
     if (privateData.jsonDataId) {
         console.log('Passed, json data id exist in request, varifiying the id');
 

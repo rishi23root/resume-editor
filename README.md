@@ -17,5 +17,6 @@
 
 <!-- bg-gradient-to-r from-blue-600 to-fuchsia-500 -->
 4. build page
-    1. pdf not working
+    0 - 1. pdf not working
     2. on add block should be open
+    3. set debounce to 1 sec    

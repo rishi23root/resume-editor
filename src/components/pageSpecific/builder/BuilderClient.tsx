@@ -62,7 +62,7 @@ const BuilderClient = memo(
       createdAt?: string;
     };
   }) => {
-    const debounceTime = 800;
+    const debounceTime = 1200; // 800 is low 1500 is high
 
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
@@ -71,7 +71,6 @@ const BuilderClient = memo(
       onSuccess: () => {
         setPdfState("Form updated");
         // console.log("first mutation success");
-        // queryClient.invalidateQueries("builder.generatePDF" as any);
         regeneratePdfImage({
           resumeId: activeResumeInstance.id,
           templateName: searchParams.templateName as string,
@@ -93,8 +92,9 @@ const BuilderClient = memo(
         setTimeout(() => setPdfState("success"), 500);
         setTimeout(() => setPdfState("idle"), 1000);
       },
-      onError: () => {
+      onError: (err) => {
         setPdfState("error with image");
+        console.log(err);
       },
       onMutate: () => {
         setPdfState("fetching image");

@@ -188,7 +188,10 @@ export const SectionWrapper = function SectionWrapper({
               animate="animate"
               whileHover="whileHover"
               className="px-2"
-              onClick={emptyAppendCallback}
+              onClick={() => {
+                setVisible(true);
+                emptyAppendCallback();
+              }}
             >
               <Plus />
             </motion.button>
