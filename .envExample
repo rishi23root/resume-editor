@@ -9,7 +9,6 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/Dashboard
 # cors url 
 WEBSITE_URL=0.0.0.0
 
-
 # db connections 
 DATABASE_URL=
 
