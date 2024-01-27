@@ -32,9 +32,9 @@ export const jobDescriptionRouter = router({
       if (!JobDiscriptionData) {
         return {} as jobDescriptionDataType;
       }
-      
+
       const jobId = opts.input.jobId;
-      
+
       if (JobDiscriptionData.hasOwnProperty(jobId)) {
         const data = JobDiscriptionData[jobId] as jobDescriptionDataType;
         data.image = {} as keyValue<string>;
@@ -45,6 +45,8 @@ export const jobDescriptionRouter = router({
           "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
           "utf8"
         );
+        console.log(templateData);
+
         templateData = JSON.parse(templateData);
 
         // console.log("current jobid",jobId);
@@ -73,7 +75,7 @@ export const jobDescriptionRouter = router({
               const pdfData = await request.blob();
               const formData = new FormData();
               formData.append("file", pdfData, "file.pdf");
-              
+
               const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
                 method: "POST",
                 body: formData,
@@ -93,7 +95,7 @@ export const jobDescriptionRouter = router({
               }
             }
           }
-          catch(err) {
+          catch (err) {
             // request failed 
             // show some other image if the request failed (maybe a default image)
             // sequenceRequestSuccess = true;
@@ -101,10 +103,10 @@ export const jobDescriptionRouter = router({
             //   data.image[templatedata.title] = //image in base64 default image hardcoded ; 
             // }
           }
-          finally {            
+          finally {
             if (!sequenceRequestSuccess) {
               if (data.image) {
-                data.image[templatedata.title] = "" ;
+                data.image[templatedata.title] = "";
               } else {
                 data.image = {};
               }
@@ -113,7 +115,7 @@ export const jobDescriptionRouter = router({
         }));
         // console.log("return after map: ", Object.keys(data.image));
         return data;
-      } 
+      }
 
       return {} as jobDescriptionDataType;
     }),

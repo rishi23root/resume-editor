@@ -1,11 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { serverAPI } from "@/serverTRPC/serverAPI";
+import { searchParamType } from "@/types/utils";
+import { urlWithAddedParams } from "@/utils/paramHandeler";
+import Link from "next/link";
 import { Suspense } from "react";
 import Card from "./jobCard";
-import { Button } from "@/components/ui/button";
-import { urlWithAddedParams } from "@/utils/paramHandeler";
-import { searchParamType } from "@/types/utils";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 const JobDiscriptionTemplateShowcase = async ({
   jobId,
