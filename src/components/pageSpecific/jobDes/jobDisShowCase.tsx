@@ -55,17 +55,21 @@ const JobDiscriptionTemplateShowcase = async ({
             })}
           </Suspense>
         </div>
-        <div className="w-full fcc">
+        <div className="w-full fcc pt-2">
           <Button
             className={cn(
-              "p-6 my-2 text-2xl capitalize bg-blue-500 border rounded-md m-auto text-white text-center w-full lg:w-[60%] ",
+              "p-6 my-2 text-xl capitalize border rounded-md m-auto text-white text-center w-full lg:w-[60%]",
+              "bg-gradient-to-r from-blue-600 to-fuchsia-500",
               "transition ease-in-out delay-150", //animate
-              "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black"
+              "hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500/50 "
             )}
           >
             <Link href={toRedirectUrl} className="w-full">
-              Continue with &nbsp;
-              <span className="bold italic">{jobIdData.title}</span>
+              Continue&nbsp;
+              <span className="hidden sm:inline-block">
+                with&nbsp;
+                <span className="bold italic">{jobIdData.title}</span>
+              </span>
             </Link>
           </Button>
         </div>

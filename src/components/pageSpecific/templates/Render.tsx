@@ -56,9 +56,10 @@ function Render({ templateData }: { templateData: templateWithImages[] }) {
         {images.length > 0 && (
           <Button
             className={cn(
-              "p-3 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center fcc",
+              "p-3 my-2 text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center fcc",
               "transition ease-in-out delay-150", //animate
-              "hover:bg-white hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black",
+              "bg-gradient-to-r from-blue-600 to-fuchsia-500",
+              "hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500/50 ",
               images.length == 1 ? "w-[50%]" : "w-[90%]"
             )}
           >

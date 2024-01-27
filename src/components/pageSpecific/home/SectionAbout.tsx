@@ -1,11 +1,9 @@
+import Link from "next/link";
 import React from "react";
 
 export function SectionAbout({ editorLink }: { editorLink: string }) {
   return (
-    <section
-      id="about"
-      className=" min-h-[65vh] fc fce w-full fcc fc gap-8 "
-    >
+    <section id="about" className=" min-h-[65vh] fc fce w-full fcc fc gap-8 ">
       {/* heading */}
       <div className="w-full gap-4 text-center fcc fc">
         <div className="text-5xl font-bold text-neutral-200">About Us</div>
@@ -14,7 +12,7 @@ export function SectionAbout({ editorLink }: { editorLink: string }) {
         </div>
       </div>
       {/* inner text para */}
-      <div className="text-lg font-medium text-zinc-400 text-opacity-70 max-w-[75ch]">
+      <div className="text-lg font-medium text-zinc-300 text-opacity-70 max-w-[75ch]">
         We are a team of experienced professionals, both students and working
         professionals, who are passionate about helping people succeed in their
         careers. We believe that everyone deserves to have access to
@@ -36,8 +34,15 @@ export function SectionAbout({ editorLink }: { editorLink: string }) {
         <br />
         <br />
         We believe that everyone deserves to have a great career, and we are
-        here to help you achieve your goals. Contact us today at [email
-        protected] to learn more about how we can help you succeed.
+        here to help you achieve your goals. Contact us today at
+        <Link
+          href={"mailto:contact@buildyourresume.online"}
+          className="hover:text-zinc-200"
+        >
+          {" "}
+          contact@buildyourresume.online{" "}
+        </Link>
+        to learn more about how we can help you succeed.
         <br />
         <br />
         Whether you are a student, an individual looking for career assistance,

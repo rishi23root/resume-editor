@@ -4,11 +4,11 @@ import { PageProps } from "@/types/utils";
 import useParamParser from "@/utils/paramHandeler";
 
 export default async function JobDescriptionsPage(props: PageProps) {
-  const { stringifiedData, privateData } = await useParamParser(
-    "/JobDescriptions",
-    props.searchParams
-  );
-  console.log("form jobDes: ", stringifiedData, privateData);
+  // const { stringifiedData, privateData } = await useParamParser(
+  //   "/JobDescriptions",
+  //   props.searchParams
+  // );
+  // console.log("form jobDes: ", stringifiedData, privateData);
 
   const jobId = (props.searchParams?.jobId as number) || 1;
 

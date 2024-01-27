@@ -9,12 +9,11 @@ import { Suspense } from "react";
 
 export default async function Template(props: PageProps) {
   const templateData = await getTemplateDataWithImages();
-
-  const { stringifiedData, privateData } = await useParamParser(
-    "/Templates",
-    props.searchParams
-  );
-  console.log("from templates: ", stringifiedData, privateData);
+  // const { stringifiedData, privateData } = await useParamParser(
+  //   "/Templates",
+  //   props.searchParams
+  // );
+  // console.log("from templates: ", stringifiedData, privateData);
 
   return (
     <div className="w-full gap-4 md:h-[42rem] md:fr fc">

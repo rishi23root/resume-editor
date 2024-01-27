@@ -13,11 +13,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function DashboardPage(props: PageProps) {
-  const { stringifiedData, privateData } = await useParamParser(
-    "/Dashboard",
-    props.searchParams
-  );
-  console.log("from dashboard: ", stringifiedData, privateData);
+  // const { stringifiedData, privateData } = await useParamParser(
+  //   "/Dashboard",
+  //   props.searchParams
+  // );
+  // console.log("from dashboard: ", stringifiedData, privateData);
   const user = await currentUser();
   const userDBid = user?.privateMetadata.userDBid;
 
