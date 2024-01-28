@@ -13,10 +13,10 @@ backend link should be
 <!-- work on
 1. openAIRouter
 3. csp
-4. limit prisma intance 
-5. make image size smaller
  -->
 
 <!-- done 
+5. make image size smaller
 2. build flow update only when resume payment is paid
+4. limit prisma instances 
 -->
