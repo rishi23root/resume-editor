@@ -7,16 +7,14 @@ import {
   builderPageParamsRedirectHandeler,
   builderPageParamsValidator,
 } from "@/utils/pageLoad";
-import useParamParser from "@/utils/paramHandeler";
 import { currentUser } from "@clerk/nextjs";
-import { Suspense } from "react";
 
 export default async function builderPage(props: PageProps) {
-  const { stringifiedData, privateData } = await useParamParser(
-    "/Builder",
-    props.searchParams
-  );
-  console.log("from builder: ", stringifiedData, privateData);
+  // const { stringifiedData, privateData } = await useParamParser(
+  //   "/Builder",
+  //   props.searchParams
+  // );
+  // console.log("from builder: ", stringifiedData, privateData);
 
   await builderPageParamsRedirectHandeler(props);
   const activeResumeInstance = await builderPageParamsValidator(props);

@@ -12,11 +12,13 @@ backend link should be
 
 <!-- work on
 1. openAIRouter
-3. csp
  -->
 
 <!-- done 
 5. make image size smaller
 2. build flow update only when resume payment is paid
 4. limit prisma instances 
+
+3. csp
+- other sources are clerk and razorpay 
 -->

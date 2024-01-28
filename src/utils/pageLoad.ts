@@ -169,9 +169,9 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
     // then check for the recent unpaid resume for the user
 
     // check if request have json data id or not
-    console.log('Check if request have json data id or not');
+    // console.log('Check if request have json data id or not');
     if (privateData.jsonDataId) {
-        console.log('Passed, json data id exist in request, varifiying the id');
+//console.log('Passed, json data id exist in request, varifiying the id');
 
         // check if the json data id is valid or not and its user id is same as the current user 
         const jsonData = await prisma.resumeData.findUnique({
@@ -189,10 +189,10 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             }
         })
         if (jsonData) {
-            console.log('passed json data id check, varified datajson id');
+	//console.log('passed json data id check, varified datajson id');
             // if unpaid then update the job id and pay id
             if (jsonData.paymentStatus === "pending") {
-                console.log('passed unpaid check, updating the pay id and job id');
+                // console.log('passed unpaid check, updating the pay id and job id');
                 // update the pay id and job id
                 const updatedResume = await prisma.resumeData.update({
                     where: {
@@ -218,8 +218,8 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             }
             else {
                 // (jsonData.paymentStatus === "paid")
-                console.log('passed paid check, user can start editing if time is left');
-                console.log(jsonData.creaatedAt)
+                // console.log('passed paid check, user can start editing if time is left');
+                // console.log(jsonData.creaatedAt)
                 // if paid then redirect to the dashboard
                 // return redirect("/Dashboard?" + await jsonToSearchParameters({
                 //     error: "You have already paid for this resume, you can download it from dashboard",
@@ -227,14 +227,14 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 return jsonData;
             }
         } else {
-            console.log('failed, datajson id, redirecting to dashboard');
+            // console.log('failed, datajson id, redirecting to dashboard');
             // if not valid then redirect to the dashboard
             return redirect("/Dashboard?" + await jsonToSearchParameters({
                 error: "error decoding data, have to restart building :( ",
             }));
         }
     } else {
-        console.log('failed, json data id not found in request, looking for recent unpaid resume for the user');
+        // console.log('failed, json data id not found in request, looking for recent unpaid resume for the user');
 
         // look for recent unpaid generated resume for the user 
         const recentRequstForResume = await prisma.resumeData.findFirst({
@@ -254,7 +254,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
         })
 
         if (recentRequstForResume) {
-            console.log('passed found unpaid resume', recentRequstForResume.id);
+            // console.log('passed found unpaid resume', recentRequstForResume.id);
             // console.log(recentRequstForResume.payId, parseInt(SearchParams.payId as string), SearchParams.payId);
             // console.log("testing for data similarity: ", parseInt(SearchParams.jobId as string) === recentRequstForResume.jobId);
 
@@ -263,7 +263,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                     jobId: parseInt(SearchParams.jobId as string),
                 });
                 // update the database with current pay id
-                console.log('updating the pay id and data for reqeuested jobid in the database');
+                // console.log('updating the pay id and data for reqeuested jobid in the database');
                 const updatedResume = await prisma.resumeData.update({
                     where: {
                         id: recentRequstForResume.id
@@ -298,7 +298,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             return redirect("/Builder?" + await jsonToSearchParameters(SearchParams));
         }
         else {
-            console.log('fail in finding unpaid resume, creating a new one');
+            // console.log('fail in finding unpaid resume, creating a new one');
             // console.log("default data for new resume:", {
             //     payId: parseInt(SearchParams.payId as string),
             // });

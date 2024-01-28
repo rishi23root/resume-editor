@@ -3,7 +3,12 @@
 
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
+import { searchParamType } from "@/types/utils";
+import { UseTRPCMutationResult } from "@trpc/react-query/shared";
+import { format } from "date-fns";
+import { saveAs } from "file-saver";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDownFromLine,
@@ -13,18 +18,12 @@ import {
   RefreshCcw,
   Trash2,
 } from "lucide-react";
-import { useEffect, useState, Suspense } from "react";
-import { Loadingstate } from "../Fallbacks";
-import { useToast } from "../ui/use-toast";
-
-import { searchParamType } from "@/types/utils";
-import { format } from "date-fns";
-import { saveAs } from "file-saver";
 import { useRouter } from "next/navigation";
-import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
-import { UseTRPCMutationResult } from "@trpc/react-query/shared";
-import { cn } from "@/lib/utils";
+import { Suspense, useEffect, useState } from "react";
+import { Loadingstate } from "../Fallbacks";
 import { ResizablePanel } from "../pageSpecific/builder/customFormFields/sections/utils";
+import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
+import { useToast } from "../ui/use-toast";
 
 function PDFviewer({
   templateName,
@@ -246,12 +245,13 @@ function PDFviewer({
                 : "h-1 invisible"
             )}
           >
-            <motion.div className="flex min-w-[50%] w-full flex-1 justify-center items-center flex-row">
+            <motion.div className="flex min-w-1/2 w-full flex-1 justify-center items-center flex-row">
               {/* flex justify-center */}
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   className={cn(
-                    "h-full flex items-center justify-center relative border border-white",
+                    "h-full flex items-center justify-center relative  ",
+                    " ",
                     isInMobileViewAndVisible ? "visible" : "invisible"
                   )}
                 >
@@ -298,7 +298,11 @@ function PDFviewer({
                           width={400}
                           height={600}
                           zoomType="click"
-                          className="rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em] border border-green-600"
+                          className={cn(
+                            "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em] border border-green-600",
+                            "group-hover:xl:-translate-x-16 border border-white",
+                            "animate-fade-in-up delay-75 transition-all duration-500 ease-in-out"
+                          )}
                         />
                       </motion.div>
                     )}
@@ -320,7 +324,7 @@ function PDFviewer({
             <motion.div
               layout
               className={cn(
-                "rounded-md transition-[width] duration-500 ease-in-out xl:opacity-0 w-full sm:w-[25%] xl:w-0 group-hover:opacity-100 group-hover:w-[25%] pointer-events-none group-hover:pointer-events-auto flex flex-col justify-top gap-1 p-2 lg:px-6 ",
+                "rounded-md transition-[width] duration-500 ease-in-out xl:opacity-0 w-full sm:w-[25%] xl:w-0 group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] pointer-events-none group-hover:pointer-events-auto flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
                 isInMobileViewAndVisible ? "visible" : "invisible"
               )}
             >
