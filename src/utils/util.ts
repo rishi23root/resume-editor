@@ -35,16 +35,21 @@ export async function getTemplateDataWithImages() {
   return templatesWithImages;
 }
 
-export async function compressImage(image: string, quality: number = 0.3) {
+export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
   return new Promise((resolve, reject) => {
     try {
       const img = new Image()
-      img.src = image
+      // convert base64 to buffer
+      const imageBuffer = Buffer.from(image.split(',')[1], 'base64')
+      img.src = imageBuffer
       const canvas = createCanvas(img.width, img.height)
       const ctx = canvas.getContext('2d')
       ctx.drawImage(img, 0, 0)
-      return resolve(canvas.toDataURL('image/jpeg', quality) as string)
+      resolve(canvas.toDataURL('image/jpeg', quality) as string)
     } catch (error) {
+      console.log("compression error: ", error);
+      reject('error')
+
       // reject(error as string)
     }
   })

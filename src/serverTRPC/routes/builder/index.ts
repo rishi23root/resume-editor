@@ -188,6 +188,10 @@ export const builderRouter = router({
           var imageLinkArr = await image.json() as string[];
           var compressedImage = await compressImage(imageLinkArr[0])
           var imageLink = (compressedImage || imageLinkArr[0]) as string
+          // console.log(
+          //   imageLinkArr[0].length - compressedImage.length, 
+          // );
+          
 
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
