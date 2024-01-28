@@ -9,6 +9,7 @@ import { z } from "zod";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
+import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
 export const builderRouter = router({
@@ -31,12 +32,13 @@ export const builderRouter = router({
 
     if (JobDiscriptionData.hasOwnProperty(jobId)) {
       // read the json from the exampleTemplates folder
-      var templateData = fs.readFileSync(
-        "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
-        "utf8"
-      );
+      var templateData = getTemplateByID(jobId.toString());
+      // var templateData = fs.readFileSync(
+      //   "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
+      //   "utf8"
+      // );
       if (templateData) {
-        data = JSON.parse(templateData);
+        data = templateData as Inputs;
       }
     }
 
@@ -252,7 +254,7 @@ export const builderRouter = router({
   getPDFByResumeId: privateProcedure.input(
     z.object({
       resumeId: z.string(),
-      templateName: z.string()
+      templateName: z.string().nullish(),
     })
   ).mutation(async (opts) => {
     console.log('renerating new pdf only');
@@ -265,6 +267,7 @@ export const builderRouter = router({
       },
       select: {
         data: true,
+        template: true,
       }
     })
 
@@ -281,7 +284,7 @@ export const builderRouter = router({
         },
         body: JSON.stringify({
           data: JSON.parse(resumeData.data),
-          template: templateName,
+          template: templateName ? templateName : resumeData.template,
         }),
       });
 

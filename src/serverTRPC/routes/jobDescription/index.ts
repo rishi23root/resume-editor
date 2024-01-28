@@ -46,9 +46,6 @@ export const jobDescriptionRouter = router({
         //   "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
         //   "utf8"
         // );
-        console.log(templateData);
-
-        // templateData = JSON.parse(templateData);
 
         // console.log("current jobid",jobId);
 

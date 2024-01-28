@@ -14,6 +14,7 @@ import { Suspense } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import NextTopLoader from "nextjs-toploader";
+import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -112,6 +113,7 @@ export default function RootLayout({
             </NoSSR>
           </Suspense>
           {children}
+          {/* <TwScreenInfo /> */}
         </body>
       </html>
     </ClerkProvider>

@@ -1,8 +1,9 @@
 "use client";
 
-
 import Seperator from "@/components/pageSpecific/Seperator";
 import { Button } from "@/components/ui/button";
+import { saveAs } from "file-saver";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,15 +13,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/serverTRPC/client";
+import { resumeDataprops } from "@/types/builder";
+import { resumeTemplates } from "@/types/templates";
 import { UserButton, useClerk } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import {
   Book,
   Cpu,
-  DoorClosed, Download, HardDriveUpload,
-  LayoutPanelTop, MoreHorizontal, PencilRuler
+  DoorClosed,
+  Download,
+  HardDriveUpload,
+  LayoutPanelTop,
+  MoreHorizontal,
+  PencilRuler,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,8 +47,8 @@ const DashboardNavBtn = ({
   return (
     <Button
       className={cn(
-        "text-white py-3 text-xl md:text-sm lg:text-xl w-full hover:text-black",
-        "bg-gray-800/20 ",
+        "text-white py-3 text-lg md:text-sm text-left w-full hover:text-black",
+        "bg-gray-800/40 leading-0 ",
         "border-b-2 border-zinc-700 hover:shadow-lg hover:shadow-zinc-500 ",
         "hover:rounded-xl w-full h-fit",
         "transition-all duration-150 ",
@@ -63,22 +73,30 @@ export const DashboardNav = async ({
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      <DashboardNavBtn>
-        <LayoutPanelTop />
-        <Link href="/Templates">Templates</Link>
-      </DashboardNavBtn>
-      <DashboardNavBtn>
-        <Book />
-        <Link href="/JobDescriptions">Job Discription</Link>
-      </DashboardNavBtn>
-      <DashboardNavBtn>
-        <HardDriveUpload />
-        <Link href="/New/jsonResume">upload Resume</Link>
-      </DashboardNavBtn>
-      <DashboardNavBtn>
-        <Cpu />
-        <Link href="/Payment">Price</Link>
-      </DashboardNavBtn>
+      <Link className="w-full " href="/Templates">
+        <DashboardNavBtn>
+          <LayoutPanelTop className="w-10 " />
+          Templates
+        </DashboardNavBtn>
+      </Link>
+      <Link className="w-full " href="/JobDescriptions">
+        <DashboardNavBtn>
+          <Book className="w-10  " />
+          Job Discription
+        </DashboardNavBtn>
+      </Link>
+      <Link className="w-full" href="/New/jsonResume">
+        <DashboardNavBtn>
+          <HardDriveUpload className="w-10 " />
+          upload Resume
+        </DashboardNavBtn>
+      </Link>
+      <Link className="w-full" href="/Payment">
+        <DashboardNavBtn>
+          <Cpu className="w-10" />
+          Price
+        </DashboardNavBtn>
+      </Link>
 
       <Seperator className="my-4 mb-8 mt-auto" />
 
@@ -114,10 +132,10 @@ export const ResumeSectionShowCase = ({
 }: {
   children: React.ReactNode;
   className?: string;
-  title: string;
+  title: string | React.ReactNode;
 }) => {
   return (
-    <div className={cn("w-full fc gap-2 ", className)}>
+    <div className={cn("w-full fc gap-2 cursor-pointer", className)}>
       <h1 className="text-2xl font-bold">{title}</h1>
       <Seperator className=" mb-1 opacity-20 " />
       <div className="flex flex-row flex-wrap gap-2 w-full ">{children}</div>
@@ -126,70 +144,126 @@ export const ResumeSectionShowCase = ({
 };
 
 // card
-
-export default function ResumeCard({
-  id,
-  pdfItself,
-  creaatedAt,
-}: {
-  id: string;
-  pdfItself: string;
-  creaatedAt: Date;
-}) {
+export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
+  // id: string;
+  // pdfItself: string;
+  // creaatedAt: Date;
+  const { id, pdfItself, creaatedAt } = resume;
   const [showAction, setShowAction] = React.useState<boolean>(false);
+  const { toast } = useToast();
+  const { urlWithAddedParams } = useRedirectHandler();
+
+  // using created at find if active or not
+  const isActive =
+    new Date().getTime() - creaatedAt.getTime() <= 30 * 24 * 60 * 60 * 1000;
+
+  const editLink = urlWithAddedParams(
+    "/Builder",
+    {
+      jobId: resume.jobId,
+      payId: resume.payId.toString() as string,
+      templateName: resume.template as string as resumeTemplates | undefined,
+    },
+    {
+      jsonDataId: resume.id,
+      procegure: 4,
+    }
+  );
+
+  const downloadPDF = trpc.builder.getPDFByResumeId.useMutation({
+    onSuccess: async (data) => {
+      // console.log("downloaded pdf: ", data);
+      // now  we got base64 encoded pdf file decode it and save it as pdf file
+      const blob = new Blob([Buffer.from(data, "base64")], {
+        type: "application/pdf",
+      });
+
+      saveAs(blob, `resume_${format(new Date(), "dd-MM-yyyy")}.pdf`);
+
+      toast({
+        variant: "default",
+        title: "PDF downloaded 👍 ",
+      });
+    },
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "unable to download pdf try again later",
+      });
+      console.log(err);
+    },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Requesting for PDF download :)",
+      });
+      setTimeout(() => {
+        toast({
+          variant: "default",
+          title: "PDF will download shortly ",
+          duration: 20000,
+        });
+      }, 500);
+    },
+  });
 
   return (
-    <motion.div
-      key={id}
-      className={
-        "border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 cursor-pointer"
-      }
-      initial={{ opacity: 0, y: 100 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={() => setShowAction(!showAction)}
-    >
-      <Image
-        src={pdfItself as string}
-        height={200}
-        width={150}
-        alt="pdf image"
-        className="group-hover:invert h-30 w-30 rounded-md"
-      />
-      <div className="flex flex-row justify-between">
-        <div className="text-white/50">{format(creaatedAt, "dd-MM-yyyy")}</div>
-        {/* three dots */}
-        <DropdownMenu open={showAction} onOpenChange={setShowAction}>
-          <DropdownMenuTrigger asChild>
-            <MoreHorizontal className="opacity-70 w-6 mx-2 " />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem
-                className="w-full flex flex-row gap-2"
-                onClick={() => {
-                  // download pdf 
-                  // implement needed mutation to handle that
-                }}
-              >
-                <Download />
-                Download
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="w-full flex flex-row gap-2"
-                disabled={false}
-              >
-                <PencilRuler />
-                Edit
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </motion.div>
+    <DropdownMenu open={showAction} onOpenChange={setShowAction}>
+      <DropdownMenuTrigger asChild>
+        <motion.div
+          key={id}
+          className={
+            "cursor-pointer border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 "
+          }
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Image
+            src={pdfItself as string}
+            height={200}
+            width={150}
+            alt="pdf image"
+            className="group-hover:invert h-30 w-30 rounded-md"
+          />
+          <div className="flex flex-row justify-between">
+            <div className="text-white/50">
+              {format(creaatedAt, "dd-MM-yyyy")}
+            </div>
+            {/* three dots */}
+            <MoreHorizontal
+              className={cn(
+                "opacity-70 w-6 mx-2 duration-50",
+                showAction && "rotate-90 translate-x-1/2"
+              )}
+            />
+          </div>
+        </motion.div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56 bg-gray-900 shadow-md ">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            className="w-full flex flex-row gap-2"
+            onClick={() => {
+              // download pdf
+              downloadPDF.mutate({ resumeId: id });
+            }}
+          >
+            <Download /> Download
+          </DropdownMenuItem>
+          {isActive && (
+            <DropdownMenuItem className="w-full flex flex-row gap-2">
+              <Link href={editLink} className="w-full flex flex-row gap-2">
+                <PencilRuler /> Edit
+              </Link>
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

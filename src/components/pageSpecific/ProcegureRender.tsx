@@ -74,7 +74,7 @@ function ProcegureRender() {
               >
                 <ProcegureElement
                   count={1}
-                  discription={"Chose your Job type"}
+                  discription={"Choose your Job type"}
                   currentProcegure={data.procegure}
                   keepProcegureRenderChildren={keepProcegureRenderChildren}
                 />

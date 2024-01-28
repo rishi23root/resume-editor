@@ -52,7 +52,7 @@ function BubbleUnderlay({
           {Array(numBubbles)
             .fill(0)
             .map((_, index) => {
-              // chose a random color and size for each bubble
+              // Choose a random color and size for each bubble
               const color =
                 bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
               const size =
