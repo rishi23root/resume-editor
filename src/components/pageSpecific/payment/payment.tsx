@@ -70,6 +70,10 @@ export const MakePaymentComponent = async ({
           name: data.name,
           email: data.email,
         },
+        // set theme color
+        theme: {
+          color: "#3399cc", // 12141D
+        },
       };
 
       if (typeof window === "undefined") {

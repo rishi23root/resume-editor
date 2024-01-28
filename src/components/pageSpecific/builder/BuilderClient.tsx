@@ -170,8 +170,13 @@ const BuilderClient = memo(
     const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
       data: any
     ) => {
-      console.log("update requested");
-      submitAction(data);
+      if (activeResumeInstance.paymentStatus === "pending") {
+        console.log("update requested, canceled, payment pending");
+        return;
+      } else {
+        console.log("update requested");
+        submitAction(data);
+      }
     };
 
     const FormManagerSubmitFnc = useCallback(

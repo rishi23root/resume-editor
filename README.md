@@ -7,9 +7,16 @@
 ## procegure
 
 backend link should be
-- https://api.buildyourresume.online
 
+- https://api.buildyourresume.online
 
 <!-- work on
 1. openAIRouter
+3. csp
+4. limit prisma intance 
+5. make image size smaller
  -->
+
+<!-- done 
+2. build flow update only when resume payment is paid
+-->

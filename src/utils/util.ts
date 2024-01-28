@@ -1,4 +1,5 @@
 // handle most of the data extraction using prisma
+import { createCanvas, Image } from 'canvas'
 
 import { templateWithImages } from "@/types/templates";
 
@@ -32,4 +33,19 @@ export async function getTemplateDataWithImages() {
   );
 
   return templatesWithImages;
+}
+
+export async function compressImage(image: string, quality: number = 0.3) {
+  return new Promise((resolve, reject) => {
+    try {
+      const img = new Image()
+      img.src = image
+      const canvas = createCanvas(img.width, img.height)
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      return resolve(canvas.toDataURL('image/jpeg', quality) as string)
+    } catch (error) {
+      // reject(error as string)
+    }
+  })
 }

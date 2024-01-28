@@ -189,8 +189,6 @@ function PDFviewer({
       });
     } else {
       setDataArray(data?.images || []);
-      // setPdfFile(data?.pdfFile || []);
-      // console.log("updated", data?.pdfFile);
     }
     // console.log("updated");
   }, [data]);
@@ -253,7 +251,7 @@ function PDFviewer({
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   className={cn(
-                    "h-full flex items-center justify-center relative ",
+                    "h-full flex items-center justify-center relative border border-white",
                     isInMobileViewAndVisible ? "visible" : "invisible"
                   )}
                 >
@@ -300,7 +298,7 @@ function PDFviewer({
                           width={400}
                           height={600}
                           zoomType="click"
-                          className="rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em]"
+                          className="rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em] border border-green-600"
                         />
                       </motion.div>
                     )}
@@ -318,6 +316,7 @@ function PDFviewer({
                 </motion.div>
               </AnimatePresence>
             </motion.div>
+            {/* action bar */}
             <motion.div
               layout
               className={cn(

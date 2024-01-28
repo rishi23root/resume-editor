@@ -10,6 +10,7 @@ import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
 import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
+import { compressImage } from "@/utils/util";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
 export const builderRouter = router({
@@ -184,7 +185,10 @@ export const builderRouter = router({
         // console.log(image.status);
         if (image.status === 200) {
           // console.log(4);
-          const imageLink = await image.json();
+          var imageLinkArr = await image.json() as string[];
+          var compressedImage = await compressImage(imageLinkArr[0])
+          var imageLink = (compressedImage || imageLinkArr[0]) as string
+
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
           // convert the file to base64 string and save it into the database
@@ -194,7 +198,7 @@ export const builderRouter = router({
               id: resumeId,
             },
             data: {
-              pdfItself: imageLink[0],
+              pdfItself: imageLink,
             },
             select: {
               id: true,
@@ -204,7 +208,7 @@ export const builderRouter = router({
           console.log("updated", updateReq)
 
           return {
-            images: imageLink as string[],
+            images: imageLinkArr,
             error: ""
           }
         } else {
