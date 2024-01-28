@@ -6,6 +6,10 @@ import { z } from "zod";
 import Razorpay from "razorpay";
 import shortid from "shortid";
 import { currentUser } from "@clerk/nextjs";
+import crypto from "crypto"
+import { prisma } from "@/lib/prisma";
+const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET as string);
+
 
 export const priceRouter = router({
   all: procedure.query(() => {
@@ -29,6 +33,7 @@ export const priceRouter = router({
       }
       return price.link;
     }),
+
   getRazorpayOrderId: procedure
     .input(z.object({ payId: z.number() }))
     .query(async (opts) => {
@@ -38,6 +43,8 @@ export const priceRouter = router({
         key_id: process.env.RAZORPAY_KEY as string,
         key_secret: process.env.RAZORPAY_SECRET as string,
       });
+
+      const userId = user?.id as string;
       const payId = opts.input.payId;
       const price = priceData.find((price) => price.id === payId);
       if (!price) {
@@ -53,13 +60,17 @@ export const priceRouter = router({
         amount: (amount * 100).toString(),
         currency: "INR",
         receipt: shortid.generate(),
-        payment_capture: 1
+        payment_capture: 1,
+        notes: {
+          userId: userId,
+          paymentId: payId,
+          paymentFor: price.title,
+        }
       };
 
       try {
         const response = await razorpay.orders.create(options);
-        const user = await currentUser();
-        let primaryAddress = user?.emailAddresses.find((email) => email.id === user.primaryEmailAddressId)?.emailAddress
+        let primaryAddress = user?.emailAddresses?.find((email) => email.id === user.primaryEmailAddressId)?.emailAddress
         // console.log(response);
 
         return {
@@ -69,32 +80,50 @@ export const priceRouter = router({
           name: user?.firstName + (user?.firstName ? (user?.lastName ? (' ' + user?.lastName) : "") : ''),
           email: primaryAddress ? primaryAddress as string : "",
           discription: price.description,
-          imageUrl: user?.imageUrl
+          imageUrl: user?.imageUrl,
+          key: process.env.RAZORPAY_KEY
         }
       } catch (err) {
         //console.log(err);
         throw new Error("error in creating razorpay order");
       }
     }),
+
   varifyRazorpayPayment: procedure.input(z.object({
+    resumeId: z.string(),
     paymentID: z.string(),
     orderID: z.string(),
     signature: z.string(),
-  })).query(async (opts) => {
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY as string,
-      key_secret: process.env.RAZORPAY_SECRET as string,
-    });
+  })).mutation(async (opts) => {
     const paymentID = opts.input.paymentID;
     const orderID = opts.input.orderID;
     const signature = opts.input.signature;
-    // const expectedSignature = razorpay.utils.generateHmac(
-    //   orderID + "|" + paymentID,
-    //   process.env.RAZORPAY_SECRET as string
-    // );
-    // if (expectedSignature !== signature) {
-    //   throw new Error("Invalid Payment");
-    // }
+
+    hmac.update(orderID + "|" + paymentID);
+    let expectedSignature = hmac.digest('hex');
+
+    console.log(expectedSignature);
+
+    if (expectedSignature !== signature) {
+      throw new Error("Invalid Payment");
+    }
+
+    // update the database with the payment details
+    const updated = await prisma.resumeData.update({
+      where: {
+        id: opts.input.resumeId
+      },
+      data: {
+        paymentId: paymentID,
+        paymentStatus: "paid"
+      },
+      select: {
+        id: true,
+        paymentId: true,
+        paymentStatus: true
+      }
+    })
+    console.log("payment added: ", updated);
     return true;
   })
 });

@@ -138,3 +138,16 @@ export type pdfAndFromStatus =
   | "error with form"
   | "Image updated"
   | "Form updated";
+
+
+
+
+export type resumeDataprops = {
+  jobId: number;
+  payId: number;
+  template: string;
+  id: string;
+  paymentStatus: string;
+  pdfItself: string | null;
+  creaatedAt: Date;
+};

@@ -1,19 +1,24 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
-// if (process.env.NODE_ENV === "production") {
-// 	prisma = new PrismaClient();
-// } else {
-// 	if (!global.prisma) {
-// 		global.prisma = new PrismaClient({
-// 			errorFormat: "pretty",
-// 		});
-// 	}
-// 	prisma = global.prisma;
-// }
+let prisma: PrismaClient;
 
-const prisma = new PrismaClient({
-	errorFormat: "pretty",
-});
+if (process.env.NODE_ENV === "production") {
+	prisma = new PrismaClient({
+		errorFormat: "pretty",
+	});
+} else {
+	let globalWithPrisma = global as typeof globalThis & {
+		prisma: PrismaClient;
+	};
+	if (!globalWithPrisma.prisma) {
+		globalWithPrisma.prisma = new PrismaClient({
+			errorFormat: "pretty",
+		});
+	}
+	prisma = globalWithPrisma.prisma;
+}
+
+export default prisma;
 
 // clear prisma database
 // async function fresh(){
@@ -116,4 +121,4 @@ const prisma = new PrismaClient({
 // 		process.exit(1);
 // 	});
 
-export default prisma;
+// export default prisma;

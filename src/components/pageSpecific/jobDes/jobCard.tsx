@@ -122,9 +122,10 @@ const Card = ({
                     </span>
                     <Button
                       className={cn(
-                        "p-6 my-2 lg:text-2xl text-xl capitalize bg-blue-500 rounded-md m-auto text-white text-center w-full ",
+                        "p-6 my-2 lg:text-2xl text-xl capitalize rounded-md m-auto text-white text-center w-full ",
+                        "bg-gradient-to-r from-blue-600 to-fuchsia-500",
                         "transition ease-in-out delay-150", //animate
-                        "hove:bg-blue-600 hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500 hover:text-black"
+                        "hover:shadow-lg hover:rounded-lg hover:shadow-zinc-500/50 "
                       )}
                     >
                       <Link
@@ -133,8 +134,11 @@ const Card = ({
                         )}
                         className="w-full"
                       >
-                        Continue with &nbsp;
-                        <span className="bold italic">{templateName}</span>
+                        Continue&nbsp;
+                        <span className="hidden sm:inline-block">
+                          with&nbsp;
+                          <span className="bold italic">{templateName}</span>
+                        </span>
                       </Link>
                     </Button>
                   </span>

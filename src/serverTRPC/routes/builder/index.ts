@@ -9,6 +9,9 @@ import { z } from "zod";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import * as fs from "node:fs";
+import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
+import { compressImage } from "@/utils/util";
+// import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
 export const builderRouter = router({
 
@@ -30,12 +33,13 @@ export const builderRouter = router({
 
     if (JobDiscriptionData.hasOwnProperty(jobId)) {
       // read the json from the exampleTemplates folder
-      var templateData = fs.readFileSync(
-        "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
-        "utf8"
-      );
+      var templateData = getTemplateByID(jobId.toString());
+      // var templateData = fs.readFileSync(
+      //   "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
+      //   "utf8"
+      // );
       if (templateData) {
-        data = JSON.parse(templateData);
+        data = templateData as Inputs;
       }
     }
 
@@ -181,25 +185,34 @@ export const builderRouter = router({
         // console.log(image.status);
         if (image.status === 200) {
           // console.log(4);
-          const imageLink = await image.json();
+          var imageLinkArr = await image.json() as string[];
+          var compressedImage = await compressImage(imageLinkArr[0])
+          var imageLink = (compressedImage || imageLinkArr[0]) as string
+          // console.log(
+          //   imageLinkArr[0].length - compressedImage.length, 
+          // );
+          
+
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
           // convert the file to base64 string and save it into the database
-          prisma.resumeData.update({
+          console.log('updating db with new pdf image in pdfitself')
+          const updateReq = await prisma.resumeData.update({
             where: {
               id: resumeId,
             },
             data: {
-              pdfItself: imageLink[0],
+              pdfItself: imageLink,
             },
             select: {
               id: true,
+              // pdfItself: true,
             }
           })
-          // console.log(dat)
+          console.log("updated", updateReq)
 
           return {
-            images: imageLink as string[],
+            images: imageLinkArr,
             error: ""
           }
         } else {
@@ -249,7 +262,7 @@ export const builderRouter = router({
   getPDFByResumeId: privateProcedure.input(
     z.object({
       resumeId: z.string(),
-      templateName: z.string()
+      templateName: z.string().nullish(),
     })
   ).mutation(async (opts) => {
     console.log('renerating new pdf only');
@@ -262,6 +275,7 @@ export const builderRouter = router({
       },
       select: {
         data: true,
+        template: true,
       }
     })
 
@@ -278,7 +292,7 @@ export const builderRouter = router({
         },
         body: JSON.stringify({
           data: JSON.parse(resumeData.data),
-          template: templateName,
+          template: templateName ? templateName : resumeData.template,
         }),
       });
 
@@ -324,6 +338,40 @@ export const builderRouter = router({
     }
     throw new Error("resume data not found");
   }),
+
+  // get user account info 
+  getAllResume: privateProcedure.input(
+    z.object({
+      userId: z.string(),
+    })
+  ).query(async (opts) => {
+    console.log('getting all resume for', opts.input.userId);
+
+    // get data from the database because id is valid this will run only on server side so its safe
+    const resumeData = await prisma.resumeData.findMany({
+      where: {
+        userId: opts.input.userId,
+      },
+      select: {
+        id: true,
+        pdfItself: true,
+        template: true,
+        payId: true,
+        jobId: true,
+        paymentStatus: true,
+        creaatedAt: true,
+      },
+      orderBy: {
+        creaatedAt: 'desc'
+      }
+    })
+    if (resumeData) {
+      // console.log(resumeData);
+      return resumeData
+    }
+    throw new Error("resume data not found");
+  }),
+
 
 });
 

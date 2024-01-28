@@ -6,7 +6,19 @@
 
 ## procegure
 
-1. chose jobDiscription
-2. chose template
-3. ? payment
-4. build/edit resume
+backend link should be
+
+- https://api.buildyourresume.online
+
+<!-- work on
+1. openAIRouter
+ -->
+
+<!-- done 
+5. make image size smaller
+2. build flow update only when resume payment is paid
+4. limit prisma instances 
+
+3. csp
+- other sources are clerk and razorpay 
+-->

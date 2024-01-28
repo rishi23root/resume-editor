@@ -3,24 +3,27 @@
 
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
+import { searchParamType } from "@/types/utils";
+import { UseTRPCMutationResult } from "@trpc/react-query/shared";
+import { format } from "date-fns";
+import { saveAs } from "file-saver";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDownFromLine,
+  ChevronsDown,
   FileJson2,
   FileText,
   RefreshCcw,
   Trash2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Loadingstate } from "../Fallbacks";
-import { useToast } from "../ui/use-toast";
-
-import { searchParamType } from "@/types/utils";
-import { format } from "date-fns";
-import { saveAs } from "file-saver";
 import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { Loadingstate } from "../Fallbacks";
+import { ResizablePanel } from "../pageSpecific/builder/customFormFields/sections/utils";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
+import { useToast } from "../ui/use-toast";
 
 function PDFviewer({
   templateName,
@@ -35,7 +38,15 @@ function PDFviewer({
   resumeId: string;
   state: string;
   // update it to make this element type safe return type of usemutation
-  generatedPDf: any;
+  generatedPDf: UseTRPCMutationResult<
+    {
+      error: string;
+      images: string[];
+    },
+    any,
+    any,
+    unknown
+  >;
   searchParams: searchParamType;
 }) {
   const [showModel, setShowModel] = useState(false);
@@ -43,6 +54,8 @@ function PDFviewer({
   const ifRendered = RenderCompleted();
   const { toast } = useToast();
   const router = useRouter();
+  const [isInMobileViewAndVisible, setIsInMobileViewAndVisible] =
+    useState<boolean>(true);
 
   const {
     data,
@@ -175,8 +188,6 @@ function PDFviewer({
       });
     } else {
       setDataArray(data?.images || []);
-      // setPdfFile(data?.pdfFile || []);
-      // console.log("updated", data?.pdfFile);
     }
     // console.log("updated");
   }, [data]);
@@ -202,155 +213,204 @@ function PDFviewer({
   return (
     <motion.div
       layout
-      className="fc glass gap-4 h-full w-full min-w-[45%] group flex-1"
+      className="fc glass gap-4  xl:h-full w-full lg:min-w-[45%] group xl:flex-1 relative"
     >
-      <div
-        className="fr justify-between items-center w-full h-4 relative cursor-pointer"
-        onClick={() => {
-          setShowModel(!showModel);
-        }}
-      >
-        <div className="opacity-80 capitalize">
-          {state !== "idle" ? state : ""}
+      <Suspense>
+        <div
+          className="fr justify-between items-center w-full h-4 relative cursor-pointer"
+          onClick={() => {
+            setShowModel(!showModel);
+          }}
+        >
+          <div className="opacity-80 capitalize">
+            {state !== "idle" ? state : ""}
+          </div>
+          <div className="hidden sm:block text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
+            Preview
+          </div>
+          <div className="opacity-80">
+            {enriched
+              ? "ATS Score: " +
+                (isAiDataLoading ? "updating" : aiData?.atsScore)
+              : ""}
+          </div>
         </div>
-        <div className="text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
-          Resume
-        </div>
-        <div className="opacity-80">
-          {enriched
-            ? "ATS Score: " + (isAiDataLoading ? "updating" : aiData?.atsScore)
-            : ""}
-        </div>
-      </div>
-      <motion.div
-        layout
-        className="flex-1 justify-center fr gap-2 overflow-hidden"
-      >
-        <motion.div className="flex-1 min-w-[50%] w-full flex justify-center items-center flex-row">
-          {/* flex justify-center */}
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div className="h-full flex items-center justify-center  relative ">
-              {isLoading && (
+        <ResizablePanel>
+          <motion.div
+            layout
+            className={cn(
+              "flex-1 justify-center flex flex-col sm:flex-row  gap-2 overflow-hidden",
+              isInMobileViewAndVisible
+                ? "h-auto max-h-[80vh] visible"
+                : "h-1 invisible"
+            )}
+          >
+            <motion.div className="flex min-w-1/2 w-full flex-1 justify-center items-center flex-row">
+              {/* flex justify-center */}
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
-                  className="w-full fc fcc "
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { duraton: 0.1 } }}
-                  exit={{ opacity: 0 }}
+                  className={cn(
+                    "h-full flex items-center justify-center relative  ",
+                    " ",
+                    isInMobileViewAndVisible ? "visible" : "invisible"
+                  )}
                 >
-                  <Loadingstate />
+                  {isLoading && (
+                    <motion.div
+                      className="w-full fc fcc "
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <Loadingstate />
+                    </motion.div>
+                  )}
+                  {isError && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                      exit={{ opacity: 0 }}
+                      className="w-full fc fcc"
+                    >
+                      {error.toString()}
+                    </motion.div>
+                  )}
+                  {!isLoading &&
+                    isInMobileViewAndVisible &&
+                    dataArray &&
+                    dataArray.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          transition: { duraton: 0.3 },
+                        }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.95,
+                          transition: { duraton: 0.3, delay: 2 },
+                        }}
+                      >
+                        <ZoomerImage
+                          src={dataArray[0]}
+                          alt={"autogenrated resume image"}
+                          width={400}
+                          height={600}
+                          zoomType="click"
+                          className={cn(
+                            "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em] border border-green-600",
+                            "group-hover:xl:-translate-x-16 border border-white",
+                            "animate-fade-in-up delay-75 transition-all duration-500 ease-in-out"
+                          )}
+                        />
+                      </motion.div>
+                    )}
+                  {!isLoading && dataArray && dataArray.length > 1 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: 1,
+                        transition: { duraton: 0.3, delay: 0.2 },
+                      }}
+                      exit={{ opacity: 0, transition: { duraton: 0.3 } }}
+                      className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
+                    />
+                  )}
                 </motion.div>
+              </AnimatePresence>
+            </motion.div>
+            {/* action bar */}
+            <motion.div
+              layout
+              className={cn(
+                "rounded-md transition-[width] duration-500 ease-in-out xl:opacity-0 w-full sm:w-[25%] xl:w-0 group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] pointer-events-none group-hover:pointer-events-auto flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
+                isInMobileViewAndVisible ? "visible" : "invisible"
               )}
-              {isError && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { duraton: 0.1 } }}
-                  exit={{ opacity: 0 }}
-                  className="w-full fc fcc"
-                >
-                  {error.toString()}
-                </motion.div>
-              )}
-              {!isLoading && dataArray && dataArray.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: { duraton: 0.3 },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    scale: 0.95,
-                    transition: { duraton: 0.3, delay: 2 },
-                  }}
-                >
-                  <ZoomerImage
-                    src={dataArray[0]}
-                    alt={"autogenrated resume image"}
-                    width={400}
-                    height={600}
-                    zoomType="click"
-                    className="rounded-md shadow-xl object-cover w-[30em] "
-                  />
-                </motion.div>
-              )}
-              {!isLoading && dataArray && dataArray.length > 1 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 1,
-                    transition: { duraton: 0.3, delay: 0.2 },
-                  }}
-                  exit={{ opacity: 0, transition: { duraton: 0.3 } }}
-                  className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
-                />
+            >
+              <div className="w-full text-center sm:text-left  sm:mb-4 xl:opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
+                Actions
+              </div>
+              {isInMobileViewAndVisible ? (
+                <div className="flex flex-row sm:flex-col gap-4 item-center justify-center">
+                  <ActionBtn
+                    toolkitContent="refresh editor"
+                    onPress={() => {
+                      regeneratePdfImage({
+                        resumeId,
+                        templateName,
+                      });
+                    }}
+                  >
+                    <RefreshCcw className="scale-125" />
+                  </ActionBtn>
+                  <ActionBtn
+                    toolkitContent="download resume"
+                    onPress={DownloadPDFFromServer}
+                  >
+                    <ArrowDownFromLine className="scale-125" />
+                  </ActionBtn>
+                  <ActionBtn
+                    toolkitContent="download schema"
+                    onPress={DownloadSchemaFromServer}
+                  >
+                    <FileJson2 className="scale-125" />
+                  </ActionBtn>
+                  <ActionBtn
+                    toolkitContent="Detailed pdf view"
+                    // show modle with its data inside
+                    onPress={() => setShowModel(!showModel)}
+                  >
+                    <FileText className="scale-125" />
+                  </ActionBtn>
+                  <ActionBtn
+                    toolkitContent="delete this resume"
+                    onPress={delResumeAndRedirect}
+                  >
+                    <Trash2 className="scale-125 hover:text-red-400" />
+                  </ActionBtn>
+                </div>
+              ) : (
+                ""
               )}
             </motion.div>
-          </AnimatePresence>
-        </motion.div>
-        <motion.div
-          layout
-          className="rounded-md transition-[width] duration-500 ease-in-out opacity-0 w-0 group-hover:opacity-100 group-hover:w-[25%] flex flex-col justify-top gap-4 p-2 px-6"
-        >
-          <div className="w-full text-left mb-4 opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
-            Actions
-          </div>
-          <ActionBtn
-            toolkitContent="download resume"
-            onPress={DownloadPDFFromServer}
-          >
-            <ArrowDownFromLine className="scale-125" />
-          </ActionBtn>
-          <ActionBtn
-            toolkitContent="refresh editor"
-            onPress={() => {
-              regeneratePdfImage({
-                resumeId,
-                templateName,
-              });
+          </motion.div>
+        </ResizablePanel>
+        <div className="w-full xl:hidden h-3 group">
+          <motion.div
+            className={cn(
+              "absolute w-full fcc bg-gray-300/30 group-focus:bg-gray-300/50 bottom-0 left-0 rounded-b-md"
+            )}
+            onClick={() => {
+              setIsInMobileViewAndVisible(!isInMobileViewAndVisible);
             }}
           >
-            <RefreshCcw className="scale-125" />
-          </ActionBtn>
-          <ActionBtn
-            toolkitContent="download schema"
-            onPress={DownloadSchemaFromServer}
-          >
-            <FileJson2 className="scale-125" />
-          </ActionBtn>
-          <ActionBtn
-            toolkitContent="Detailed pdf view"
-            // show modle with its data inside
-            onPress={() => setShowModel(!showModel)}
-          >
-            <FileText className="scale-125" />
-          </ActionBtn>
-          <ActionBtn
-            toolkitContent="delete this resume"
-            onPress={delResumeAndRedirect}
-          >
-            <Trash2 className="scale-125 hover:text-red-400" />
-          </ActionBtn>
-          {/* <div className="w-full text-center mt-auto opacity-0 group-hover:opacity-100 duration-150 delay-300   ">
-            Actions
-          </div> */}
-        </motion.div>
-      </motion.div>
-      {/* model conditionally rendered when needed only*/}
-      {ifRendered && (
-        <ModelComponent
-          dataArray={dataArray}
-          error={error}
-          isError={isError}
-          resumeId={resumeId}
-          modelState={[showModel, setShowModel]}
-          searchParams={searchParams}
-          getAiRecomandations={getAiRecomandations}
-          enriched={enriched}
-          regeneratePdfImage={regeneratePdfImage}
-          DownloadPDFFromServer={DownloadPDFFromServer}
-        />
-      )}
+            <ChevronsDown
+              className={cn(
+                isInMobileViewAndVisible ? "rotate-180" : "",
+                "transition-all duration-300 ease-in-out"
+              )}
+            />
+          </motion.div>
+        </div>
+      </Suspense>
+      <Suspense>
+        {/* model conditionally rendered when needed only*/}
+        {ifRendered && (
+          <ModelComponent
+            dataArray={dataArray}
+            error={error}
+            isError={isError}
+            resumeId={resumeId}
+            modelState={[showModel, setShowModel]}
+            searchParams={searchParams}
+            getAiRecomandations={getAiRecomandations}
+            enriched={enriched}
+            regeneratePdfImage={regeneratePdfImage}
+            DownloadPDFFromServer={DownloadPDFFromServer}
+          />
+        )}
+      </Suspense>
     </motion.div>
   );
 }

@@ -62,7 +62,7 @@ const BuilderClient = memo(
       createdAt?: string;
     };
   }) => {
-    const debounceTime = 1000;
+    const debounceTime = 1200; // 800 is low 1500 is high
 
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
@@ -71,7 +71,6 @@ const BuilderClient = memo(
       onSuccess: () => {
         setPdfState("Form updated");
         // console.log("first mutation success");
-        // queryClient.invalidateQueries("builder.generatePDF" as any);
         regeneratePdfImage({
           resumeId: activeResumeInstance.id,
           templateName: searchParams.templateName as string,
@@ -93,8 +92,9 @@ const BuilderClient = memo(
         setTimeout(() => setPdfState("success"), 500);
         setTimeout(() => setPdfState("idle"), 1000);
       },
-      onError: () => {
+      onError: (err) => {
         setPdfState("error with image");
+        console.log(err);
       },
       onMutate: () => {
         setPdfState("fetching image");
@@ -170,8 +170,13 @@ const BuilderClient = memo(
     const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
       data: any
     ) => {
-      console.log("update requested");
-      submitAction(data);
+      if (activeResumeInstance.paymentStatus === "pending") {
+        console.log("update requested, canceled, payment pending");
+        return;
+      } else {
+        console.log("update requested");
+        submitAction(data);
+      }
     };
 
     const FormManagerSubmitFnc = useCallback(
@@ -180,10 +185,14 @@ const BuilderClient = memo(
     );
 
     if (!isrendered) return null;
+
+    // /setup the form and pdf viewer size and model togel button
     return (
-      <Suspense>
+      <div className="h-full w-full xl:max-h-[75vh] flex gap-4 flex-col-reverse xl:flex-row">
         <FormProvider {...formHandeler}>
-          <FormManager onSubmit={FormManagerSubmitFnc} />
+          <div className="flex-1 max-h-[75vh] relative">
+            <FormManager onSubmit={FormManagerSubmitFnc} />
+          </div>
           {/* <DevTool control={formHandeler.control} /> */}
           <PDFviewer
             templateName={searchParams.templateName as string}
@@ -194,7 +203,7 @@ const BuilderClient = memo(
             searchParams={searchParams}
           />
         </FormProvider>
-      </Suspense>
+      </div>
     );
   }
 );

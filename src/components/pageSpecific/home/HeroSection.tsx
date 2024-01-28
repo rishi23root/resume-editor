@@ -10,10 +10,13 @@ function HeroSection({ editorLink }: { editorLink: string }) {
           <div className="text-neutral-200 text-[1.5rem] font-semibold md:text-[3rem]">
             Build Your Professional
             <br />
-            Resume with Simple Login
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-fuchsia-500 ">
+              Résumé
+            </span>{" "}
+            with Simple Login
           </div>
-          <div className="flex flex-col items-start justify-between p-4 ">
-            <div className="flex items-start justify-start gap-1 ">
+          <div className="flex flex-col gap-2 items-start justify-between p-2">
+            <div className="flex items-center justify-start gap-1 ">
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
@@ -25,7 +28,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
                 Find Your Starting Point, Craft Your Perfect Resume
               </div>
             </div>
-            <div className="flex items-start justify-start gap-1 ">
+            <div className="flex items-center justify-start gap-1 ">
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
@@ -37,7 +40,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
                 Master the Art of Resume Writing with Best Practices
               </div>
             </div>
-            <div className="flex items-start justify-start gap-1 ">
+            <div className="flex items-center justify-start gap-1 ">
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
@@ -49,7 +52,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
                 Unlock Success with Mentor-Recommended Templates
               </div>
             </div>
-            <div className="flex items-start justify-start gap-1 ">
+            <div className="flex items-center justify-start gap-1 ">
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"
@@ -61,7 +64,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
                 Get Noticed by HR - Make Your Resume Irresistible
               </div>
             </div>
-            <div className="flex items-start justify-start gap-1 ">
+            <div className="flex items-center justify-start gap-1 ">
               <Image
                 className="w-[22px] h-[17px]"
                 alt="arrow svg"

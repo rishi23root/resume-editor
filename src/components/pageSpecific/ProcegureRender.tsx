@@ -74,7 +74,7 @@ function ProcegureRender() {
               >
                 <ProcegureElement
                   count={1}
-                  discription={"Chose your Job type"}
+                  discription={"Choose your Job type"}
                   currentProcegure={data.procegure}
                   keepProcegureRenderChildren={keepProcegureRenderChildren}
                 />
@@ -119,7 +119,7 @@ const ProcegureElement = ({
   const [toRemore, setToRemove] = useState(false);
   const router = useRouter();
   useEffect(() => {
-    console.log(count, currentProcegure);
+    // console.log(count, currentProcegure);
 
     var timeout: NodeJS.Timeout;
     if (currentProcegure === 4) {

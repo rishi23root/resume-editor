@@ -22,7 +22,7 @@ const variantsActionButton: Variants = {
   whileHover: { scale: 1.02, opacity: 1 },
 };
 
-function ResizablePanel({ children }: { children: React.ReactNode }) {
+export function ResizablePanel({ children }: { children: React.ReactNode }) {
   let [ref, { height }] = useMeasure();
   const id = useId();
 
@@ -188,7 +188,10 @@ export const SectionWrapper = function SectionWrapper({
               animate="animate"
               whileHover="whileHover"
               className="px-2"
-              onClick={emptyAppendCallback}
+              onClick={() => {
+                setVisible(true);
+                emptyAppendCallback();
+              }}
             >
               <Plus />
             </motion.button>

@@ -24,6 +24,8 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
 import { Inputs } from "@/types/builder";
 import { searchParamType } from "@/types/utils";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { UseTRPCMutationResult } from "@trpc/react-query/shared";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { HardDriveDownload } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -49,7 +51,7 @@ export function ActionBtn({
   return (
     <div
       onClick={onPress}
-      className="w-full flex flex-col gap-2  justify-center opacity-0 group-hover:opacity-100 duration-150 delay-500 group/actionBtn "
+      className="sm:w-full flex flex-col gap-2  justify-center xl:opacity-0 group-hover:opacity-100 duration-150 delay-500 group/actionBtn"
     >
       <motion.div
         layout
@@ -62,8 +64,8 @@ export function ActionBtn({
           scale: 1,
         }}
         className={cn(
-          "p-6 shadow-sm rounded-md shadow-gray-500/50",
-          "bg-white/20 mr-auto w-fit ",
+          "p-3 sm:p-6  shadow-sm rounded-md sm:shadow-gray-500/50",
+          "bg-white/20 sm:mr-auto w-fit ",
           "duration-500 delay-100 ease-in shadow-lg hover:shadow-zinc-500 transition-all",
           "hover:bg-blue-500/50 text-white",
           "cursor-pointer relative"
@@ -74,16 +76,17 @@ export function ActionBtn({
           layout
           className={cn(
             "absolute  left-[105%] top-0 h-full text-center ",
-            "flex justify-center items-center opacity-0",
-            "group-hover/actionBtn:opacity-100 ",
-            "transition-all duration-150 ease-in-out leading-0 capitalize text-center text-sm  text-wrap "
+            "flex justify-center items-center xl:opacity-0",
+            "group-hover/actionBtn:opacity-100 group-focus/actionBtn:opacity-100 ",
+            "transition-all duration-150 ease-in-out leading-0 capitalize text-center text-sm  text-wrap ",
+            "hidden sm:flex"
           )}
         >
           <motion.div
             layout
             className={cn(
-              "w-[5ch] pl-1 text-left text-white/60",
-              "transform -translate-x-8 group-hover/actionBtn:translate-x-0",
+              "w-[5ch] lg:pl-1 text-sm text-left text-white/60",
+              "transform translate-x-0 xl:-translate-x-8 group-hover/actionBtn:translate-x-0",
               "transition-transform duration-250 ease-in-out "
             )}
           >
@@ -113,9 +116,25 @@ export function ModelComponent({
   dataArray: string[];
   modelState: [boolean, Dispatch<SetStateAction<boolean>>];
   searchParams: searchParamType;
-  getAiRecomandations: any;
+  getAiRecomandations: UseTRPCMutationResult<
+    {
+      atsScore: number;
+      recommandations: string;
+    },
+    any,
+    any,
+    unknown
+  >;
   enriched: boolean;
-  regeneratePdfImage: any;
+  regeneratePdfImage: UseMutateFunction<
+    {
+      error: string;
+      images: string[];
+    },
+    any,
+    any,
+    unknown
+  >;
   DownloadPDFFromServer: () => void;
 }) {
   const router = useRouter();
@@ -127,7 +146,11 @@ export function ModelComponent({
   // model state
   const [showModel, setShowModel] = modelState;
 
-  const { data: atsAndRecommendation, mutate: refetch } = getAiRecomandations;
+  const {
+    data: atsAndRecommendation,
+    isLoading: isAtsRLoading,
+    mutate: refetch,
+  } = getAiRecomandations;
 
   useEffect(() => {
     if (showModel && enriched) {
@@ -297,9 +320,11 @@ export function ModelComponent({
                       Possible Updates ◔̯ ◔
                     </span>
                     <span className="fc gap-2">
-                      {refetching !== "idle"
+                      {refetching !== "idle" && isAtsRLoading
                         ? refetching
-                        : atsAndRecommendation.recommandations}
+                        : atsAndRecommendation
+                        ? atsAndRecommendation.recommandations
+                        : "no recommendations with this package :( "}
                     </span>
                   </span>
                   <div className="h-full"></div>

@@ -1,4 +1,4 @@
 import { JsonType } from '@/types/utils';
-import data from './data.json' assert { type: 'json' };
+import data from './data.json'
 
-export const defaultTemplate:JsonType = data;
+export const defaultTemplate: JsonType = data;

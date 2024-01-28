@@ -1,11 +1,11 @@
 // pathname: api/trpc/jobDis/{functionNameHere}
+import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { procedure, router } from "@/serverTRPC/trpc";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import { keyValue } from "@/types/utils";
 import * as fs from "node:fs";
 import { z } from "zod";
-// import {1,2,3,4} from '@/JSONapiData/exampleTemplates' assert {type: 'json'};
 
 export const jobDescriptionRouter = router({
   all: procedure.query(() => {
@@ -32,20 +32,20 @@ export const jobDescriptionRouter = router({
       if (!JobDiscriptionData) {
         return {} as jobDescriptionDataType;
       }
-      
+
       const jobId = opts.input.jobId;
-      
+
       if (JobDiscriptionData.hasOwnProperty(jobId)) {
         const data = JobDiscriptionData[jobId] as jobDescriptionDataType;
         data.image = {} as keyValue<string>;
         // const images = {} as keyValue<string>;
 
         // read the json from the exampleTemplates folder
-        var templateData = fs.readFileSync(
-          "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
-          "utf8"
-        );
-        templateData = JSON.parse(templateData);
+        var templateData = getTemplateByID(jobId.toString());
+        // var templateData = fs.readFileSync(
+        //   "./src/JSONapiData/exampleTemplates/" + jobId.toString() + ".json",
+        //   "utf8"
+        // );
 
         // console.log("current jobid",jobId);
 
@@ -73,7 +73,7 @@ export const jobDescriptionRouter = router({
               const pdfData = await request.blob();
               const formData = new FormData();
               formData.append("file", pdfData, "file.pdf");
-              
+
               const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
                 method: "POST",
                 body: formData,
@@ -93,7 +93,7 @@ export const jobDescriptionRouter = router({
               }
             }
           }
-          catch(err) {
+          catch (err) {
             // request failed 
             // show some other image if the request failed (maybe a default image)
             // sequenceRequestSuccess = true;
@@ -101,10 +101,10 @@ export const jobDescriptionRouter = router({
             //   data.image[templatedata.title] = //image in base64 default image hardcoded ; 
             // }
           }
-          finally {            
+          finally {
             if (!sequenceRequestSuccess) {
               if (data.image) {
-                data.image[templatedata.title] = "" ;
+                data.image[templatedata.title] = "";
               } else {
                 data.image = {};
               }
@@ -113,7 +113,7 @@ export const jobDescriptionRouter = router({
         }));
         // console.log("return after map: ", Object.keys(data.image));
         return data;
-      } 
+      }
 
       return {} as jobDescriptionDataType;
     }),

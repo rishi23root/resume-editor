@@ -29,8 +29,7 @@ export default async function New(props: PageProps) {
     "/New",
     props.searchParams
   );
-  console.log("from new: ", stringifiedData, privateData);
-
+  // console.log("from new: ", stringifiedData, privateData);
 
   // update the private data if not there
   props.searchParams._s = privateData;

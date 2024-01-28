@@ -12,6 +12,9 @@ const Section2 = dynamic(
 const SectionFeatures = dynamic(
   () => import("@/components/pageSpecific/home/SectionFeatures")
 );
+const BackToTopBtn = dynamic(
+  () => import("@/components/pageSpecific/home/BackToTop")
+);
 const Footer = dynamic(() => import("@/components/Footer"));
 
 import { SectionAbout } from "../../components/pageSpecific/home/SectionAbout";
@@ -25,8 +28,6 @@ const BubbleUnderlay = dynamic(
 import NoSSR from "@/hooks/NoSSR";
 import clsx from "clsx";
 import { auth } from "@clerk/nextjs";
-
-// import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 export default function Home() {
   const editorLink = "/Dashboard";
@@ -47,7 +48,7 @@ export default function Home() {
           )}
         />
       </NoSSR>
-      <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8 ">
+      <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8">
         {/* paint each section */}
         <Nav isSignedIn={user?.sessionId ? true : false} pathname="/" />
         <HeroSection editorLink={editorLink} />
@@ -61,8 +62,7 @@ export default function Home() {
         <SectionPrice />
         <Line />
         <Footer />
-
-        {/* <TwScreenInfo /> */}
+        <BackToTopBtn />
       </main>
     </>
   );

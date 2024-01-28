@@ -1,73 +1,103 @@
 "use client";
 
-import RenderCompleted from "@/hooks/RenderCompleted";
+import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/serverTRPC/client";
-import { currentUser } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Script from "next/script";
 
-const initializeRazorpay = () => {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+export const MakePaymentComponent = async ({
+  resumeId,
+  payId,
+}: {
+  resumeId: string;
+  payId: number;
+}) => {
+  const router = useRouter();
+  const { toast } = useToast();
 
-    script.onload = () => {
-      resolve(true);
-    };
-    script.onerror = () => {
-      resolve(false);
-    };
-
-    document.body.appendChild(script);
-  });
-};
-
-// const makePayment = async (payId: number) => {
-// };
-
-export const MakePaymentComponent = async ({ payId }: { payId: number }) => {
-  const isrendered = RenderCompleted();
   const { data } = trpc.price.getRazorpayOrderId.useQuery({ payId });
-  useEffect(() => {
-    isrendered &&
-      initializeRazorpay().then((res) => {
-        if (!res) {
-          alert("Razorpay SDK Failed to load");
-          return;
-        }
-        if (data) {
-          // console.log(data);
-          var options = {
-            key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-            name: data.name,
-            currency: data.currency,
-            amount: data.amount,
-            order_id: data.id,
-            description: data.discription,
-            image: data.imageUrl,
-            handler: (response: {
-              razorpay_payment_id: any;
-              razorpay_order_id: any;
-              razorpay_signature: any;
-            }) => {
-              // Validate payment at server - using webhooks is a better idea.
-              alert(response.razorpay_payment_id);
-              alert(response.razorpay_order_id);
-              alert(response.razorpay_signature);
-            },
-            prefill: {
-              name: data.name,
-              email: data.email,
-            },
-          };
+  const { mutate: varifiyPayment } =
+    trpc.price.varifyRazorpayPayment.useMutation({
+      onSuccess: (data) => {
+        // refresh the page
+        toast({
+          variant: "default",
+          title: "Payment varified ✅",
+        });
+        router.refresh();
+      },
+      onError: (err) => {
+        // redirect to dashboard page
+        toast({
+          variant: "destructive",
+          title: "payment failed",
+        });
+        router.push("/Dashboard");
+      },
+      onMutate: () => {
+        // show toast for updating the payment in db
+        toast({
+          variant: "default",
+          title: "payment varification in progress",
+        });
+      },
+    });
 
-          if (typeof window === "undefined") {
-            return;
-          }
+  const makePayment = async () => {
+    if (data) {
+      // console.log(data);
+      var options = {
+        key: data.key, // Enter the Key ID generated from the Dashboard
+        name: data.name,
+        currency: data.currency,
+        amount: data.amount,
+        order_id: data.id,
+        description: data.discription,
+        image: data.imageUrl,
+        handler: (response: {
+          razorpay_payment_id: any;
+          razorpay_order_id: any;
+          razorpay_signature: any;
+        }) => {
+          varifiyPayment({
+            resumeId,
+            paymentID: response.razorpay_payment_id,
+            orderID: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+          });
+        },
+        prefill: {
+          name: data.name,
+          email: data.email,
+        },
+        // set theme color
+        theme: {
+          color: "#3399cc", // 12141D
+        },
+      };
 
-          const paymentObject = new (window as any).Razorpay(options);
-          paymentObject.open();
-        }
-      });
-  }, [data]);
-  return <></>;
+      if (typeof window === "undefined") {
+        return;
+      }
+
+      const paymentObject = new (window as any).Razorpay(options);
+      paymentObject.open();
+    }
+  };
+  return (
+    <>
+      <Script
+        defer
+        id="razorpay-checkout-js"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
+
+      <div
+        className="absolute w-full h-full opacity-30 top-0 left-0 z-50"
+        onClick={() => {
+          makePayment();
+        }}
+      ></div>
+    </>
+  );
 };

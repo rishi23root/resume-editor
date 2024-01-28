@@ -1,5 +1,4 @@
-export type resumeTemplates= "singleColumn" | "twoColumn" 
-
+export type resumeTemplates = "singleColumn" | "twoColumn"
 
 export type templateWithImages = {
     id: number,

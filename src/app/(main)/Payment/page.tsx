@@ -14,7 +14,7 @@ export default async function paymentPage(props: PageProps) {
     "/Payment",
     props.searchParams
   );
-  console.log("from payment: ", stringifiedData, privateData);
+  // console.log("from payment: ", stringifiedData, privateData);
 
   // after payment redirect link
   const afterPaymentRedirection = async (payId: number) =>
@@ -31,12 +31,13 @@ export default async function paymentPage(props: PageProps) {
 
   return (
     // make whole page with 10/12 width and center it on above medium screens
-    <main className="flex-1 md:fr fc gap-4 justify-center ">
+    <main className="flex-1 md:fr fc gap-4 justify-center h-fit ">
       <PaymentCard
         data={data[0]}
         onSuceessRedirectUrl={async (payId: number) =>
           "/Builder?" + (await afterPaymentRedirection(payId))
         }
+        className={"h-full"}
       />
       <PaymentCard
         data={data[1]}
