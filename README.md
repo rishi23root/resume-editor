@@ -7,12 +7,9 @@
 ## procegure
 
 backend link should be
-
 - https://api.buildyourresume.online
 
 
 <!-- work on
 1. openAIRouter
-2. payment component 
-
  -->

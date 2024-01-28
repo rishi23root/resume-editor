@@ -182,6 +182,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 id: true,
                 payId: true,
                 jobId: true,
+                template: true,
                 paymentId: true,
                 paymentStatus: true,
                 creaatedAt: true,
@@ -210,6 +211,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                         template: true,
                         paymentStatus: true,
                         paymentId: true,
+                        creaatedAt: true,
                     }
                 })
                 return updatedResume;
@@ -247,6 +249,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 template: true,
                 paymentStatus: true,
                 paymentId: true,
+                creaatedAt: true,
             }
         })
 
@@ -278,6 +281,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                         template: true,
                         paymentStatus: true,
                         paymentId: true,
+                        creaatedAt: true,
                     }
                 })
                 // return updatedResume;
@@ -323,6 +327,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                     template: true,
                     paymentStatus: true,
                     paymentId: true,
+                    creaatedAt: true,
                 }
             })
             // console.log(newResume);

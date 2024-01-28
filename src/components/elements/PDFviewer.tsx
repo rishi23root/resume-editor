@@ -370,10 +370,6 @@ function PDFviewer({
               ) : (
                 ""
               )}
-
-              {/* <div className="w-full text-center mt-auto opacity-0 group-hover:opacity-100 duration-150 delay-300   ">
-            Actions
-          </div> */}
             </motion.div>
           </motion.div>
         </ResizablePanel>
