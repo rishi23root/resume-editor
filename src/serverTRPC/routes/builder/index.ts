@@ -189,6 +189,8 @@ export const builderRouter = router({
           var compressedImage;
           try {
             compressedImage = await compressImage(imageLinkArr[0])
+            console.log("image Compressed", compressedImage.length, imageLinkArr[0].length);
+
 
           } catch (error) {
             throw new Error(error as any)
