@@ -47,6 +47,6 @@ export async function compressImage(image: string, quality: number = 0.3): Promi
       .then(data => {
         resolve(`data:image/png;base64,${data.toString('base64')}`)
       })
-      .then(reject)
+      .catch(reject)
   })
 }

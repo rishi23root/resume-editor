@@ -186,12 +186,18 @@ export const builderRouter = router({
         if (image.status === 200) {
           // console.log(4);
           var imageLinkArr = await image.json() as string[];
-          var compressedImage = await compressImage(imageLinkArr[0])
+          var compressedImage;
+          try {
+            compressedImage = await compressImage(imageLinkArr[0])
+
+          } catch (error) {
+            throw new Error(error as any)
+          }
           var imageLink = (compressedImage || imageLinkArr[0]) as string
           // console.log(
           //   imageLinkArr[0].length - compressedImage.length, 
           // );
-          
+
 
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
