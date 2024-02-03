@@ -5,7 +5,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
   return (
     <section className="fcb min-h-[55vh] my-10 justify-center md:gap-20 gap-8 md:justify-between  px-auto w-full fc md:fr">
       {/* text  */}
-      <div className="flex flex-col justify-between h-full gap-8  md:max-w-[35em] w-full ">
+      <div className="flex flex-col justify-between h-full gap-8  md:max-w-[35em] w-full">
         <div className="  flex-col justify-start items-start gap-[2rem] flex  ">
           <div className="text-neutral-200 text-[1.5rem] font-semibold md:text-[3rem]">
             Build Your Professional
@@ -81,9 +81,9 @@ function HeroSection({ editorLink }: { editorLink: string }) {
         {/* button */}
         <Link
           href={editorLink}
-          className="p-4 px-16 rounded-lg bg-gradient-to-r from-blue-600 to-fuchsia-500 border-stone-500 w-fit"
+          className="flex justify-center md:justify-start "
         >
-          <div className="text-center text-neutral-200 md::text-[2.3rem] font-medium">
+          <div className="text-center text-neutral-200 md::text-[2.3rem] font-medium p-4 px-16 rounded-lg bg-gradient-to-r from-blue-600 to-fuchsia-500 border-stone-500 w-fit">
             Build Your Resume
           </div>
         </Link>

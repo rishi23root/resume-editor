@@ -1,20 +1,18 @@
+import NoSSR from "@/hooks/NoSSR";
+import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { clsx } from "clsx";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
+import { Suspense } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const BubbleUnderlay = dynamic(
   () => import("@/components/custom/BubbelUnderLay")
 );
-
-import NoSSR from "@/hooks/NoSSR";
-import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-import NextTopLoader from "nextjs-toploader";
-import TwScreenInfo from "@/components/custom/TwScreenInfo";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -96,6 +94,8 @@ export default function RootLayout({
             "fc "
           )}
         >
+          <SpeedInsights />
+
           <NextTopLoader height={3} color="#3b82f6" />
           {/* bg animations */}
           <Suspense>

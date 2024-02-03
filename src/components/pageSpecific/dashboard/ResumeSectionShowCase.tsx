@@ -30,12 +30,13 @@ export function DashboardMain({
           </>
         }
       >
-        <Link href="/New" className="h-full">
+        <Link href="/New" className="h-auto">
           <motion.div
             key={"id"}
             className={cn(
               "cursor-pointer border-2 w-40 shadow-lg shadow-gray-900 border-dashed  border-gray-700 bg-gray-700/30 flex flex-col justify-center items-center  p-4 rounded-md gap-2 h-full",
-              "hover:border-gray-500/50 hover:bg-gray-500/50 hover:shadow-gray-500/50"
+              "hover:border-gray-500/50 hover:bg-gray-500/50 hover:shadow-gray-500/50",
+              "max-h-[15em]"
             )}
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}

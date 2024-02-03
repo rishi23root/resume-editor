@@ -213,7 +213,7 @@ function PDFviewer({
   return (
     <motion.div
       layout
-      className="fc glass gap-4  xl:h-full w-full lg:min-w-[45%] group xl:flex-1 relative"
+      className="fc glass gap-4 xl:h-full w-full lg:min-w-[45%] group xl:flex-1 relative"
     >
       <Suspense>
         <div
@@ -239,13 +239,13 @@ function PDFviewer({
           <motion.div
             layout
             className={cn(
-              "flex-1 justify-center flex flex-col sm:flex-row  gap-2 overflow-hidden",
+              "flex-1 justify-center flex flex-col sm:flex-row  gap-2 overflow-hidden w-full",
               isInMobileViewAndVisible
                 ? "h-auto max-h-[80vh] visible"
                 : "h-1 invisible"
             )}
           >
-            <motion.div className="flex min-w-1/2 w-full flex-1 justify-center items-center flex-row">
+            <motion.div className="flex min-w-1/2 w-full flex-1 justify-center items-center flex-row ">
               {/* flex justify-center */}
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div

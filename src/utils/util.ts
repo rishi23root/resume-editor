@@ -1,6 +1,6 @@
 // handle most of the data extraction using prisma
-import { createCanvas, Image } from 'canvas'
-
+// import { createCanvas, Image } from 'canvas'
+import sharp from 'sharp'
 import { templateWithImages } from "@/types/templates";
 
 export async function getTemplateDataWithImages() {
@@ -36,21 +36,17 @@ export async function getTemplateDataWithImages() {
 }
 
 export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      const img = new Image()
-      // convert base64 to buffer
-      const imageBuffer = Buffer.from(image.split(',')[1], 'base64')
-      img.src = imageBuffer
-      const canvas = createCanvas(img.width, img.height)
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      resolve(canvas.toDataURL('image/jpeg', quality) as string)
-    } catch (error) {
-      console.log("compression error: ", error);
-      reject('error')
-
-      // reject(error as string)
-    }
+  return new Promise(async (resolve, reject) => {
+    const newimage = image.split(';base64,').pop()
+    const buffer = Buffer.from(newimage as string, 'base64');
+    console.log("compressing image");
+    
+    await sharp(buffer)
+      .jpeg({ quality: quality * 10 })
+      .toBuffer()
+      .then(data => {
+        resolve(`data:image/png;base64,${data.toString('base64')}`)
+      })
+      .then(reject)
   })
 }
