@@ -42,7 +42,7 @@ export const FormInput = React.forwardRef<
   return (
     <motion.div
       className={cn(
-        "w-full fc",
+        "w-full fc z-10",
         props.headerinput?.parentclassvalue
           ? props.headerinput.parentclassvalue
           : "",
@@ -307,7 +307,7 @@ const ImageUpload = ({
   });
 
   return (
-    <div className="relative">
+    <div className="relative h-10">
       <Input
         id={picID}
         type={"text"}

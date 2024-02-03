@@ -135,7 +135,7 @@ export const ResumeSectionShowCase = ({
   title: string | React.ReactNode;
 }) => {
   return (
-    <div className={cn("w-full fc gap-2 cursor-pointer", className)}>
+    <div className={cn("w-full fc gap-2 cursor-pointer h-fit", className)}>
       <h1 className="text-2xl font-bold">{title}</h1>
       <Seperator className=" mb-1 opacity-20 " />
       <div className="flex flex-row flex-wrap gap-2 w-full ">{children}</div>
@@ -213,7 +213,7 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
         <motion.div
           key={id}
           className={
-            "cursor-pointer border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 "
+            "cursor-pointer border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 max-h-[15em]"
           }
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}

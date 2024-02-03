@@ -177,7 +177,7 @@ export const SectionWrapper = function SectionWrapper({
       <MotionConfig transition={{ duration }}>
         <motion.div
           className={cn(
-            "w-full fc  gap-2",
+            "w-full fc gap-2 z-10 ",
             sectionClass != undefined ? sectionClass : "glass"
           )}
         >
@@ -214,7 +214,7 @@ export const SectionWrapper = function SectionWrapper({
       <MotionConfig transition={{ duration }}>
         <motion.div
           className={cn(
-            "w-full fc  gap-2",
+            "w-full fc gap-2 z-10",
             sectionClass != undefined ? sectionClass : "glass"
           )}
         >

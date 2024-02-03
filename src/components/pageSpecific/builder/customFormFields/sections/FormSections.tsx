@@ -17,32 +17,32 @@ export function Basic() {
         <FormInput
           {...register("basics.name")}
           type="text"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.label")}
           type="text"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.image")}
           type="image"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.email")}
           type="email"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.phone")}
           type="tel"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.url")}
           type="url"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.summary")}
@@ -55,17 +55,17 @@ export function Basic() {
         <FormInput
           {...register("basics.location.address")}
           type="text"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.location.city")}
           type="text"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
         <FormInput
           {...register("basics.location.countryCode")}
           type="text"
-          parentclassvalue="w-[49%]"
+          parentclassvalue="sm:w-[49%] w-full "
         />
       </SectionWrapper>
 
@@ -77,7 +77,7 @@ export function Basic() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fc gap-2 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="fr gap-2">
@@ -201,7 +201,7 @@ function Core() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">
@@ -574,7 +574,7 @@ export function Work() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">
@@ -698,7 +698,7 @@ export function Education() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">
@@ -812,7 +812,7 @@ export function Projects() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">
@@ -893,7 +893,7 @@ export function Awards() {
               <div
                 key={field.id}
                 className={cn(
-                  "w-[49%] fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
+                  "sm:w-[49%] w-full  fr flex-wrap gap-1 p-2 border-2 inset-2 glass shadow-sm rounded-md"
                 )}
               >
                 <motion.div className="w-full fr gap-2">

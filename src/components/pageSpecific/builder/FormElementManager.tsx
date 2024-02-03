@@ -65,7 +65,7 @@ const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
     <div
       className={cn(
         "items-center min-w-[50%] w-full fc md:h-full gap-4 relative rounded-md",
-        "formOverLay"
+        "lg:formOverLay"
       )}
       ref={formOverLayDivRef}
     >
