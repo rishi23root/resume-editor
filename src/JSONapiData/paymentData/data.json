@@ -10,7 +10,7 @@
       "Single click builder",
       "Create Resume according to Job Description"
     ],
-    "link": "/Dashboard"
+    "link": "/dashboard"
   },
   {
     "id": 2,
@@ -25,7 +25,7 @@
       "AI integration and recommendations",
       "Mentor Review for Resume"
     ],
-    "link": "/Dashboard"
+    "link": "/dashboard"
   },
   {
     "id": 3,

@@ -32,7 +32,7 @@ export const MakePaymentComponent = async ({
           variant: "destructive",
           title: "payment failed",
         });
-        router.push("/Dashboard");
+        router.push("/dashboard");
       },
       onMutate: () => {
         // show toast for updating the payment in db

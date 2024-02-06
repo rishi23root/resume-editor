@@ -24,7 +24,7 @@ const ShowErrorIfany = () => {
           <ToastAction
             altText="Try again"
             onClick={() => {
-              router.push("/Dashboard");
+              router.push("/dashboard");
             }}
           >
             Dashboard {"->"}

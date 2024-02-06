@@ -12,7 +12,7 @@ import { Suspense } from "react";
 
 export default async function DashboardPage(props: PageProps) {
   // const { stringifiedData, privateData } = await useParamParser(
-  //   "/Dashboard",
+  //   "/dashboard",
   //   props.searchParams
   // );
   // console.log("from dashboard: ", stringifiedData, privateData);

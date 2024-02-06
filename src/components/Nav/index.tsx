@@ -57,7 +57,7 @@ function NavBtns(props: NavProps) {
     if (pathname == "/") {
       return (
         <Link
-          href={"/Dashboard"}
+          href={"/dashboard"}
           className="p-2 md:px-5 rounded-xl border-stone-500 bg-gradient-to-r from-blue-600 to-fuchsia-500 fcc"
         >
           <div className="gap-2 font-medium text-center lg:text-xl text-neutral-200 fcc">
@@ -85,7 +85,7 @@ function NavBtns(props: NavProps) {
             <div className="absolute z-10">
               <UserButton
                 afterSignOutUrl="/sign-in"
-                afterSwitchSessionUrl="/Dashboard"
+                afterSwitchSessionUrl="/dashboard"
               />
             </div>
             <div className="absolute top-0 left-0 w-3 h-3 translate-x-[0.5rem] translate-y-1 bg-black rounded-full  face"></div>

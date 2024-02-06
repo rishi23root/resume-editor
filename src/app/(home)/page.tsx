@@ -30,7 +30,7 @@ import clsx from "clsx";
 import { auth } from "@clerk/nextjs";
 
 export default function Home() {
-  const editorLink = "/Dashboard";
+  const editorLink = "/dashboard";
   const user = auth();
 
   return (

@@ -8,7 +8,6 @@ import { z } from "zod";
 
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
-import * as fs from "node:fs";
 import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
 import { compressImage } from "@/utils/util";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
@@ -189,7 +188,7 @@ export const builderRouter = router({
           var compressedImage;
           try {
             compressedImage = await compressImage(imageLinkArr[0])
-            console.log("image Compressed", compressedImage.length, imageLinkArr[0].length);
+            // console.log("image Compressed", compressedImage.length, imageLinkArr[0].length);
           } catch (error) {
             throw new Error(error as any)
           }
@@ -202,7 +201,7 @@ export const builderRouter = router({
           // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
 
           // convert the file to base64 string and save it into the database
-          console.log('updating db with new pdf image in pdfitself')
+          // console.log('updating db with new pdf image in pdfitself')
           const updateReq = await prisma.resumeData.update({
             where: {
               id: resumeId,

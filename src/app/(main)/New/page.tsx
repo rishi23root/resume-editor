@@ -112,7 +112,7 @@ export default async function New(props: PageProps) {
         </div>
         {privateData?.mode !== "newLogin" && (
           <Link
-            href={"/Dashboard"}
+            href={"/dashboard"}
             className="w-full text-center duration-75 cursor-pointer glass fcc fc hover:scale-105"
           >
             <div className="text-2xl font-medium text-white ">

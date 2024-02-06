@@ -105,7 +105,7 @@ export const DashboardNav = async ({
           <div className="absolute z-10">
             <UserButton
               afterSignOutUrl="/sign-in"
-              afterSwitchSessionUrl="/Dashboard"
+              afterSwitchSessionUrl="/dashboard"
               //   defaultOpen={true}
             />
           </div>

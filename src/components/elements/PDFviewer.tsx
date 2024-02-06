@@ -72,7 +72,7 @@ function PDFviewer({
         variant: "default",
         title: "Resume deleted",
       });
-      router.push("/Dashboard");
+      router.push("/dashboard");
     },
     onError: (err) => {
       toast({

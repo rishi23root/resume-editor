@@ -35,10 +35,10 @@ export function LogoElementWithLink() {
   // if any on any other page then show dashboard link
   const currentRedirectingPath =
     pathname === "/"
-      ? "/Dashboard"
-      : pathname === "/Dashboard"
+      ? "/dashboard"
+      : pathname === "/dashboard"
       ? "/"
-      : "/Dashboard";
+      : "/dashboard";
 
   return (
     <Link href={currentRedirectingPath}>
@@ -136,9 +136,9 @@ export function HamburgerOnMobile(props: NavProps) {
         <div className="flex-1 "></div>
 
         {/* if not on dashboard page */}
-        {props.pathname != "/Dashboard" && (
+        {props.pathname != "/dashboard" && (
           <Link
-            href={"/Dashboard"}
+            href={"/dashboard"}
             className="items-center gap-4 fr"
             onClick={(_) => setOpen(false)}
           >
