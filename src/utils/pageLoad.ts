@@ -106,7 +106,7 @@ export async function builderPageParamsRedirectHandeler({ searchParams }: PagePr
     // if (private data or _s session string) is not found or empty object then redirect to the dashboard
     if (!Object.keys(privateData).length || !SearchParams._s) {
         SearchParams.error = "error decoding data, have to restart building :( ";
-        return redirect("/Dashboard?" + await jsonToSearchParameters(SearchParams));
+        return redirect("/dashboard?" + await jsonToSearchParameters(SearchParams));
     }
 
     // add param to activate mean mode where only those path with no 
@@ -157,7 +157,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
 
     // if user is not found then redirect to the dashboard and logout
     if (!userDBid) {
-        return redirect("/Dashboard?" + await jsonToSearchParameters({
+        return redirect("/dashboard?" + await jsonToSearchParameters({
             error: "Error with your account, del your account and try again :( ",
         }));
     }
@@ -171,7 +171,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
     // check if request have json data id or not
     // console.log('Check if request have json data id or not');
     if (privateData.jsonDataId) {
-//console.log('Passed, json data id exist in request, varifiying the id');
+        //console.log('Passed, json data id exist in request, varifiying the id');
 
         // check if the json data id is valid or not and its user id is same as the current user 
         const jsonData = await prisma.resumeData.findUnique({
@@ -189,7 +189,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
             }
         })
         if (jsonData) {
-	//console.log('passed json data id check, varified datajson id');
+            //console.log('passed json data id check, varified datajson id');
             // if unpaid then update the job id and pay id
             if (jsonData.paymentStatus === "pending") {
                 // console.log('passed unpaid check, updating the pay id and job id');
@@ -221,7 +221,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
                 // console.log('passed paid check, user can start editing if time is left');
                 // console.log(jsonData.creaatedAt)
                 // if paid then redirect to the dashboard
-                // return redirect("/Dashboard?" + await jsonToSearchParameters({
+                // return redirect("/dashboard?" + await jsonToSearchParameters({
                 //     error: "You have already paid for this resume, you can download it from dashboard",
                 // }));
                 return jsonData;
@@ -229,7 +229,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
         } else {
             // console.log('failed, datajson id, redirecting to dashboard');
             // if not valid then redirect to the dashboard
-            return redirect("/Dashboard?" + await jsonToSearchParameters({
+            return redirect("/dashboard?" + await jsonToSearchParameters({
                 error: "error decoding data, have to restart building :( ",
             }));
         }
