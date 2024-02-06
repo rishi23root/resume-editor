@@ -292,7 +292,14 @@ export function ModelComponent({
                   <span className="fc gap-2">
                     <span className="text-2xl bold capitalize text-white">
                       Ats Score:{" "}
-                      <span className="opacity-60 cursor-pointer">8</span>
+                      <span className="opacity-60 cursor-pointer">
+                        {" "}
+                        {refetching !== "idle" && isAtsRLoading
+                          ? refetching
+                          : atsAndRecommendation
+                          ? atsAndRecommendation.atsScore
+                          : "not with this package :( "}
+                      </span>
                     </span>
                   </span>
 
