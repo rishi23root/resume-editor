@@ -1,14 +1,29 @@
 import { Loadingstate } from "@/components/Fallbacks";
 import GetTemplates from "@/components/pageSpecific/templates/AllTemplatesNav";
 import Render from "@/components/pageSpecific/templates/Render";
+import { templateWithImages } from "@/types/templates";
 
 import { PageProps } from "@/types/utils";
-import useParamParser from "@/utils/paramHandeler";
+import { urlWithAddedParams } from "@/utils/paramHandeler";
 import { getTemplateDataWithImages } from "@/utils/util";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function Template(props: PageProps) {
-  const templateData = await getTemplateDataWithImages();
+  var templateData;
+  try {
+    //
+    if (!props.searchParams.error) {
+      templateData = await getTemplateDataWithImages();
+    }
+    templateData = [] as templateWithImages[];
+  } catch (err) {
+    redirect(
+      urlWithAddedParams("/Templates", props.searchParams, {
+        error: "unable to fetch data, server must be down ! ",
+      })
+    );
+  }
   // const { stringifiedData, privateData } = await useParamParser(
   //   "/Templates",
   //   props.searchParams

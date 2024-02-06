@@ -6,6 +6,8 @@ import { urlWithAddedParams } from "@/utils/paramHandeler";
 import Link from "next/link";
 import { Suspense } from "react";
 import Card from "./jobCard";
+import { object } from "zod";
+import { redirect } from "next/navigation";
 
 const JobDiscriptionTemplateShowcase = async ({
   jobId,
@@ -20,6 +22,19 @@ const JobDiscriptionTemplateShowcase = async ({
   const jobIdData = await serverAPI.jobDis.byId({
     jobId: parseInt(jobId.toString()),
   });
+
+  // get all the images in jobIdData
+  if (
+    !Object.values(jobIdData.image as object).filter((item) => item).length &&
+    !searchParam.hasOwnProperty("error")
+  ) {
+    redirect(
+      urlWithAddedParams("/JobDescriptions", searchParam, {
+        error: "unable to fetch data, server must be down ! ",
+      })
+    );
+  }
+
   // console.log(jobIdData);
   const redirectPage = searchParam.redirectPage as string;
   const toRedirectUrl = redirectPage

@@ -7,7 +7,9 @@ import {
   builderPageParamsRedirectHandeler,
   builderPageParamsValidator,
 } from "@/utils/pageLoad";
+import { urlWithAddedParams } from "@/utils/paramHandeler";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export default async function builderPage(props: PageProps) {
   // const { stringifiedData, privateData } = await useParamParser(
@@ -28,6 +30,14 @@ export default async function builderPage(props: PageProps) {
     resumeId: activeResumeInstance.id,
     userId: userDBid as string,
   });
+
+  // if (!defaultData && !props.searchParams.hasOwnProperty("error")) {
+  //   redirect(
+  //     urlWithAddedParams("/dashboard", props.searchParams, {
+  //       error: "unable to fetch data, server must be down ! ",
+  //     })
+  //   );
+  // }
 
   // console.log(
   //   "active data: ",
