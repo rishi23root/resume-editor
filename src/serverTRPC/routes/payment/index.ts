@@ -54,7 +54,7 @@ export const priceRouter = router({
       // Create an order -> generate the OrderID -> Send it to the Front-end
       // Also, check the amount and currency on the backend (Security measure)
       // "Rs. "
-      const amount = parseInt(price.price.split('Rs.')[1]);
+      const amount = parseFloat(price.price.split('Rs.')[1]);
 
       const options = {
         amount: (amount * 100).toString(),

@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Basic Package",
-    "price": "Rs. 10",
+    "price": "Rs. 14.99",
     "description": "Essential Resume Package",
     "features": [
       "Choose from Top Templates",
@@ -15,7 +15,7 @@
   {
     "id": 2,
     "title": "Advanced Package",
-    "price": "Rs. 30",
+    "price": "Rs. 34.99",
     "description": "Enhanced Resume Package",
     "features": [
       "Choose from Top Templates",
