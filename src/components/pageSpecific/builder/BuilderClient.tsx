@@ -181,7 +181,7 @@ const BuilderClient = memo(
 
     const FormManagerSubmitFnc = useCallback(
       formHandeler.handleSubmit(onSubmit),
-      []
+      [activeResumeInstance.paymentStatus]
     );
 
     if (!isrendered) return null;

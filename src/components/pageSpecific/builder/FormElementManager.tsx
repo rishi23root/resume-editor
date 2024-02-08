@@ -31,30 +31,30 @@ const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
 
     if (latest == 0) {
       // console.log("top");
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--topBlurColor",
         "transparent"
       );
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--bottomBlurColor",
         shadowColor
       );
     } else if (latest > 0.99) {
       // console.log("bottom");
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--bottomBlurColor",
         "transparent"
       );
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--topBlurColor",
         shadowColor
       );
     } else {
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--bottomBlurColor",
         shadowColor
       );
-      formOverLayDivRef.current?.style.setProperty(
+      formOverLayDivRef.current?.style?.setProperty(
         "--topBlurColor",
         shadowColor
       );

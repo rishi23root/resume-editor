@@ -48,25 +48,25 @@
     "languages": [
       {
         "name": "Italian",
-        "level": 90
+        "level": 3
       },
       {
         "name": "French",
-        "level": 80
+        "level": 2
       },
       {
         "name": "Asian",
-        "level": 80
+        "level": 2
       }
     ],
     "technologies": [
       {
         "name": "Sous Vide",
-        "level": 70
+        "level": 1
       },
       {
         "name": "Grilling",
-        "level": 70
+        "level": 1
       }
     ],
     "frameworks": [],

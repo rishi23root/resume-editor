@@ -1,9 +1,12 @@
 "use client";
 
+import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { useEffect, useState } from "react";
 
 export const MakePaymentComponent = async ({
   resumeId,
@@ -14,6 +17,8 @@ export const MakePaymentComponent = async ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
+  const [paymentModelVisible, setPaymentModelVisible] =
+    useState<Boolean>(false);
 
   const { data } = trpc.price.getRazorpayOrderId.useQuery({ payId });
   const { mutate: varifiyPayment } =
@@ -77,17 +82,39 @@ export const MakePaymentComponent = async ({
       };
 
       if (typeof window === "undefined") {
+        console.log("window is not defined");
         return;
       }
 
       const paymentObject = new (window as any).Razorpay(options);
+      setPaymentModelVisible(true);
       paymentObject.open();
     }
   };
+
+  useEffect(() => {
+    if (data && !paymentModelVisible) {
+      toast({
+        variant: "default",
+        title: "Payment is pending",
+        description: "please complete the payment to start edit the resume",
+        action: (
+          <ToastAction
+            altText="Payment is pending"
+            onClick={() => {
+              makePayment();
+            }}
+          >
+            Pay now
+          </ToastAction>
+        ),
+      });
+    }
+  }, [data]);
+
   return (
     <>
       <Script
-        defer
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />

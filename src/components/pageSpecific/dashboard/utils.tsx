@@ -36,6 +36,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { router } from "@/serverTRPC/trpc";
 
 const DashboardNavBtn = ({
   children,
@@ -152,6 +153,7 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
   const [showAction, setShowAction] = React.useState<boolean>(false);
   const { toast } = useToast();
   const { urlWithAddedParams } = useRedirectHandler();
+  const router = useRouter();
 
   // using created at find if active or not
   const isActive =
@@ -207,6 +209,36 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
     },
   });
 
+  const deleteResume = trpc.builder.delByResumeId.useMutation({
+    onSuccess: (data) => {
+      toast({
+        variant: "default",
+        title: "Resume deleted 👍",
+      });
+      router.refresh();
+    },
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "unable to delete resume try again later",
+      });
+      console.log(err);
+    },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Requesting for resume delete :)",
+      });
+      setTimeout(() => {
+        toast({
+          variant: "default",
+          title: "Resume will delete shortly ",
+          duration: 20000,
+        });
+      }, 500);
+    },
+  });
+
   return (
     <DropdownMenu open={showAction} onOpenChange={setShowAction}>
       <DropdownMenuTrigger asChild>
@@ -247,7 +279,7 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
-            className="w-full flex flex-row gap-2"
+            className="w-full flex flex-row gap-2 cursor-pointer"
             onClick={() => {
               // download pdf
               downloadPDF.mutate({ resumeId: id });
@@ -262,6 +294,23 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
               </Link>
             </DropdownMenuItem>
           )}
+          {/* delete  */}
+          <DropdownMenuItem
+            className="w-full flex flex-row gap-2 cursor-pointer group"
+            onClick={() => {
+              // delete resume
+              const confirm = window.confirm("Delete resume : " + id);
+              if (confirm) {
+                // delete resume
+                deleteResume.mutate({ resumeId: id });
+              }
+            }}
+          >
+            <DoorClosed className="group-hover:text-red-500/80 transition-all" />
+            <span className="group-hover:text-red-500/80 transition-all">
+              Delete
+            </span>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

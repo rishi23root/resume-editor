@@ -48,25 +48,25 @@
     "languages": [
       {
         "name": "Interviewing",
-        "level": 90
+        "level": 3
       },
       {
         "name": "Resume Screening",
-        "level": 80
+        "level": 2
       },
       {
         "name": "Onboarding",
-        "level": 80
+        "level": 2
       }
     ],
     "libraries": [
       {
         "name": "Conflict Resolution",
-        "level": 70
+        "level": 1
       },
       {
         "name": "Employee Engagement",
-        "level": 70
+        "level": 1
       }
     ],
     "tools": [

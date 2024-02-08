@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 function HeroSection({ editorLink }: { editorLink: string }) {
   return (
@@ -91,27 +92,31 @@ function HeroSection({ editorLink }: { editorLink: string }) {
 
       {/* images  */}
       <div className="relative w-[26em] h-[30em] xl:scale-[1.1] lg:scale-[.9] md:scale-[.9] scale-[.65] translate-x-4 md:-translate-x-4   lg:-translate-x-2 xl:-translate-x-14 ">
-        <Image
-          alt="example resume"
-          className="absolute rounded right-[0] top-[50%] -translate-y-1/2 scale-[1] brightness-[.95]  object-cover aspect-[17/22]"
-          src="/exampleR/twoColumn.jpg"
-          loading="lazy"
-          width={900}
-          height={1500}
-          blurDataURL="/exampleR/twoColumn.jpg"
-          placeholder="blur"
-        />
+        <Suspense>
+          <Image
+            alt="example resume"
+            className="absolute rounded right-[0] top-[50%] -translate-y-1/2 scale-[1] brightness-[.95]  object-cover aspect-[17/22]"
+            src="/exampleR/twoColumn.webp"
+            loading="lazy"
+            width={900}
+            height={1500}
+            blurDataURL="/exampleR/twoColumn.webp"
+            placeholder="blur"
+          />
+        </Suspense>
 
-        <Image
-          alt="example resume"
-          className="absolute rounded right-[28%] top-[55%] -translate-y-1/2 scale-120 h-[28rem] w-[22rem] brightness-[.97] shadow-lg"
-          src="/exampleR/singleColumn.jpg"
-          loading="lazy"
-          width={900}
-          height={1500}
-          blurDataURL="/exampleR/singleColumn.jpg"
-          placeholder="blur"
-        />
+        <Suspense>
+          <Image
+            alt="example resume"
+            className="absolute rounded right-[28%] top-[55%] -translate-y-1/2 scale-120 h-[28rem] w-[22rem] brightness-[.97] shadow-lg"
+            src="/exampleR/singleColumn.webp"
+            loading="lazy"
+            width={900}
+            height={1500}
+            blurDataURL="/exampleR/singleColumn.webp"
+            placeholder="blur"
+          />
+        </Suspense>
       </div>
     </section>
   );

@@ -69,25 +69,25 @@
     "languages": [
       {
         "name": "JavaScript",
-        "level": 90
+        "level": 3
       },
       {
         "name": "HTML5",
-        "level": 80
+        "level": 2
       },
       {
         "name": "CSS",
-        "level": 80
+        "level": 2
       }
     ],
     "frameworks": [
       {
         "name": "React",
-        "level": 70
+        "level": 1
       },
       {
         "name": "Angular",
-        "level": 70
+        "level": 1
       }
     ],
     "technologies": [

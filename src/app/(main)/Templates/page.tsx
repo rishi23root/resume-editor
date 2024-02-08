@@ -15,8 +15,9 @@ export default async function Template(props: PageProps) {
     //
     if (!props.searchParams.error) {
       templateData = await getTemplateDataWithImages();
+    } else {
+      templateData = [] as templateWithImages[];
     }
-    templateData = [] as templateWithImages[];
   } catch (err) {
     redirect(
       urlWithAddedParams("/Templates", props.searchParams, {
