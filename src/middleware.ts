@@ -10,7 +10,7 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url });
     }
   },
-  publicRoutes: ["/"],
+  publicRoutes: ["/", "/termAndCondition", "/privacyPolicy"],
 });
 
 
