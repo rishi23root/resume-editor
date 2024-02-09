@@ -7,14 +7,7 @@ import { searchParamType } from "@/types/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import _ from "lodash";
 import debounce from "lodash.debounce";
-import {
-  Suspense,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
 import { compareJsonObjects } from "./customFormFields/sections/utils";
@@ -63,9 +56,15 @@ const BuilderClient = memo(
     };
   }) => {
     const debounceTime = 1200; // 800 is low 1500 is high
-
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
+
+    // crucial for preventing full page reload
+    const paymenInstanceRef = useRef(activeResumeInstance.paymentStatus);
+    useEffect(() => {
+      // console.log("payemnt status updated");
+      paymenInstanceRef.current = activeResumeInstance.paymentStatus;
+    }, [activeResumeInstance.paymentStatus]);
 
     const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
       onSuccess: () => {
@@ -170,18 +169,18 @@ const BuilderClient = memo(
     const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
       data: any
     ) => {
-      if (activeResumeInstance.paymentStatus === "pending") {
-        console.log("update requested, canceled, payment pending");
-        return;
-      } else {
+      if (paymenInstanceRef.current === "paid") {
         console.log("update requested");
         submitAction(data);
+      } else {
+        console.log("update requested, canceled, payment pending");
+        return;
       }
     };
 
     const FormManagerSubmitFnc = useCallback(
       formHandeler.handleSubmit(onSubmit),
-      [activeResumeInstance.paymentStatus]
+      []
     );
 
     if (!isrendered) return null;
@@ -230,7 +229,8 @@ export default ({
       defaultData,
       activeResumeInstance,
     };
-  }, [searchParams, defaultData, activeResumeInstance]);
+  }, [searchParams, activeResumeInstance.paymentStatus]);
+  console.log("Render from builder client", activeResumeInstance.paymentStatus);
 
   return <BuilderClient {...params} />;
 };

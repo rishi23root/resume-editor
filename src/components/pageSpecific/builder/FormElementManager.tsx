@@ -13,7 +13,7 @@ import {
   Work,
 } from "./customFormFields/sections/FormSections";
 
-const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
+export default function FormManager({ onSubmit }: { onSubmit: any }) {
   // console.log("form manager rendered");
 
   const ref = useRef<HTMLFormElement>(null);
@@ -103,6 +103,4 @@ const FormManager = memo(({ onSubmit }: { onSubmit: any }) => {
       </motion.form>
     </div>
   );
-});
-
-export default FormManager;
+}
