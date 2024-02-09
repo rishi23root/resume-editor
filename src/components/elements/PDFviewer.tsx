@@ -81,6 +81,12 @@ function PDFviewer({
       });
       console.log(err);
     },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Deleting resume :(",
+      });
+    },
   });
 
   // download pdf mutation
