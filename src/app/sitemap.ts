@@ -3,19 +3,19 @@ import { MetadataRoute } from 'next'
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: `${process.env.WEBSITE_URL}/`,
+      url: `${process.env.FRONTEND}/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: `${process.env.WEBSITE_URL}/privacyPolicy`,
+      url: `${process.env.FRONTEND}/privacyPolicy`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: `${process.env.WEBSITE_URL}/termAndCondition`,
+      url: `${process.env.FRONTEND}/termAndCondition`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
