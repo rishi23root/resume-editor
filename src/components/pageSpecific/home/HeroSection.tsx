@@ -84,7 +84,7 @@ function HeroSection({ editorLink }: { editorLink: string }) {
           href={editorLink}
           className="flex justify-center md:justify-start "
         >
-          <div className="text-center text-neutral-200 md::text-[2.3rem] font-medium p-4 px-16 rounded-lg bg-gradient-to-r from-blue-600 to-fuchsia-500 border-stone-500 w-fit">
+          <div className="text-center text-neutral-200 md::text-[2.3rem] text-xl font-medium p-4 px-16 rounded-lg bg-gradient-to-r from-blue-600 to-fuchsia-500 border-stone-500 w-fit">
             Build Your Resume
           </div>
         </Link>

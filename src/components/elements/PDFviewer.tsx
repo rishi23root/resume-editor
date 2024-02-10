@@ -406,6 +406,7 @@ function PDFviewer({
           <ModelComponent
             dataArray={dataArray}
             error={error}
+            isLoading={isLoading}
             isError={isError}
             resumeId={resumeId}
             modelState={[showModel, setShowModel]}

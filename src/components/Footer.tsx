@@ -4,18 +4,32 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="w-full fcb ">
-      <Image
-        alt="logo"
-        className="w-20 h-10 lg:w-96 lg:h-20"
-        src="/logo.png"
-        width={350}
-        height={80}
-      />
-      <div className="flex flex-col items-end justify-end lg:w-[60%] w-full gap-2 h-full py-2 ">
+    <footer className="w-full sm:fcb  ">
+      <Link href={"/"}>
+        <Image
+          alt="logo"
+          className="w-full h-20 lg:w-96 lg:h-20"
+          src="/logo.png"
+          width={350}
+          height={80}
+        />
+      </Link>
+      <div className="flex flex-col lg:w-[60%] w-full gap-2 h-full py-2 ">
+        <Link
+          href={"https://buildyourresume.online/privacyPolicy"}
+          className="text-base font-medium text-center sm:text-right  text-white "
+        >
+          Privacy Policy
+        </Link>
+        <Link
+          href={"https://buildyourresume.online/termAndCondition"}
+          className="text-base font-medium text-center sm:text-right  text-white "
+        >
+          Terms & Conditions
+        </Link>
         <Link
           href={"mailto:contact@buildyourresume.online"}
-          className="text-base font-medium text-right text-white "
+          className="text-base font-medium text-center sm:text-right  text-white "
         >
           contact@buildyourresume.online
         </Link>

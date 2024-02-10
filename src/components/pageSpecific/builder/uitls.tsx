@@ -27,7 +27,7 @@ import { searchParamType } from "@/types/utils";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { UseTRPCMutationResult } from "@trpc/react-query/shared";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { HardDriveDownload } from "lucide-react";
+import { HardDriveDownload, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Dispatch,
@@ -101,6 +101,7 @@ export function ActionBtn({
 export function ModelComponent({
   resumeId,
   isError,
+  isLoading,
   error,
   dataArray,
   modelState,
@@ -111,6 +112,7 @@ export function ModelComponent({
   DownloadPDFFromServer,
 }: {
   resumeId: string;
+  isLoading: boolean;
   isError: boolean;
   error: any;
   dataArray: string[];
@@ -258,8 +260,9 @@ export function ModelComponent({
                       Template :{" "}
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <span className="opacity-60 underline underline-offset-4 cursor-pointer">
+                          <span className="opacity-60 underline underline-offset-4 cursor-pointer flex gap-2">
                             {searchParams.templateName}
+                            <Pencil />
                           </span>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
@@ -358,6 +361,16 @@ export function ModelComponent({
                     ref={pdfOverLayDivRef}
                     className="pdfShowOverlay flex h-full max-w-full mx-2 items-center justify-center relative "
                   >
+                    {isLoading && (
+                      <motion.div
+                        className="w-full fc fcc "
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                        exit={{ opacity: 0 }}
+                      >
+                        <Loadingstate />
+                      </motion.div>
+                    )}
                     {isError && (
                       <div className="w-full fc fcc">{error.toString()}</div>
                     )}

@@ -82,7 +82,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
         <Projects />
         <Awards />
 
-        <Button
+        {/* <Button
           className={cn(
             "w-full bg-gradient-to-r from-blue-600 to-fuchsia-500",
             "transition ease-in-out delay-150", //animate
@@ -99,7 +99,7 @@ export default function FormManager({ onSubmit }: { onSubmit: any }) {
             )}
             value={"Update Resume"}
           />
-        </Button>
+        </Button> */}
       </motion.form>
     </div>
   );

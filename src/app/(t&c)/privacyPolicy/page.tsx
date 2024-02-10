@@ -5,7 +5,7 @@ import Link from "next/link";
 // test for payment page here once then del it for good
 export default function PrivacyPolicy(props: PageProps) {
   return (
-    <div className="m-4 p-4  lg:mx-auto lg:w-[70%]">
+    <div className="m-4 p-4 lg:mx-auto lg:w-[70%]">
       <h1 className="text-3xl font-extrabold mb-4">Privacy Policy</h1>
       <div className="mb-2">
         rishi23root built the build your resume app as a Commercial app. This

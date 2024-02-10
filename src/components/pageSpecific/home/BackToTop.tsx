@@ -38,17 +38,7 @@ function BackToTopBtn() {
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       initial={{ opacity: 0, y: 50 }}
       animate={controls}
-      style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        padding: "12px",
-        color: "#fff",
-        borderRadius: "5px",
-        cursor: "pointer",
-        border: "none",
-      }}
-      className="bg-blue-500 text-bold"
+      className="bg-[#6c11ed] font-bold fixed z-50 bottom-4 right-4 rounded-lg shadow-lg text-white text-lg px-4 py-2 hover:bg-[#4d0d9b] transition-all duration-300 ease-in-out cursor-pointer"
     >
       ↑ Back to Top
     </motion.button>
