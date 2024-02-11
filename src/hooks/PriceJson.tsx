@@ -28,6 +28,12 @@ const usePriceJson = async (paymentLinks: Boolean = false) => {
     const params = await jsonToSearchParameters(startFreshSearchParams);
 
     return priceData.map((item) => {
+      if (item.link.startsWith("mailto:")) {
+        return {
+          ...item,
+          link: item.link,
+        };
+      }
       return {
         ...item,
         link: "/New?" + params + "&payId=" + item.id,
@@ -37,6 +43,12 @@ const usePriceJson = async (paymentLinks: Boolean = false) => {
     // make product link for rozerpay component from id in the priceData and after payment success give redirect to the provided link
     const params = await jsonToSearchParameters(afterPaymentRedirection);
     return priceData.map((item) => {
+      if (item.link.startsWith("mailto:")) {
+        return {
+          ...item,
+          link: item.link,
+        };
+      }
       return {
         ...item,
         link: "/Builder?" + params + "&payId=" + item.id,
