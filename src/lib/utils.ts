@@ -41,7 +41,7 @@ export const makeEmptyObject = (obj: any): any => {
         }
         // return [arr[0], typeof arr[1] === "boolean" ? false : ""];
       })
-      .filter(([key, val]) => key !== "id")
+    // .filter(([key, val]) => key !== "id")
   );
   return data;
 };

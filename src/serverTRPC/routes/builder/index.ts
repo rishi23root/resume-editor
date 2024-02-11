@@ -1,18 +1,26 @@
 // pathname: api/trpc/pdf/{functionNameHere}
 import { defaultTemplate } from "@/JSONapiData/builder";
+import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
+import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { prisma } from "@/lib/prisma";
+import { makeEmptyObject } from "@/lib/utils";
 import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
-import { getUserData } from "@/utils/dbUtils";
-import { z } from "zod";
-
-import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
 import { jobDescriptionDataType } from "@/types/jobDescription";
-import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
+import { getUserData } from "@/utils/dbUtils";
 import { compressImage } from "@/utils/util";
+import { z } from "zod";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
 export const builderRouter = router({
+
+  getEmptyField: procedure.input(z.object({
+    key: z.string(),
+  })).mutation(async (opts) => {
+    var data = defaultTemplate as Inputs
+    var firstEntry = (data[opts.input.key as keyof Inputs] as any[])[0]
+    return makeEmptyObject(firstEntry) as any;
+  }),
 
   // get the default data for the builder first time and save it in DB
   getDefault: procedure.input(

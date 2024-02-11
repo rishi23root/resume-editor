@@ -1,9 +1,8 @@
 "use client";
 // "yes, it is inportant to have this file !"
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import {
   Awards,
   Basic,

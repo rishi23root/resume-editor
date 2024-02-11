@@ -1,12 +1,10 @@
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { FormInput } from "../formInput";
 import { SectionWrapper } from "./utils";
-import { Separator } from "@/components/ui/separator";
-import { TagPicker } from "../tagPicker";
 
 export function Basic() {
   const { register } = useFormContext();
@@ -103,8 +101,7 @@ export function Basic() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >
@@ -227,8 +224,7 @@ function Core() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >
@@ -600,8 +596,7 @@ export function Work() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >
@@ -724,8 +719,7 @@ export function Education() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >
@@ -838,8 +832,7 @@ export function Projects() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >
@@ -919,8 +912,7 @@ export function Awards() {
                   <button
                     type="button"
                     className={cn(
-                      "hover:text-red-490 hover:opacity-100 opacity-50",
-                      fields.length > 1 ? "" : "hidden"
+                      "hover:text-red-490 hover:opacity-100 opacity-50"
                     )}
                     onClick={() => remove(index)}
                   >

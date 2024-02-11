@@ -19,31 +19,20 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
           value as string,
           "text/html"
         );
-        const ulElementInnerHtml = parsedValue.querySelector("ul")?.innerHTML;
-        if (ulElementInnerHtml) {
-          // inner may not have any li element
-          // check if li emelent is present inside the ul element and take only li element join them
-          const AllLiElement = parsedValue.querySelectorAll("li");
-          let liElementInnerHtml = "";
-          AllLiElement.forEach((liElement, index) => {
-            liElementInnerHtml += `<li>${liElement.innerHTML}</li>`;
-          });
-          setContent(liElementInnerHtml);
+        // const ulElementInnerHtml = parsedValue.querySelector("ul")?.innerHTML;
+        // console.log("no ul element found, means only text is present or li");
+        // if no ul element found, means only text is present
+        const AllLiElement = parsedValue.querySelectorAll("li");
+        let liElementInnerHtml = "";
+        AllLiElement.forEach((liElement, index) => {
+          liElementInnerHtml += `<li>${liElement.innerHTML}</li>`;
+        });
+        // console.log(liElementInnerHtml);
+        // remove any html tags other than li and store in clean value variable
+        if (liElementInnerHtml == "") {
+          setContent("<li>" + value + "</li>");
         } else {
-          // console.log("no ul element found, means only text is present or li");
-          // if no ul element found, means only text is present
-          const AllLiElement = parsedValue.querySelectorAll("li");
-          let liElementInnerHtml = "";
-          AllLiElement.forEach((liElement, index) => {
-            liElementInnerHtml += `<li>${liElement.innerHTML}</li>`;
-          });
-          // console.log(liElementInnerHtml);
-          // remove any html tags other than li and store in clean value variable
-          if (liElementInnerHtml == "") {
-            setContent("<li>" + value + "</li>");
-          } else {
-            setContent(liElementInnerHtml);
-          }
+          setContent(liElementInnerHtml);
         }
       }
     }, [value]);

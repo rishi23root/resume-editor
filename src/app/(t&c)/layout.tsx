@@ -32,7 +32,7 @@ export default async function RootLayout({
           </Link>
         </div>
         <Footer />
-        {/* <BackToTopBtn /> */}
+        <BackToTopBtn />
       </main>
     </div>
   );

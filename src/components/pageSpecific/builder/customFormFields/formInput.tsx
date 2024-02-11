@@ -126,7 +126,7 @@ export const TypeCheckedInput = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <>
           <input type="hidden" ref={ref} {...rest} />
-          <DatePicker
+          <DatePickerComponent
             id={id}
             className={rest.className}
             fieldTitle={rest.name as any}
@@ -355,7 +355,7 @@ const ImageUpload = ({
   );
 };
 
-const DatePicker = ({
+const DatePickerComponent = ({
   id,
   className,
   fieldTitle,
@@ -380,13 +380,13 @@ const DatePicker = ({
       // convert this date to some readable date for json formater
       setValue(
         fieldTitle,
-        format(date, "LLL yyyy")
-          ? format(date, "LLL yyyy")
+        format(date, "dd LLL yyyy")
+          ? format(date, "dd LLL yyyy")
           : getValues(fieldTitle)
       );
       // console.log(
       //   "formated updated :",
-      //   format(date, "LLL yyyy")
+      //   format(date, "dd LLL yyyy")
       // )
     } else {
       // in the first send a date if not alreay there
@@ -395,8 +395,8 @@ const DatePicker = ({
       // if (inputRef.current) {
       // }
 
-      // inputRef?.current?.setAttribute("value", format(date, "LLL yyyy"));
-      // .current?.setAttribute("value", format(date, "LLL yyyy"));
+      // inputRef?.current?.setAttribute("value", format(date, "dd LLL yyyy"));
+      // .current?.setAttribute("value", format(date, "dd LLL yyyy"));
 
       let defaultValue = getValues(fieldTitle as any);
       if (!defaultValue) {
@@ -414,7 +414,7 @@ const DatePicker = ({
   useEffect(() => {
     setValue(
       fieldTitle,
-      date ? format(date, "LLL yyyy") : getValues(fieldTitle)
+      date ? format(date, "dd LLL yyyy") : getValues(fieldTitle)
     );
   }, [disabled]);
 
@@ -431,16 +431,23 @@ const DatePicker = ({
           onClick={() => setIsOpen(!isOpen)}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "LLL yyyy") : <span>Pick a date</span>}
+          {date ? format(date, "dd LLL yyyy") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto p-0" align="end">
         <Calendar
-          id={calId}
           mode="single"
+          className={cn(className)}
+          captionLayout="dropdown-buttons"
           selected={date}
-          onSelect={setDate}
-          initialFocus
+          defaultMonth={date}
+          onSelect={(selectedDate) => {
+            if (!selectedDate) return;
+            console.log(selectedDate);
+            setDate(selectedDate);
+          }}
+          fromYear={1960}
+          toYear={2030}
         />
       </PopoverContent>
     </Popover>

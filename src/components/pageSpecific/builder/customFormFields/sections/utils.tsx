@@ -1,8 +1,10 @@
 "use client";
 import { cn, makeEmptyObject } from "@/lib/utils";
+import { trpc } from "@/serverTRPC/client";
 import { Inputs } from "@/types/builder";
 import { JsonType } from "@/types/utils";
 import { AnimatePresence, MotionConfig, Variants, motion } from "framer-motion";
+import _ from "lodash";
 import { Eye, EyeOff, Plus } from "lucide-react";
 import React, { memo, useCallback, useId, useState } from "react";
 import {
@@ -12,7 +14,6 @@ import {
   useFormContext,
 } from "react-hook-form";
 import useMeasure from "react-use-measure";
-import _ from "lodash";
 
 const duration = 0.25;
 
@@ -122,16 +123,6 @@ export const SectionWrapper = function SectionWrapper({
             visible ? "" : "cursor-pointer"
           )}
         >
-          {/* {editableInputItself && (
-          <div
-            className={cn("flex-1 group relative h-10", !editableTitle && "hidden")}
-          >
-            {editableInputItself}
-          </div>
-        )}
-        {!editableTitle && (
-          <span>{sectionKey.split(".").pop()?.toUpperCase()}</span>
-        )} */}
           {editableTitle ? (
             <div className="flex-1 group relative h-10">
               {editableInputItself}
@@ -158,8 +149,6 @@ export const SectionWrapper = function SectionWrapper({
     }
   );
 
-  // const memoTitleSection = React.memo(TitleSection,);
-
   if (fieldArraySection) {
     const fieldArray = useFieldArray({
       name: sectionKey as any,
@@ -167,11 +156,31 @@ export const SectionWrapper = function SectionWrapper({
       shouldUnregister: false,
     });
     const { fields, append } = fieldArray;
+    const { mutate: addKeyData } = trpc.builder.getEmptyField.useMutation({
+      onSettled: (newEntryData) => {
+        console.log("got data for key ", sectionKey, " : ", newEntryData);
+        if (Object.keys(newEntryData).includes("id")) {
+          newEntryData.id = `${fields.length + 1}`;
+        }
+        append(newEntryData);
+      },
+    });
 
-    const emptyAppendCallback = useCallback(
-      () => append(makeEmptyObject(fields[0]) as any),
-      []
-    );
+    const emptyAppendCallback = useCallback(async () => {
+      // console.log("current length", fields.length);
+      if (fields.length > 0) {
+        // console.log("got form old data");
+        const newEntryData = makeEmptyObject(fields[0]) as any;
+        // if id exists then add value of length +1 to it
+        if (Object.keys(newEntryData).includes("id")) {
+          newEntryData.id = `${fields.length + 1}`;
+        }
+        append(newEntryData);
+      } else {
+        // request to add new field
+        addKeyData({ key: sectionKey as string });
+      }
+    }, [fields]);
 
     return (
       <MotionConfig transition={{ duration }}>
@@ -260,33 +269,6 @@ export function useWatchedValue(watchKey: FieldPath<Inputs>) {
   return watchValue;
 }
 
-export function flattenJson(json: JsonType, parentKey = "") {
-  let result: JsonType = {};
-
-  for (const key in json) {
-    const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-    if (typeof json[key] === "object" && !Array.isArray(json[key])) {
-      // Recursively flatten nested objects
-      result = { ...result, ...flattenJson(json[key], newKey) };
-    } else if (Array.isArray(json[key])) {
-      // Flatten arrays by appending index to keys
-      json[key].forEach((item: JsonType, index: any) => {
-        const arrayKey = `${newKey}.${index}`;
-        if (typeof item === "object") {
-          result = { ...result, ...flattenJson(item, arrayKey) };
-        } else {
-          result[arrayKey] = item;
-        }
-      });
-    } else {
-      result[newKey] = json[key];
-    }
-  }
-
-  return result;
-}
-
 export function getValueFromNestedObject(data: JsonType, keyString: string) {
   const keys = keyString.split(".");
 
@@ -297,55 +279,5 @@ export function getValueFromNestedObject(data: JsonType, keyString: string) {
   }
 }
 export function compareJsonObjects(obj1: Inputs, obj2: Inputs): boolean {
-  // // Quick check for the same object
-  // if (obj1 === obj2) return true;
-
-  // // Check for null or type mismatch
-  // if (
-  //   typeof obj1 !== "object" ||
-  //   typeof obj2 !== "object" ||
-  //   obj1 === null ||
-  //   obj2 === null
-  // )
-  //   return false;
-
-  // // Get the keys of the objects
-  // const keys1 = Object.keys(obj1);
-  // const keys2 = Object.keys(obj2);
-
-  // // Check if the number of keys is the same
-  // if (keys1.length !== keys2.length) return false;
-
-  // // Iterate through keys and values
-  // for (const key of keys1) {
-  //   // Check if the key exists in obj2
-  //   if (!keys2.includes(key)) return false;
-
-  //   // Recursively check nested objects
-  //   if (typeof obj1[key] === "object" && !Array.isArray(obj1[key])) {
-  //     if (!compareJsonObjects(obj1[key], obj2[key])) return false;
-  //   } else if (Array.isArray(obj1[key])) {
-  //     // Check if arrays are the same
-  //     if (!Array.isArray(obj2[key]) || obj1[key].length !== obj2[key].length)
-  //       return false;
-
-  //     // Check each element in the array
-  //     for (let i = 0; i < obj1[key].length; i++) {
-  //       if (!compareJsonObjects(obj1[key][i], obj2[key][i])) return false;
-  //     }
-  //   } else {
-  //     // console.log(obj1[key], obj2[key], key);
-
-  //     // Check if values are the same
-  //     if (obj1[key] !== obj2[key]) return false;
-  //   }
-  // }
-
-  // // If all checks pass, the objects are equal
-  // return true;
-  // console.log(obj1.basics.name, obj2.basics.name);
-  // console.log(obj1.basics.profiles.length, obj2.basics.profiles.length);
   return _.isEqual(obj1, obj2);
-
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
