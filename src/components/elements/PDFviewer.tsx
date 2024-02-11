@@ -245,19 +245,26 @@ function PDFviewer({
           <motion.div
             layout
             className={cn(
-              "flex-1 justify-center flex flex-col sm:flex-row  gap-2 overflow-hidden w-full",
+              "flex-1 justify-between flex flex-col  sm:flex-row  gap-2 overflow-hidden w-full",
               isInMobileViewAndVisible
                 ? "h-auto max-h-[80vh] visible"
                 : "h-1 invisible"
             )}
           >
-            <motion.div className="flex min-w-1/2 w-full flex-1 justify-center items-center flex-row ">
+            <motion.div
+              className={cn(
+                "flex w-full justify-center items-center flex-row ",
+                "transition-width duration-500 ease-in-out",
+                "group-hover:xl:w-1/3"
+              )}
+            >
               {/* flex justify-center */}
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
+                  layout
                   className={cn(
-                    "h-full flex items-center justify-center relative  ",
-                    " ",
+                    "flex items-center justify-center relative ",
+                    "transition-transform delay-200 duration-500 ease-in-out ",
                     isInMobileViewAndVisible ? "visible" : "invisible"
                   )}
                 >
@@ -305,8 +312,8 @@ function PDFviewer({
                           height={600}
                           zoomType="click"
                           className={cn(
-                            "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em] border border-green-600",
-                            "group-hover:xl:-translate-x-16 border border-white",
+                            "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em]",
+                            "",
                             "animate-fade-in-up delay-75 transition-all duration-500 ease-in-out"
                           )}
                         />
@@ -330,11 +337,14 @@ function PDFviewer({
             <motion.div
               layout
               className={cn(
-                "rounded-md transition-[width] duration-500 ease-in-out xl:opacity-0 w-full sm:w-[25%] xl:w-0 group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] pointer-events-none group-hover:pointer-events-auto flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
+                "transition-[width] duration-500 delay-100 ease-in-out",
+                "rounded-md w-full sm:w-[25%] xl:w-0 xl:opacity-0 pointer-events-none",
+                "group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] group-hover:pointer-events-auto",
+                "flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
                 isInMobileViewAndVisible ? "visible" : "invisible"
               )}
             >
-              <div className="w-full text-center sm:text-left  sm:mb-4 xl:opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg ">
+              <div className="w-full text-center sm:text-left  sm:mb-4 xl:opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg">
                 Actions
               </div>
               {isInMobileViewAndVisible ? (
