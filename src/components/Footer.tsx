@@ -16,13 +16,13 @@ function Footer() {
       </Link>
       <div className="flex flex-col lg:w-[60%] w-full gap-2 h-full py-2 ">
         <Link
-          href={"https://buildyourresume.online/privacyPolicy"}
+          href={"/privacyPolicy"}
           className="text-base font-medium text-center sm:text-right  text-white "
         >
           Privacy Policy
         </Link>
         <Link
-          href={"https://buildyourresume.online/termAndCondition"}
+          href={"/termAndCondition"}
           className="text-base font-medium text-center sm:text-right  text-white "
         >
           Terms & Conditions

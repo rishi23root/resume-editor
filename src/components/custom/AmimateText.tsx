@@ -1,4 +1,6 @@
-'use client'
+"use client";
+import { cn } from "@/lib/utils";
+import { useInView } from "framer-motion";
 import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
@@ -12,6 +14,8 @@ export default function AmimateText({
   className?: string;
 }) {
   const textEle = useRef<HTMLDivElement>(null);
+  const isInView = useInView(textEle);
+  const [isAnimated, setIsAnimated] = React.useState(false);
 
   useEffect(() => {
     let iteration = 0;
@@ -28,23 +32,34 @@ export default function AmimateText({
           : letter;
       });
     };
-    if (textEle.current) {
+    if (textEle.current && !isAnimated) {
       textEle.current.innerText = randomstring().join("");
     }
 
-    setTimeout(() => {
-      interval = setInterval(() => {
-        const random = randomstring();
-        if (textEle.current) {
-          textEle.current.innerText = random.join("");
-        }
-      }, 20);
+    const overallDelay = setTimeout(() => {
+      // textEle.current
+      // when this component is in view
+      if (isInView && !isAnimated) {
+        interval = setInterval(() => {
+          const random = randomstring();
+          if (textEle.current) {
+            textEle.current.innerText = random.join("");
+          }
+        }, 30);
+        setIsAnimated(true);
+      }
     }, 1000);
 
     return () => {
       clearInterval(interval);
+      clearInterval(overallDelay);
     };
-  }, [textEle, text]);
+  }, [textEle, text, isInView]);
 
-  return <div ref={textEle} className={className}></div>;
+  return (
+    <div
+      ref={textEle}
+      className={cn(className, "transition-all duration-500 ease-in-out ")}
+    ></div>
+  );
 }

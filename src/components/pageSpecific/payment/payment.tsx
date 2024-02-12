@@ -2,7 +2,6 @@
 
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
@@ -21,13 +20,13 @@ export const MakePaymentComponent = async ({
     useState<Boolean>(false);
 
   const { data } = trpc.price.getRazorpayOrderId.useQuery({ payId });
-  const { mutate: varifiyPayment } =
+  const { mutate: verifyPayment } =
     trpc.price.varifyRazorpayPayment.useMutation({
       onSuccess: (data) => {
         // refresh the page
         toast({
           variant: "default",
-          title: "Payment varified ✅",
+          title: "Payment Verified ✅",
         });
         router.refresh();
       },
@@ -64,7 +63,7 @@ export const MakePaymentComponent = async ({
           razorpay_order_id: any;
           razorpay_signature: any;
         }) => {
-          varifiyPayment({
+          verifyPayment({
             resumeId,
             paymentID: response.razorpay_payment_id,
             orderID: response.razorpay_order_id,

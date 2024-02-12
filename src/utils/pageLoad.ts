@@ -171,7 +171,7 @@ export async function builderPageParamsValidator({ searchParams }: PageProps) {
     // check if request have json data id or not
     // console.log('Check if request have json data id or not');
     if (privateData.jsonDataId) {
-        //console.log('Passed, json data id exist in request, varifiying the id');
+        //console.log('Passed, json data id exist in request, verifying the id');
 
         // check if the json data id is valid or not and its user id is same as the current user 
         const jsonData = await prisma.resumeData.findUnique({
