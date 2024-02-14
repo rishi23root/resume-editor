@@ -6,7 +6,8 @@ import { dark } from "@clerk/themes";
 import { clsx } from "clsx";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { Inter } from "next/font/google";
+import { Inter, Poppins, Exo_2 } from "next/font/google";
+import localfont from "next/font/local";
 import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -14,12 +15,19 @@ const BubbleUnderlay = dynamic(
   () => import("@/components/custom/BubbelUnderLay")
 );
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+// const inter = Poppins({ weight: "400", subsets: ["latin"] });
+// const inter = Exo_2({ weight: "400", subsets: ["latin"] });
+const inter = localfont({
+  src: "./fonts/Surt-Normal-Bold.woff2",
+  variable: "--font-surt-bold",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
-  title: "Build.Your.Resume",
+  title: "Build.Your.Resume online",
   description:
-    "Generated Your Resume online free, fast and easy with simple clicks.",
+    "Generate a perfect resume online, select the 100% accepting templates , personalize it, and get more interviews in 2024, in Maggi time.",
   keywords: [
     "build.your.resume",
     "build a resume",
@@ -55,19 +63,27 @@ export const metadata: Metadata = {
     { name: "rishi23root" },
     { name: "Rishabh Jain", url: "https://github.com/rishi23root" },
   ],
-  // openGraph: {
-  //   type: "website",
-  //   url: "https://editor.buildyourresume.online",
-  //   title: "Build.Your.Resume",
-  //   description:
-  //     "Generated Your Resume online free, fast and easy with simple clicks.",
-  //   images: [
-  //     {
-  //       url: "https://buildyourresume.online/logo.png",
-  //       alt: "Build.Your.Resume",
-  //     },
-  //   ],
-  // },
+  icons: {
+    icon: ["/favicon.ico?v=1"],
+    apple: ["/logo.png?v=1"],
+    shortcut: ["/logo.png?v=1"],
+  },
+  openGraph: {
+    type: "website",
+    title: "Build.Your.Resume",
+    description:
+      "Generated Your Resume online free, fast and easy with simple clicks.",
+    url: "https://buildyourresume.online",
+    siteName: "Build.Your.Resume",
+    images: [
+      {
+        url: "https://buildyourresume.online/og.png",
+        alt: "Build.Your.Resume",
+        width: 500,
+        height: 160,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

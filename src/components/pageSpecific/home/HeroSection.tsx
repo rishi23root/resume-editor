@@ -8,14 +8,14 @@ function HeroSection({ editorLink }: { editorLink: string }) {
       {/* text  */}
       <div className="flex flex-col justify-between h-full gap-8  md:max-w-[35em] w-full">
         <div className="  flex-col justify-start items-start gap-[2rem] flex  ">
-          <div className="text-neutral-200 text-[1.5rem] font-semibold md:text-[3rem]">
+          <h1 className="text-neutral-200 text-[1.5rem] font-semibold md:text-[3rem]">
             Build Your Professional
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-fuchsia-500 ">
               Résumé
             </span>{" "}
             with Simple Login
-          </div>
+          </h1>
           <div className="flex flex-col gap-2 items-start justify-between p-2">
             <div className="flex items-center justify-start gap-1 ">
               <Image
