@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   description:
     "Generate a perfect resume online, select the 100% accepting templates , personalize it, and get more interviews in 2024, in Maggi time.",
   keywords: [
+    "resume",
+    "cover letter examples",
+    "resume builder",
+    "resume templates",
+    "resume examples",
     "build.your.resume",
     "build a resume",
     "making a resume",
@@ -67,6 +72,7 @@ export const metadata: Metadata = {
     icon: ["/favicon.ico?v=1"],
     apple: ["/logo.png?v=1"],
     shortcut: ["/logo.png?v=1"],
+    // openGraph: ["/og.png?v=1"],
   },
   openGraph: {
     type: "website",
@@ -77,7 +83,7 @@ export const metadata: Metadata = {
     siteName: "Build.Your.Resume",
     images: [
       {
-        url: "https://buildyourresume.online/og.png",
+        url: "https://buildyourresume.online/opengraph-image.jpg",
         alt: "Build.Your.Resume",
         width: 500,
         height: 160,
