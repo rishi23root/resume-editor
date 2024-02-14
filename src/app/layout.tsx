@@ -16,13 +16,13 @@ const BubbleUnderlay = dynamic(
 );
 
 // const inter = Inter({ subsets: ["latin"] });
-// const inter = Poppins({ weight: "400", subsets: ["latin"] });
+const inter = Poppins({ weight: "400", subsets: ["latin"] });
 // const inter = Exo_2({ weight: "400", subsets: ["latin"] });
-const inter = localfont({
-  src: "./fonts/Surt-Normal-Bold.woff2",
-  variable: "--font-surt-bold",
-  weight: "400",
-});
+// const inter = localfont({
+//   src: "./fonts/Surt-Normal-Bold.woff2",
+//   variable: "--font-surt-bold",
+//   weight: "400",
+// });
 
 export const metadata: Metadata = {
   title: "Build.Your.Resume online",
