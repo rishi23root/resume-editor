@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { JsonType } from "@/types/utils";
 import { currentUser } from "@clerk/nextjs";
+import _ from "lodash";
 
 // handle parsing and data extraction from linkedin pdf file    
 export async function uploadFile(formData: FormData) {
@@ -16,14 +17,31 @@ export async function uploadFile(formData: FormData) {
 
         var jsonData: JsonType;
         if (file.type === "application/pdf") {
+            console.log("[info] extracting data from the pdf file");
+
             // extract text from pdf file
             const formData = new FormData();
             formData.append("file", file);
             const req = await fetch(process.env.BACKEND + "/extract_text", { method: "POST", body: formData })
             const extractedText = await req.json();
 
+            console.log("[info] extraction done :", extractedText.slice(0, 30), '...');
             // convert extracted text to json data
             const data = await serverAPI.openai.pdfTextToJson({ pdfText: extractedText });
+
+            // try {
+            //     schema.parse(data);
+            // } catch (err) {
+            //     // error with the json parsing
+            //     console.log(err);
+
+            //     return {
+            //         error: {
+            //             title: "Error with json data",
+            //             des: err
+            //         }
+            //     }
+            // }
 
             if (data.error || !data.jsonData) {
                 return {
@@ -33,6 +51,7 @@ export async function uploadFile(formData: FormData) {
                     }
                 }
             } else {
+                console.log("[info] formated data :", _.keys(data.jsonData).slice(0, 10), '...');
                 jsonData = data.jsonData;
             }
         } else {
@@ -53,7 +72,7 @@ export async function uploadFile(formData: FormData) {
 
         // check if data is valid
         const user = await currentUser();
-        const userDBid = user?.privateMetadata.userDBid;
+        const userDBid = user?.privateMetadata?.userDBid;
         // create new db instance
         const newResume = await prisma.resumeData.create({
             data: {

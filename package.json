@@ -2,6 +2,7 @@
   "name": "buildyourresume.online",
   "version": "0.1.0",
   "private": true,
+  "module": "esnext",
   "scripts": {
     "dev": "next dev",
     "build": "npx prisma generate && next build",
@@ -60,6 +61,7 @@
     "lucide-react": "^0.276.0",
     "next": "^13.5.1",
     "nextjs-toploader": "^1.6.4",
+    "openai": "^4.28.0",
     "pdf.js-extract": "^0.2.1",
     "pdfjs-dist": "^4.0.379",
     "postcss": "8.4.26",

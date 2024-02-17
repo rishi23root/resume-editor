@@ -1,0 +1,137 @@
+{
+  "basics": {
+    "name": "",
+    "label": "",
+    "image": "",
+    "email": "",
+    "phone": "",
+    "url": "",
+    "summary": "",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "countryCode": "",
+      "region": ""
+    },
+    "profiles": [
+      {
+        "network": "",
+        "username": "",
+        "url": ""
+      }
+    ]
+  },
+  "skills": {
+    "core": [
+      {
+        "keywords": [""],
+        "level": 1,
+        "name": ""
+      }
+    ],
+    "interests": [
+      {
+        "name": ""
+      }
+    ],
+    "languages": [
+      {
+        "name": "",
+        "level": 1
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "",
+        "level": 0
+      }
+    ],
+    "technologies": [
+      {
+        "name": "",
+        "level": 0
+      }
+    ],
+    "libraries": [
+      {
+        "name": "",
+        "level": 0
+      }
+    ],
+    "databases": [
+      {
+        "name": "",
+        "level": 0
+      }
+    ],
+    "tools": [
+      {
+        "name": "",
+        "level": 0
+      }
+    ],
+    "mask": {
+      "interests": "interests",
+      "languages": "languages",
+      "frameworks": "frameworks",
+      "technologies": "technologies",
+      "libraries": "libraries",
+      "databases": "databases",
+      "tools": "tools"
+    }
+  },
+  "work": [
+    {
+      "id": "1",
+      "name": "",
+      "position": "",
+      "url": "",
+      "startDate": "",
+      "isWorkingHere": false,
+      "endDate": "",
+      "summary": "",
+      "years": ""
+    }
+  ],
+  "education": [
+    {
+      "id": "2",
+      "institution": "",
+      "url": "",
+      "studyType": "",
+      "area": "",
+      "startDate": "",
+      "isStudyingHere": false,
+      "endDate": "",
+      "score": ""
+    }
+  ],
+  "projects": [
+    {
+      "id": "3",
+      "name": "",
+      "url": "",
+      "languages": "",
+      "description": ""
+    }
+  ],
+  "awards": [
+    {
+      "title": "",
+      "date": "",
+      "awarder": "",
+      "summary": "",
+      "url": "",
+      "id": "1"
+    }
+  ],
+  "mask": {
+    "basics": "basics",
+    "skills": "skills",
+    "education": "education",
+    "work": "work",
+    "projects": "projects",
+    "awards": "certificates"
+  }
+}

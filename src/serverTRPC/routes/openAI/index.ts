@@ -1,8 +1,8 @@
 // pathname: api/trpc/pdf/{functionNameHere}
-import { schema } from "@/components/pageSpecific/builder/schema";
 import { prisma } from "@/lib/prisma";
-import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
+import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
+import { PdfToSchema } from "@/utils/openai.util";
 import { z } from "zod";
 
 export const openAIRouter = router({
@@ -10,24 +10,29 @@ export const openAIRouter = router({
     pdfTextToJson: privateProcedure.input(
         z.object({
             pdfText: z.any()
-            // pdf: pdfFileSchema
         }),
     ).query(async (opts) => {
         const text = opts.input.pdfText;
 
+        console.log("[info] Analysing Text");
+
         // make openai request here
         try {
             // convert data to json using open ai api function calling
-            let data = text
-            schema.parse(data);
+            // const text = "data here";
+            const call = new PdfToSchema(text);
+            const results = await call.extractSchema();
+            console.log("[info] Analysing Done");
+
             return {
-                jsonData: data as Inputs,
+                jsonData: results as Inputs,
                 error: ""
             };
         } catch (err) {
+            console.log(err);
             return {
-                error: "unable to convert text into schema format :(",
-                jsonData: {} as Inputs
+                error: "unable to extract text from the format :(, we are redirecting you to the manual form.",
+                jsonData: {}
             };
         }
     }),
