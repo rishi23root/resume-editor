@@ -257,6 +257,9 @@ function PDFviewer({
                 "transition-width duration-500 ease-in-out",
                 "group-hover:xl:w-1/3"
               )}
+              onClick={() => {
+                setShowModel(!showModel);
+              }}
             >
               {/* flex justify-center */}
               <AnimatePresence mode="wait" initial={false}>

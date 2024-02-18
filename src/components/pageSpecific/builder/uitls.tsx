@@ -188,30 +188,30 @@ export function ModelComponent({
     if (dataArray.length > 1) {
       if (latest == 0) {
         console.log("top");
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--topBlurColor",
           "transparent"
         );
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--bottomBlurColor",
           shadowColor
         );
       } else if (latest > 0.99) {
         console.log("bottom");
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--bottomBlurColor",
           "transparent"
         );
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--topBlurColor",
           shadowColor
         );
       } else {
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--bottomBlurColor",
           shadowColor
         );
-        pdfOverLayDivRef.current?.style.setProperty(
+        pdfOverLayDivRef.current?.style?.setProperty(
           "--topBlurColor",
           shadowColor
         );
