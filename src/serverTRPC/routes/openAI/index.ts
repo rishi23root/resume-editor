@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
 import { PdfToSchema } from "@/utils/openai.util";
+import { AtsExtraction, makeOpenAiRequest } from "@/utils/util";
 import { z } from "zod";
 
 export const openAIRouter = router({
@@ -70,8 +71,35 @@ export const openAIRouter = router({
         if (resumeData) {
             // here we got the data now need to get the text of the pdf 
             // use the extracted text from the resume and use that get ats score and recommendations
-
             console.log("requesting openai here");
+
+
+            // abstract this function to make openai request
+            const messages = [
+                {
+                    role: 'user',
+                    content: `
+                        you are a skilled resume selector base on the basis of  data extraction model, you never make things up 
+                        1. text is info extracted from a pdf resume 
+                        2. if the exact requested information is not present in the text then you can leave it empty.
+                        3. extract all this information - ${[AtsExtraction].map(i => i.function.name).join(', ')} from the text
+                        4. do not make things up, do not pharaphrase, do not add any extra information, do not remove any information  
+                        5. remember you need to extract all the information from the text, so be sure to extract all the information user asked from you, and be strict about the format of the information
+
+                        json : ${resumeData.data}
+                        `.trim(),
+                },
+            ];
+
+            var results = makeOpenAiRequest(messages);
+            console.log("openai response", results);
+
+
+            resumeData.data 
+
+
+
+
             return {
                 atsScore: 5, recommandations: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae sapiente mollitia, repellat deleniti eos sed dignissimos cumque, cum, incidunt libero asperiores explicabo iusto doloremque autem adipisci in.Nobis, obcaecati sapiente."
             }

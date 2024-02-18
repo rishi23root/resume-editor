@@ -5,89 +5,6 @@ import { templateWithImages } from "@/types/templates";
 import { JsonType } from '@/types/utils';
 import https from 'https';
 
-export async function getTemplateDataWithImages() {
-  const res = await fetch(`${process.env.BACKEND}/templates`);
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-
-  // loop through the names and get images data for each images
-  let data: string[] = await res.json();
-
-  // loop through the names and get images data for each
-  const templatesWithImages: templateWithImages[] = await Promise.all(
-    data.map(async (element, index) => {
-      // const images = await fetch();
-      const res = await fetch(
-        `${process.env.BACKEND}/getTemplatePreview?templateName=${element}`
-      );
-
-      return {
-        id: index,
-        name: element,
-        pages: res.ok ? await res.json() : [],
-      };
-    })
-  );
-
-  return templatesWithImages;
-}
-
-export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
-  return new Promise(async (resolve, reject) => {
-    const newimage = image.split(';base64,').pop()
-    const buffer = Buffer.from(newimage as string, 'base64');
-    console.log("compressing image");
-
-    await sharp(buffer)
-      .jpeg({ quality: quality * 10 })
-      .toBuffer()
-      .then(data => {
-        resolve(`data:image/png;base64,${data.toString('base64')}`)
-      })
-      .catch(reject)
-  })
-}
-
-export function flattenJson(json: JsonType, parentKey = "") {
-  let result: JsonType = {};
-
-  for (const key in json) {
-    const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-    if (typeof json[key] === "object" && !Array.isArray(json[key])) {
-      // Recursively flatten nested objects
-      result = { ...result, ...flattenJson(json[key], newKey) };
-    } else if (Array.isArray(json[key])) {
-      // Flatten arrays by appending index to keys
-      json[key].forEach((item: JsonType, index: any) => {
-        const arrayKey = `${newKey}.${index}`;
-        if (typeof item === "object") {
-          result = { ...result, ...flattenJson(item, arrayKey) };
-        } else {
-          result[arrayKey] = item;
-        }
-      });
-    } else {
-      result[newKey] = json[key];
-    }
-  }
-
-  return result;
-}
-
-export function makeOpenAiRequest() {
-  // abstract this function to make openai request
-
-}
-
-
-
-
 
 export const custom_functions = [
   // basics
@@ -381,5 +298,157 @@ export const custom_functions = [
   }
 ]
 
+export const AtsExtraction = {
+  "type": "function",
+  "function": {
+    'name': 'basics',
+    'description': 'Get the basic information from the body of the input text',
+    'parameters': {
+      'type': 'number',
+      'description': 'from the given data extract the score and provide an ats score 1-10 based on the content'
+    },
+  }
+}
 
-// // print([i['function']['name'] for i in custom_functions])
+
+
+export async function getTemplateDataWithImages() {
+  const res = await fetch(`${process.env.BACKEND}/templates`);
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  // loop through the names and get images data for each images
+  let data: string[] = await res.json();
+
+  // loop through the names and get images data for each
+  const templatesWithImages: templateWithImages[] = await Promise.all(
+    data.map(async (element, index) => {
+      // const images = await fetch();
+      const res = await fetch(
+        `${process.env.BACKEND}/getTemplatePreview?templateName=${element}`
+      );
+
+      return {
+        id: index,
+        name: element,
+        pages: res.ok ? await res.json() : [],
+      };
+    })
+  );
+
+  return templatesWithImages;
+}
+
+export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    const newimage = image.split(';base64,').pop()
+    const buffer = Buffer.from(newimage as string, 'base64');
+    console.log("compressing image");
+
+    await sharp(buffer)
+      .jpeg({ quality: quality * 10 })
+      .toBuffer()
+      .then(data => {
+        resolve(`data:image/png;base64,${data.toString('base64')}`)
+      })
+      .catch(reject)
+  })
+}
+
+export function flattenJson(json: JsonType, parentKey = "") {
+  let result: JsonType = {};
+
+  for (const key in json) {
+    const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+    if (typeof json[key] === "object" && !Array.isArray(json[key])) {
+      // Recursively flatten nested objects
+      result = { ...result, ...flattenJson(json[key], newKey) };
+    } else if (Array.isArray(json[key])) {
+      // Flatten arrays by appending index to keys
+      json[key].forEach((item: JsonType, index: any) => {
+        const arrayKey = `${newKey}.${index}`;
+        if (typeof item === "object") {
+          result = { ...result, ...flattenJson(item, arrayKey) };
+        } else {
+          result[arrayKey] = item;
+        }
+      });
+    } else {
+      result[newKey] = json[key];
+    }
+  }
+
+  return result;
+}
+
+
+const model = "gpt-3.5-turbo-0125";
+const tools = [ AtsExtraction ];
+
+export async function makeOpenAiRequest(messages: any[]) {
+
+  const requestData = JSON.stringify({
+    model: model,
+    messages: messages,
+    tools: tools,
+    tool_choice: 'auto',
+  });
+
+  const options = {
+    hostname: 'api.openai.com',
+    path: '/v1/chat/completions',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // Replace with your OpenAI API key
+    },
+  };
+
+  const response = await new Promise((resolve, reject) => {
+    const req = https.request(options, (res: any) => {
+      let data = '';
+
+      res.on('data', (chunk: any) => {
+        data += chunk;
+      });
+
+      res.on('end', () => {
+        resolve(JSON.parse(data));
+      });
+    });
+
+    req.on('error', (error: any) => {
+      reject(error);
+    });
+
+    req.write(requestData);
+    req.end();
+  }) as any;
+
+  if (response.error) {
+    console.log(response.error)
+    return
+  }
+
+  // print token used
+  console.log('used token :', response.usage.total_tokens);
+
+  // if there are tool used in the response
+  const toolCalls = response.choices[0].message.tool_calls;
+
+  if (toolCalls) {
+    // console.log(toolCalls);
+    for (const toolCall of toolCalls) {
+      const functionArgs = JSON.parse(toolCall.function.arguments);
+      const functionName = toolCall.function.name;
+      console.log(functionName, functionArgs);
+    }
+  }
+
+}

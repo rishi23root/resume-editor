@@ -201,7 +201,7 @@ export class PdfToSchema {
           you are a skilled data extraction model, you never make things up 
           1. text is info extracted from a pdf resume 
           2. if the exact requested information is not present in the text then you can leave it empty.
-          3. extract all this information - ${[...custom_functions].reverse().map(i => i.function.name).join(', ')} from the text
+          3. extract all this information - ${[...custom_functions].map(i => i.function.name).join(', ')} from the text
           4. do not make things up, do not pharaphrase, do not add any extra information, do not remove any information  
           5. remember you need to extract all the information from the text, so be sure to extract all the information user asked from you, and be strict about the format of the information
 
@@ -256,8 +256,8 @@ export class PdfToSchema {
         // print token used
         console.log('used token :', response.usage.total_tokens);
 
-        if (response?.choices) {
-            this.returnDict
+        if (!response?.choices) {
+            return this.returnDict
         }
 
         // if there are tool used in the response
