@@ -16,7 +16,6 @@ export const openAIRouter = router({
         const text = opts.input.pdfText;
 
         console.log("[info] Analysing Text");
-
         // make openai request here
         try {
             // convert data to json using open ai api function calling

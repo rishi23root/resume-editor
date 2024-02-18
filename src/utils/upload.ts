@@ -25,9 +25,10 @@ export async function uploadFile(formData: FormData) {
             const req = await fetch(process.env.BACKEND + "/extract_text", { method: "POST", body: formData })
             const extractedText = await req.json();
 
-            console.log("[info] extraction done :", extractedText.slice(0, 30), '...');
+            console.log("[info] extraction done :", extractedText);
             // convert extracted text to json data
             const data = await serverAPI.openai.pdfTextToJson({ pdfText: extractedText });
+
 
             // try {
             //     schema.parse(data);
@@ -51,7 +52,7 @@ export async function uploadFile(formData: FormData) {
                     }
                 }
             } else {
-                console.log("[info] formated data :", _.keys(data.jsonData).slice(0, 10), '...');
+                console.log("[info] formated data :", data.jsonData);
                 jsonData = data.jsonData;
             }
         } else {
@@ -74,31 +75,71 @@ export async function uploadFile(formData: FormData) {
         const user = await currentUser();
         const userDBid = user?.privateMetadata?.userDBid;
         // create new db instance
-        const newResume = await prisma.resumeData.create({
-            data: {
-                data: JSON.stringify(jsonData),
-                payId: 0,
-                jobId: 0,
-                paymentId: "",
-                template: "",
-                user: {
-                    connect: {
-                        id: userDBid as string
-                    }
-                }
+        // find the last unpaid resume data and update it
+        const lastResume = await prisma.resumeData.findFirst({
+            where: {
+                userId: userDBid as string,
+                paymentStatus: "unpaid"
             },
-            select: {
-                id: true,
-                payId: true,
-                jobId: true,
-                paymentStatus: true,
-                paymentId: true,
+            orderBy: {
+                creaatedAt: "desc"
             }
         })
+
+        var currentResume: any;
+        if (lastResume) {
+            console.log("[info] updating last resume data");
+
+            currentResume = await prisma.resumeData.update({
+                where: {
+                    id: lastResume.id
+                },
+                data: {
+                    data: JSON.stringify(jsonData)
+                },
+                select: {
+                    id: true,
+                    payId: true,
+                    jobId: true,
+                    paymentStatus: true,
+                    paymentId: true,
+                }
+            })
+            return {
+                data: {
+                    jsonDataId: currentResume.id,
+                }
+            }
+        } else {
+            console.log("[info] creating new resume data");
+
+            currentResume = await prisma.resumeData.create({
+                data: {
+                    data: JSON.stringify(jsonData),
+                    payId: 0,
+                    jobId: 0,
+                    paymentId: "",
+                    template: "",
+                    paymentStatus: "unpaid",
+                    user: {
+                        connect: {
+                            id: userDBid as string
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    payId: true,
+                    jobId: true,
+                    paymentStatus: true,
+                    paymentId: true,
+                }
+            })
+        }
         // console.log(newResume);
         return {
             data: {
-                jsonDataId: newResume.id,
+                jsonDataId: currentResume.id,
             }
         }
 

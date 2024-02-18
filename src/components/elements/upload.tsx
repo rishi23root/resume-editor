@@ -79,6 +79,15 @@ const UploadResume = () => {
 
   useEffect(() => {
     // console.log(file);
+    const fileNotifier = setTimeout(() => {
+      if (file) {
+        toast({
+          variant: "default",
+          title: "File is being processed",
+          description: "Please wait for a moment",
+        });
+      }
+    }, 1000);
     if (file) {
       // console.log("file do exist", file);
       // make formData and append file to it // fix for direct file is not being passing into server function argument
@@ -86,6 +95,7 @@ const UploadResume = () => {
       formData.append("file", file[0]);
 
       uploadFile(formData).then((res) => {
+        clearTimeout(fileNotifier);
         if (res.hasOwnProperty("error")) {
           // console.log(res);
           toast({
@@ -130,6 +140,10 @@ const UploadResume = () => {
         }
       });
     }
+
+    return () => {
+      clearTimeout(fileNotifier);
+    };
   }, [file]);
 
   return (

@@ -14,3 +14,6 @@ DATABASE_URL=
 
 FRONTEND=http://localhost:3000
 BACKEND=https://api.buildyourresume.online
+
+# open ai key
+OPENAI_API_KEY=
