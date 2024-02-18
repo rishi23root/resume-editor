@@ -16,8 +16,11 @@ if (
 
 const nextConfig = {
     experimental: {
-        serverActions: true,
+        serverActions: {
+            allowedOrigins: ["localhost:3000", "laughing-doodle-6w4g46wpqw724wqv-3000.app.github.dev" ,'buildyourresume.online'],
+        },
     },
+    // serverActions: true,
     reactStrictMode: true,
     compress: true,
     swcMinify: true,
