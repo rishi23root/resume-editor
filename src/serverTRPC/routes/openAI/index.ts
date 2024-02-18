@@ -58,18 +58,19 @@ export const openAIRouter = router({
             }
         })
 
-        // if (!resumeData) {
-        //     throw new Error("resume entry not found");
-        // }
-        // if (resumeData?.paymentStatus !== 'paid') {
-        //     throw new Error("payment not done");
-        // }
+        if (!resumeData) {
+            throw new Error("resume entry not found");
+        }
+        if (resumeData?.paymentStatus !== 'paid') {
+            throw new Error("payment not done");
+        }
 
         // extract only the good part of the whole json resume and try to get some recommendations on to improve it and get a over all ats score
 
         if (resumeData) {
             // here we got the data now need to get the text of the pdf 
-            // extract h
+            // use the extracted text from the resume and use that get ats score and recommendations
+
             console.log("requesting openai here");
             return {
                 atsScore: 5, recommandations: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae sapiente mollitia, repellat deleniti eos sed dignissimos cumque, cum, incidunt libero asperiores explicabo iusto doloremque autem adipisci in.Nobis, obcaecati sapiente."

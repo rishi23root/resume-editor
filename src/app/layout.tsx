@@ -3,26 +3,18 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { clsx } from "clsx";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { Inter, Poppins, Exo_2 } from "next/font/google";
-import localfont from "next/font/local";
+import { Poppins } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 const BubbleUnderlay = dynamic(
   () => import("@/components/custom/BubbelUnderLay")
 );
 
-// const inter = Inter({ subsets: ["latin"] });
-const inter = Poppins({ weight: "400", subsets: ["latin"] });
-// const inter = Exo_2({ weight: "400", subsets: ["latin"] });
-// const inter = localfont({
-//   src: "./fonts/Surt-Normal-Bold.woff2",
-//   variable: "--font-surt-bold",
-//   weight: "400",
-// });
+const poppins = Poppins({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Build.Your.Resume online",
@@ -74,6 +66,7 @@ export const metadata: Metadata = {
     shortcut: ["/logo.png?v=1"],
     // openGraph: ["/og.png?v=1"],
   },
+  metadataBase: new URL("https://buildyourresume.online"),
   openGraph: {
     type: "website",
     title: "Build.Your.Resume",
@@ -107,7 +100,7 @@ export default function RootLayout({
         <body
           suppressHydrationWarning={true}
           className={clsx(
-            inter.className,
+            poppins.className,
             "bg-[#12141D]",
             "text-[#E0E0E0]",
             "min-h-screen",
