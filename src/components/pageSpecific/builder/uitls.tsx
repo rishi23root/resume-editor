@@ -39,6 +39,19 @@ import {
 } from "react";
 import { useFormContext } from "react-hook-form";
 
+function formatRecommendation(recommendation: string) {
+  // make it list of strings using li elements on every new line or -
+  if (recommendation.includes("-"))
+    return recommendation
+      .split("-")
+      .map((el, index) => <li key={index}>{el}</li>);
+  else if (recommendation.includes("\n"))
+    return recommendation
+      .split("\n")
+      .map((el, index) => <li key={index}>{el}</li>);
+  else return <li>{recommendation}</li>;
+}
+
 export function ActionBtn({
   children,
   onPress,
@@ -333,11 +346,17 @@ export function ModelComponent({
                       Possible Updates ◔̯ ◔
                     </span>
                     <span className="fc gap-2">
-                      {refetching !== "idle" && isAtsRLoading
-                        ? refetching
-                        : atsAndRecommendation
-                        ? atsAndRecommendation.recommendation
-                        : "no recommendation with this package :( "}
+                      {refetching !== "idle" && isAtsRLoading ? (
+                        refetching
+                      ) : atsAndRecommendation ? (
+                        <ul className="list-disc px-4">
+                          {formatRecommendation(
+                            atsAndRecommendation.recommendation
+                          )}
+                        </ul>
+                      ) : (
+                        "no recommendation with this package :( "
+                      )}
                     </span>
                   </span>
                   <div className="h-full"></div>

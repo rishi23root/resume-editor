@@ -196,11 +196,13 @@ function PDFviewer({
       resumeId,
       templateName: searchParams.templateName as string,
     });
+
     if (enriched) {
       getAiRecomandations.mutate({
         resumeId,
       });
     }
+
     // notify user if the payment is not ai one
     if (
       activeResumeInstance.payId === 1 &&
@@ -225,6 +227,11 @@ function PDFviewer({
           },
         },
       });
+    }
+
+    // if the payment is done then refetch the ats score
+    if (activeResumeInstance.paymentStatus === "paid") {
+      refetchATS({ resumeId });
     }
   }, []);
 

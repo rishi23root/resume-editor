@@ -1,4 +1,5 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 // import { NextResponse } from "next/server";
 
 
@@ -9,6 +10,10 @@ export default authMiddleware({
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }
+    if (auth.userId && !auth.isPublicRoute) {
+      return NextResponse.next();
+    }
+    return NextResponse.next();
   },
   publicRoutes: ["/", "/termAndCondition", "/privacyPolicy"],
 });
@@ -16,7 +21,7 @@ export default authMiddleware({
 
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"]
 };
 
 

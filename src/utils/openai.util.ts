@@ -193,13 +193,28 @@ async function makeOpenAiRequest(text: string) {
         {
             role: 'user',
             content: `
-                you are a skilled resume selector base on the basis of data extraction model, you will carefully read all the information present and give your honest views on what is wrong and what should be updated 
-                1. text is provided to you to relate the information  
-                2. extract the ats score and recommendation from the JSON data
-                3. be specific and explecit in your recommendation
-
-                text : ${text}
-            `.trim(),
+                you are a skilled resume analyst, on the basis of these checks
+                - Personal Information: Name, address, city, state, cell phone number, and email address .
+                - Objective (optional): Identifying the position you are seeking .
+                - Highlights of Qualifications: Matching skills to the target job description .
+                - Experience: Listing in reverse chronological order with specific details .
+                - Accomplishments: Specific, measurable, and quantifiable achievements .
+                - Rapid/Frequent Promotions: Noteworthy career progression .
+                - Awards and Recognition: Employee of the Month, President's Club, etc. .
+                - Tangible Evidence of Accomplishments: Publications, products developed, software applications created .
+                - Operational Efficiency Contributions: Cost reduction, time-saving, improved processes .
+                - Productivity Contributions: Team motivation, increased efficiency .
+                - Relationship Building: Internal and external stakeholder engagement .
+                - Problem-Solving Skills: Using SAR or PAR technique to showcase problem-solving abilities .
+                - statistics: use numbers to quantify your achievements
+                
+                data in text : ${text}
+                
+                extract the ats score and recommendation 
+                1. use bullet points to represent the recommendation
+                2. and give to the point answers and be strict about the format of the information
+                `.trim(),
+            // note: if you think there is no update required then return "All good to go. Best of luck for the interview"
         },
     ];
 
@@ -259,10 +274,10 @@ async function makeOpenAiRequest(text: string) {
             const functionName = toolCall.function.name;
             // console.log(functionName, functionArgs);
             if (functionName === "ats_and_recommendation") {
-                if (typeof functionArgs === "object" && 'atsScore' in functionArgs) {
+                if (typeof functionArgs === "object" && 'atsScore' in functionArgs && 'recommendation' in functionArgs) {
                     return {
                         atsScore: functionArgs.atsScore,
-                        recommendation: functionArgs.recommendation || "All good to go. Best of luck for the interview"
+                        recommendation: functionArgs.recommendation
                     }
                 } else {
                     return {
@@ -293,6 +308,6 @@ export function cachedMakeOpenAiRequest(text: string, id: string) {
     cache[id] = result;
     setTimeout(() => {
         delete cache[id];
-    }, 60000); // 1min cache clear
+    }, 1000); // 1min cache clear
     return result;
 }

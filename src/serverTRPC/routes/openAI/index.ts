@@ -74,7 +74,7 @@ export const openAIRouter = router({
         if (resumeData) {
             // use the extracted text from the resume and use that get ats score and recommendation
             var results = await cachedMakeOpenAiRequest(jsonToParagraphs(JSON.parse(resumeData.data)), opts.input.resumeId);
-            console.log("openai response", results);
+            // console.log("openai response", results);
             return {
                 atsScore: `${results?.atsScore}`,
                 recommendation: results?.recommendation as string
