@@ -5,7 +5,8 @@
   "module": "esnext",
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && next build",
+    "build": "next build",
+    "buildDev": "npx prisma generate && next build",
     "start": "next start",
     "sizeView": "export ANALYZE=true && next build && export ANALYZE=false",
     "lint": "next lint",
@@ -45,6 +46,7 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "@types/react-inner-image-zoom": "^3.0.3",
+    "@vercel/analytics": "^1.2.1",
     "@vercel/speed-insights": "^1.0.9",
     "autoprefixer": "10.4.14",
     "canvas": "^2.11.2",

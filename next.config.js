@@ -17,7 +17,7 @@ if (
 const nextConfig = {
     experimental: {
         serverActions: {
-            allowedOrigins: ["localhost:3000", "laughing-doodle-6w4g46wpqw724wqv-3000.app.github.dev" ,'buildyourresume.online'],
+            allowedOrigins: ["localhost:3000", "*.app.github.dev", "*.vercel.app" ,'buildyourresume.online'],
         },
     },
     // serverActions: true,

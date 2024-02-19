@@ -293,6 +293,6 @@ export function cachedMakeOpenAiRequest(text: string, id: string) {
     cache[id] = result;
     setTimeout(() => {
         delete cache[id];
-    }, 30000); // 30sec cache clear
+    }, 60000); // 1min cache clear
     return result;
 }
