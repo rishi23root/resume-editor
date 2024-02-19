@@ -2,8 +2,8 @@
 import { prisma } from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
-import { PdfToSchema } from "@/utils/openai.util";
-import { AtsAndRecommendationExtraction, makeOpenAiRequest } from "@/utils/util";
+import { PdfToSchema, makeOpenAiRequest } from "@/utils/openai.util";
+import { AtsAndRecommendationExtraction, jsonToParagraphs } from "@/utils/util";
 import { z } from "zod";
 
 export const openAIRouter = router({
@@ -60,56 +60,51 @@ export const openAIRouter = router({
 
         if (!resumeData) {
             return {
-                atsScore: "resume entry not found", recommandations: "[error] resume not found"
+                atsScore: "resume entry not found", recommendation: "[error] resume not found"
             }
         }
         if (resumeData?.paymentStatus !== 'paid') {
             return {
-                atsScore: "Un-Paid :(", recommandations: "please complete the payment to use this feature"
+                atsScore: "Un-Paid :(", recommendation: "please complete the payment to use this feature"
             }
         }
 
-        // extract only the good part of the whole json resume and try to get some recommendations on to improve it and get a over all ats score
+        // extract only the good part of the whole json resume and try to get some recommendation on to improve it and get a over all ats score
 
         if (resumeData) {
             // here we got the data now need to get the text of the pdf 
-            // use the extracted text from the resume and use that get ats score and recommendations
-            console.log("requesting openai here");
-
+            // use the extracted text from the resume and use that get ats score and recommendation
 
             // abstract this function to make openai request
             const messages = [
                 {
                     role: 'user',
                     content: `
-                        you are a skilled resume selector base on the basis of  data extraction model, you never make things up 
-                        1. text is info extracted from a pdf resume 
-                        2. if the exact requested information is not present in the text then you can leave it empty.
-                        3. extract all this information - ${[AtsAndRecommendationExtraction].map(i => i.function.name).join(', ')} from the text
-                        4. do not make things up, do not pharaphrase, do not add any extra information, do not remove any information  
-                        5. remember you need to extract all the information from the text, so be sure to extract all the information user asked from you, and be strict about the format of the information
+                        you are a skilled resume selector base on the basis of data extraction model, you will carefully read all the information present and give your honest views on what is wrong and what should be updated 
+                        1. text is provided to you to relate the information  
+                        2. extract the ats score and recommendation from the JSON data
+                        3. be specific and explecit in your recommendation
 
-                        json : ${resumeData.data}
+                        text : ${jsonToParagraphs(JSON.parse(resumeData.data))}
                         `.trim(),
                 },
             ];
 
-            var results = makeOpenAiRequest(messages);
+
+            var results = await makeOpenAiRequest(messages, opts.input.resumeId);
             console.log("openai response", results);
-
-
-            // resumeData.data
-
-
-
-
+            // console.log("openai response");
+            // : { score: number, recommendation: string }
             return {
-                atsScore: 5, recommandations: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae sapiente mollitia, repellat deleniti eos sed dignissimos cumque, cum, incidunt libero asperiores explicabo iusto doloremque autem adipisci in.Nobis, obcaecati sapiente."
+                atsScore: `${results?.atsScore}`,
+                recommendation: results?.recommendation as string
             }
         } else {
             console.log("response error");
-            throw new Error("resume entry not found");
-            // return { status: 'error' }
+            return {
+                atsScore: "0",
+                recommendation: 'anable to get the ats score and recommendation, please try again later.'
+            }
         }
     })
 });

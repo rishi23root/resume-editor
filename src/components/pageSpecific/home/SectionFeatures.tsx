@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -42,7 +42,7 @@ function SectionFeatures({ editorLink }: { editorLink: string }) {
                 Built-in AI Integration
               </div>
               <div className="text-xl font-medium text-white text-opacity-70">
-                Optimize Your Resume with Expert Recommendations
+                Optimize Your Resume with Expert recommendation
               </div>
             </motion.div>
           </div>

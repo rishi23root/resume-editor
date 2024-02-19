@@ -27,7 +27,7 @@ import { searchParamType } from "@/types/utils";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { UseTRPCMutationResult } from "@trpc/react-query/shared";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { HardDriveDownload, Pencil } from "lucide-react";
+import { ArrowRightToLine, HardDriveDownload, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Dispatch,
@@ -120,8 +120,8 @@ export function ModelComponent({
   searchParams: searchParamType;
   getAiRecomandations: UseTRPCMutationResult<
     {
-      atsScore: number | string;
-      recommandations: string;
+      atsScore: string;
+      recommendation: string;
     },
     any,
     any,
@@ -316,9 +316,12 @@ export function ModelComponent({
                         Object.values(getValues("mask"))
                           .filter((item) => item !== "basics")
                           .map((item) => (
-                            <span key={item} className="text-lg text-white/50">
+                            <span
+                              key={item}
+                              className="text-lg text-white/50 fr gap-2"
+                            >
                               {/* => {item} */}
-                              =&gt; {item}
+                              <ArrowRightToLine /> {item}
                             </span>
                           ))}
                     </span>
@@ -333,8 +336,8 @@ export function ModelComponent({
                       {refetching !== "idle" && isAtsRLoading
                         ? refetching
                         : atsAndRecommendation
-                        ? atsAndRecommendation.recommandations
-                        : "no recommendations with this package :( "}
+                        ? atsAndRecommendation.recommendation
+                        : "no recommendation with this package :( "}
                     </span>
                   </span>
                   <div className="h-full"></div>

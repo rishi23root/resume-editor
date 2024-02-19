@@ -4,6 +4,7 @@ import sharp from 'sharp'
 import { templateWithImages } from "@/types/templates";
 import { JsonType } from '@/types/utils';
 import https from 'https';
+import _ from 'lodash';
 
 
 export const custom_functions = [
@@ -302,21 +303,21 @@ export const AtsAndRecommendationExtraction = {
   "type": "function",
   "function": {
     'name': 'ats_and_recommendation',
-    'description': 'Get the basic information from the body of the input text',
+    'description': 'Get the ats score and recomendation to update the resume to make it stand out',
     'parameters': {
       'type': 'object',
       'properties': {
-        'score': {
+        'atsScore': {
           'type': 'number',
-          'description': 'score of the content extracted from the text'
+          'description': 'ATS score of the content between 0 to 9'
         },
-        'recommendations': {
+        'recommendation': {
           'type': 'string',
-          'description': 'recommendations for the content extracted from the text'
+          'description': 'recommendation, to make this resume stand out and get shortlisted for the interviews, if you have any, else return "All good to go. Best of luck for the interview"'
         }
       },
     },
-    "required": ['score']
+    "required": ['atsScore', 'recommendation']
   },
 }
 
@@ -399,67 +400,27 @@ export function flattenJson(json: JsonType, parentKey = "") {
 }
 
 
-const model = "gpt-3.5-turbo-0125";
-const tools = [AtsAndRecommendationExtraction];
+export function jsonToParagraphs(jsonData: JsonType) {
+  const processNestedObject = (obj: JsonType) => {
+    let result = '';
 
-export async function makeOpenAiRequest(messages: any[]) {
+    _.map(obj, (value, key) => {
+      if (_.isObject(value)) {
+        result += '\n' + processNestedObject(value);
+      } else {
+        result += `${value} `;
+      }
+    });
 
-  const requestData = JSON.stringify({
-    model: model,
-    messages: messages,
-    tools: tools,
-    tool_choice: 'auto',
-  });
-
-  const options = {
-    hostname: 'api.openai.com',
-    path: '/v1/chat/completions',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // Replace with your OpenAI API key
-    },
+    return result;
   };
 
-  const response = await new Promise((resolve, reject) => {
-    const req = https.request(options, (res: any) => {
-      let data = '';
+  var paragraphs = processNestedObject(jsonData);
+  paragraphs = paragraphs.replace(/\n/g, ', ');
+  // paragraphs = paragraphs.replace(/\n\n/g, '\t');
 
-      res.on('data', (chunk: any) => {
-        data += chunk;
-      });
-
-      res.on('end', () => {
-        resolve(JSON.parse(data));
-      });
-    });
-
-    req.on('error', (error: any) => {
-      reject(error);
-    });
-
-    req.write(requestData);
-    req.end();
-  }) as any;
-
-  if (response.error) {
-    console.log(response.error)
-    return
-  }
-
-  // print token used
-  console.log('used token :', response.usage.total_tokens);
-
-  // if there are tool used in the response
-  const toolCalls = response.choices[0].message.tool_calls;
-
-  if (toolCalls) {
-    // console.log(toolCalls);
-    for (const toolCall of toolCalls) {
-      const functionArgs = JSON.parse(toolCall.function.arguments);
-      const functionName = toolCall.function.name;
-      console.log(functionName, functionArgs);
-    }
-  }
-
+  return paragraphs;
 }
+
+
+

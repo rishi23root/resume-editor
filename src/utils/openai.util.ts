@@ -1,14 +1,16 @@
 import { emptyTemplate } from "@/JSONapiData/refTemplate";
-import { custom_functions } from './util';
+import { AtsAndRecommendationExtraction, custom_functions } from './util';
 import https from "https";
 import _ from "lodash";
 import { JsonType } from "@/types/utils";
+
+const modelUsable = "gpt-3.5-turbo-0125";
 
 export class PdfToSchema {
     text: string;
     model: string;
     returnDict: any;
-    constructor(text: string, model = "gpt-3.5-turbo-0125") {
+    constructor(text: string, model = modelUsable) {
         this.text = text;
         this.model = model;
         this.returnDict = Object.assign({}, emptyTemplate); // Assuming data.json is in the same directory
@@ -177,3 +179,92 @@ export class PdfToSchema {
 // const call = new PdfToSchema(text);
 // const results = await call.extractSchema();
 // console.log(results['awards']);
+
+
+
+const tools = [AtsAndRecommendationExtraction];
+
+export async function makeOpenAiRequest(messages: any[], id: string) {
+    const requestData = JSON.stringify({
+        model: modelUsable,
+        messages: messages,
+        tools: tools,
+        tool_choice: 'auto',
+    });
+
+    const options = {
+        hostname: 'api.openai.com',
+        path: '/v1/chat/completions',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // Replace with your OpenAI API key
+        },
+    };
+
+    // create a cahe for the openai request using key as id for 30 seconds
+    // if the same id is requested within 30 seconds then return the same result
+
+
+
+
+    const response = await new Promise((resolve, reject) => {
+        const req = https.request(options, (res: any) => {
+            let data = '';
+
+            res.on('data', (chunk: any) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                resolve(JSON.parse(data));
+            });
+        });
+
+        req.on('error', (error: any) => {
+            reject(error);
+        });
+
+        req.write(requestData);
+        req.end();
+    }) as any;
+
+    if (response.error) {
+        console.log(response.error)
+        return
+    }
+
+    // print token used
+    console.log('used token :', response.usage.total_tokens);
+
+    // if there are tool used in the response
+    const toolCalls = response.choices[0].message.tool_calls;
+
+    if (toolCalls) {
+        // console.log(toolCalls);
+        for await (const toolCall of toolCalls) {
+            const functionArgs = JSON.parse(toolCall.function.arguments);
+            const functionName = toolCall.function.name;
+            console.log(functionName, functionArgs);
+            if (functionName === "ats_and_recommendation") {
+                if (typeof functionArgs === "object" && 'atsScore' in functionArgs) {
+                    return {
+                        atsScore: functionArgs.atsScore,
+                        recommendation: functionArgs.recommendation || "All good to go. Best of luck for the interview"
+                    }
+                } else {
+                    return {
+                        atsScore: 0,
+                        recommendation: "for some reason we are unable to get the ats score and recommendation, please try again later"
+                    }
+                }
+            }
+        }
+    }
+    return {
+        atsScore: 0,
+        recommendation: "for some reason we are unable to get the ats score and recommendation, please try again later"
+    }
+
+}
+

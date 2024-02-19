@@ -19,7 +19,15 @@ import {
   Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import {
+  Suspense,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Loadingstate } from "../Fallbacks";
 import { ResizablePanel } from "../pageSpecific/builder/customFormFields/sections/utils";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
@@ -61,6 +69,7 @@ function PDFviewer({
   const ifRendered = RenderCompleted();
   const { toast } = useToast();
   const enriched = activeResumeInstance.payId === 2;
+  const initialized = useRef(false);
   const router = useRouter();
   const [isInMobileViewAndVisible, setIsInMobileViewAndVisible] =
     useState<boolean>(true);
@@ -174,16 +183,13 @@ function PDFviewer({
 
   // get ai base recommadations
   var getAiRecomandations = trpc.openai.getAtsAndRecommandation.useMutation();
-  // const { data: aiData, isloading: isAiDataLoading } = getAiRecomandations;
   const {
     data: aiData,
     isLoading: isAiDataLoading,
     mutate: refetchATS,
   } = getAiRecomandations;
 
-  // for only firstLoad
-  useEffect(() => {
-    // generate pdf for the first time on load
+  const expensiveFirstOnlyRequest = useCallback(() => {
     regeneratePdfImage({
       resumeId,
       templateName: searchParams.templateName as string,
@@ -192,6 +198,15 @@ function PDFviewer({
       getAiRecomandations.mutate({
         resumeId,
       });
+    }
+  }, []);
+
+  // for only firstLoad
+  useEffect(() => {
+    // generate pdf for the first time on load
+    if (!initialized.current) {
+      initialized.current = true;
+      expensiveFirstOnlyRequest();
     }
   }, []);
 
@@ -211,11 +226,11 @@ function PDFviewer({
   }, [data]);
 
   // when payment is done
-  useEffect(() => {
-    if (activeResumeInstance.paymentStatus === "paid") {
-      refetchATS({ resumeId });
-    }
-  }, [activeResumeInstance.paymentStatus]);
+  // useEffect(() => {
+  //   if (activeResumeInstance.paymentStatus === "paid") {
+  //     refetchATS({ resumeId });
+  //   }
+  // }, [activeResumeInstance.paymentStatus]);
 
   function DownloadPDFFromServer() {
     console.log(resumeId);
@@ -456,4 +471,4 @@ function PDFviewer({
   );
 }
 
-export default PDFviewer;
+export default memo(PDFviewer);
