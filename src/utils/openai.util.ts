@@ -6,6 +6,8 @@ import { JsonType } from "@/types/utils";
 
 const modelUsable = "gpt-3.5-turbo-0125";
 
+
+// pdf to schema extraction
 export class PdfToSchema {
     text: string;
     model: string;
@@ -181,10 +183,26 @@ export class PdfToSchema {
 // console.log(results['awards']);
 
 
+// ats and recommendation extraction
 
 const tools = [AtsAndRecommendationExtraction];
 
-export async function makeOpenAiRequest(messages: any[], id: string) {
+async function makeOpenAiRequest(text: string) {
+    console.log('[info] making openai request');
+    const messages = [
+        {
+            role: 'user',
+            content: `
+                you are a skilled resume selector base on the basis of data extraction model, you will carefully read all the information present and give your honest views on what is wrong and what should be updated 
+                1. text is provided to you to relate the information  
+                2. extract the ats score and recommendation from the JSON data
+                3. be specific and explecit in your recommendation
+
+                text : ${text}
+            `.trim(),
+        },
+    ];
+
     const requestData = JSON.stringify({
         model: modelUsable,
         messages: messages,
@@ -201,12 +219,6 @@ export async function makeOpenAiRequest(messages: any[], id: string) {
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`, // Replace with your OpenAI API key
         },
     };
-
-    // create a cahe for the openai request using key as id for 30 seconds
-    // if the same id is requested within 30 seconds then return the same result
-
-
-
 
     const response = await new Promise((resolve, reject) => {
         const req = https.request(options, (res: any) => {
@@ -245,7 +257,7 @@ export async function makeOpenAiRequest(messages: any[], id: string) {
         for await (const toolCall of toolCalls) {
             const functionArgs = JSON.parse(toolCall.function.arguments);
             const functionName = toolCall.function.name;
-            console.log(functionName, functionArgs);
+            // console.log(functionName, functionArgs);
             if (functionName === "ats_and_recommendation") {
                 if (typeof functionArgs === "object" && 'atsScore' in functionArgs) {
                     return {
@@ -268,3 +280,19 @@ export async function makeOpenAiRequest(messages: any[], id: string) {
 
 }
 
+const cache = {};
+
+export function cachedMakeOpenAiRequest(text: string, id: string) {
+    if (cache[id]) {
+        // console.log("returning from cache ", id);
+        return cache[id];
+    }
+
+    // console.log("calling expensiveFunction ", id);
+    const result = makeOpenAiRequest(text);
+    cache[id] = result;
+    setTimeout(() => {
+        delete cache[id];
+    }, 30000); // 30sec cache clear
+    return result;
+}

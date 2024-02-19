@@ -1,10 +1,9 @@
 import Nav from "@/components/Nav/index";
-import { newUserLoginHandler } from "@/utils/pageLoad";
-
-import TwScreenInfo from "@/components/custom/TwScreenInfo";
 import ShowErrorIfany from "@/components/elements/errorRender";
 import ProcegureRender from "@/components/pageSpecific/ProcegureRender";
+import { Toaster as Sonar } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
+import { newUserLoginHandler } from "@/utils/pageLoad";
 import { Suspense } from "react";
 import TRPCProvider from "../../serverTRPC/Provider";
 
@@ -21,6 +20,7 @@ export default async function RootLayout({
     <TRPCProvider>
       {/* addeding toast component */}
       <Toaster />
+      <Sonar />
       {/* main layout for all pages  */}
       <div className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8 w-full">
         <Nav isSignedIn={data ? true : false} pathname="/dashboard" />

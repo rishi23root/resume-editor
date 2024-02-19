@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const MakePaymentComponent = async ({
   resumeId,
@@ -16,6 +16,7 @@ export const MakePaymentComponent = async ({
 }) => {
   const router = useRouter();
   const { toast } = useToast();
+  const initialized = useRef(false);
   const [paymentModelVisible, setPaymentModelVisible] =
     useState<Boolean>(false);
 
@@ -92,7 +93,8 @@ export const MakePaymentComponent = async ({
   };
 
   useEffect(() => {
-    if (data && !paymentModelVisible) {
+    if (data && !paymentModelVisible && !initialized.current) {
+      initialized.current = true;
       toast({
         variant: "default",
         title: "Payment is pending",

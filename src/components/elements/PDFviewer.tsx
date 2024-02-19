@@ -1,6 +1,5 @@
 // working under issue #35
 "use client";
-
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { cn } from "@/lib/utils";
@@ -24,14 +23,15 @@ import {
   memo,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import { Loadingstate } from "../Fallbacks";
 import { ResizablePanel } from "../pageSpecific/builder/customFormFields/sections/utils";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
+import { toast as sonnerToast } from "sonner";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 
 function PDFviewer({
   templateName,
@@ -71,6 +71,8 @@ function PDFviewer({
   const enriched = activeResumeInstance.payId === 2;
   const initialized = useRef(false);
   const router = useRouter();
+  const { urlWithAddedParams } = useRedirectHandler();
+
   const [isInMobileViewAndVisible, setIsInMobileViewAndVisible] =
     useState<boolean>(true);
 
@@ -197,6 +199,31 @@ function PDFviewer({
     if (enriched) {
       getAiRecomandations.mutate({
         resumeId,
+      });
+    }
+    // notify user if the payment is not ai one
+    if (
+      activeResumeInstance.payId === 1 &&
+      activeResumeInstance.paymentStatus !== "paid"
+    ) {
+      sonnerToast("Want to Change Plan ?", {
+        description:
+          "This is not an AI helper resume, you can switch to AI mode to get more features",
+        position: "top-center",
+        action: {
+          label: "Change",
+          onClick: () => {
+            // redirect the user to the same page but with ai mode
+            sonnerToast("Great Switching to Advance plan", {
+              description:
+                "you are going to get more features and better resume with AI mode",
+              position: "top-center",
+              // go away after 5 seconds
+              duration: 2000,
+            });
+            router.push(urlWithAddedParams("/Builder", { payId: "2" }, {}));
+          },
+        },
       });
     }
   }, []);
