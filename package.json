@@ -5,8 +5,7 @@
   "module": "esnext",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "buildDev": "npx prisma generate && next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "sizeView": "export ANALYZE=true && next build && export ANALYZE=false",
     "lint": "next lint",
@@ -49,7 +48,6 @@
     "@vercel/analytics": "^1.2.1",
     "@vercel/speed-insights": "^1.0.9",
     "autoprefixer": "10.4.14",
-    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^3.0.6",
