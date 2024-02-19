@@ -36,7 +36,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { router } from "@/serverTRPC/trpc";
 
 const DashboardNavBtn = ({
   children,

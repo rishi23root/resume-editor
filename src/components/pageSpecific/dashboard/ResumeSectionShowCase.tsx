@@ -61,12 +61,16 @@ export function DashboardMain({
         </Link>
 
         {activeResumes.map((resume) => (
-          <ResumeCard key={resume.id} resume={resume} />
+          <Suspense key={resume.id}>
+            <ResumeCard key={resume.id} resume={resume} />
+          </Suspense>
         ))}
       </ResumeSectionShowCase>
       <ResumeSectionShowCase title="All Resume">
         {allResumeWithData.map((resume) => (
-          <ResumeCard key={resume.id} resume={resume} />
+          <Suspense key={resume.id}>
+            <ResumeCard key={resume.id} resume={resume} />
+          </Suspense>
         ))}
       </ResumeSectionShowCase>
     </>

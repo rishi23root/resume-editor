@@ -195,7 +195,7 @@ const BuilderClient = memo(
           {/* <DevTool control={formHandeler.control} /> */}
           <PDFviewer
             templateName={searchParams.templateName as string}
-            enriched={activeResumeInstance.payId == 2}
+            activeResumeInstance={activeResumeInstance}
             resumeId={activeResumeInstance.id}
             state={pdfState}
             generatedPDf={generatedPDf}

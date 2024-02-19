@@ -25,7 +25,7 @@ export default async function DashboardPage(props: PageProps) {
 
   // requst server to generate pdf for them parallely using promise.all and update the the current variable
   const allResumeWithData = await Promise.all(
-    allResume.map(async (data, index) => {
+    allResume.map(async (data: any, index) => {
       const { id, template, pdfItself } = data;
       if (pdfItself == null) {
         const generatedImage = await serverAPI.builder.generatePDF({

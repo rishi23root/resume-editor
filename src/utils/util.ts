@@ -97,7 +97,7 @@ export const custom_functions = [
     "type": "function",
     "function": {
       'name': 'work',
-      'description': 'Get the work information from the body of the input text,which includes the work experience of the person in these variables only - id, name, position, url, startDate, isWorkingHere, endDate, summary, years',
+      'description': 'user work information from the body of the text, which includes the work experience of the person in these variables only - id, name, position, url, startDate, isWorkingHere, endDate, summary, years, in array of objects ',
       'parameters': {
         'type': 'object',
         'properties': {
@@ -153,7 +153,7 @@ export const custom_functions = [
     "type": "function",
     "function": {
       'name': 'education',
-      'description': 'Get the education information from the body of the input text,which includes the education of the person in these variables only - id ,institution ,url ,studyType ,area ,startDate ,isStudyingHere ,endDate ,score ',
+      'description': 'user education information from the body of the text,which includes the education of the person in these variables only - id ,institution ,url ,studyType ,area ,startDate ,isStudyingHere ,endDate ,score , in array of objects ',
       'parameters': {
         'type': 'object',
         'properties': {
@@ -210,7 +210,7 @@ export const custom_functions = [
     "type": "function",
     "function": {
       'name': 'projects',
-      'description': 'Get the projects information from the body of the input text,which includes the projects of the person in these variables only - id ,name ,url ,languages ,description ',
+      'description': 'user projects information from the body of the text,which includes the projects of the person in these variables only - id ,name ,url ,languages ,description , in array of objects ',
       'parameters': {
         'type': 'object',
         'properties': {
@@ -250,7 +250,7 @@ export const custom_functions = [
     "type": "function",
     "function": {
       'name': 'awards',
-      'description': 'Get the awards / certificate / achivement information from body of the text, from the body of the input text, which includes the achivement of the person these variables only - title2, date, awarder, summary, url, id - if not present in the text then empty',
+      'description': 'array object of awards information from body of the text, dataArray is array of objects {id,url,summary,awarder,date,title2}, if found else empty element',
       'parameters': {
         'type': 'object',
         'properties': {
@@ -267,7 +267,7 @@ export const custom_functions = [
               },
               "summary": {
                 "type": "string",
-                "description": "a discription, if present in the text else empty, convert the normal text into bullet using html ui, li elements only , if present in the text else empty,"
+                "description": "a discription, if present in the text else empty, convert the normal text into bullet using html ui, li elements only"
               },
               'awarder': {
                 'type': 'string',
@@ -279,7 +279,7 @@ export const custom_functions = [
               },
               'title2': {
                 'type': 'string',
-                'description': 'name of the award or certificate, if present in the text else empty'
+                'description': 'name of the award or certificate, as title if present in the text else empty'
               }
             },
             "required": [
@@ -298,17 +298,28 @@ export const custom_functions = [
   }
 ]
 
-export const AtsExtraction = {
+export const AtsAndRecommendationExtraction = {
   "type": "function",
   "function": {
-    'name': 'basics',
+    'name': 'ats_and_recommendation',
     'description': 'Get the basic information from the body of the input text',
     'parameters': {
-      'type': 'number',
-      'description': 'from the given data extract the score and provide an ats score 1-10 based on the content'
+      'type': 'object',
+      'properties': {
+        'score': {
+          'type': 'number',
+          'description': 'score of the content extracted from the text'
+        },
+        'recommendations': {
+          'type': 'string',
+          'description': 'recommendations for the content extracted from the text'
+        }
+      },
     },
-  }
+    "required": ['score']
+  },
 }
+
 
 
 
@@ -389,7 +400,7 @@ export function flattenJson(json: JsonType, parentKey = "") {
 
 
 const model = "gpt-3.5-turbo-0125";
-const tools = [ AtsExtraction ];
+const tools = [AtsAndRecommendationExtraction];
 
 export async function makeOpenAiRequest(messages: any[]) {
 

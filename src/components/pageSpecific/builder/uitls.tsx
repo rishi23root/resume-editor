@@ -120,7 +120,7 @@ export function ModelComponent({
   searchParams: searchParamType;
   getAiRecomandations: UseTRPCMutationResult<
     {
-      atsScore: number;
+      atsScore: number | string;
       recommandations: string;
     },
     any,

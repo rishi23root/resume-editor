@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
 import { PdfToSchema } from "@/utils/openai.util";
-import { AtsExtraction, makeOpenAiRequest } from "@/utils/util";
+import { AtsAndRecommendationExtraction, makeOpenAiRequest } from "@/utils/util";
 import { z } from "zod";
 
 export const openAIRouter = router({
@@ -59,10 +59,14 @@ export const openAIRouter = router({
         })
 
         if (!resumeData) {
-            throw new Error("resume entry not found");
+            return {
+                atsScore: "resume entry not found", recommandations: "[error] resume not found"
+            }
         }
         if (resumeData?.paymentStatus !== 'paid') {
-            throw new Error("payment not done");
+            return {
+                atsScore: "Un-Paid :(", recommandations: "please complete the payment to use this feature"
+            }
         }
 
         // extract only the good part of the whole json resume and try to get some recommendations on to improve it and get a over all ats score
@@ -81,7 +85,7 @@ export const openAIRouter = router({
                         you are a skilled resume selector base on the basis of  data extraction model, you never make things up 
                         1. text is info extracted from a pdf resume 
                         2. if the exact requested information is not present in the text then you can leave it empty.
-                        3. extract all this information - ${[AtsExtraction].map(i => i.function.name).join(', ')} from the text
+                        3. extract all this information - ${[AtsAndRecommendationExtraction].map(i => i.function.name).join(', ')} from the text
                         4. do not make things up, do not pharaphrase, do not add any extra information, do not remove any information  
                         5. remember you need to extract all the information from the text, so be sure to extract all the information user asked from you, and be strict about the format of the information
 
@@ -94,7 +98,7 @@ export const openAIRouter = router({
             console.log("openai response", results);
 
 
-            resumeData.data 
+            // resumeData.data
 
 
 

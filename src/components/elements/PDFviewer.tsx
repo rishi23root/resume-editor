@@ -28,12 +28,19 @@ import { useToast } from "../ui/use-toast";
 function PDFviewer({
   templateName,
   resumeId,
-  enriched,
+  activeResumeInstance,
   state,
   generatedPDf,
   searchParams,
 }: {
-  enriched: boolean;
+  activeResumeInstance: {
+    id: string;
+    payId: number;
+    jobId: number;
+    paymentId: string;
+    paymentStatus: string;
+    createdAt?: string;
+  };
   templateName: string;
   resumeId: string;
   state: string;
@@ -53,6 +60,7 @@ function PDFviewer({
   const [dataArray, setDataArray] = useState<string[]>([]);
   const ifRendered = RenderCompleted();
   const { toast } = useToast();
+  const enriched = activeResumeInstance.payId === 2;
   const router = useRouter();
   const [isInMobileViewAndVisible, setIsInMobileViewAndVisible] =
     useState<boolean>(true);
@@ -167,7 +175,11 @@ function PDFviewer({
   // get ai base recommadations
   var getAiRecomandations = trpc.openai.getAtsAndRecommandation.useMutation();
   // const { data: aiData, isloading: isAiDataLoading } = getAiRecomandations;
-  const { data: aiData, isLoading: isAiDataLoading } = getAiRecomandations;
+  const {
+    data: aiData,
+    isLoading: isAiDataLoading,
+    mutate: refetchATS,
+  } = getAiRecomandations;
 
   // for only firstLoad
   useEffect(() => {
@@ -197,6 +209,13 @@ function PDFviewer({
     }
     // console.log("updated");
   }, [data]);
+
+  // when payment is done
+  useEffect(() => {
+    if (activeResumeInstance.paymentStatus === "paid") {
+      refetchATS({ resumeId });
+    }
+  }, [activeResumeInstance.paymentStatus]);
 
   function DownloadPDFFromServer() {
     console.log(resumeId);
@@ -235,10 +254,12 @@ function PDFviewer({
             Preview
           </div>
           <div className="opacity-80">
-            {enriched
-              ? "ATS Score: " +
-                (isAiDataLoading ? "updating" : aiData?.atsScore)
-              : ""}
+            {enriched && "ATS Score: "}
+            {enriched && (
+              <span className="font-bold">
+                {isAiDataLoading ? "updating" : aiData?.atsScore}
+              </span>
+            )}
           </div>
         </div>
         <ResizablePanel>

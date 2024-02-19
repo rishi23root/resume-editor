@@ -52,7 +52,7 @@ export async function uploadFile(formData: FormData) {
                     }
                 }
             } else {
-                console.log("[info] formated data :", data.jsonData);
+                // console.log("[info] formated data :", data.jsonData);
                 jsonData = data.jsonData;
             }
         } else {
@@ -75,11 +75,11 @@ export async function uploadFile(formData: FormData) {
         const user = await currentUser();
         const userDBid = user?.privateMetadata?.userDBid;
         // create new db instance
-        // find the last unpaid resume data and update it
+        // find the last pending resume data and update it
         const lastResume = await prisma.resumeData.findFirst({
             where: {
                 userId: userDBid as string,
-                paymentStatus: "unpaid"
+                paymentStatus: "pending"
             },
             orderBy: {
                 creaatedAt: "desc"
@@ -120,7 +120,7 @@ export async function uploadFile(formData: FormData) {
                     jobId: 0,
                     paymentId: "",
                     template: "",
-                    paymentStatus: "unpaid",
+                    paymentStatus: "pending",
                     user: {
                         connect: {
                             id: userDBid as string
