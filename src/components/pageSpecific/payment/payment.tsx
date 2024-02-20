@@ -121,7 +121,7 @@ export const MakePaymentComponent = async ({
       />
 
       <div
-        className="absolute w-full h-full opacity-30 top-0 left-0 z-50"
+        className="absolute w-full h-full opacity-30 top-0 left-0 z-50 cursor-pointer"
         onClick={() => {
           makePayment();
         }}

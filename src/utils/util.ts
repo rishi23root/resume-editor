@@ -1,4 +1,6 @@
-'use server'
+export const runtime = 'edge';
+// 'use server'
+// export const runtime
 
 import { templateWithImages } from "@/types/templates";
 import { JsonType } from '@/types/utils';

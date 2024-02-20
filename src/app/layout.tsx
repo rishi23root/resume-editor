@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react";
 import { clsx } from "clsx";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
@@ -101,7 +100,6 @@ export default function RootLayout({
           )}
         >
           <SpeedInsights />
-          <Analytics />
 
           <NextTopLoader height={3} color="#3b82f6" />
           {/* bg animations */}

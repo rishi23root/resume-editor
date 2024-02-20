@@ -4,7 +4,7 @@ import { procedure, router } from "@/serverTRPC/trpc";
 import { priceDataType } from "@/types/payment";
 import { z } from "zod";
 import Razorpay from "razorpay";
-import shortid from "shortid";
+import { v4 as uuidv4 } from 'uuid';
 import { currentUser } from "@clerk/nextjs";
 import crypto from "crypto"
 import { prisma } from "@/lib/prisma";
@@ -59,7 +59,7 @@ export const priceRouter = router({
       const options = {
         amount: (amount * 100).toString(),
         currency: "INR",
-        receipt: shortid.generate(),
+        receipt: uuidv4(),
         payment_capture: 1,
         notes: {
           userId: userId,
