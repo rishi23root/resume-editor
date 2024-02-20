@@ -76,7 +76,7 @@
     "react-inner-image-zoom": "^3.0.2",
     "react-use-measure": "^2.1.1",
     "react-zoom-pan-pinch": "^3.3.0",
-    "sharp": "^0.32.6",
+    "sharp": "^0.33.2",
     "shortid": "^2.2.16",
     "sonner": "^1.4.0",
     "styled-components": "^6.0.5",

@@ -12,7 +12,7 @@ export const openAIRouter = router({
         z.object({
             pdfText: z.any()
         }),
-    ).query(async (opts) => {
+    ).mutation(async (opts) => {
         const text = opts.input.pdfText;
 
         console.log("[info] Analysing Text");
@@ -73,7 +73,7 @@ export const openAIRouter = router({
 
         if (resumeData) {
             // use the extracted text from the resume and use that get ats score and recommendation
-            var results = await cachedMakeOpenAiRequest(jsonToParagraphs(JSON.parse(resumeData.data)), opts.input.resumeId);
+            var results = await cachedMakeOpenAiRequest(await jsonToParagraphs(JSON.parse(resumeData.data)), opts.input.resumeId);
             // console.log("openai response", results);
             return {
                 atsScore: `${results?.atsScore}`,

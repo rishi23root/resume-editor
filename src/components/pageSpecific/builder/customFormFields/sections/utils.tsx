@@ -247,25 +247,6 @@ export const SectionWrapper = function SectionWrapper({
 export function useWatchedValue(watchKey: FieldPath<Inputs>) {
   const { watch } = useFormContext<Inputs>();
   const watchValue = watch(watchKey as any);
-  // useEffect(() => {
-  //   console.log("updated", watchKey, watchValue);
-  // }, [watchValue]);
-  // console.log("rendered", watchKey, watchValue);
-
-  // const [data, setValue] = useState("");
-
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) => {
-  //     // setValue()
-  //     // console.log(value, name, type);
-  //     const tes = flattenJson(value)[watchKey as any];
-  //     console.log("val",tes);
-  //     setValue(tes);
-
-  //     // console.log(value[watchKey as any]);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
   return watchValue;
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { uploadFile } from "@/utils/upload";
+import { saveJsonObject } from "@/utils/upload";
 import { motion } from "framer-motion";
 import { FileJson, FileText } from "lucide-react";
 import Image from "next/image";
@@ -12,6 +12,10 @@ import { useToast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import { useRouter } from "next/navigation";
 import useRedirectHandler from "@/hooks/redirectionHandlers";
+import { fileHandeler } from "@/utils/file.util";
+import { trpc } from "@/serverTRPC/client";
+import { toast as sToast } from "sonner";
+import { JsonType } from "@/types/utils";
 
 const UploadResume = () => {
   const { toast } = useToast();
@@ -76,69 +80,110 @@ const UploadResume = () => {
     acceptedFiles.splice(0, acceptedFiles.length);
     setFiles(null);
   };
+  // convert extracted text to json data
+  const { mutateAsync } = trpc.openai.pdfTextToJson.useMutation({
+    onSettled: (data) => {
+      console.log("[info] data :", data);
+      if (data) {
+        if (data.error || !data.jsonData) {
+          console.log("[error] ", data.error);
+          toast({
+            variant: "destructive",
+            title: "Error with processing your file",
+            description: "redirecting to manual building page",
+          });
+          const redirectingUrl = urlWithAddedParams("/builder", {}, {});
+          router.push(redirectingUrl);
+          // console.log(redirectingUrl);
+        } else {
+          saveJsonObject(data.jsonData as JsonType)
+            .then((res) => {
+              sToast("data converted and saved", {
+                description: "redirecting to the next page",
+                position: "top-center",
+              });
+              // console.log(res);
+              const jsonDataId = res.data?.jsonDataId;
+              // redirect the user to next page
+              const redirectUrl = urlWithAddedParams(
+                "/Builder",
+                {},
+                { jsonDataId }
+              );
+              router.push(redirectUrl);
+            })
+            .catch((err) => {
+              console.error(err);
+              toast({
+                variant: "destructive",
+                title: "Error with processing your file",
+                description: "redirecting to manual building page",
+              });
+              router.push(urlWithAddedParams("/builder", {}, {}));
+            });
+        }
+        console.log("[data] ", data);
+      }
+    },
+  });
 
   useEffect(() => {
     // console.log(file);
-    const fileNotifier = setTimeout(() => {
-      if (file) {
-        toast({
-          variant: "default",
-          title: "File is being processed",
-          description: "Please wait for a moment",
-        });
-      }
-    }, 1000);
-    if (file) {
-      // console.log("file do exist", file);
-      // make formData and append file to it // fix for direct file is not being passing into server function argument
-      const formData = new FormData();
-      formData.append("file", file[0]);
+    var fileNotifier: NodeJS.Timeout;
 
-      uploadFile(formData).then((res) => {
-        clearTimeout(fileNotifier);
-        if (res.hasOwnProperty("error")) {
-          // console.log(res);
-          toast({
-            variant: "destructive",
-            title: res.error?.title,
-            description: res.error?.des,
-          });
-          removeAll();
-        }
-        // redirect data id
-        else if (res.hasOwnProperty("data")) {
+    if (file?.length && file[0]) {
+      fileNotifier = setTimeout(() => {
+        if (file) {
           toast({
             variant: "default",
-            title: "File uploaded successfully",
-            description: "Redirecting to the next page :)",
+            title: "File is being processed",
+            description: "Please wait for a moment",
           });
-          const jsonDataId = res?.data?.jsonDataId;
-          // redirect the user to next page
-          const redirectUrl = urlWithAddedParams(
-            "/Builder",
-            {},
-            { jsonDataId }
-          );
-          router.push(redirectUrl);
-        } else {
+        }
+      }, 1500);
+      fileHandeler(file[0], mutateAsync)
+        .then((res) => {
+          // console.log("fileHandeler response :", res);
+          if (res.type === "json") {
+            saveJsonObject(res.jsonData as JsonType)
+              .then((res) => {
+                sToast("data converted and saved", {
+                  description: "redirecting to the next page",
+                  position: "top-center",
+                });
+                // console.log(res);
+                const jsonDataId = res.data?.jsonDataId;
+                // redirect the user to next page
+                const redirectUrl = urlWithAddedParams(
+                  "/Builder",
+                  {},
+                  { jsonDataId }
+                );
+                router.push(redirectUrl);
+              })
+              .catch((err) => {
+                console.error(err);
+                toast({
+                  variant: "destructive",
+                  title: "Error with processing your file",
+                  description: "redirecting to manual building page",
+                });
+                router.push(urlWithAddedParams("/builder", {}, {}));
+              });
+            // process and save data in the db
+          }
+          removeAll();
+        })
+        .catch((err) => {
+          console.error(err);
           toast({
             variant: "destructive",
-            title: "File upload Error 505",
-            description: "something went wrong please try again :(",
-            action: (
-              <ToastAction
-                altText="click to refresh page "
-                onClick={() => {
-                  router.refresh();
-                }}
-              >
-                click to refresh page {"->"}
-              </ToastAction>
-            ),
+            title: "Error with processing your file",
+            description: "redirecting to manual building page",
           });
+          router.push(urlWithAddedParams("/builder", {}, {}));
           removeAll();
-        }
-      });
+        });
     }
 
     return () => {

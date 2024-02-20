@@ -12,6 +12,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
 import { compareJsonObjects } from "./customFormFields/sections/utils";
 import { schema } from "./schema";
+import { toast } from "sonner";
 // import { useToast } from "@/components/ui/use-toast";
 // import { ToastAction } from "@/components/ui/toast";
 // import { DevTool } from "@hookform/devtools";
@@ -57,7 +58,7 @@ const BuilderClient = memo(
       createdAt?: string;
     };
   }) => {
-    const debounceTime = 1200; // 800 is low 1500 is high
+    const debounceTime = 1500; // 800 is low 1500 is high
     const isrendered = RenderCompleted();
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
 
@@ -120,6 +121,14 @@ const BuilderClient = memo(
         console.log("change listener activated ");
         subscription = formHandeler.watch((value, { name, type }) => {
           // console.log(name, type);
+          // check for payment status
+          if (paymenInstanceRef.current === "pending") {
+            console.log("payment pending");
+            // toast("Payment pending", {
+            //   description: "please complete the payment to update the form",
+            // });
+            return;
+          }
           onSubmit(value as any);
         });
       }, 5000);
@@ -127,7 +136,7 @@ const BuilderClient = memo(
         clearTimeout(timeout);
         subscription?.unsubscribe();
       };
-    }, [formHandeler.watch]);
+    }, [formHandeler.watch, paymenInstanceRef.current]);
 
     // for first render only
     useEffect(() => {
@@ -232,7 +241,7 @@ export default ({
       activeResumeInstance,
     };
   }, [searchParams, activeResumeInstance.paymentStatus]);
-  console.log("Render from builder client", activeResumeInstance.paymentStatus);
+  // console.log("Render from builder client", activeResumeInstance.paymentStatus);
 
   return <BuilderClient {...params} />;
 };
