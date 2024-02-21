@@ -6,7 +6,7 @@ export function SectionAbout({ editorLink }: { editorLink: string }) {
     <section id="about" className=" min-h-[65vh] fc fce w-full fcc fc gap-8 ">
       {/* heading */}
       <div className="w-full gap-4 text-center fcc fc">
-        <div className="text-5xl font-bold text-neutral-200">About Us</div>
+        <h2 className="text-5xl font-bold text-neutral-200">About Us</h2>
         <div className="text-base font-medium text-zinc-400 text-opacity-40">
           #ForTheStudentsByTheStudents
         </div>
