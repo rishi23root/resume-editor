@@ -8,9 +8,9 @@ function SectionFeatures({ editorLink }: { editorLink: string }) {
       <div className="w-full h-full gap-16 text-center fc fss">
         {/* text */}
         <div className="w-full gap-2 fc fcc">
-          <div className="text-neutral-200 text-[3rem] font-bold ">
+          <h3 className="text-neutral-200 text-[3rem] font-bold ">
             Services that make your life easier.
-          </div>
+          </h3>
           <div className="opacity-50">
             We go above and beyond to make sure you&lsquo;re satisfied.
           </div>

@@ -1,3 +1,4 @@
+import { Github, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -33,7 +34,36 @@ function Footer() {
         >
           contact@buildyourresume.online
         </Link>
-        <div className="w-full h-px border border-white"></div>
+        <div className="w-full h-px border border-white" />
+        <div className="fr gap-4 justify-center h-[2.5rem]">
+          <Link
+            href={"https://twitter.com/rishi23jain"}
+            className="text-base font-medium text-center sm:text-right text-white p-2 group hover:glass hover:p-2 hover:rounded-sm "
+          >
+            <Twitter
+              strokeWidth={1}
+              className="group-hover:scale-125 transition-transform duration-250 ease-in-out"
+            />
+          </Link>
+          <Link
+            href={"https://www.linkedin.com/in/rishi23jain/"}
+            className="text-base font-medium text-center sm:text-right text-white p-2 group hover:glass hover:p-2 hover:rounded-sm "
+          >
+            <Linkedin
+              strokeWidth={1}
+              className="group-hover:scale-125 transition-transform duration-250 ease-in-out"
+            />
+          </Link>
+          <Link
+            href={"https://github.com/rishi23root/"}
+            className="text-base font-medium text-center sm:text-right text-white p-2 group hover:glass hover:p-2 hover:rounded-sm "
+          >
+            <Github
+              strokeWidth={1}
+              className="group-hover:scale-125 transition-transform duration-250 ease-in-out"
+            />
+          </Link>
+        </div>
       </div>
     </footer>
   );

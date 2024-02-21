@@ -10,7 +10,7 @@ export async function SectionPrice() {
   return (
     <section id="pricing" className=" min-h-[65vh] fc fce w-full gap-12">
       {/* heading */}
-      <div className="w-full gap-4 text-center fcc fc">
+      <h2 className="w-full gap-4 text-center fcc fc">
         <div className="text-3xl font-bold lg:text-5xl md:text-4xl text-neutral-200">
           Make the prudent and straightforward
           <br />
@@ -19,7 +19,7 @@ export async function SectionPrice() {
         <div className="text-base font-medium text-zinc-400 text-opacity-40">
           Choose from our affordable 3 packages made for students and Groups
         </div>
-      </div>
+      </h2>
       {/* tiles */}
       <div className="flex-wrap w-full h-full gap-8 fr fcc">
         <EachCard data={data[0]} />
