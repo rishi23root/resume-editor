@@ -72,8 +72,6 @@
     "react-hook-form": "^7.49.2",
     "react-inner-image-zoom": "^3.0.2",
     "react-use-measure": "^2.1.1",
-    "sharp": "^0.33.2",
-    "shortid": "^2.2.16",
     "sonner": "^1.4.0",
     "styled-components": "^6.0.5",
     "tailwind-merge": "^1.14.0",

@@ -1,11 +1,11 @@
-export const runtime = 'edge';
 // 'use server'
+// export const runtime = 'edge';
 // export const runtime
 
 import { templateWithImages } from "@/types/templates";
 import { JsonType } from '@/types/utils';
 import _ from 'lodash';
-import sharp from 'sharp';
+// import sharp from 'sharp';
 
 
 export async function getTemplateDataWithImages() {
@@ -40,21 +40,38 @@ export async function getTemplateDataWithImages() {
   return templatesWithImages;
 }
 
-export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
-  return new Promise(async (resolve, reject) => {
-    const newimage = image.split(';base64,').pop()
-    const buffer = Buffer.from(newimage as string, 'base64');
-    console.log("compressing image");
+// export async function compressImage(image: string, quality: number = 0.3): Promise<string> {
+//   return new Promise(async (resolve, reject) => {
+//     const newimage = image.split(';base64,').pop()
+//     const buffer = Buffer.from(newimage as string, 'base64');
+//     console.log("compressing image ", image.slice(0, 30));
 
-    await sharp(buffer)
-      .jpeg({ quality: quality * 10 })
-      .toBuffer()
-      .then(data => {
-        resolve(`data:image/png;base64,${data.toString('base64')}`)
-      })
-      .catch(reject)
-  })
-}
+//     try {
+//       const files = await imagemin.buffer(buffer, {
+//         plugins: [
+//           imageminPngquant({
+//             quality: [0.2, quality]
+//           })
+//         ]
+//       });
+
+//       resolve(`data:image/png;base64,${files.toString('base64')}`)
+//     }
+//     catch (err) {
+//       console.log(err);
+//       reject(err);
+//     }
+
+
+// await sharp(buffer)
+//   .jpeg({ quality: quality * 10 })
+//   .toBuffer()
+//   .then(data => {
+//     resolve(`data:image/png;base64,${data.toString('base64')}`)
+//   })
+//   .catch(reject)
+//   })
+// }
 
 // export async function flattenJson(json: JsonType, parentKey = "") {
 //   let result: JsonType = {};

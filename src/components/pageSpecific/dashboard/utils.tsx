@@ -244,7 +244,7 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
         <motion.div
           key={id}
           className={
-            "cursor-pointer border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 max-h-[15em]"
+            "cursor-pointer border-b shadow-lg shadow-gray-900 border-gray-700 p-1 px-2 bg-gray-700/30 flex flex-col rounded-md gap-2 max-h-[15em] relative"
           }
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
@@ -252,14 +252,23 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
         >
+          {resume.paymentStatus === "paid" && (
+            <div
+              className={cn(
+                "w-full h-[3%] rounded-t-sm opacity-50 blur-sm",
+                "absolute top-0 left-0",
+                "bg-gradient-to-r from-blue-600 to-fuchsia-500 "
+              )}
+            />
+          )}
           <Image
             src={pdfItself as string}
             height={200}
             width={150}
             alt="pdf image"
-            className="group-hover:invert h-30 w-30 rounded-md"
+            className="group-hover:invert h-30 w-30 rounded-md z-20"
           />
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between z-20">
             <div className="text-white/50">
               {format(creaatedAt, "dd-MM-yyyy")}
             </div>

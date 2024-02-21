@@ -8,7 +8,6 @@ import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import { getUserData } from "@/utils/dbUtils";
-import { compressImage } from "@/utils/util";
 import { z } from "zod";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
@@ -183,6 +182,7 @@ export const builderRouter = router({
         const pdfData = await request.blob();
         const formData = new FormData();
         formData.append("file", pdfData, "file.pdf");
+        formData.append("compress", 'true');
 
         const image = await fetch(process.env.BACKEND + "/getJpgPreview", {
           method: "POST",
@@ -193,21 +193,7 @@ export const builderRouter = router({
         if (image.status === 200) {
           // console.log(4);
           var imageLinkArr = await image.json() as string[];
-          var compressedImage;
-          try {
-            compressedImage = await compressImage(imageLinkArr[0])
-            // console.log("image Compressed", compressedImage.length, imageLinkArr[0].length);
-          } catch (error) {
-            throw new Error(error as any)
-          }
-          var imageLink = (compressedImage || imageLinkArr[0]) as string
-          // console.log(
-          //   imageLinkArr[0].length - compressedImage.length, 
-          // );
-
-
-          // console.log("time taken to generate pdf: ", performance.now() - start, "ms");
-
+          var imageLink = imageLinkArr[0] as string
           // convert the file to base64 string and save it into the database
           // console.log('updating db with new pdf image in pdfitself')
           const updateReq = await prisma.resumeData.update({
