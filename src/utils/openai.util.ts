@@ -587,7 +587,7 @@ async function makeOpenAiRequest(text: string) {
         for await (const toolCall of toolCalls) {
             const functionArgs = JSON.parse(toolCall.function.arguments);
             const functionName = toolCall.function.name;
-            // console.log(functionName, functionArgs);
+            console.log(functionName, functionArgs);
             if (functionName === "ats_and_recommendation") {
                 if (typeof functionArgs === "object" && 'atsScore' in functionArgs && 'recommendation' in functionArgs) {
                     return {

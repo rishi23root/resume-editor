@@ -14,6 +14,9 @@ import { serverAPI } from "@/serverTRPC/serverAPI";
 export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     // effective only for new login accounts
     const user = await currentUser();
+    // console.log(user?.firstName);
+    // console.log("[user private data]", user?.privateMetadata);
+    // console.log("[userDBid]", user?.privateMetadata?.userDBid);
 
     if (!user) return {}
 
