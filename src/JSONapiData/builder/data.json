@@ -1,12 +1,12 @@
 {
   "basics": {
-    "name": "rishi",
+    "name": "",
     "label": "",
     "image": "",
     "email": "",
     "phone": "",
     "url": "",
-    "summary": "tesing if this works",
+    "summary": "",
     "location": {
       "address": "",
       "postalCode": "",
@@ -18,11 +18,6 @@
       {
         "network": "linkedin",
         "username": "",
-        "url": ""
-      },
-      {
-        "network": "github",
-        "username": "rishi23root",
         "url": ""
       }
     ]
@@ -128,7 +123,7 @@
       "name": "Tech Innovators",
       "position": "Senior Software Developer",
       "url": "https://github.com/johndoe/",
-      "startDate": "Apr 2021",
+      "startDate": "",
       "isWorkingHere": true,
       "endDate": null,
       "summary": "<ul><li>Utilized extensive experience in front-end development to define project structures and components for reusability</li><li>Maintained high code quality by reviewing code from other developers and suggesting improvements</li><li>Collaborated with designers to translate design concepts into functional code</li><li>Contributed to E-commerce maintenance with Fastcommerce, a Brazilian e-commerce platform</li></ul>",
@@ -139,9 +134,9 @@
       "name": "Digital Solutions Ltd.",
       "position": "Software Developer",
       "url": "",
-      "startDate": "Jun 2015",
+      "startDate": "",
       "isWorkingHere": false,
-      "endDate": "Dec 2017",
+      "endDate": "",
       "summary": "<ul><li>Developed web applications based on Sharepoint, Drupal 8, and Episerver</li><li>Led a team of 10 front-end developers, providing support to the client's multi-cultural team, offering feedback, clarifying requirements, and assisting with technical questions</li><li>Ensured project progress updates were communicated to the Project Manager and IT Leads</li><li>Maintained code and features implemented by other developers in accordance with requirements</li></ul>",
       "years": "2 years"
     },
@@ -164,9 +159,9 @@
       "url": "https://www.mit.edu/",
       "studyType": "Masters",
       "area": "Cloud Technology",
-      "startDate": "2014",
+      "startDate": "",
       "isStudyingHere": false,
-      "endDate": "2016",
+      "endDate": "",
       "score": "68%"
     },
     {
@@ -175,9 +170,9 @@
       "url": "https://www.nmamit.nitte.edu.in/",
       "studyType": "B.Tech",
       "area": "Computer Science",
-      "startDate": "2010",
+      "startDate": "",
       "isStudyingHere": true,
-      "endDate": "2014",
+      "endDate": "",
       "score": "8.3 CGPA"
     }
   ],
