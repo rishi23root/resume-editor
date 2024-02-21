@@ -19,6 +19,19 @@ import { getValueFromNestedObject } from "./sections/utils";
 import { TagPicker } from "./tagPicker";
 import ListEditor from "./textEditor";
 
+function formatDate(date: Date | string) {
+  // if date is in valid format then return empty string
+  if (typeof date === "string") {
+    const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
+    if (monthYearRegex.test(date)) {
+      return date;
+    }
+  }
+  console.log("[format date] ", date);
+
+  return format(date, "dd LLL yyyy");
+}
+
 export const FormInput = React.forwardRef<
   HTMLInputElement,
   InputProps & {
@@ -380,42 +393,33 @@ const DatePickerComponent = ({
       // convert this date to some readable date for json formater
       setValue(
         fieldTitle,
-        format(date, "dd LLL yyyy")
-          ? format(date, "dd LLL yyyy")
-          : getValues(fieldTitle)
+        formatDate(date) ? formatDate(date) : getValues(fieldTitle)
       );
-      // console.log(
-      //   "formated updated :",
-      //   format(date, "dd LLL yyyy")
-      // )
     } else {
       // in the first send a date if not alreay there
       // dateValue as string right now
       // use date fns to update the format if possible else dont update it
-      // if (inputRef.current) {
-      // }
-
-      // inputRef?.current?.setAttribute("value", format(date, "dd LLL yyyy"));
-      // .current?.setAttribute("value", format(date, "dd LLL yyyy"));
 
       let defaultValue = getValues(fieldTitle as any);
       if (!defaultValue) {
         defaultValue = document.getElementById(calId)?.getAttribute("value");
       }
+
+      var tempDate = new Date(defaultValue);
+      tempDate.valueOf() && setDate(tempDate);
+      //
       // console.log("defaultValue:", defaultValue);
-      const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
-      if (defaultValue && monthYearRegex.test(defaultValue)) {
-        // console.log("Valid date format");
-        setDate(new Date(defaultValue));
-      }
+      // const monthYearRegex: RegExp = /^[A-Za-z]{3}\s\d{4}$/;
+      // if (defaultValue && monthYearRegex.test(defaultValue)) {
+      //   // console.log("Valid date format", defaultValue);
+      // } else {
+      //   console.log("Invalid date format", defaultValue);
+      // }
     }
   }, [date]);
 
   useEffect(() => {
-    setValue(
-      fieldTitle,
-      date ? format(date, "dd LLL yyyy") : getValues(fieldTitle)
-    );
+    setValue(fieldTitle, date ? formatDate(date) : getValues(fieldTitle));
   }, [disabled]);
 
   return (
@@ -431,7 +435,7 @@ const DatePickerComponent = ({
           onClick={() => setIsOpen(!isOpen)}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "dd LLL yyyy") : <span>Pick a date</span>}
+          {date ? formatDate(date) : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="end">

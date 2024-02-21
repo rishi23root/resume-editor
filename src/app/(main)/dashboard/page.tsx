@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { PageProps } from "@/types/utils";
+import { urlWithAddedParams } from "@/utils/paramHandeler";
 import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function DashboardPage(props: PageProps) {
@@ -19,9 +21,26 @@ export default async function DashboardPage(props: PageProps) {
   const user = await currentUser();
   const userDBid = user?.privateMetadata?.userDBid;
 
+  // console.log(user?.firstName);
+  // console.log("[user private data]", user?.privateMetadata);
+  // console.log("[userDBid]", user?.privateMetadata?.userDBid);
+
+  if (userDBid == null) {
+    return <div>loading...</div>;
+  }
+
   const allResume = await serverAPI.builder.getAllResume({
     userId: userDBid as string,
   });
+
+  if ("error" in allResume) {
+    redirect(
+      urlWithAddedParams("/", {
+        error: allResume.error,
+      })
+    );
+    return;
+  }
 
   // requst server to generate pdf for them parallely using promise.all and update the the current variable
   const allResumeWithData = await Promise.all(

@@ -2,6 +2,7 @@ import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
 import { MakePaymentComponent } from "@/components/pageSpecific/payment/payment";
 import NoSSR from "@/hooks/NoSSR";
 import { serverAPI } from "@/serverTRPC/serverAPI";
+import { Inputs } from "@/types/builder";
 import { PageProps } from "@/types/utils";
 import {
   builderPageParamsRedirectHandeler,
@@ -31,13 +32,14 @@ export default async function builderPage(props: PageProps) {
     userId: userDBid as string,
   });
 
-  // if (!defaultData && !props.searchParams.hasOwnProperty("error")) {
-  //   redirect(
-  //     urlWithAddedParams("/dashboard", props.searchParams, {
-  //       error: "unable to fetch data, server must be down ! ",
-  //     })
-  //   );
-  // }
+  if ("error" in defaultData) {
+    redirect(
+      urlWithAddedParams("/dashboard", props.searchParams, {
+        error: defaultData.error,
+      })
+    );
+    return;
+  }
 
   // console.log(
   //   "active data: ",
@@ -59,7 +61,7 @@ export default async function builderPage(props: PageProps) {
       )}
       <BuilderClient
         searchParams={props.searchParams}
-        defaultData={defaultData}
+        defaultData={defaultData as Inputs}
         activeResumeInstance={activeResumeInstance}
       />
     </main>

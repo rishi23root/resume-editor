@@ -8,6 +8,8 @@ import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
 import { jobDescriptionDataType } from "@/types/jobDescription";
 import { getUserData } from "@/utils/dbUtils";
+import { TRPCError } from "@trpc/server";
+import { error } from "console";
 import { z } from "zod";
 // import { 1, 2, 3, 4} from "@JSONapiData/exampleTemplates";
 
@@ -88,8 +90,12 @@ export const builderRouter = router({
       return JSON.parse(resumeData.data, (key, value) => {
         return value === 'undefined' ? null : value;
       }) as Inputs
+    } else {
+      return {
+        error: "resume data not found must be wrong id, try again"
+      }
     }
-    throw new Error("resume data not found");
+    // throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
   }),
 
   // function to update the data form a specific resume id
@@ -128,7 +134,7 @@ export const builderRouter = router({
       return { status: 'success' }
     } else {
       console.log("response error");
-      throw new Error("resume entry not found");
+      throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
       // return { status: 'error' }
     }
   }),
@@ -226,12 +232,15 @@ export const builderRouter = router({
 
       return {
         images: [] as string[],
-
         error: await request.text()
       }
     }
     catch (err) {
-      throw new Error("unable to generate resume");
+      return {
+        images: [] as string[],
+        error: "uaable to generate pdf for this resume id, try again or report"
+      }
+      // throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
     }
   }),
 
@@ -254,7 +263,7 @@ export const builderRouter = router({
       // console.log('resume data found');
       return resumeData
     }
-    throw new Error("resume data not found");
+    throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
   }),
 
   // get pdf file for a specific resume id
@@ -279,8 +288,9 @@ export const builderRouter = router({
     })
 
     if (!resumeData) {
-      throw new Error("resume data not found must be wrong id, try again");
+      throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
     }
+
     // console.log("genrating pdf: ", Object.keys(JSON.parse(resumeData?.data as string).education[0]));
 
     try {
@@ -304,11 +314,12 @@ export const builderRouter = router({
         return basedata
       }
       else {
-        throw new Error(await response.text());
+        throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
+
       }
     }
     catch (err) {
-      throw new Error("server errror");
+      throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
     }
   }),
 
@@ -335,7 +346,7 @@ export const builderRouter = router({
         return value === 'undefined' ? null : value;
       }) as Inputs
     }
-    throw new Error("resume data not found");
+    throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
   }),
 
   // get user account info 
@@ -367,10 +378,13 @@ export const builderRouter = router({
     if (resumeData) {
       // console.log(resumeData);
       return resumeData
+    } else {
+      return {
+        error: "resume data not found must be wrong userid, try again"
+      }
     }
-    throw new Error("resume data not found");
+    // throw new TRPCError({ code: "BAD_REQUEST", message: "resume data not found" })
   }),
-
 });
 
 
