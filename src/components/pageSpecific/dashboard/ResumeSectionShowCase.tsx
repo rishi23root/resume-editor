@@ -12,13 +12,15 @@ export function DashboardMain({
 }: {
   allResumeWithData: resumeDataprops[];
 }) {
+  const dayLimit = 7;
+
   // filter out all the active resume which are paid and created in last 14 days
   const activeResumes = allResumeWithData.filter(({ creaatedAt }) => {
     const date = new Date(creaatedAt);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const diffDays = diff / (1000 * 3600 * 24);
-    return diffDays <= 14;
+    return diffDays <= dayLimit;
   });
 
   return (
@@ -26,7 +28,8 @@ export function DashboardMain({
       <ResumeSectionShowCase
         title={
           <>
-            Active Resume <span className="opacity-25 text-sm">/ 14 days</span>
+            Active Resume{" "}
+            <span className="opacity-25 text-sm">/ {dayLimit} days</span>
           </>
         }
       >

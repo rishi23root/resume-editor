@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Build.Your.Resume online",
   description:
-    "Generate a perfect resume online, select the 100% accepting templates , personalize it, and get more interviews in 2024, in Maggi time.",
+    "build your resume online, select the perfect 100% accepting templates, personalize it, and get more interviews in 2024 and get hired, in Maggi time.",
   keywords: [
     "build.your.resume",
     "build your resume",

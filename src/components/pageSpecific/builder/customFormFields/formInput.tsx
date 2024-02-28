@@ -27,7 +27,7 @@ function formatDate(date: Date | string) {
       return date;
     }
   }
-  console.log("[format date] ", date);
+  // console.log("[format date] ", date);
 
   return format(date, "dd LLL yyyy");
 }

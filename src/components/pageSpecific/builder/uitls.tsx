@@ -40,16 +40,18 @@ import {
 import { useFormContext } from "react-hook-form";
 
 function formatRecommendation(recommendation: string) {
-  // make it list of strings using li elements on every new line or -
-  if (recommendation.includes("-"))
-    return recommendation
-      .split("-")
-      .map((el, index) => <li key={index}>{el}</li>);
-  else if (recommendation.includes("\n"))
-    return recommendation
-      .split("\n")
-      .map((el, index) => <li key={index}>{el}</li>);
-  else return <li>{recommendation}</li>;
+  let lines: string[] = recommendation
+    .replace(/<li>/g, "")
+    .replace(/<\/li>/g, "\n")
+    .split(/[-\n]+/)
+    .map((line) => line.trim())
+    .filter((line) => line.trim() !== "");
+
+  if (lines.length === 1) return <li>{lines[0]}</li>;
+
+  // Create new <li> elements
+  const newList = lines.map((line, index) => <li key={index}>{line}</li>);
+  return newList;
 }
 
 export function ActionBtn({

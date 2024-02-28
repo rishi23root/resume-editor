@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
-import { PdfToSchema, cachedMakeOpenAiRequest } from "@/utils/openai.util";
+import { PdfToSchema, cachedMakeOpenAiRequest, cachedMakeOpenAiRequestforSummary } from "@/utils/openai.util";
 import { jsonToParagraphs } from "@/utils/util";
 import { z } from "zod";
 
@@ -85,6 +85,25 @@ export const openAIRouter = router({
                 atsScore: "0",
                 recommendation: 'anable to get the ats score and recommendation, please try again later.'
             }
+        }
+    }),
+
+    // take pdf text and give ats recomandations
+    getCompletion: privateProcedure.input(
+        z.object({
+            currentText: z.string(),
+            keyName: z.string(),
+        })
+    ).mutation(async (opts) => {
+        const text = opts.input.currentText;
+        const keyName = opts.input.keyName + ';' + opts.ctx.id
+        // make openai request here
+        try {
+            // convert data to json using open ai api function calling
+            const results = await cachedMakeOpenAiRequestforSummary(text, keyName);
+            return results as string;
+        } catch (err) {
+            throw new Error("unable to build the text here :(");
         }
     })
 });

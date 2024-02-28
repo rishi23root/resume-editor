@@ -2,9 +2,9 @@ import { emptyTemplate } from "@/JSONapiData/refTemplate";
 import https from "https";
 import _ from "lodash";
 import { JsonType } from "@/types/utils";
+import SectionFeatures from '../components/pageSpecific/home/SectionFeatures';
 
 const modelUsable = "gpt-3.5-turbo-0125";
-
 
 // open ai custom functions
 
@@ -509,8 +509,6 @@ async function makeOpenAiRequest(text: string) {
             role: 'user',
             content: `
                 you are a skilled resume analyst, on the basis of these checks
-                - Personal Information: Name, address, city, state, cell phone number, and email address .
-                - Objective (optional): Identifying the position you are seeking .
                 - Highlights of Qualifications: Matching skills to the target job description .
                 - Experience: Listing in reverse chronological order with specific details .
                 - Accomplishments: Specific, measurable, and quantifiable achievements .
@@ -612,17 +610,64 @@ async function makeOpenAiRequest(text: string) {
 
 const cache = {};
 
-export function cachedMakeOpenAiRequest(text: string, id: string) {
+export async function cachedMakeOpenAiRequest(text: string, id: string) {
     if (cache[id]) {
         // console.log("returning from cache ", id);
-        return cache[id];
+        return await cache[id];
+    } else {
+        // console.log("calling expensiveFunction ", id);
+        cache[id] = makeOpenAiRequest(text);
+        const results = await cache[id];
+
+        if (results?.recommendation?.startsWith("for some reason")) {
+            delete cache[id];
+            return results;
+        }
+        setTimeout(() => {
+            delete cache[id];
+        }, 1000 * 60); // 1min cache clear
+        return results;
+        ;
     }
+}
+
+async function makeOpenAiRequestforSummary(text: string, id: string) {
+    const key = id.split(';')[0];
+    console.log('[info] making openai request for description');
+    const messages = [{
+        role: 'user',
+        content: `you are a world-class helper to write description for the resume section ${key}, where existing text is - '${text}' ,help user to write more professional, attractive and ATS friendly content in bulletins only, and try using statist and facts to make it more professional and attractive, you are completing the existing text therefore do not repeat the existing text.`
+    }]
+
+    // make request using fetch
+    const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+            model: modelUsable,
+            messages,
+        }),
+    });
+    const data = await response.json();
+
+    // print token used
+    console.log('used token :', data.usage.total_tokens);
+    return text + "\n" + data.choices[0].message.content;
+}
+
+export function cachedMakeOpenAiRequestforSummary(text: string, id: string) {
+    // console.log(id, text);
+
+    if (cache[id]) return cache[id];
 
     // console.log("calling expensiveFunction ", id);
-    const result = makeOpenAiRequest(text);
+    const result = makeOpenAiRequestforSummary(text, id);
     cache[id] = result;
     setTimeout(() => {
         delete cache[id];
-    }, 1000); // 1min cache clear
+    }, 1000 * 30); // 30sec cache clear
     return result;
 }

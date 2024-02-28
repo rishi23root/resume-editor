@@ -41,4 +41,4 @@ Dive into the open-source party! Contribute to our project and help us make resu
 
 🕺 Follow the steps in [CONTRIBUTING.md](link_to_contributing_file) to join the resume revolution. Spoiler alert: it involves coding, and memes
 
-Feel free to tweak, dance, and add more LaTeX magic to your heart's content! 🎉
+Feel free to tweak, and add more LaTeX magic to your heart's content! 🎉
