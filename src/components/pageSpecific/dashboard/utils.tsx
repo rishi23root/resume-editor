@@ -1,5 +1,4 @@
 "use client";
-
 import Seperator from "@/components/pageSpecific/Seperator";
 import { Button } from "@/components/ui/button";
 import { saveAs } from "file-saver";
@@ -36,6 +35,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+
+export const expireInDays = 7;
 
 const DashboardNavBtn = ({
   children,
@@ -156,7 +157,8 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
 
   // using created at find if active or not
   const isActive =
-    new Date().getTime() - creaatedAt.getTime() <= 30 * 24 * 60 * 60 * 1000;
+    new Date().getTime() - creaatedAt.getTime() <=
+    expireInDays * 24 * 60 * 60 * 1000;
 
   const editLink = urlWithAddedParams(
     "/Builder",
