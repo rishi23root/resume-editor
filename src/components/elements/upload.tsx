@@ -1,21 +1,20 @@
 "use client";
 
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/serverTRPC/client";
+import { JsonType } from "@/types/utils";
+import { fileHandeler } from "@/utils/file.util";
 import { saveJsonObject } from "@/utils/upload";
 import { motion } from "framer-motion";
 import { FileJson, FileText } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast as sToast } from "sonner";
 import { Loadingstate } from "../Fallbacks";
 import { useToast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
-import { useRouter } from "next/navigation";
-import useRedirectHandler from "@/hooks/redirectionHandlers";
-import { fileHandeler } from "@/utils/file.util";
-import { trpc } from "@/serverTRPC/client";
-import { toast as sToast } from "sonner";
-import { JsonType } from "@/types/utils";
 
 const UploadResume = () => {
   const { toast } = useToast();
