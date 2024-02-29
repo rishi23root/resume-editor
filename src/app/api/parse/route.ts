@@ -51,11 +51,11 @@ const sleep = (ms = 10000) => new Promise((resolve) => setTimeout(resolve, ms));
 //     res.json({ message: 'There was an error with the upstream service!' })
 // }
 
-export async function GET(request: Request) {
+export async function GET() {
     // const { searchParams } = new URL(request.url)
     // const id = searchParams.get('id')
 
     await sleep(20000)
 
-    return Response.json({ 'a': true })
+    return Response.redirect('https://www.google.com')
 }
