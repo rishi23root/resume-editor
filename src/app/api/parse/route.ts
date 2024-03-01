@@ -82,37 +82,3 @@ export async function POST(request: Request) {
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// testing for the edge server
-
-// export default async function GET(req, res) {
-//     await sleep(10000);
-
-//     console.log("Request received");
-
-//     // NextResponse.json({
-//     //     status: 200,
-//     //     message: "pdfText not found in the request body",
-//     // });
-//     res.json({ message: 'There was an error with the upstream service!' })
-// }
