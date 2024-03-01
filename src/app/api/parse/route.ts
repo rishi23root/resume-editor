@@ -3,7 +3,7 @@ import { Inputs } from "@/types/builder";
 import { PdfToSchema } from "@/utils/openai.util";
 import { streamTillPromise } from "@/utils/util";
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 
 export async function POST(request: Request) {
     const { pdfText } = await request.json();
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         }
     }
     const stream = streamTillPromise(worker(pdfText as string));
-    
+
     // const decoder = new TextDecoder();
     // const encoder = new TextEncoder();
     // TransformStreams can transform a stream's chunks
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     //     },
     // });
     // return new Response(stream.pipeThrough(transformStream), {
-    
+
     return new Response(stream, {
         headers: {
             'Content-Type': 'text/html; charset=utf-8',

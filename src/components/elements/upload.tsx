@@ -197,7 +197,7 @@ const UploadResume = () => {
                 title: "Error with processing your file",
                 description: "redirecting to manual building page",
               });
-              router.push(urlWithAddedParams("/builder", {}, {}));
+              router.push(urlWithAddedParams("/Builder", {}, {}));
             });
         }
       })
