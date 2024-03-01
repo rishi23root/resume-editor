@@ -1,7 +1,7 @@
-// resume parser api it will use edge server 
 import { Inputs } from "@/types/builder";
 import { PdfToSchema } from "@/utils/openai/util";
 
+// resume parser api it will use edge server 
 export const runtime = 'edge';
 
 function streamTillPromise(cb: Promise<any>) {
@@ -15,8 +15,8 @@ function streamTillPromise(cb: Promise<any>) {
         console.log('[rejected]');
         return err;
     })
-    const encoder = new TextEncoder();
 
+    const encoder = new TextEncoder();
 
     return new ReadableStream({
         start(controller) {
@@ -34,24 +34,19 @@ function streamTillPromise(cb: Promise<any>) {
                     } finally {
                         controller.close();
                         clearInterval(timer);
-
                     }
                 } else {
                     controller.enqueue(encoder.encode('0'));
                 }
-            }, 500);
-
+            }, 300);
         },
-
     });
 }
 
 export async function POST(request: Request) {
     const { pdfText } = await request.json();
-    // const { searchParams } = new URL(request.url)
-    // const pdfText = searchParams.get('pdfText')
-    // console.log(pdfText);
-    async function worker(text: string) {
+
+    async function heavyTaskWrapper(text: string) {
         if (text) {
             try {
                 // convert data to json using open ai api function calling
@@ -73,27 +68,12 @@ export async function POST(request: Request) {
             }
         } else {
             return {
-                status: 400,
-                message: "pdfText not found in the request body",
+                jsonData: {},
+                error: "pdfText not found in the request body",
             }
         }
     }
-    const stream = streamTillPromise(worker(pdfText as string));
-
-    // const decoder = new TextDecoder();
-    // const encoder = new TextEncoder();
-    // TransformStreams can transform a stream's chunks
-    // before they're read in the client
-    // const transformStream = new TransformStream({
-    //     transform(chunk, controller) {
-    //         // Decode the content, so it can be transformed
-    //         const text = decoder.decode(chunk);
-    //         // Make the text uppercase, then encode it and
-    //         // add it back to the stream
-    //         controller.enqueue(encoder.encode(text.toUpperCase()));
-    //     },
-    // });
-    // return new Response(stream.pipeThrough(transformStream), {
+    const stream = streamTillPromise(heavyTaskWrapper(pdfText as string));
 
     return new Response(stream, {
         headers: {

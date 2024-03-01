@@ -79,52 +79,6 @@ const UploadResume = () => {
     acceptedFiles.splice(0, acceptedFiles.length);
     setFiles(null);
   };
-  // convert extracted text to json data
-  // const { mutateAsync2 } = trpc.openai.pdfTextToJson.useMutation({
-  //   onSettled: (data) => {
-  //     console.log("[info] data :", data);
-  //     if (data) {
-  //       if (data.error || !data.jsonData) {
-  //         console.log("[error] ", data.error);
-  //         toast({
-  //           variant: "destructive",
-  //           title: "Error with processing your file",
-  //           description: "redirecting to manual building page",
-  //         });
-  //         const redirectingUrl = urlWithAddedParams("/builder", {}, {});
-  //         router.push(redirectingUrl);
-  //         // console.log(redirectingUrl);
-  //       } else {
-  //         saveJsonObject(data.jsonData as JsonType)
-  //           .then((res) => {
-  //             sToast("data converted and saved", {
-  //               description: "redirecting to the next page",
-  //               position: "top-center",
-  //             });
-  //             // console.log(res);
-  //             const jsonDataId = res.data?.jsonDataId;
-  //             // redirect the user to next page
-  //             const redirectUrl = urlWithAddedParams(
-  //               "/Builder",
-  //               {},
-  //               { jsonDataId }
-  //             );
-  //             router.push(redirectUrl);
-  //           })
-  //           .catch((err) => {
-  //             console.error(err);
-  //             toast({
-  //               variant: "destructive",
-  //               title: "Error with processing your file",
-  //               description: "redirecting to manual building page",
-  //             });
-  //             router.push(urlWithAddedParams("/builder", {}, {}));
-  //           });
-  //       }
-  //       console.log("[data] ", data);
-  //     }
-  //   },
-  // });
 
   async function mutateAsync({ pdfText }: { pdfText: string }) {
     // here we will wait for the stream to end, making request using fetch

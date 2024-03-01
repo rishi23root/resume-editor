@@ -5,7 +5,6 @@ import _ from "lodash";
 export const modelUsable = "gpt-3.5-turbo-0125";
 
 // open ai custom functions
-
 export const custom_functions = [
     // basics
     {
@@ -320,8 +319,6 @@ export const AtsAndRecommendationExtraction = {
     },
 }
 
-
-
 // pdf to schema extraction
 export class PdfToSchema {
     text: string;
@@ -495,6 +492,8 @@ export class PdfToSchema {
                 this.sendRequest([
                     custom_functions[0],
                     custom_functions[1],
+                ]),
+                this.sendRequest([
                     custom_functions[2],
                     custom_functions[3],
                     custom_functions[4]
