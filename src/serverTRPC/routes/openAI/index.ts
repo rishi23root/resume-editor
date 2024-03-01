@@ -1,42 +1,11 @@
 // pathname: api/trpc/pdf/{functionNameHere}
 import { prisma } from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
-import { Inputs } from "@/types/builder";
-import { PdfToSchema, cachedMakeOpenAiRequest, cachedMakeOpenAiRequestforSummary } from "@/utils/openai.util";
+import { cachedMakeOpenAiRequest, cachedMakeOpenAiRequestforSummary } from "@/utils/openai.util";
 import { jsonToParagraphs } from "@/utils/util";
 import { z } from "zod";
 
 export const openAIRouter = router({
-    // parse the pdf for and return the json data
-    pdfTextToJson: privateProcedure.input(
-        z.object({
-            pdfText: z.any()
-        }),
-    ).mutation(async (opts) => {
-        const text = opts.input.pdfText;
-
-        console.log("[info] Analysing Text");
-        // make openai request here
-        try {
-            // convert data to json using open ai api function calling
-            // const text = "data here";
-            const call = new PdfToSchema(text);
-            const results = await call.extractSchema();
-            console.log("[info] Analysing Done");
-
-            return {
-                jsonData: results as Inputs,
-                error: ""
-            };
-        } catch (err) {
-            console.log(err);
-            return {
-                error: "unable to extract text from the format :(, we are redirecting you to the manual form.",
-                jsonData: {}
-            };
-        }
-    }),
-
     // take pdf text and give ats recomandations
     getAtsAndRecommandation: privateProcedure.input(
         z.object({

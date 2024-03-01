@@ -154,6 +154,8 @@ const UploadResume = () => {
             break;
           } else {
             if (text !== "0") {
+              // console.log(text);
+
               resolve(JSON.parse(text));
               break;
               // } else {

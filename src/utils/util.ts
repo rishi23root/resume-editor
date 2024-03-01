@@ -1,12 +1,6 @@
-// 'use server'
-// export const runtime = 'edge';
-// export const runtime
-
 import { templateWithImages } from "@/types/templates";
 import { JsonType } from '@/types/utils';
 import _ from 'lodash';
-import { Readable } from "stream";
-// import sharp from 'sharp';
 
 
 export async function getTemplateDataWithImages() {
@@ -122,47 +116,3 @@ export async function jsonToParagraphs(jsonData: JsonType) {
 
   return paragraphs;
 }
-
-
-
-export function streamTillPromise(cb: Promise<any>) {
-  var isResolved = false;
-  const results = cb.then((data: any) => {
-    isResolved = true;
-    console.log('[resolved]');
-    return data;
-  }).catch((err: any) => {
-    isResolved = true;
-    console.log('[rejected]');
-    return err;
-  })
-  const encoder = new TextEncoder();
-
-
-  return new ReadableStream({
-    start(controller) {
-      const timer = setInterval(async () => {
-        if (isResolved) {
-          var res: any;
-          try {
-            res = (await results);
-            if (typeof res === 'object') {
-              res = JSON.stringify(res);
-            }
-            controller.enqueue(encoder.encode(res));
-          } catch (err) {
-            controller.enqueue(encoder.encode('error: ' + err));
-          } finally {
-            controller.close();
-            clearInterval(timer);
-
-          }
-        } else {
-          controller.enqueue(encoder.encode('0'));
-        }
-      }, 500);
-
-    },
-
-  });
-} 
