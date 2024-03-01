@@ -6,14 +6,6 @@ import { NextResponse } from "next/server";
 
 export default authMiddleware({
   async afterAuth(auth, req, evt) {
-    // handle users who aren't authenticated
-    // try {
-    //   const user = await currentUser();
-    // } catch (error) {
-    //   return redirectToSignIn({ returnBackUrl: req.url });
-    // }
-    // console.log('[middleware] ',req.url);
-
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }

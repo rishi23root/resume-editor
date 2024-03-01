@@ -80,22 +80,101 @@ const UploadResume = () => {
     setFiles(null);
   };
   // convert extracted text to json data
-  const { mutateAsync } = trpc.openai.pdfTextToJson.useMutation({
-    onSettled: (data) => {
-      console.log("[info] data :", data);
-      if (data) {
-        if (data.error || !data.jsonData) {
-          console.log("[error] ", data.error);
+  // const { mutateAsync2 } = trpc.openai.pdfTextToJson.useMutation({
+  //   onSettled: (data) => {
+  //     console.log("[info] data :", data);
+  //     if (data) {
+  //       if (data.error || !data.jsonData) {
+  //         console.log("[error] ", data.error);
+  //         toast({
+  //           variant: "destructive",
+  //           title: "Error with processing your file",
+  //           description: "redirecting to manual building page",
+  //         });
+  //         const redirectingUrl = urlWithAddedParams("/builder", {}, {});
+  //         router.push(redirectingUrl);
+  //         // console.log(redirectingUrl);
+  //       } else {
+  //         saveJsonObject(data.jsonData as JsonType)
+  //           .then((res) => {
+  //             sToast("data converted and saved", {
+  //               description: "redirecting to the next page",
+  //               position: "top-center",
+  //             });
+  //             // console.log(res);
+  //             const jsonDataId = res.data?.jsonDataId;
+  //             // redirect the user to next page
+  //             const redirectUrl = urlWithAddedParams(
+  //               "/Builder",
+  //               {},
+  //               { jsonDataId }
+  //             );
+  //             router.push(redirectUrl);
+  //           })
+  //           .catch((err) => {
+  //             console.error(err);
+  //             toast({
+  //               variant: "destructive",
+  //               title: "Error with processing your file",
+  //               description: "redirecting to manual building page",
+  //             });
+  //             router.push(urlWithAddedParams("/builder", {}, {}));
+  //           });
+  //       }
+  //       console.log("[data] ", data);
+  //     }
+  //   },
+  // });
+
+  async function mutateAsync({ pdfText }: { pdfText: string }) {
+    // here we will wait for the stream to end, making request using fetch
+    return new Promise(async (resolve, reject) => {
+      const response = await fetch("/api/parse", {
+        method: "POST",
+        body: JSON.stringify({ pdfText }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // response should be a stream
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const chunk = await reader?.read();
+        const { done, value } = chunk as { done: boolean; value: Uint8Array };
+        if (done) {
+          reject("value is done, but no value found in the stream");
+          break;
+        }
+
+        if (value) {
+          const text = decoder.decode(value);
+          if (text.startsWith("error:")) {
+            reject(text);
+            break;
+          } else {
+            if (text !== "0") {
+              resolve(JSON.parse(text));
+              break;
+              // } else {
+              //   console.log(text);
+            }
+          }
+        }
+      }
+    })
+      .then((res: unknown) => {
+        const response = res as { jsonData: JsonType; error: string };
+        console.log("[info] response from the server", res);
+        if (response?.error) {
           toast({
             variant: "destructive",
             title: "Error with processing your file",
             description: "redirecting to manual building page",
           });
-          const redirectingUrl = urlWithAddedParams("/builder", {}, {});
-          router.push(redirectingUrl);
-          // console.log(redirectingUrl);
+          router.push(urlWithAddedParams("/builder", {}, {}));
         } else {
-          saveJsonObject(data.jsonData as JsonType)
+          saveJsonObject(response?.jsonData as JsonType)
             .then((res) => {
               sToast("data converted and saved", {
                 description: "redirecting to the next page",
@@ -121,10 +200,17 @@ const UploadResume = () => {
               router.push(urlWithAddedParams("/builder", {}, {}));
             });
         }
-        console.log("[data] ", data);
-      }
-    },
-  });
+      })
+      .catch((err) => {
+        console.error(err);
+        toast({
+          variant: "destructive",
+          title: "Error with processing your file",
+          description: "redirecting to manual building page",
+        });
+        router.push(urlWithAddedParams("/builder", {}, {}));
+      });
+  }
 
   useEffect(() => {
     // console.log(file);
