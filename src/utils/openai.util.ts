@@ -337,7 +337,7 @@ export class PdfToSchema {
 
         // some fixes for reserver keywords in openai function calling format
         if (key === 'awards') {
-            for await (const [index, element] of value.entries()) {
+            for (const [index, element] of value.entries()) {
                 if ('title2' in element) {
                     element['title'] = element['title2'];
                     delete element['title2'];
@@ -479,11 +479,18 @@ export class PdfToSchema {
         // make 2 functions at once to get better results
         const tokens = await Promise.all(
             [
-                this.sendRequest([custom_functions[0]]),
-                this.sendRequest([custom_functions[1]]),
-                this.sendRequest([custom_functions[2]]),
-                this.sendRequest([custom_functions[3]]),
-                this.sendRequest([custom_functions[4]]),
+                this.sendRequest([
+                    custom_functions[0],
+                    custom_functions[1],
+                    custom_functions[2],
+                    custom_functions[3],
+                    custom_functions[4]
+                ]),
+                // this.sendRequest([custom_functions[0]]),
+                // this.sendRequest([custom_functions[1]]),
+                // this.sendRequest([custom_functions[2]]),
+                // this.sendRequest([custom_functions[3]]),
+                // this.sendRequest([custom_functions[4]]),
             ]);
 
         console.log("[info] total token used :", _.sum(tokens))
