@@ -230,7 +230,7 @@ function PDFviewer({
     }
 
     // if the payment is done then refetch the ats score
-    if (activeResumeInstance.paymentStatus === "paid") {
+    if (activeResumeInstance.paymentStatus === "paid" && enriched) {
       refetchATS({ resumeId });
     }
   }, []);

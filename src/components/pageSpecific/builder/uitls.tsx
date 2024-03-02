@@ -188,7 +188,7 @@ export function ModelComponent({
         }
       );
     }
-  }, [showModel]);
+  }, [showModel, enriched]);
 
   // model showcase code
   const ref = useRef<HTMLDivElement>(null);

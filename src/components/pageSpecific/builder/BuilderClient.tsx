@@ -106,7 +106,7 @@ const BuilderClient = memo(
     const formHandeler = useForm<Inputs>({
       defaultValues: defaultData,
       shouldUnregister: false,
-      resolver: zodResolver(schema),
+      // resolver: zodResolver(schema),
       // mode: "onSubmit",
     });
 

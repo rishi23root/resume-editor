@@ -19,6 +19,21 @@ export const builderRouter = router({
     key: z.string(),
   })).mutation(async (opts) => {
     var data = defaultTemplate as Inputs
+    var key = opts.input.key;
+    var allLevels = key.split('.');
+    if (allLevels.length > 1) {
+      // get the data from the data object
+      var tempData = data;
+      for (let i = 0; i < allLevels.length; i++) {
+        if (i === allLevels.length - 1) {
+          tempData = tempData[allLevels[i]];
+        } else {
+          tempData = tempData[allLevels[i]];
+        }
+      }
+      return makeEmptyObject(tempData) as any;
+    }
+
     var firstEntry = (data[opts.input.key as keyof Inputs] as any[])[0]
     return makeEmptyObject(firstEntry) as any;
   }),
