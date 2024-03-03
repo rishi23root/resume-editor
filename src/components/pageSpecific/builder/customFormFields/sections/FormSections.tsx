@@ -924,11 +924,11 @@ export function Awards() {
                   type="text"
                   {...register(`awards.${index}.awarder`)}
                 />
+                <FormInput type="url" {...register(`awards.${index}.url`)} />
                 <FormInput
                   type="summary"
                   {...register(`awards.${index}.summary`)}
                 />
-                <FormInput type="url" {...register(`awards.${index}.url`)} />
               </div>
             );
           })

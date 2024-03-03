@@ -10,40 +10,61 @@ import { motion, stagger, useAnimation } from "framer-motion";
 import { trpc } from "@/serverTRPC/client";
 import { toast } from "sonner";
 
+// higher order function to wrap element in a tag
+function AddTag(tag: string) {
+  return function (text: string) {
+    return `<${tag}>${text}</${tag}>`;
+  };
+}
+
+// a helper function which will return array of li elements and text to store in form
+const parseListPara = (value: string): [string, string[]] => {
+  // parseListPara will take the value which can be simple string or html string of ul and li elements
+  // if simple string then convert it to li element
+  // if html string then extract the li elements and store them in array
+  // return the array of li elements
+  const liWrapper = AddTag("li");
+
+  value = value
+    .replace(/<ul[^>]*>/g, "") // remove ul tag and its attributes
+    .replace(/<\/ul>/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .trim();
+  // remove all the null spaces and other things from here
+
+  // const parsedValue = parseFromString(value, "text/html");
+  const parsedValue = new DOMParser().parseFromString(value, "text/html");
+
+  const AllLiElement = [...parsedValue.getElementsByTagName("li")];
+  if (AllLiElement.length === 0) {
+    // if no li elements found then wrap the value in li element
+    const addLiTag = AddTag("li");
+    return [addLiTag(value), [value]];
+  }
+  let liElesInStr = "";
+  AllLiElement.forEach((liElement) => {
+    liElesInStr += liWrapper(liElement.textContent as string);
+  });
+  return [
+    liElesInStr,
+    AllLiElement.map((liEle) => liEle.textContent?.trim() as string),
+  ];
+};
+
+// this code is implemented in node test env
+
 const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
   ({ id, className, value, onChange, ...props }, ref) => {
     const [content, setContent] = useState<string>((value || "") as string);
     const [undoContent, setUndoContent] = useState<string>("");
     const [isHover, setIsHover] = useState(false);
+    const ulWraper = AddTag("ul");
+    const liWraper = AddTag("li");
 
     const { setValue } = useFormContext<Inputs>();
     const editorRef = useRef(null);
     const controls = useAnimation();
-
-    useEffect(() => {
-      // parset the value and get the innerHTML of the ul element
-      if (value) {
-        const parsedValue = new DOMParser().parseFromString(
-          value as string,
-          "text/html"
-        );
-        // const ulElementInnerHtml = parsedValue.querySelector("ul")?.innerHTML;
-        // console.log("no ul element found, means only text is present or li");
-        // if no ul element found, means only text is present
-        const AllLiElement = parsedValue.querySelectorAll("li");
-        let liElementInnerHtml = "";
-        AllLiElement.forEach((liElement, index) => {
-          liElementInnerHtml += `<li>${liElement.innerHTML}</li>`;
-        });
-        // console.log(liElementInnerHtml);
-        // remove any html tags other than li and store in clean value variable
-        if (liElementInnerHtml == "") {
-          setContent("<li>" + value + "</li>");
-        } else {
-          setContent(liElementInnerHtml);
-        }
-      }
-    }, [value]);
 
     useEffect(() => {
       if (isHover) {
@@ -60,23 +81,33 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
       }
     }, [controls, isHover]);
 
+    // first render show content
+    useEffect(() => {
+      if (value) {
+        // console.log("[value] ", value);
+        const [formLiText, formLiTextArr] = parseListPara(value as string);
+        setContent(formLiText);
+      }
+    }, [value]);
+
     const handleChange = (e: ContentEditableEvent) => {
-      let updatedValue = "<ul>" + e.target.value + "</ul>";
-      setContent(e.target.value);
-      setValue(props.name as any, updatedValue);
+      let updatedValue = e.target.value;
+      const [formLiText, formLiTextArr] = parseListPara(updatedValue as string);
+      setContent(formLiText);
+      setValue(props.name as any, ulWraper(formLiText));
     };
 
     const { isLoading, mutate } = trpc.openai.getCompletion.useMutation({
       onSuccess: (data) => {
         setUndoContent(content);
         // split the data on '-' and make them li elements
-        let recomendation = data.split("\n").map((li) => {
-          return `<li>${li.replace("-","")}</li>`;
-        }).join(" ")
-        // console.log(recomendation);
-        
+        let recomendation = data
+          .split("\n")
+          .map((li) => liWraper(li.replace("-", "").trim()))
+          .join("");
+
         setContent(recomendation);
-        setValue(props.name as any, recomendation);
+        setValue(props.name as any, ulWraper(recomendation));
 
         toast("data updated");
       },
@@ -99,23 +130,20 @@ const ListEditor = React.forwardRef<HTMLInputElement, TextareaProps>(
       } else {
         setUndoContent(content);
         // from the existing content extract all the li text as array
-        const parsedValue = new DOMParser().parseFromString(
-          content,
-          "text/html"
-        );
-        const AllLiElement = parsedValue.querySelectorAll("li");
-        let extractedText :string[] = [];
-        AllLiElement.forEach((liElement) => {
-          extractedText.push(liElement?.innerHTML);
-        });
-        
-        extractedText = extractedText.map((content)=>{
-          return '- ' + content
-          .replace(/<[^>]*>?/gm, "")
-          .replace(/\s+/g, " ")
-          .replace(/&nbsp;/g, " ")
-          .trim(); 
-        })
+        const [formLiText, formLiTextArr] = parseListPara(content as string);
+        // console.log("value", formLiTextArr);
+        // console.log("value", ulWraper(formLiText));
+        setContent(formLiText);
+        const extractedText = formLiTextArr
+          .map((content) =>
+            content
+              .replace(/<[^>]*>?/gm, "")
+              .replace(/\s+/g, " ")
+              .replace(/&nbsp;/g, " ")
+              .trim()
+          )
+          .filter((content) => content !== "")
+          .map((content) => "- " + content);
 
         mutate({
           currentText: extractedText.join("\n"),
