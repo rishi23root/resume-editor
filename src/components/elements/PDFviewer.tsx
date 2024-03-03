@@ -400,7 +400,7 @@ function PDFviewer({
                         transition: { duraton: 0.3, delay: 0.2 },
                       }}
                       exit={{ opacity: 0, transition: { duraton: 0.3 } }}
-                      className="-z-10 bg-blue-500/15 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
+                      className="-z-10 bg-blue-500/30 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
                     />
                   )}
                 </motion.div>

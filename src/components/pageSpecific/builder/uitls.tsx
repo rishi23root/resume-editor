@@ -27,7 +27,12 @@ import { searchParamType } from "@/types/utils";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { UseTRPCMutationResult } from "@trpc/react-query/shared";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { ArrowRightToLine, HardDriveDownload, Pencil } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowRightToLine,
+  HardDriveDownload,
+  Pencil,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Dispatch,
@@ -271,8 +276,8 @@ export function ModelComponent({
                 <span className="flex-1 fc gap-4 h-full ">
                   {/* active template and option to change it */}
                   <span className="fc gap-2">
-                    <span className="text-2xl bold capitalize text-white">
-                      Template :{" "}
+                    <span className="text-2xl bold capitalize text-white flex gap-2 flex-wrap">
+                      <span>Template : </span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <span className="opacity-60 underline underline-offset-4 cursor-pointer flex gap-2">
@@ -416,6 +421,46 @@ export function ModelComponent({
                         ))}
                     </motion.div>
                   </div>
+                  {dataArray.length > 1 && (
+                    <div className="p-2 w-1/3 flex justify-between ">
+                      <div
+                        className={cn(
+                          "opacity-60 hover:opacity-75 hover:scale-110",
+                          "rotate-180",
+                          "cursor-pointer transition-all duration-150 ease-in-out"
+                        )}
+                        onClick={() => {
+                          // scroll to left
+                          if (ref.current) {
+                            // ref.current.scrollLeft -= 250;
+                            ref.current.scrollTo({
+                              left: -250,
+                              behavior: "smooth",
+                            });
+                          }
+                        }}
+                      >
+                        <ArrowRight />
+                      </div>
+                      <div
+                        className={cn(
+                          "opacity-60 hover:opacity-75 hover:scale-110",
+                          "cursor-pointer transition-all duration-150 ease-in-out"
+                        )}
+                        onClick={() => {
+                          // scroll to right
+                          if (ref.current) {
+                            ref.current.scrollTo({
+                              left: 250,
+                              behavior: "smooth",
+                            });
+                          }
+                        }}
+                      >
+                        <ArrowRight />
+                      </div>
+                    </div>
+                  )}
                 </span>
               </DialogDescription>
             </DialogHeader>
