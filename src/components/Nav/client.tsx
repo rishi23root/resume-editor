@@ -113,7 +113,7 @@ export function HamburgerOnMobile(props: NavProps) {
         <SheetHeader className="text-start">
           <SheetTitle className="pb-4">Links</SheetTitle>
           <SheetDescription
-            className="flex flex-col gap-4 text-2xl underline text-start underline-offset-4 decoration-[#6255C2]"
+            className="flex flex-col gap-4 text-2xl text-start"
             onClick={(_) => setOpen(false)}
           >
             <NavLinks {...props} />
@@ -166,21 +166,27 @@ export function NavLinksDashboard() {
         href={urlWithOnlyTheseParams("/Templates", {
           templateName: "singleColumn",
         })}
-        className="text-violet-50"
+        className="text-violet-50 hover:underline underline-offset-8 decoration-blue-500 transition-all duration-300 ease-in-out"
       >
         Templates
       </Link>
       <Link
         href={urlWithOnlyTheseParams("/Payment")}
-        className="text-violet-50"
+        className="text-violet-50 hover:underline underline-offset-8 decoration-blue-500 transition-all duration-300 ease-in-out"
       >
         Price
       </Link>
       <Link
         href={urlWithOnlyTheseParams("/JobDescriptions")}
-        className="text-violet-50"
+        className="text-violet-50 hover:underline underline-offset-8 decoration-blue-500 transition-all duration-300 ease-in-out"
       >
         Job Descriptions
+      </Link>
+      <Link
+        href={"/blog"}
+        className="text-violet-50 hover:underline underline-offset-8 decoration-blue-500 transition-all duration-300 ease-in-out"
+      >
+        Blogs
       </Link>
     </>
   );

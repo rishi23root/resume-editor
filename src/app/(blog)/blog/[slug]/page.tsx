@@ -44,7 +44,7 @@ export default async function BlogPost({
         </Link>
       </div>
       {/* actual blog data */}
-      <section className="w-full lg:w-3/4 self-center  flex-1 fc items-center ">
+      <section className="w-full lg:w-3/4 self-center flex-1 fc items-center">
         <h1 className="uppercase text-3xl lg:text-4xl">{meta.title}</h1>
         <p className="opacity-70 text-sm mb-12">
           <span className="underline decoration-blue-500/40 underline-offset-4">
@@ -52,7 +52,7 @@ export default async function BlogPost({
           </span>
           - {meta.date}
         </p>
-        <div className="prose prose-invert max-w-prose text-xl self-center w-full ">
+        <div className="prose prose-invert  max-w-screen-2xl text-lg self-center text-justify  w-full ">
           {content}
         </div>
       </section>
