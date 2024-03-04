@@ -1,26 +1,25 @@
+import withMdx from "@next/mdx";
+import  withBundleAnalyzer  from "@next/bundle-analyzer";
+
+const withMdxData = withMdx({
+    extension: /\.mdx?$/,
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+    },
+});
+const withBundleAnalyzed = withBundleAnalyzer({ enabled: true });
+eval(process.env.ANALYZE) && console.log("\tIn site sizeView :", eval(process.env.ANALYZE));
+
+
 /** @type {import('next').NextConfig} */
-
-// hacky fix for node canvas module issue
-// - https://github.com/Automattic/node-canvas/issues/1779#issuecomment-895885846
-// if (
-//   process.env.LD_LIBRARY_PATH == null ||
-//   !process.env.LD_LIBRARY_PATH.includes(
-//     `${process.env.PWD}/node_modules/canvas/build/Release:`,
-//   )
-// ) {
-//   process.env.LD_LIBRARY_PATH = `${
-//     process.env.PWD
-//   }/node_modules/canvas/build/Release:${process.env.LD_LIBRARY_PATH || ''}`;
-// }
-
-
 const nextConfig = {
     experimental: {
         serverActions: {
             allowedOrigins: ["localhost:3000", "*.app.github.dev", "*.vercel.app" ,'buildyourresume.online'],
         },
     },
-    // serverActions: true,
+    pageExtensions: ['mdx', 'ts', 'tsx'],
     reactStrictMode: true,
     compress: true,
     swcMinify: true,
@@ -50,7 +49,5 @@ const nextConfig = {
     // },
 }
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({ enabled: true });
-eval(process.env.ANALYZE) && console.log("\tIn site sizeView :", eval(process.env.ANALYZE));
 
-module.exports = eval(process.env.ANALYZE) ? withBundleAnalyzer({}) : nextConfig;
+export default eval(process.env.ANALYZE) ? withBundleAnalyzed({}) : withMdxData(nextConfig);

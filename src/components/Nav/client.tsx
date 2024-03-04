@@ -120,8 +120,8 @@ export function HamburgerOnMobile(props: NavProps) {
           </SheetDescription>
         </SheetHeader>
 
-        <SheetHeader className="text-start">
-          {/* notifications */}
+        {/* notifications */}
+        {/* <SheetHeader className="text-start">
           {notification.length && (
             <SheetTitle className="pt-12 pb-4">Notification</SheetTitle>
           )}
@@ -131,7 +131,7 @@ export function HamburgerOnMobile(props: NavProps) {
           >
             <NotificationRenderer notification={notification} />
           </div>
-        </SheetHeader>
+        </SheetHeader> */}
 
         <div className="flex-1 "></div>
 
