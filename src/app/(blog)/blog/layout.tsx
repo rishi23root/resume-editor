@@ -15,14 +15,14 @@ export default async function RootLayout({
   const data = await newUserLoginHandler();
   // effective for only first login
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <div className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8 w-full">
         <Nav isSignedIn={data ? true : false} pathname="/dashboard" />
       </div>
-      <main className="app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8">
+      <main className="flex-1 app xl:px-[11%] md:px-[5%] px-[2%] py-[2.5rem] flex flex-col lg:gap-20 gap-8">
         <Suspense>{children}</Suspense>
-        <Footer />
         <BackToTopBtn />
+        <Footer />
       </main>
     </div>
   );

@@ -1,13 +1,5 @@
-import withMdx from "@next/mdx";
-import  withBundleAnalyzer  from "@next/bundle-analyzer";
+import  withBundleAnalyzer from "@next/bundle-analyzer";
 
-const withMdxData = withMdx({
-    extension: /\.mdx?$/,
-    options: {
-        remarkPlugins: [],
-        rehypePlugins: [],
-    },
-});
 const withBundleAnalyzed = withBundleAnalyzer({ enabled: true });
 eval(process.env.ANALYZE) && console.log("\tIn site sizeView :", eval(process.env.ANALYZE));
 
@@ -50,4 +42,4 @@ const nextConfig = {
 }
 
 
-export default eval(process.env.ANALYZE) ? withBundleAnalyzed({}) : withMdxData(nextConfig);
+export default eval(process.env.ANALYZE) ? withBundleAnalyzed({}) : nextConfig;
