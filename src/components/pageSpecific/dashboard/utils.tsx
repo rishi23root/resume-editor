@@ -36,7 +36,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
-export const expireInDays = 7;
+export const expireInDays: number = 7;
 
 const DashboardNavBtn = ({
   children,

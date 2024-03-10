@@ -416,7 +416,7 @@ export function ModelComponent({
                             alt={"autogenrated resume image"}
                             width={400}
                             height={600}
-                            className="rounded-md shadow-xl object-cover w-[33em] min-w-[30em] border border-green-200 "
+                            className="rounded-md shadow-xl object-cover w-[33em] min-w-[30em] "
                           />
                         ))}
                     </motion.div>
