@@ -1,7 +1,7 @@
 import { getBlogBySlug } from "@/utils/mdx";
 import Link from "next/link";
 
-const getPageContent = async (slug) => {
+const getPageContent = async (slug: string) => {
   const { meta, content } = await getBlogBySlug(slug);
   return { meta, content };
 };
@@ -46,7 +46,7 @@ export default async function BlogPost({
       {/* actual blog data */}
       <section className="w-full lg:w-3/4 self-center flex-1 fc items-center">
         <h1 className="uppercase text-3xl lg:text-4xl">{meta.title}</h1>
-        <p className="opacity-70 text-sm mb-12">
+        <p className="opacity-70 text-sm m-2 mb-12">
           <span className="underline decoration-blue-500/40 underline-offset-4">
             {meta.author}
           </span>

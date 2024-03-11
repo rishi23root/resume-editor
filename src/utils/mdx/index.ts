@@ -1,7 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import { compileMDX } from 'next-mdx-remote/rsc'
-import { blogPostMeta } from '@/types/blog'
+import { blogPostMeta } from '@/types/blog';
+import fs from 'fs';
+import { compileMDX } from 'next-mdx-remote/rsc';
+import path from 'path';
+import { customImage } from './components';
 
 const rootDirectory = path.join(process.cwd(), 'src', 'blogData')
 
@@ -13,7 +14,10 @@ export const getBlogBySlug = async (slug: string) => {
 
     const { frontmatter, content } = await compileMDX({
         source: fileContent,
-        options: { parseFrontmatter: true }
+        options: { parseFrontmatter: true },
+        components: {
+            'img': customImage
+        }
     })
 
     return { meta: { ...frontmatter, slug: realSlug } as blogPostMeta, content }
