@@ -1,5 +1,6 @@
 import { getBlogBySlug } from "@/utils/mdx";
 import Link from "next/link";
+import { MDXRemote } from "next-mdx-remote";
 
 const getPageContent = async (slug: string) => {
   const { meta, content } = await getBlogBySlug(slug);
@@ -10,7 +11,10 @@ export async function generateMetadata({ params }) {
   const { meta } = await getPageContent(params.slug);
   return { title: meta.title, description: meta.description, date: meta.date };
 }
-
+// components: {
+//       img: customImage,
+//       a: LinkPreview,
+//     },
 export default async function BlogPost({
   params,
 }: {
@@ -54,6 +58,10 @@ export default async function BlogPost({
         </p>
         <div className="prose prose-invert  max-w-screen-2xl text-lg self-center text-justify  w-full ">
           {content}
+          {/* <MDXRemote compiledSource={content} /> */}
+          {/* <MDXProvider components={{ h2: Component3, h3: Component4 }}>
+          </MDXProvider> */}
+          {/* <Content /> */}
         </div>
       </section>
     </div>

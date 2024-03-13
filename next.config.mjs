@@ -8,8 +8,11 @@ eval(process.env.ANALYZE) && console.log("\tIn site sizeView :", eval(process.en
 const nextConfig = {
     experimental: {
         serverActions: {
-            allowedOrigins: ["localhost:3000", "*.app.github.dev", "*.vercel.app" ,'buildyourresume.online'],
+            allowedOrigins: ["localhost:3000", 'buildyourresume.online'],
         },
+    },
+    images: {
+        domains: ['resumeworded.com', 'buildyourresume.online', 'img.youtube.com', 'cdn.overleaf.com'],
     },
     pageExtensions: ['mdx', 'ts', 'tsx'],
     reactStrictMode: true,
@@ -18,6 +21,7 @@ const nextConfig = {
     compiler: {
         styledComponents: true,
     },
+
     // https://report-uri.com/home/generate to solve it 
     // headers() {
     //     return [

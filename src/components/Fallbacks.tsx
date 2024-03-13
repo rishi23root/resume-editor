@@ -26,7 +26,7 @@ export function Loadingstate({
     };
   });
   return (
-    <motion.div
+    <motion.span
       initial={{
         opacity: 0.6,
       }}
@@ -40,6 +40,6 @@ export function Loadingstate({
     >
       {/* Loading please wait */}
       {Dots} {text ? text : "Loading please wait"} {Dots}
-    </motion.div>
+    </motion.span>
   );
 }
