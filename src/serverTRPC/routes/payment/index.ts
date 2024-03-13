@@ -7,7 +7,7 @@ import Razorpay from "razorpay";
 import { v4 as uuidv4 } from 'uuid';
 import { currentUser } from "@clerk/nextjs";
 import crypto from "crypto"
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET as string);
 
 

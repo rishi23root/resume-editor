@@ -1,5 +1,5 @@
 // handle all the actions to use use by the each pages 
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { PrivateMetadata } from "@/types/user";
 import { clerkClient, currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";

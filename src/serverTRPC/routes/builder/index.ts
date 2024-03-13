@@ -2,7 +2,7 @@
 import { defaultTemplate } from "@/JSONapiData/builder";
 import { getTemplateByID } from "@/JSONapiData/exampleTemplates";
 import { JobDiscriptionData } from "@/JSONapiData/jobDescriptionData/";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { makeEmptyObject } from "@/lib/utils";
 import { privateProcedure, procedure, router } from "@/serverTRPC/trpc";
 import { Inputs } from "@/types/builder";
