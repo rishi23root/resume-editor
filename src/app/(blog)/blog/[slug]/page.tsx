@@ -49,7 +49,9 @@ export default async function BlogPost({
       </div>
       {/* actual blog data */}
       <section className="w-full lg:w-3/4 self-center flex-1 fc items-center">
-        <h1 className="uppercase text-3xl lg:text-4xl">{meta.title}</h1>
+        <h1 className="uppercase text-3xl lg:text-4xl text-center">
+          {meta.title}
+        </h1>
         <p className="opacity-70 text-sm m-2 mb-12">
           <span className="underline decoration-blue-500/40 underline-offset-4">
             {meta.author}

@@ -1,5 +1,7 @@
 import cheerio from "cheerio";
 
+export const runtime = 'edge';
+
 const isYouTubeURL = (url: string) => {
     return url.includes("youtube.com") || url.includes("youtu.be");
 };

@@ -254,3 +254,25 @@ body::-webkit-scrollbar-thumb {
   background-color: rgba(169, 169, 169, 0.3);
   border-radius: 0.5rem;
 }
+
+/* confetti */
+/* .confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform-origin: center bottom;
+  animation: fall 4s linear infinite;
+}
+
+.confetti.square {
+  clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%);
+}
+.confetti.triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+  }
+} */

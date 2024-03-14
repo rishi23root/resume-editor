@@ -13,11 +13,17 @@ export default async function BlogHome() {
       <h1 className="text-5xl font-extrabold mb-4 lg:mb-12 text-center">
         Blogs
       </h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:m-4 justify-center self-center">
+      <div
+        className={cn(
+          "grid grid-flow-row-dense grid-cols-1 lg:grid-cols-2",
+          "gap-4 justify-center self-center w-full",
+          "lg:m-4 lg:px-20"
+        )}
+      >
         {posts?.map((post) => (
           <Link href={`blog/${post.slug}`} key={post?.title}>
             <ScaleOnHover>
-              <div className="p-8 rounded-md shadow-md hover:shadow-xl glass w-full h-full lg:w-[25em] transition-all duration-150 ease-linear relative z-20 overflow-hidden group fc justify-between">
+              <div className="p-8 rounded-md shadow-md hover:shadow-xl glass w-full h-80 transition-all duration-150 ease-linear relative z-20 overflow-hidden group fc justify-between">
                 <div>
                   <h3 className="text-xl xl:text-2xl font-semibold">
                     {post.title}
@@ -25,7 +31,7 @@ export default async function BlogHome() {
                   <div className="brightness-75">{post.description}</div>
                 </div>
                 <div className="opacity-85">
-                  <p className="mt-4 text-sm ">{post.author}</p>
+                  <p className="mt-4 text-sm font-bold">{post.author}</p>
                   <time className="text-sm">{post.date}</time>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full opacity-60">

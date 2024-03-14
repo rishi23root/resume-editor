@@ -1,10 +1,13 @@
 "use client";
 
+import { CongoBomb } from "@/components/custom/CongoBomb";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { toast as sToast } from "sonner";
+
 import { useEffect, useRef, useState } from "react";
 
 export const MakePaymentComponent = async ({
@@ -15,6 +18,7 @@ export const MakePaymentComponent = async ({
   payId: number;
 }) => {
   const router = useRouter();
+  const [fire, setFire] = useState(false);
   const { toast } = useToast();
   const initialized = useRef(false);
   const [paymentModelVisible, setPaymentModelVisible] =
@@ -28,6 +32,11 @@ export const MakePaymentComponent = async ({
         toast({
           variant: "default",
           title: "Payment Verified ✅",
+        });
+        setFire(true);
+        sToast("Payment Completed 👍🏻", {
+          description: "You can now edit your resume.",
+          position: "top-center",
         });
         router.refresh();
       },
@@ -126,6 +135,7 @@ export const MakePaymentComponent = async ({
           makePayment();
         }}
       ></div>
+      <CongoBomb fire={fire} />
     </>
   );
 };
