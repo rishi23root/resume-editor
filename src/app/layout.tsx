@@ -103,8 +103,8 @@ export default function RootLayout({
           suppressHydrationWarning={true}
           className={clsx(
             poppins.className,
-            "bg-[#12141D]",
-            "text-white/80",
+            "bg-background",
+            "text-white",
             "min-h-screen",
             "min-w-full ",
             "relative ",

@@ -29,6 +29,8 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log(url);
+
     fetch("/api/link-preview", {
       method: "POST",
       headers: {
@@ -105,8 +107,18 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
           </span>
         )}
         <span className="text-left justify-center my-auto ">
-          <h3 className="m-0 text-lg">{previewData.title}</h3>
-          <span className="text-md opacity-75">{previewData.description}</span>
+          {previewData.title && previewData.description ? (
+            <>
+              <h3 className="m-0 text-lg">{previewData.title}</h3>
+              <span className="text-md opacity-75">
+                {previewData.description}
+              </span>
+            </>
+          ) : (
+            <>
+              <h3 className="m-0 text-lg">{url}</h3>
+            </>
+          )}
         </span>
       </Link>
     </motion.span>

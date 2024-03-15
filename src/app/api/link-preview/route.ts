@@ -6,6 +6,10 @@ const isYouTubeURL = (url: string) => {
     return url.includes("youtube.com") || url.includes("youtu.be");
 };
 
+const isTwitterURL = (url: string) => {
+    return url.includes("twitter.com") || url.includes("x.com");
+};
+
 const extractYouTubeVideoId = (url: string) => {
     const videoIdRegex =
         /(?:\/embed\/|\/watch\?v=|\/(?:embed\/|v\/|watch\?.*v=|youtu\.be\/|embed\/|v=))([^&?#]+)/;
@@ -32,6 +36,20 @@ const fetchData = async (url: string) => {
         const data = await response.text();
 
         const isYouTubeVideo = isYouTubeURL(url);
+        const isTwitter = isTwitterURL(url);
+        if (isTwitter) {
+            // make request to twitter api
+            // extract username and tweet id
+            const username = url.split("/")[3];
+            // console.log("username :", username);
+
+            return {
+                title: '@' + username,
+                description: url,
+                image: `https://unavatar.io/twitter/${username}`,
+            }
+            // return tweetJson;
+        }
         if (isYouTubeVideo) {
             const videoId = extractYouTubeVideoId(url);
             const videoThumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
