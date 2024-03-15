@@ -60,7 +60,6 @@ export default function Home() {
         <SectionAbout editorLink={editorLink} />
         <Line />
         <SectionPrice />
-        <Line />
         <Footer />
         <BackToTopBtn />
       </main>

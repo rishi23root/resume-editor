@@ -1,6 +1,9 @@
 import Seperator from "@/components/pageSpecific/Seperator";
 import { DashboardMain } from "@/components/pageSpecific/dashboard/ResumeSectionShowCase";
-import { DashboardNav } from "@/components/pageSpecific/dashboard/utils";
+import {
+  DashboardNav,
+  expireInDays,
+} from "@/components/pageSpecific/dashboard/utils";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { serverAPI } from "@/serverTRPC/serverAPI";
@@ -45,8 +48,18 @@ export default async function DashboardPage(props: PageProps) {
   // requst server to generate pdf for them parallely using promise.all and update the the current variable
   const allResumeWithData = await Promise.all(
     allResume.map(async (data: any, index) => {
-      const { id, template, pdfItself } = data;
-      if (pdfItself == null) {
+      const { id, template, pdfItself, creaatedAt } = data;
+      const date = new Date(creaatedAt);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime();
+      const diffDays = diff / (1000 * 3600 * 24);
+      // console.log(typeof expireInDays, diffDays, expireInDays > diffDays);
+
+      // expireInDays # for some reason expireInDays is not reading as a variable here rather than as a function !!!
+      // must be a bug from next js it self
+      if (pdfItself == null || 7 >= diffDays) {
+        console.log("generating new image for ", id);
+
         const generatedImage = await serverAPI.builder.generatePDF({
           resumeId: id,
           templateName: template,

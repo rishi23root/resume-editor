@@ -6,6 +6,7 @@ import { jobDescriptionDataType } from "@/types/jobDescription";
 import { keyValue } from "@/types/utils";
 import * as fs from "node:fs";
 import { z } from "zod";
+import { Basic } from '../../../components/pageSpecific/builder/customFormFields/sections/FormSections';
 
 export const jobDescriptionRouter = router({
   all: procedure.query(() => {
@@ -47,6 +48,9 @@ export const jobDescriptionRouter = router({
         //   "utf8"
         // );
 
+        // console.log("test", jobId, Object(templateData).keys());
+
+
         // console.log("current jobid",jobId);
 
         // loop through the templateIds and get the template.json from the server with this specific id from the exampleTemplates folder
@@ -66,6 +70,7 @@ export const jobDescriptionRouter = router({
                 template: templatedata.title,
               }),
             });
+
 
             // console.log(request.status);
             if (request.status === 200) {
@@ -91,9 +96,15 @@ export const jobDescriptionRouter = router({
                 console.log(image.body);
                 sequenceRequestSuccess = false;
               }
+            } else {
+              console.log("[Error]", jobId, request.status, templatedata.title);
+              const errRes = await request.text()
+              console.log("Request failed -"+ errRes);
+              sequenceRequestSuccess = false;
             }
           }
           catch (err) {
+            throw err;
             // request failed 
             // show some other image if the request failed (maybe a default image)
             // sequenceRequestSuccess = true;

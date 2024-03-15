@@ -1,5 +1,5 @@
 // pathname: api/trpc/pdf/{functionNameHere}
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { privateProcedure, router } from "@/serverTRPC/trpc";
 import { cachedMakeOpenAiRequest, cachedMakeOpenAiRequestforSummary } from "@/utils/openai.util";
 import { jsonToParagraphs } from "@/utils/util";

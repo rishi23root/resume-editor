@@ -72,7 +72,7 @@ export const TagPicker = React.forwardRef<
     <motion.div
       ref={ref}
       className={cn(
-        "flex flex-row flex-wrap w-full border gap-1 p-2",
+        "flex flex-row flex-wrap w-full border gap-2 p-2 relative",
         className
       )}
     >
@@ -82,7 +82,7 @@ export const TagPicker = React.forwardRef<
             layout
             key={tag.name + id}
             className={cn(
-              "border border-gray-400/60 bg-transparent rounded-xl px-2 py-1 flex items-center gap-1 text-white group cursor-pointer text-lg relative group ",
+              "border border-gray-400/60 bg-transparent rounded-xl py-1 flex items-center text-white group cursor-pointer text-lg relative group hover:px-2 px-5 gap-1",
               uselevelstring && tag.level === 1 && "bg-blue-600/20",
               uselevelstring && tag.level === 2 && "bg-blue-600/60",
               uselevelstring && tag.level === 3 && "bg-blue-600/90"
@@ -91,7 +91,7 @@ export const TagPicker = React.forwardRef<
             <span onClick={() => addLevel(tag.name)}>{tag.name}</span>
             <span
               onClick={() => removeTag(tag.name)}
-              className="hidden group-hover:block opacity-40"
+              className="hidden group-hover:block opacity-40 transition-all duration-200 ease-in-out"
             >
               <Delete />
             </span>

@@ -88,8 +88,11 @@
     "databases": [],
     "mask": {
       "interests": "interests",
-      "recruitment": "recruitment",
-      "employee_relations": "employee_relations",
+      "languages": "languages",
+      "frameworks": "frameworks",
+      "technologies": "technologies",
+      "libraries": "libraries",
+      "databases": "databases",
       "tools": "tools"
     }
   },
