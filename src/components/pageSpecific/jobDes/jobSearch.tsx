@@ -39,7 +39,7 @@ const JobSearch = () => {
     if (isError) {
       // add error param to the url
       router.replace(
-        urlWithAddedParams("",{ error: "unable to process the API request !" })
+        urlWithAddedParams("", { error: "unable to process the API request !" })
       );
     }
   }, [isError]);

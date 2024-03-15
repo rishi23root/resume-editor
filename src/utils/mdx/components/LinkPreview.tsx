@@ -49,7 +49,7 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
   if (loading) {
     return (
       <>
-        <span className="w-full border fcc h-40 glass">
+        <span className="w-full fcc h-40 glass">
           <Loadingstate />
         </span>
         <br />
@@ -86,28 +86,28 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
       transition={{
         duration: 0.5,
       }}
-      className="w-full border fcc hover:bg-gradient-to-r from-blue-600 to-fuchsia-500 rounded-xl my-2 hover:p-[2px] transition-all duration-300 ease-in-out group cursor-alias"
+      className="w-full fcc hover:bg-gradient-to-r from-blue-600 to-fuchsia-500 rounded-xl my-2 hover:p-[2px] transition-all duration-300 ease-in-out group cursor-alias"
     >
       <Link
         href={url as string}
         target="_blank"
-        className="glass flex flex-col lg:flex-row gap-4 h-auto no-underline p-3 group:hover:p-2  shadow-xl group-hover:bg-[#12141D] "
+        className="glass flex-1 flex flex-col lg:flex-row gap-4 h-auto no-underline p-3 group:hover:p-2  shadow-xl group-hover:bg-[#12141D] "
       >
-        <span className="text-left">
-          <h3 className="m-0 text-lg">{previewData.title}</h3>
-          <span className="text-md opacity-75">{previewData.description}</span>
-        </span>
         {previewData.image && (
           <span className="w-full lg:w-1/3  fcc ">
             <Image
               width={400}
               height={400}
-              className="rounded-md m-0 max-h-28 object-contain"
+              className="rounded-xl m-0 max-h-28 object-contain"
               src={previewData.image}
               alt="Link Preview"
             />
           </span>
         )}
+        <span className="text-left justify-center my-auto ">
+          <h3 className="m-0 text-lg">{previewData.title}</h3>
+          <span className="text-md opacity-75">{previewData.description}</span>
+        </span>
       </Link>
     </motion.span>
   );

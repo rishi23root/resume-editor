@@ -6,7 +6,6 @@ import { urlWithAddedParams } from "@/utils/paramHandeler";
 import Link from "next/link";
 import { Suspense } from "react";
 import Card from "./jobCard";
-import { object } from "zod";
 import { redirect } from "next/navigation";
 
 const JobDiscriptionTemplateShowcase = async ({

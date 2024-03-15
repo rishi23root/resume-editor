@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogposts = posts.map((post) => ({
     url: `${process.env.FRONTEND}/blog/${post.slug}`,
     lastModified: new Date(post.date) as Date,
-    changeFrequency: 'monthly',
+    changeFrequency: 'weekly',
     priority: 1,
   }));
   return [
@@ -18,6 +18,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${process.env.FRONTEND}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 1,
+    },
+    {
+      url: `${process.env.FRONTEND}/Templates`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 1,
+    },
+    {
+      url: `${process.env.FRONTEND}/JobDescriptions`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,

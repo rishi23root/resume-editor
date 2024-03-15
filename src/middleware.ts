@@ -15,7 +15,15 @@ export default authMiddleware({
     }
     return NextResponse.next();
   },
-  publicRoutes: ["/", "/termAndCondition", "/privacyPolicy", '/blog', '/blog/(.*)','/api/link-preview']
+  publicRoutes: [
+    "/",
+    "/termAndCondition",
+    "/privacyPolicy",
+    '/blog', '/blog/(.*)', '/api/link-preview',
+    "/Templates",
+    "/api/trpc/(.*)",
+    "/JobDescriptions",
+  ]
 });
 
 
