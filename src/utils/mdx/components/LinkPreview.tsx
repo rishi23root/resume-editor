@@ -5,11 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnchorHTMLAttributes, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Mail } from "lucide-react";
 const isYouTubeURL = (url: string) => {
   return url.includes("youtube.com") || url.includes("youtu.be");
 };
 export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
   const { href: url } = props;
+  const [ismail, setIsmail] = useState(false);
   const [previewData, setPreviewData] = useState<{
     title?: string;
     description?: string;
@@ -29,23 +31,30 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(url);
+    if (!url) {
+      return;
+    }
 
-    fetch("/api/link-preview", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("[data]", data);
+    if (!url.startsWith("mailto:")) {
+      fetch("/api/link-preview", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("[data]", data);
 
-        setPreviewData(data);
-        setLoading(false);
-      });
-    isYouTubeURL(url as string) && setIsYt(true);
+          setPreviewData(data);
+          setLoading(false);
+        });
+      isYouTubeURL(url as string) && setIsYt(true);
+    } else {
+      setLoading(false);
+      setIsmail(true);
+    }
   }, [url]);
 
   if (loading) {
@@ -59,8 +68,23 @@ export const LinkPreview = (props: AnchorHTMLAttributes<HTMLAnchorElement>) => {
     );
   }
 
-  if (!previewData) {
-    return <span>Failed to fetch link preview. - {url}</span>;
+  if (ismail) {
+    return (
+      <Link href={url as string} className="glass flex py-1 my-2 h-10 w-fit">
+        {/* <Mail />  */}
+        <div className="flex items-center gap-2">
+          <Image
+            alt="mail logo"
+            src={"/blog/maillogo.svg"}
+            height={10}
+            width={20}
+            className="w-8 h-8 "
+          />
+
+          {url?.slice(7)}
+        </div>
+      </Link>
+    );
   }
 
   if (previewData.videoId && previewData.videoThumbnail) {

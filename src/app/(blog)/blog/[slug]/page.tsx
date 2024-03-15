@@ -58,12 +58,8 @@ export default async function BlogPost({
           </span>
           - {meta.date}
         </p>
-        <div className="prose prose-invert  max-w-screen-2xl text-lg self-center text-justify  w-full ">
+        <div className="prose prose-invert  max-w-screen-2xl text-lg self-center text-left xl:text-justify  w-full ">
           {content}
-          {/* <MDXRemote compiledSource={content} /> */}
-          {/* <MDXProvider components={{ h2: Component3, h3: Component4 }}>
-          </MDXProvider> */}
-          {/* <Content /> */}
         </div>
       </section>
     </div>

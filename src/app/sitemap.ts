@@ -1,11 +1,15 @@
 import { getAllBlogMeta } from '@/utils/mdx';
 import { MetadataRoute } from 'next'
+import { format, parse } from 'date-fns'
+
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllBlogMeta();
+  // const isoDate = moment(inputDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
+  const isoDate = (date: string) => format(parse(date, 'dd-MM-yyyy', new Date()), 'yyyy-MM-dd');
   const blogposts = posts.map((post) => ({
     url: `${process.env.FRONTEND}/blog/${post.slug}`,
-    lastModified: new Date(post.date) as Date,
+    lastModified: isoDate(post.date),
     changeFrequency: 'weekly',
     priority: 1,
   }));
