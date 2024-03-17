@@ -2,7 +2,30 @@ import { ScaleOnHover } from "@/components/custom/animateWrap";
 import { Illustration } from "@/components/pageSpecific/blog";
 import { cn } from "@/lib/utils";
 import { getAllBlogMeta } from "@/utils/mdx";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Build.Your.Resume - Blog",
+  description:
+    "Read more on templates and guidance for crafting resumes tailored to fresher job seekers. Discover the optimal fresher resume formats, templates, and essential ATS insights to land your dream job.",
+  keywords: [
+    "summary for resume for freshers",
+    "how to make resume for freshers",
+    "what is ats resume",
+    "ats resume checker",
+    "fast job",
+    "job card",
+    "mgnrega job card",
+    "student first job resume format for freshers",
+    "resume for freshers",
+    "fresher resume",
+    "fresher resume format",
+    "fresher resume template",
+    "fresher resume templates",
+    "fresher resume sample",
+  ],
+};
 
 // test for payment page here once then del it for good
 export default async function BlogHome() {
