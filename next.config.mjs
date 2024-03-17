@@ -12,7 +12,7 @@ const nextConfig = {
         },
     },
     images: {
-        domains: ['resumeworded.com', 'buildyourresume.online', 'img.youtube.com', 'cdn.overleaf.com', "twitter.com","www.canva.com","www.overleaf.com",'unavatar.io'],
+        domains: ['resumeworded.com', 'buildyourresume.online', 'img.youtube.com', 'cdn.overleaf.com', "twitter.com","www.canva.com","www.overleaf.com",'unavatar.io',"ph-files.imgix.net"],
     },
     pageExtensions: ['mdx', 'ts', 'tsx'],
     reactStrictMode: true,
