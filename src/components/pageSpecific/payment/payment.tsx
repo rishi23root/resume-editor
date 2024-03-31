@@ -1,14 +1,12 @@
 "use client";
 
 import { CongoBomb } from "@/components/custom/CongoBomb";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/serverTRPC/client";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { toast as sToast } from "sonner";
-
 import { useEffect, useRef, useState } from "react";
+import { toast as sToast } from "sonner";
 
 export const MakePaymentComponent = async ({
   resumeId,
@@ -107,18 +105,10 @@ export const MakePaymentComponent = async ({
       toast({
         variant: "default",
         title: "Payment is pending",
-        description: "please complete the payment to start edit the resume",
-        action: (
-          <ToastAction
-            altText="Payment is pending"
-            onClick={() => {
-              makePayment();
-            }}
-          >
-            Pay now
-          </ToastAction>
-        ),
+        description:
+          "please complete the payment to download the pdf of the resume",
       });
+      makePayment();
     }
   }, [data]);
 

@@ -1,6 +1,4 @@
 import BuilderClient from "@/components/pageSpecific/builder/BuilderClient";
-import { MakePaymentComponent } from "@/components/pageSpecific/payment/payment";
-import NoSSR from "@/hooks/NoSSR";
 import { serverAPI } from "@/serverTRPC/serverAPI";
 import { Inputs } from "@/types/builder";
 import { PageProps } from "@/types/utils";
@@ -38,7 +36,6 @@ export default async function builderPage(props: PageProps) {
         error: defaultData.error,
       })
     );
-    return;
   }
 
   // console.log(
@@ -51,14 +48,14 @@ export default async function builderPage(props: PageProps) {
   return (
     <main className="flex-1 relative">
       {/* if payment if not completed then complete the payment */}
-      {activeResumeInstance.paymentStatus == "pending" && (
+      {/* {activeResumeInstance.paymentStatus == "pending" && (
         <NoSSR>
           <MakePaymentComponent
             resumeId={activeResumeInstance.id}
             payId={activeResumeInstance.payId}
           />
         </NoSSR>
-      )}
+      )} */}
       <BuilderClient
         searchParams={props.searchParams}
         defaultData={defaultData as Inputs}

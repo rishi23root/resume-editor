@@ -4,14 +4,12 @@ import RenderCompleted from "@/hooks/RenderCompleted";
 import { trpc } from "@/serverTRPC/client";
 import { Inputs, pdfAndFromStatus } from "@/types/builder";
 import { searchParamType } from "@/types/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import _ from "lodash";
 import debounce from "lodash.debounce";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import FormManager from "./FormElementManager";
 import { compareJsonObjects } from "./customFormFields/sections/utils";
-import { schema } from "./schema";
 // import { DevTool } from "@hookform/devtools";
 
 // cahe the data and check for changes if change then continue
@@ -60,11 +58,11 @@ const BuilderClient = memo(
     const [pdfState, setPdfState] = useState<pdfAndFromStatus>("idle");
 
     // crucial for preventing full page reload
-    const paymenInstanceRef = useRef(activeResumeInstance.paymentStatus);
-    useEffect(() => {
-      // console.log("payemnt status updated");
-      paymenInstanceRef.current = activeResumeInstance.paymentStatus;
-    }, [activeResumeInstance.paymentStatus]);
+    // const paymenInstanceRef = useRef(activeResumeInstance.paymentStatus);
+    // useEffect(() => {
+    //   // console.log("payemnt status updated");
+    //   paymenInstanceRef.current = activeResumeInstance.paymentStatus;
+    // }, [activeResumeInstance.paymentStatus]);
 
     const updateDatabase = trpc.builder.updateDataByResumeId.useMutation({
       onSuccess: () => {
@@ -119,13 +117,13 @@ const BuilderClient = memo(
         subscription = formHandeler.watch((value, { name, type }) => {
           // console.log(name, type);
           // check for payment status
-          if (paymenInstanceRef.current === "pending") {
-            console.log("payment pending");
-            // toast("Payment pending", {
-            //   description: "please complete the payment to update the form",
-            // });
-            return;
-          }
+          // if (paymenInstanceRef.current === "pending") {
+          //   console.log("payment pending");
+          //   // toast("Payment pending", {
+          //   //   description: "please complete the payment to update the form",
+          //   // });
+          //   return;
+          // }
           onSubmit(value as any);
         });
       }, 5000);
@@ -133,7 +131,8 @@ const BuilderClient = memo(
         clearTimeout(timeout);
         subscription?.unsubscribe();
       };
-    }, [formHandeler.watch, paymenInstanceRef.current]);
+    }, [formHandeler.watch]);
+    // }, [formHandeler.watch, paymenInstanceRef.current]);
 
     // for first render only
     useEffect(() => {
@@ -177,13 +176,14 @@ const BuilderClient = memo(
     const onSubmit: SubmitHandler<Inputs> | ((data: Inputs) => void) = (
       data: any
     ) => {
-      if (paymenInstanceRef.current === "paid") {
-        console.log("update requested");
-        submitAction(data);
-      } else {
-        console.log("update requested, canceled, payment pending");
-        return;
-      }
+      submitAction(data);
+      // if (paymenInstanceRef.current === "paid") {
+      //   console.log("update requested");
+      //   submitAction(data);
+      // } else {
+      //   console.log("update requested, canceled, payment pending");
+      //   return;
+      // }
     };
 
     const FormManagerSubmitFnc = useCallback(

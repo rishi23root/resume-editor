@@ -97,7 +97,7 @@ export default function RootLayout({
           className={clsx(
             poppins.className,
             "bg-background",
-            "text-white",
+            "text-primary",
             "min-h-screen",
             "min-w-full ",
             "relative ",

@@ -1,6 +1,9 @@
 // working under issue #35
 "use client";
 import { ZoomerImage } from "@/components/custom/ImageMagnify";
+import { useToast } from "@/components/ui/use-toast";
+import NoSSR from "@/hooks/NoSSR";
+import useRedirectHandler from "@/hooks/redirectionHandlers";
 import RenderCompleted from "@/hooks/RenderCompleted";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/serverTRPC/client";
@@ -26,12 +29,12 @@ import {
   useRef,
   useState,
 } from "react";
+import { toast as sonnerToast } from "sonner";
 import { Loadingstate } from "../Fallbacks";
 import { ResizablePanel } from "../pageSpecific/builder/customFormFields/sections/utils";
 import { ActionBtn, ModelComponent } from "../pageSpecific/builder/uitls";
-import { useToast } from "@/components/ui/use-toast";
-import { toast as sonnerToast } from "sonner";
-import useRedirectHandler from "@/hooks/redirectionHandlers";
+import { MakePaymentComponent } from "../pageSpecific/payment/payment";
+import { ToastAction } from "../ui/toast";
 
 function PDFviewer({
   templateName,
@@ -65,6 +68,7 @@ function PDFviewer({
   searchParams: searchParamType;
 }) {
   const [showModel, setShowModel] = useState(false);
+  const [requestingPayment, setRequestingPayment] = useState(false);
   const [dataArray, setDataArray] = useState<string[]>([]);
   const ifRendered = RenderCompleted();
   const { toast } = useToast();
@@ -241,6 +245,24 @@ function PDFviewer({
     if (!initialized.current) {
       initialized.current = true;
       expensiveFirstOnlyRequest();
+      if (activeResumeInstance.paymentStatus === "pending") {
+        toast({
+          variant: "default",
+          title: "Payment is pending",
+          description:
+            "please complete the payment to download the pdf of the resume",
+          action: (
+            <ToastAction
+              altText="Payment is pending"
+              onClick={() => {
+                setRequestingPayment(true);
+              }}
+            >
+              Pay now
+            </ToastAction>
+          ),
+        });
+      }
     }
   }, []);
 
@@ -268,7 +290,11 @@ function PDFviewer({
 
   function DownloadPDFFromServer() {
     console.log(resumeId);
-    // downloadPDF();
+    if (activeResumeInstance.paymentStatus == "pending") {
+      setShowModel(false);
+      setRequestingPayment(true);
+      return;
+    }
     downloadPDF.mutate({ resumeId, templateName });
   }
   function DownloadSchemaFromServer() {
@@ -285,223 +311,233 @@ function PDFviewer({
   }
 
   return (
-    <motion.div
-      layout
-      className="fc glass gap-4 xl:h-full w-full lg:min-w-[45%] group xl:flex-1 relative"
-    >
-      <Suspense>
-        <div
-          className="fr justify-between items-center w-full h-4 relative cursor-pointer"
-          onClick={() => {
-            setShowModel(!showModel);
-          }}
-        >
-          <div className="opacity-80 capitalize">
-            {state !== "idle" ? state : ""}
-          </div>
-          <div className="hidden sm:block text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
-            Preview
-          </div>
-          <div className="opacity-80">
-            {enriched && "ATS Score: "}
-            {enriched && (
-              <span className="font-bold">
-                {isAiDataLoading ? "updating" : aiData?.atsScore}
-              </span>
-            )}
-          </div>
-        </div>
-        <ResizablePanel>
-          <motion.div
-            layout
-            className={cn(
-              "flex-1 justify-between flex flex-col  sm:flex-row  gap-2 overflow-hidden w-full",
-              isInMobileViewAndVisible
-                ? "h-auto max-h-[80vh] visible"
-                : "h-1 invisible"
-            )}
+    <>
+      {activeResumeInstance.paymentStatus == "pending" && requestingPayment && (
+        <NoSSR>
+          <MakePaymentComponent
+            resumeId={activeResumeInstance.id}
+            payId={activeResumeInstance.payId}
+          />
+        </NoSSR>
+      )}
+      <motion.div
+        layout
+        className="fc glass gap-4 xl:h-full w-full lg:min-w-[45%] group xl:flex-1 relative"
+      >
+        <Suspense>
+          <div
+            className="fr justify-between items-center w-full h-4 relative cursor-pointer"
+            onClick={() => {
+              setShowModel(!showModel);
+            }}
           >
-            <motion.div
-              className={cn(
-                "flex w-full justify-center items-center flex-row ",
-                "transition-width duration-500 ease-in-out",
-                "group-hover:xl:w-1/3"
+            <div className="opacity-80 capitalize">
+              {state !== "idle" ? state : ""}
+            </div>
+            <div className="hidden sm:block text-xl absolute -translate-x-1/2 -translate-y-1/2 left-[50%] h-full">
+              Preview
+            </div>
+            <div className="opacity-80">
+              {enriched && "ATS Score: "}
+              {enriched && (
+                <span className="font-bold">
+                  {isAiDataLoading ? "updating" : aiData?.atsScore}
+                </span>
               )}
-              onClick={() => {
-                setShowModel(!showModel);
-              }}
-            >
-              {/* flex justify-center */}
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  layout
-                  className={cn(
-                    "flex items-center justify-center relative ",
-                    "transition-transform delay-200 duration-500 ease-in-out ",
-                    isInMobileViewAndVisible ? "visible" : "invisible"
-                  )}
-                >
-                  {isLoading && (
-                    <motion.div
-                      className="w-full fc fcc "
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1, transition: { duraton: 0.1 } }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <Loadingstate />
-                    </motion.div>
-                  )}
-                  {isError && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1, transition: { duraton: 0.1 } }}
-                      exit={{ opacity: 0 }}
-                      className="w-full fc fcc"
-                    >
-                      {error.toString()}
-                    </motion.div>
-                  )}
-                  {!isLoading &&
-                    isInMobileViewAndVisible &&
-                    dataArray &&
-                    dataArray.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                          transition: { duraton: 0.3 },
-                        }}
-                        exit={{
-                          opacity: 0,
-                          scale: 0.95,
-                          transition: { duraton: 0.3, delay: 2 },
-                        }}
-                      >
-                        <ZoomerImage
-                          src={dataArray[0]}
-                          alt={"autogenrated resume image"}
-                          width={400}
-                          height={600}
-                          zoomType="click"
-                          className={cn(
-                            "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em]",
-                            "",
-                            "animate-fade-in-up delay-75 transition-all duration-500 ease-in-out"
-                          )}
-                        />
-                      </motion.div>
-                    )}
-                  {!isLoading && dataArray && dataArray.length > 1 && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: 1,
-                        transition: { duraton: 0.3, delay: 0.2 },
-                      }}
-                      exit={{ opacity: 0, transition: { duraton: 0.3 } }}
-                      className="-z-10 bg-blue-500/30 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
-                    />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-            {/* action bar */}
+            </div>
+          </div>
+          <ResizablePanel>
             <motion.div
               layout
               className={cn(
-                "transition-[width] duration-500 delay-100 ease-in-out",
-                "rounded-md w-full sm:w-[25%] xl:w-0 xl:opacity-0 pointer-events-none",
-                "group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] group-hover:pointer-events-auto",
-                "flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
-                isInMobileViewAndVisible ? "visible" : "invisible"
+                "flex-1 justify-between flex flex-col  sm:flex-row  gap-2 overflow-hidden w-full",
+                isInMobileViewAndVisible
+                  ? "h-auto max-h-[80vh] visible"
+                  : "h-1 invisible"
               )}
             >
-              <div className="w-full text-center sm:text-left  sm:mb-4 xl:opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg">
-                Actions
-              </div>
-              {isInMobileViewAndVisible ? (
-                <div className="flex flex-row sm:flex-col gap-4 item-center justify-center">
-                  <ActionBtn
-                    toolkitContent="refresh editor"
-                    onPress={() => {
-                      regeneratePdfImage({
-                        resumeId,
-                        templateName,
-                      });
-                    }}
+              <motion.div
+                className={cn(
+                  "flex w-full justify-center items-center flex-row ",
+                  "transition-width duration-500 ease-in-out",
+                  "group-hover:xl:w-1/3"
+                )}
+                onClick={() => {
+                  setShowModel(!showModel);
+                }}
+              >
+                {/* flex justify-center */}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    layout
+                    className={cn(
+                      "flex items-center justify-center relative ",
+                      "transition-transform delay-200 duration-500 ease-in-out ",
+                      isInMobileViewAndVisible ? "visible" : "invisible"
+                    )}
                   >
-                    <RefreshCcw className="scale-125" />
-                  </ActionBtn>
-                  <ActionBtn
-                    toolkitContent="download resume"
-                    onPress={DownloadPDFFromServer}
-                  >
-                    <ArrowDownFromLine className="scale-125" />
-                  </ActionBtn>
-                  <ActionBtn
-                    toolkitContent="download schema"
-                    onPress={DownloadSchemaFromServer}
-                  >
-                    <FileJson2 className="scale-125" />
-                  </ActionBtn>
-                  <ActionBtn
-                    toolkitContent="Detailed pdf view"
-                    // show modle with its data inside
-                    onPress={() => setShowModel(!showModel)}
-                  >
-                    <FileText className="scale-125" />
-                  </ActionBtn>
-                  <ActionBtn
-                    toolkitContent="delete this resume"
-                    onPress={delResumeAndRedirect}
-                  >
-                    <Trash2 className="scale-125 hover:text-red-400" />
-                  </ActionBtn>
+                    {isLoading && (
+                      <motion.div
+                        className="w-full fc fcc "
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                        exit={{ opacity: 0 }}
+                      >
+                        <Loadingstate />
+                      </motion.div>
+                    )}
+                    {isError && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duraton: 0.1 } }}
+                        exit={{ opacity: 0 }}
+                        className="w-full fc fcc"
+                      >
+                        {error.toString()}
+                      </motion.div>
+                    )}
+                    {!isLoading &&
+                      isInMobileViewAndVisible &&
+                      dataArray &&
+                      dataArray.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{
+                            opacity: 1,
+                            scale: 1,
+                            transition: { duraton: 0.3 },
+                          }}
+                          exit={{
+                            opacity: 0,
+                            scale: 0.95,
+                            transition: { duraton: 0.3, delay: 2 },
+                          }}
+                        >
+                          <ZoomerImage
+                            src={dataArray[0]}
+                            alt={"autogenrated resume image"}
+                            width={400}
+                            height={600}
+                            zoomType="click"
+                            className={cn(
+                              "rounded-md shadow-xl object-cover w-[100%] sm:w-[25em] lg:w-[30em]",
+                              "",
+                              "animate-fade-in-up delay-75 transition-all duration-500 ease-in-out"
+                            )}
+                          />
+                        </motion.div>
+                      )}
+                    {!isLoading && dataArray && dataArray.length > 1 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: 1,
+                          transition: { duraton: 0.3, delay: 0.2 },
+                        }}
+                        exit={{ opacity: 0, transition: { duraton: 0.3 } }}
+                        className="-z-10 bg-blue-500/30 scale-95 left-8 w-full h-full absolute rounded-md shadow-xl"
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.div>
+              {/* action bar */}
+              <motion.div
+                layout
+                className={cn(
+                  "transition-[width] duration-500 delay-100 ease-in-out",
+                  "rounded-md w-full sm:w-[25%] xl:w-0 xl:opacity-0 pointer-events-none",
+                  "group-hover:opacity-100 group-hover:w-[25%] group-hover:xl:w-[30%] group-hover:pointer-events-auto",
+                  "flex flex-col justify-top gap-1 p-2 lg:px-6 xl:px-0 group-hover:xl:px-2 ",
+                  isInMobileViewAndVisible ? "visible" : "invisible"
+                )}
+              >
+                <div className="w-full text-center sm:text-left  sm:mb-4 xl:opacity-0 group-hover:opacity-70 duration-150 delay-300 capitalize text-lg">
+                  Actions
                 </div>
-              ) : (
-                ""
-              )}
+                {isInMobileViewAndVisible ? (
+                  <div className="flex flex-row sm:flex-col gap-4 item-center justify-center">
+                    <ActionBtn
+                      toolkitContent="refresh editor"
+                      onPress={() => {
+                        regeneratePdfImage({
+                          resumeId,
+                          templateName,
+                        });
+                      }}
+                    >
+                      <RefreshCcw className="scale-125" />
+                    </ActionBtn>
+                    <ActionBtn
+                      toolkitContent="download resume"
+                      onPress={DownloadPDFFromServer}
+                    >
+                      <ArrowDownFromLine className="scale-125" />
+                    </ActionBtn>
+                    <ActionBtn
+                      toolkitContent="download schema"
+                      onPress={DownloadSchemaFromServer}
+                    >
+                      <FileJson2 className="scale-125" />
+                    </ActionBtn>
+                    <ActionBtn
+                      toolkitContent="Detailed pdf view"
+                      // show modle with its data inside
+                      onPress={() => setShowModel(!showModel)}
+                    >
+                      <FileText className="scale-125" />
+                    </ActionBtn>
+                    <ActionBtn
+                      toolkitContent="delete this resume"
+                      onPress={delResumeAndRedirect}
+                    >
+                      <Trash2 className="scale-125 hover:text-red-400" />
+                    </ActionBtn>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        </ResizablePanel>
-        <div className="w-full xl:hidden h-3 group">
-          <motion.div
-            className={cn(
-              "absolute w-full fcc bg-gray-300/30 group-focus:bg-gray-300/50 bottom-0 left-0 rounded-b-md"
-            )}
-            onClick={() => {
-              setIsInMobileViewAndVisible(!isInMobileViewAndVisible);
-            }}
-          >
-            <ChevronsDown
+          </ResizablePanel>
+          <div className="w-full xl:hidden h-3 group">
+            <motion.div
               className={cn(
-                isInMobileViewAndVisible ? "rotate-180" : "",
-                "transition-all duration-300 ease-in-out"
+                "absolute w-full fcc bg-gray-300/30 group-focus:bg-gray-300/50 bottom-0 left-0 rounded-b-md"
               )}
+              onClick={() => {
+                setIsInMobileViewAndVisible(!isInMobileViewAndVisible);
+              }}
+            >
+              <ChevronsDown
+                className={cn(
+                  isInMobileViewAndVisible ? "rotate-180" : "",
+                  "transition-all duration-300 ease-in-out"
+                )}
+              />
+            </motion.div>
+          </div>
+        </Suspense>
+        <Suspense>
+          {/* model conditionally rendered when needed only*/}
+          {ifRendered && (
+            <ModelComponent
+              dataArray={dataArray}
+              error={error}
+              isLoading={isLoading}
+              isError={isError}
+              resumeId={resumeId}
+              modelState={[showModel, setShowModel]}
+              searchParams={searchParams}
+              getAiRecomandations={getAiRecomandations}
+              enriched={enriched}
+              regeneratePdfImage={regeneratePdfImage}
+              DownloadPDFFromServer={DownloadPDFFromServer}
             />
-          </motion.div>
-        </div>
-      </Suspense>
-      <Suspense>
-        {/* model conditionally rendered when needed only*/}
-        {ifRendered && (
-          <ModelComponent
-            dataArray={dataArray}
-            error={error}
-            isLoading={isLoading}
-            isError={isError}
-            resumeId={resumeId}
-            modelState={[showModel, setShowModel]}
-            searchParams={searchParams}
-            getAiRecomandations={getAiRecomandations}
-            enriched={enriched}
-            regeneratePdfImage={regeneratePdfImage}
-            DownloadPDFFromServer={DownloadPDFFromServer}
-          />
-        )}
-      </Suspense>
-    </motion.div>
+          )}
+        </Suspense>
+      </motion.div>
+    </>
   );
 }
 
