@@ -35,6 +35,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { ToastAction } from "@/components/ui/toast";
 
 export const expireInDays: number = 7;
 
@@ -210,6 +211,43 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
     },
   });
 
+  // download pdf schema
+  const downloadSchema = trpc.builder.getSchemaByResumeId.useMutation({
+    onSuccess: (data) => {
+      // console.log("downloaded schema: ", data.basics.name);
+      // save the data into a file with name username_resumeId.json and download it
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+
+      saveAs(
+        blob,
+        `${data.basics.name.replace(" ", ".")}_${format(
+          new Date(),
+          "dd-MM-yyyy"
+        )}.json`
+      );
+
+      toast({
+        variant: "default",
+        title: "Schema downloaded 👍 ",
+      });
+    },
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "Unable to download schema try again later",
+      });
+      console.log(err);
+    },
+    onMutate: () => {
+      toast({
+        variant: "default",
+        title: "Requesting for schema download :)",
+      });
+    },
+  });
+
   const deleteResume = trpc.builder.delByResumeId.useMutation({
     onSuccess: (data) => {
       toast({
@@ -292,11 +330,45 @@ export default function ResumeCard({ resume }: { resume: resumeDataprops }) {
             className="w-full flex flex-row gap-2 cursor-pointer"
             onClick={() => {
               // download pdf
-              downloadPDF.mutate({ resumeId: id });
+              if (resume.paymentStatus == "paid") {
+                downloadPDF.mutate({ resumeId: id });
+              } else {
+                if (isActive) {
+                  toast({
+                    variant: "destructive",
+                    title: "Please pay to download the resume",
+                    action: (
+                      <ToastAction
+                        altText="Pay Now"
+                        onClick={() => {
+                          router.push(editLink);
+                        }}
+                      >
+                        Pay Now {"->"}
+                      </ToastAction>
+                    ),
+                  });
+                } else {
+                  toast({
+                    variant: "destructive",
+                    title: "This resume has expired ! 😔",
+                  });
+                }
+              }
             }}
           >
-            <Download /> Download
+            <Download /> Download PDF
           </DropdownMenuItem>
+          <DropdownMenuItem
+            className="w-full flex flex-row gap-2 cursor-pointer"
+            onClick={() => {
+              // download pdf
+              downloadSchema.mutate({ resumeId: id });
+            }}
+          >
+            <Download /> Download Schema
+          </DropdownMenuItem>
+
           {isActive && (
             <DropdownMenuItem className="w-full flex flex-row gap-2">
               <Link href={editLink} className="w-full flex flex-row gap-2">

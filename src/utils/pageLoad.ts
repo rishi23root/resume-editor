@@ -9,8 +9,6 @@ import { PageProps } from '../types/utils';
 import { serverAPI } from "@/serverTRPC/serverAPI";
 
 
-
-
 export async function newUserLoginHandler(): Promise<PrivateMetadata | {}> {
     // effective only for new login accounts
     const user = await currentUser();

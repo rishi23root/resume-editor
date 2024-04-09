@@ -11,6 +11,9 @@ export async function generateMetadata({ params }) {
   const { meta } = await getPageContent(params.slug);
   return { title: meta.title, description: meta.description, date: meta.date };
 }
+
+// add seo keywords in meta for each pages automaitcally
+
 // components: {
 //       img: customImage,
 //       a: LinkPreview,
