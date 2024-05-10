@@ -56,7 +56,8 @@ export default async function DashboardPage(props: PageProps) {
       // console.log(typeof expireInDays, diffDays, expireInDays > diffDays);
 
       // expireInDays # for some reason expireInDays is not reading as a variable here rather than as a function !!!
-      // must be a bug from next js it self
+      // must be a bug from next js it self expireInDays = 7
+
       if (pdfItself == null || 7 >= diffDays) {
         console.log("generating new image for ", id);
 

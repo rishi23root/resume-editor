@@ -122,7 +122,7 @@ const UploadResume = () => {
       .then((res: unknown) => {
         const response = res as { jsonData: JsonType; error: string };
         console.log("[info] response from the server", res);
-        if (response?.error) {
+        if (response?.error !== "") {
           toast({
             variant: "destructive",
             title: "Error with processing your file",
@@ -130,6 +130,7 @@ const UploadResume = () => {
           });
           router.push(urlWithAddedParams("/builder", {}, {}));
         } else {
+          // console.log("[info] response from the server", response?.jsonData);
           saveJsonObject(response?.jsonData as JsonType)
             .then((res) => {
               sToast("data converted and saved", {

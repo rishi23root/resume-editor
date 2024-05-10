@@ -1,5 +1,6 @@
 'use server'
 
+import { expireInDays } from "@/components/pageSpecific/dashboard/utils";
 import prisma from "@/lib/prisma";
 import { JsonType } from "@/types/utils";
 import { currentUser } from "@clerk/nextjs";
@@ -14,13 +15,26 @@ export async function extractPdfText(formData: FormData) {
         const formData = new FormData();
         formData.append("file", file);
 
+
+
         // console.log("[info] making request", process.env.BACKEND + "/extract_text");
         const req = await fetch(process.env.BACKEND + "/extract_text", { method: "POST", body: formData })
-        const extractedText = await req.json();
+        try {
+            const extractedText = await req.json();
+            console.log(extractedText);
+            console.log("[info] extraction done", extractedText);
+            // console.log("[info] extraction done:", extractedText);
+            return extractedText;
+        } catch (err) {
+            console.log(err);
+            return {
+                error: {
+                    title: "Error with file type",
+                    des: "unable to process file type, :( try again with a pdf file."
+                }
+            }
+        }
 
-        console.log("[info] extraction done");
-        // console.log("[info] extraction done:", extractedText);
-        return extractedText;
     } else {
         return {
             error: {
@@ -33,6 +47,7 @@ export async function extractPdfText(formData: FormData) {
 }
 
 export async function saveJsonObject(jsonData: JsonType) {
+    // console.log("[info] saving json data", jsonData);
     try {
         // schema.parse(jsonData);
         // check if data is valid
@@ -43,12 +58,26 @@ export async function saveJsonObject(jsonData: JsonType) {
         const lastResume = await prisma.resumeData.findFirst({
             where: {
                 userId: userDBid as string,
-                paymentStatus: "pending"
+                paymentStatus: "pending",
+                // and not expired
+                // creaatedAt: {
+                //     gt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * expireInDays) // 24 hours
+                // }
             },
             orderBy: {
                 creaatedAt: "desc"
+            },
+            select: {
+                id: true,
+                payId: true,
+                jobId: true,
+                paymentStatus: true,
+                paymentId: true,
             }
         })
+
+        // console.log("jsonData", jsonData)
+        // console.log("lastResume", lastResume)
 
         var currentResume: any;
         if (lastResume) {
@@ -59,7 +88,8 @@ export async function saveJsonObject(jsonData: JsonType) {
                     id: lastResume.id
                 },
                 data: {
-                    data: JSON.stringify(jsonData)
+                    data: JSON.stringify(jsonData),
+                    creaatedAt: new Date(),
                 },
                 select: {
                     id: true,
@@ -77,6 +107,7 @@ export async function saveJsonObject(jsonData: JsonType) {
         } else {
             console.log("[info] creating new resume data");
 
+            // console.log('[josnData]', jsonData)
             currentResume = await prisma.resumeData.create({
                 data: {
                     data: JSON.stringify(jsonData),
@@ -99,11 +130,12 @@ export async function saveJsonObject(jsonData: JsonType) {
                     paymentId: true,
                 }
             })
-        }
-        // console.log(newResume);
-        return {
-            data: {
-                jsonDataId: currentResume.id,
+
+            // console.log(newResume);
+            return {
+                data: {
+                    jsonDataId: currentResume.id,
+                }
             }
         }
     } catch (err) {

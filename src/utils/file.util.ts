@@ -20,6 +20,7 @@ export const fileHandeler = async (file: File, formatDataInSchema: any): Promise
             // then process the data
             const formData = new FormData();
             formData.append("file", file);
+            
             const pdfText = await extractPdfText(formData)
             if (pdfText.error) {
                 console.log("[error] extracting pdf text error :", pdfText.error);

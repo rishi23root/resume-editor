@@ -53,7 +53,9 @@ export async function POST(request: Request) {
                 // const text = "data here";
                 const call = new PdfToSchema(text);
                 const results = await call.extractSchema();
+                console.log(results);
                 console.log("[info] Analysing Done");
+
 
                 return {
                     jsonData: results as Inputs,
@@ -73,6 +75,7 @@ export async function POST(request: Request) {
             }
         }
     }
+
     const stream = streamTillPromise(heavyTaskWrapper(pdfText as string));
 
     return new Response(stream, {

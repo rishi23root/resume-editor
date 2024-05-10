@@ -2,7 +2,7 @@ import { emptyTemplate } from "@/JSONapiData/refTemplate";
 import { JsonType } from "@/types/utils";
 import _ from "lodash";
 
-export const modelUsable = "gpt-3.5-turbo-0125";
+export const modelUsable = "gpt-4-turbo";
 
 // open ai custom functions
 export const custom_functions = [
